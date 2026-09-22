@@ -19,6 +19,7 @@
 class AbstractColumn;
 class AxisPrivate;
 class Line;
+class Heatmap;
 class TextLabel;
 class QActionGroup;
 
@@ -31,6 +32,8 @@ class Axis : public WorksheetElement {
 	Q_OBJECT
 
 public:
+	enum class AxisType { Normal, ColorBar };
+	Q_ENUM(AxisType)
 	enum class RangeType { Auto, AutoData, Custom };
 	enum class Position { Top, Bottom, Left, Right, Centered, Custom, Logical };
 	enum class LabelsFormat {
@@ -115,9 +118,11 @@ public:
 
 	typedef AxisPrivate Private; // for Axis::Private used in macros instead of AxisPrivate
 
-	explicit Axis(const QString&, Orientation = Orientation::Horizontal, bool loading = false);
+	explicit Axis(const QString&, Orientation = Orientation::Horizontal, AxisType = AxisType::Normal, bool loading = false);
+	Axis(const QString&, Orientation, bool loading);
 	~Axis() override;
 
+	void finalizeAdd() override;
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	void setZValue(qreal) override;
@@ -127,6 +132,7 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 
+	BASIC_D_ACCESSOR_DECL(AxisType, axisType, AxisType)
 	BASIC_D_ACCESSOR_DECL(RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
@@ -197,6 +203,12 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
 	static int maxNumberMajorTicksCustomColumn();
 
+	BASIC_D_ACCESSOR_DECL(double, colorBarWidth, ColorBarWidth) //!< thickness perpendicular to the axis
+	BASIC_D_ACCESSOR_DECL(double, colorBarLength, ColorBarLength) //!< length along the axis for Custom placement
+	BASIC_D_ACCESSOR_DECL(QPointF, colorBarPosition, ColorBarPosition)
+	POINTER_D_ACCESSOR_DECL(const Heatmap, heatmap, Heatmap)
+	CLASS_D_ACCESSOR_DECL(QString, heatmapPath, HeatmapPath)
+
 	Line* majorGridLine() const;
 	Line* minorGridLine() const;
 
@@ -213,6 +225,7 @@ public:
 
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);
+	void handleAspectUpdated(const QString&, const AbstractAspect*) override;
 	TextLabel* m_title{nullptr};
 
 private:
@@ -246,6 +259,11 @@ private Q_SLOTS:
 	void lineColorChanged(QAction*);
 
 Q_SIGNALS:
+	void axisTypeChanged(AxisType);
+	void colorBarWidthChanged(double);
+	void colorBarLengthChanged(double);
+	void colorBarPositionChanged(QPointF);
+	void heatmapChanged(const Heatmap*);
 	void orientationChanged(Orientation);
 	void positionChanged(Position);
 	void positionChanged(double);

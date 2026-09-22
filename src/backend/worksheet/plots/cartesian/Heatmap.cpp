@@ -877,9 +877,10 @@ QRectF HeatmapPrivate::update() {
 	}
 
 	// Adjust formatting
-	if (automaticLimits) {
+	if (automaticLimits && (format.min != minValue || format.max != maxValue)) {
 		format.min = minValue;
 		format.max = maxValue;
+		Q_EMIT q->formatChanged(format);
 	}
 
 	// Calculate rectangles

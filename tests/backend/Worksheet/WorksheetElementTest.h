@@ -66,6 +66,7 @@ private Q_SLOTS:
 	void referenceLineYMouseMove();
 
 	// general tests
+	void customCoordinateSystemOwnership();
 	void moveElementBefore();
 	void moveElementAfter();
 	void prepareDrawingMenu();

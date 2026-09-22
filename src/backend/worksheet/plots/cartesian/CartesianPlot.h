@@ -250,8 +250,11 @@ private:
 	double m_zoomFactor{1.2};
 	bool m_menusInitialized{false};
 
+	Axis* addColorBar(WorksheetElement::Orientation, const Heatmap* = nullptr);
 	QAction* addHorizontalAxisAction{nullptr};
 	QAction* addVerticalAxisAction{nullptr};
+	QAction* addHorizontalColorBarAction{nullptr};
+	QAction* addVerticalColorBarAction{nullptr};
 	QAction* addLegendAction{nullptr};
 	QAction* addTextLabelAction{nullptr};
 	QAction* addImageAction{nullptr};
@@ -320,6 +323,8 @@ private Q_SLOTS:
 
 	void addHorizontalAxis();
 	void addVerticalAxis();
+	void addHorizontalColorBar();
+	void addVerticalColorBar();
 	void addTextLabel();
 	void addImage();
 	void addCustomPoint();

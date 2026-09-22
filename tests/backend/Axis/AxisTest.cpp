@@ -12,9 +12,12 @@
 #include "AxisTest.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Heatmap.h"
+#include "frontend/widgets/TreeViewComboBox.h"
 #include "src/backend/core/Time.h"
 #include "src/backend/worksheet/Line.h"
 #include "src/backend/worksheet/TextLabel.h"
@@ -26,6 +29,8 @@
 #include "src/frontend/widgets/LineWidget.h"
 
 #include "backend/lib/UndoStack.h"
+
+#include <KConfig>
 
 // TODO: write test switching between numeric and datetime
 
@@ -2523,6 +2528,556 @@ void AxisTest::autoScaleLog102Vertical() {
 		QStringLiteral("1.00"),
 	};
 	COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+}
+
+void AxisTest::colorBar() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	plot->setType(CartesianPlot::Type::TwoAxes);
+	ws->addChild(plot);
+	auto* axis = plot->children<Axis>().first();
+	QCOMPARE(axis->axisType(), Axis::AxisType::Normal);
+	axis->setAxisType(Axis::AxisType::ColorBar);
+	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+	auto* heatmap = new Heatmap(QStringLiteral("heatmap"));
+	plot->addChild(heatmap);
+	heatmap->setAutomaticLimits(false);
+	Heatmap::Format format;
+	format.min = 0;
+	format.max = 100;
+	format.colors = {Qt::red, Qt::green, Qt::blue};
+	heatmap->setFormat(format);
+	axis->setHeatmap(heatmap);
+	axis->setMajorTicksAutoNumber(false);
+	axis->setMajorTicksNumber(3);
+	QCOMPARE(axis->range().start(), 0.);
+	QCOMPARE(axis->range().end(), 100.);
+	QCOMPARE(axis->tickLabelValues(), QVector<double>({0., 50., 100.}));
+	QVERIFY(axis->coordinateSystem() != plot->coordinateSystem(0));
+	QCOMPARE(axis->d_func()->colorBarBands.size(), 3);
+	QCOMPARE(axis->d_func()->colorBarBands.first().second, QColor(Qt::red));
+	QCOMPARE(axis->d_func()->colorBarBands.last().second, QColor(Qt::blue));
+	axis->setHeatmap(nullptr);
+	QVERIFY(axis->heatmapPath().isEmpty());
+	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+	project.undoStack()->undo();
+	QCOMPARE(axis->heatmap(), heatmap);
+	QCOMPARE(axis->heatmapPath(), heatmap->path());
+	const auto barRect = axis->d_func()->colorBarRect;
+	plot->setRange(Dimension::X, 0, Range<double>(1., 1000., RangeT::Format::Numeric, RangeT::Scale::Log10));
+	plot->setRange(Dimension::Y, 0, Range<double>(100., -100.));
+	plot->setRangeFormat(Dimension::X, RangeT::Format::DateTime);
+	QCOMPARE(axis->range().end(), 100.);
+	QVERIFY(axis->isNumeric());
+	QCOMPARE(axis->scale(), RangeT::Scale::Linear);
+	QCOMPARE(axis->d_func()->colorBarRect, barRect);
+	QCOMPARE(axis->tickLabelValues(), QVector<double>({0., 50., 100.}));
+
+	heatmap->setFormatMax(200.);
+	QCOMPARE(axis->range().end(), 200.);
+	project.undoStack()->undo();
+	QCOMPARE(axis->range().end(), 100.);
+	project.undoStack()->redo();
+	QCOMPARE(axis->range().end(), 200.);
+	axis->setRangeType(Axis::RangeType::Custom);
+	axis->setRange(20., 80.);
+	heatmap->setFormatMax(300.);
+	QCOMPARE(axis->range().start(), 20.);
+	QCOMPARE(axis->range().end(), 80.);
+	axis->setColorBarWidth(12.);
+	QCOMPARE(axis->colorBarWidth(), 12.);
+	project.undoStack()->undo();
+	QVERIFY(axis->colorBarWidth() != 12.);
+	project.undoStack()->redo();
+	QCOMPARE(axis->colorBarWidth(), 12.);
+	axis->setAxisType(Axis::AxisType::Normal);
+	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+	QVERIFY(axis->d_func()->colorBarBands.isEmpty());
+	project.undoStack()->undo();
+	QCOMPARE(axis->axisType(), Axis::AxisType::ColorBar);
+	QVERIFY(axis->coordinateSystem() != plot->coordinateSystem(0));
+
+	axis->setRangeType(Axis::RangeType::Auto);
+	heatmap->setFormatMax(0.);
+	QVERIFY(axis->d_func()->linePath.isEmpty());
+	QVERIFY(axis->tickLabelValues().isEmpty());
+	heatmap->setFormatMax(100.);
+	heatmap->setFormatColors({});
+	QVERIFY(axis->d_func()->colorBarBands.isEmpty());
+	QVERIFY(!axis->d_func()->linePath.isEmpty());
+	plot->removeChild(heatmap);
+	QVERIFY(!axis->heatmap());
+	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+	project.undoStack()->undo();
+	QCOMPARE(axis->heatmap(), heatmap);
+}
+
+void AxisTest::colorBarPlacement_data() {
+	QTest::addColumn<Axis::Orientation>("orientation");
+	QTest::addColumn<Axis::Position>("position");
+	QTest::addColumn<int>("direction");
+	for (const auto position :
+		 {Axis::Position::Top, Axis::Position::Bottom, Axis::Position::Left, Axis::Position::Right, Axis::Position::Centered, Axis::Position::Custom}) {
+		for (const auto orientation : {Axis::Orientation::Horizontal, Axis::Orientation::Vertical}) {
+			if ((orientation == Axis::Orientation::Horizontal && (position == Axis::Position::Left || position == Axis::Position::Right))
+				|| (orientation == Axis::Orientation::Vertical && (position == Axis::Position::Top || position == Axis::Position::Bottom)))
+				continue;
+			for (int direction = Axis::noTicks; direction <= Axis::ticksBoth; ++direction) {
+				const auto name = QStringLiteral("%1-%2-%3").arg(int(orientation)).arg(int(position)).arg(direction).toLatin1();
+				QTest::newRow(name.constData()) << orientation << position << direction;
+			}
+		}
+	}
+}
+
+void AxisTest::colorBarPlacement() {
+	QFETCH(Axis::Orientation, orientation);
+	QFETCH(Axis::Position, position);
+	QFETCH(int, direction);
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+	auto* heatmap = new Heatmap(QStringLiteral("heatmap"));
+	plot->addChild(heatmap);
+	heatmap->setAutomaticLimits(false);
+	heatmap->setFormatMin(10.);
+	heatmap->setFormatMax(100.);
+	auto* axis = new Axis(QStringLiteral("color"), orientation);
+	plot->addChild(axis);
+	axis->setHeatmap(heatmap);
+	axis->setAxisType(Axis::AxisType::ColorBar);
+	axis->setPosition(position);
+	axis->setColorBarPosition(QPointF(-200., -150.));
+	axis->setColorBarLength(120.);
+	axis->setOffset(7.);
+	axis->setColorBarWidth(10.);
+	axis->setMajorTicksAutoNumber(false);
+	axis->setMajorTicksNumber(3);
+	axis->setMajorTicksDirection(Axis::TicksDirection(direction));
+	axis->setMajorTicksLength(5.);
+	axis->setMinorTicksDirection(Axis::ticksBoth);
+	axis->majorGridLine()->setStyle(Qt::SolidLine);
+	axis->minorGridLine()->setStyle(Qt::SolidLine);
+	auto* d = axis->d_func();
+	const bool horizontal = orientation == Axis::Orientation::Horizontal;
+	for (int resize = 0; resize < 2; ++resize) {
+		const auto rect = plot->dataRect();
+		const auto line = d->lines.first();
+		const double anchor = horizontal ? line.y1() : line.x1();
+		double expected = 0;
+		switch (position) {
+		case Axis::Position::Top:
+			expected = rect.top() - 7.;
+			break;
+		case Axis::Position::Bottom:
+			expected = rect.bottom() - 7.;
+			break;
+		case Axis::Position::Left:
+			expected = rect.left() + 7.;
+			break;
+		case Axis::Position::Right:
+			expected = rect.right() + 7.;
+			break;
+		case Axis::Position::Centered:
+			expected = horizontal ? rect.center().y() - 7. : rect.center().x() + 7.;
+			break;
+		case Axis::Position::Custom:
+			expected = horizontal ? rect.bottom() + 150. : rect.left() - 190.;
+			QCOMPARE(d->colorBarRect.bottomLeft(), rect.bottomLeft() + QPointF(-200., 150.));
+			break;
+		case Axis::Position::Logical:
+			QFAIL("Unexpected position");
+		}
+		QCOMPARE(anchor, expected);
+		QCOMPARE(horizontal ? d->colorBarRect.width() : d->colorBarRect.height(),
+				 position == Axis::Position::Custom ? 120. : (horizontal ? rect.width() : rect.height()));
+		QCOMPARE(horizontal ? d->colorBarRect.height() : d->colorBarRect.width(), 10.);
+		QVERIFY(d->shape().contains(d->colorBarRect.center()));
+		QVERIFY(d->majorGridPath.isEmpty());
+		QVERIFY(d->minorGridPath.isEmpty());
+		const auto titleRect = axis->title()->graphicsItem()->mapRectToParent(axis->title()->graphicsItem()->boundingRect());
+		QVERIFY(!titleRect.intersects(d->colorBarRect));
+		if (direction == Axis::noTicks) {
+			QVERIFY(d->majorTicksPath.isEmpty());
+		} else {
+			QVERIFY(!d->majorTickPoints.isEmpty());
+			const auto tick = d->majorTickPoints.first();
+			QCOMPARE(d->majorTickPoints.size(), 3);
+			QCOMPARE(horizontal ? d->majorTickPoints.last().x() - tick.x() : tick.y() - d->majorTickPoints.last().y(), line.length());
+			const bool negative = position == Axis::Position::Top || position == Axis::Position::Left || (position == Axis::Position::Centered && horizontal);
+			const QPointF out = horizontal ? QPointF(0, negative ? -1 : 1) : QPointF(negative ? -1 : 1, 0);
+			QVector<QPointF> expectedPoints;
+			if (direction & Axis::ticksOut)
+				expectedPoints << tick << tick + out * 5.;
+			if (direction & Axis::ticksIn)
+				expectedPoints << tick - out * 10. << tick - out * 15.;
+			for (int i = 0; i < expectedPoints.size(); ++i) {
+				const auto element = d->majorTicksPath.elementAt(i);
+				QCOMPARE(QPointF(element.x, element.y), expectedPoints.at(i));
+			}
+		}
+		plot->setRect(QRectF(0, 0, 1800, 1400));
+	}
+}
+
+void AxisTest::customCoordinateSystem() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+	auto custom = std::make_unique<CartesianCoordinateSystem>(plot);
+	const auto* customSystem = custom.get();
+	const auto rect = plot->dataRect();
+	custom->setScales(Dimension::X,
+					  {CartesianScale::createLinearScale(Range<double>(0., 100.), Range<double>(rect.left(), rect.right()), Range<double>(0., 100.))});
+	custom->setScales(Dimension::Y,
+					  {CartesianScale::createLinearScale(Range<double>(0., 1.), Range<double>(rect.bottom(), rect.top()), Range<double>(0., 1.))});
+	auto* axis = new Axis(QStringLiteral("axis"));
+	plot->addChild(axis);
+	axis->setRangeType(Axis::RangeType::Custom);
+	axis->setRange(0., 100.);
+	axis->setCoordinateSystem(std::move(custom));
+	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+	axis->setCoordinateSystemSource(WorksheetElement::CoordinateSystemSource::Custom);
+	QCOMPARE(axis->coordinateSystem(), customSystem);
+	project.undoStack()->undo();
+	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+	project.undoStack()->redo();
+	QCOMPARE(axis->coordinateSystem(), customSystem);
+	plot->addCoordinateSystem();
+	axis->setCoordinateSystemIndex(1);
+	QCOMPARE(axis->coordinateSystem(), customSystem);
+	project.undoStack()->undo();
+	QCOMPARE(axis->coordinateSystem(), customSystem);
+	axis->setCoordinateSystem(nullptr);
+	QVERIFY(!axis->coordinateSystem());
+	project.undoStack()->undo();
+	QCOMPARE(axis->coordinateSystem(), customSystem);
+
+	// The generated color bar mapping must not replace the supplied custom system.
+	auto* heatmap = new Heatmap(QStringLiteral("heatmap"));
+	plot->addChild(heatmap);
+	axis->setHeatmap(heatmap);
+	axis->setAxisType(Axis::AxisType::ColorBar);
+	QVERIFY(axis->coordinateSystem() != customSystem);
+	axis->setAxisType(Axis::AxisType::Normal);
+	QCOMPARE(axis->coordinateSystem(), customSystem);
+	QCOMPARE(customSystem->scales(Dimension::X).first()->range(), Range<double>(0., 100.));
+	axis->setCoordinateSystemSource(WorksheetElement::CoordinateSystemSource::Plot);
+	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(axis->coordinateSystemIndex()));
+}
+
+void AxisTest::colorBarSaveLoad_data() {
+	QTest::addColumn<Axis::Orientation>("orientation");
+	QTest::addColumn<Axis::Position>("position");
+	QTest::newRow("vertical-right") << Axis::Orientation::Vertical << Axis::Position::Right;
+	QTest::newRow("vertical-custom") << Axis::Orientation::Vertical << Axis::Position::Custom;
+	QTest::newRow("horizontal-bottom") << Axis::Orientation::Horizontal << Axis::Position::Bottom;
+	QTest::newRow("horizontal-custom") << Axis::Orientation::Horizontal << Axis::Position::Custom;
+}
+
+void AxisTest::colorBarSaveLoad() {
+	QFETCH(Axis::Orientation, orientation);
+	QFETCH(Axis::Position, position);
+	QString savePath;
+	QRectF savedRect;
+	{
+		Project project;
+		auto* ws = new Worksheet(QStringLiteral("worksheet"));
+		project.addChild(ws);
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		ws->addChild(plot);
+		auto* heatmap = new Heatmap(QStringLiteral("heatmap"));
+		plot->addChild(heatmap);
+		heatmap->setAutomaticLimits(false);
+		heatmap->setFormatMax(200.);
+		auto* axis = new Axis(QStringLiteral("color"), orientation, Axis::AxisType::ColorBar);
+		plot->addChild(axis);
+		axis->setPosition(position);
+		axis->setOffset(15.);
+		axis->setHeatmap(heatmap);
+		axis->setAxisType(Axis::AxisType::ColorBar);
+		axis->setColorBarWidth(12.);
+		axis->setColorBarLength(120.);
+		axis->setColorBarPosition(QPointF(25., -15.));
+		savedRect = axis->d_func()->colorBarRect;
+		SAVE_PROJECT("axis-color-bar");
+	}
+	Project project;
+	QVERIFY(project.load(savePath));
+	auto* plot = project.child<Worksheet>(0)->child<CartesianPlot>(0);
+	auto* axis = plot->child<Axis>(0);
+	QCOMPARE(axis->axisType(), Axis::AxisType::ColorBar);
+	QCOMPARE(axis->colorBarWidth(), 12.);
+	QCOMPARE(axis->colorBarLength(), 120.);
+	QCOMPARE(axis->colorBarPosition(), QPointF(25., -15.));
+	QCOMPARE(axis->orientation(), orientation);
+	QCOMPARE(axis->heatmap(), plot->child<Heatmap>(0));
+	QCOMPARE(axis->range().end(), 200.);
+	QCOMPARE(axis->position(), position);
+	QCOMPARE(axis->offset(), 15.);
+	QCOMPARE(axis->d_func()->colorBarRect, savedRect);
+	QVERIFY(!axis->d_func()->colorBarBands.isEmpty());
+	auto* matrix = new Matrix(2, 2, QStringLiteral("matrix"));
+	project.addChild(matrix);
+	matrix->setCell(0, 0, 1.);
+	matrix->setCell(0, 1, 2.);
+	matrix->setCell(1, 0, 3.);
+	matrix->setCell(1, 1, 4.);
+	auto* heatmap = plot->child<Heatmap>(0);
+	heatmap->setMatrix(matrix);
+	heatmap->setAutomaticLimits(true);
+	QCOMPARE(axis->range().start(), heatmap->formatMin());
+	QCOMPARE(axis->range().end(), heatmap->formatMax());
+	matrix->setCell(1, 1, 99.);
+	QCOMPARE(axis->range().end(), heatmap->formatMax());
+	QCOMPARE(axis->range().end(), 99.);
+}
+
+void AxisTest::colorBarDock() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	plot->setType(CartesianPlot::Type::TwoAxes);
+	ws->addChild(plot);
+	auto* axis = plot->horizontalAxis();
+	auto* otherAxis = plot->verticalAxis();
+	plot->setRangeFormat(Dimension::X, RangeT::Format::DateTime);
+	auto* heatmap = new Heatmap(QStringLiteral("heatmap"));
+	plot->addChild(heatmap);
+	heatmap->setAutomaticLimits(false);
+	heatmap->setFormatMax(42.);
+	auto* otherPlot = new CartesianPlot(QStringLiteral("other plot"));
+	ws->addChild(otherPlot);
+	auto* otherHeatmap = new Heatmap(QStringLiteral("other heatmap"));
+	otherPlot->addChild(otherHeatmap);
+
+	AxisDock dock(nullptr);
+	dock.setAxes({axis});
+	const auto selectHeatmap = [&dock](const Heatmap* selectedHeatmap) {
+		const auto index = selectedHeatmap ? dock.m_heatmapModel->modelIndexOfAspect(selectedHeatmap) : QModelIndex();
+		return QMetaObject::invokeMethod(dock.cbHeatmap, "treeViewIndexActivated", Q_ARG(QModelIndex, index));
+	};
+	QCOMPARE(dock.ui.cbAxisType->currentData().toInt(), static_cast<int>(Axis::AxisType::Normal));
+	QVERIFY(dock.cbHeatmap->QWidget::isHidden());
+	QVERIFY(dock.ui.sbStart->isHidden());
+	QCOMPARE(dock.m_heatmapModel->selectableAspects(), QList<AspectType>{AspectType::Heatmap});
+	QVERIFY(dock.m_heatmapModel->flags(dock.m_heatmapModel->modelIndexOfAspect(heatmap)) & Qt::ItemIsSelectable);
+	QVERIFY(!(dock.m_heatmapModel->flags(dock.m_heatmapModel->modelIndexOfAspect(axis)) & Qt::ItemIsSelectable));
+	QCOMPARE(dock.aspectModel()->selectableAspects(), QList<AspectType>{AspectType::Column});
+
+	project.undoStack()->clear();
+	dock.ui.cbAxisType->setCurrentIndex(dock.ui.cbAxisType->findData(static_cast<int>(Axis::AxisType::ColorBar)));
+	QCOMPARE(axis->axisType(), Axis::AxisType::ColorBar);
+	QVERIFY(!dock.cbHeatmap->QWidget::isHidden());
+	QVERIFY(dock.cbHeatmap->isEnabled());
+	QVERIFY(dock.ui.cbPlotRanges->isHidden());
+	QVERIFY(!dock.ui.tabWidget->isTabVisible(dock.ui.tabWidget->indexOf(dock.ui.tabGrid)));
+	QCOMPARE(project.undoStack()->count(), 1);
+	project.undoStack()->undo();
+	QCOMPARE(axis->axisType(), Axis::AxisType::Normal);
+	QVERIFY(dock.cbHeatmap->QWidget::isHidden());
+	project.undoStack()->redo();
+	QCOMPARE(axis->axisType(), Axis::AxisType::ColorBar);
+	QVERIFY(!dock.cbHeatmap->QWidget::isHidden());
+
+	QVERIFY(selectHeatmap(heatmap));
+	QCOMPARE(axis->heatmap(), heatmap);
+	QCOMPARE(dock.ui.sbEnd->value(), 42.);
+	QVERIFY(!dock.ui.sbStart->isHidden());
+	QVERIFY(dock.ui.dateTimeEditStart->isHidden());
+	heatmap->setFormatMax(84.);
+	QCOMPARE(dock.ui.sbEnd->value(), 84.);
+	QVERIFY(selectHeatmap(otherHeatmap));
+	QCOMPARE(axis->heatmap(), otherHeatmap);
+	project.undoStack()->undo();
+	QCOMPARE(axis->heatmap(), heatmap);
+	QCOMPARE(dock.cbHeatmap->currentAspect(), heatmap);
+	QVERIFY(selectHeatmap(nullptr));
+	QVERIFY(!axis->heatmap());
+	QVERIFY(axis->heatmapPath().isEmpty());
+	project.undoStack()->undo();
+	QCOMPARE(axis->heatmap(), heatmap);
+
+	dock.ui.cbAxisType->setCurrentIndex(dock.ui.cbAxisType->findData(static_cast<int>(Axis::AxisType::Normal)));
+	QCOMPARE(axis->heatmap(), heatmap);
+	QVERIFY(dock.cbHeatmap->QWidget::isHidden());
+	project.undoStack()->undo();
+	QCOMPARE(dock.cbHeatmap->currentAspect(), heatmap);
+	plot->removeChild(heatmap);
+	QVERIFY(!axis->heatmap());
+	QVERIFY(!dock.cbHeatmap->currentAspect());
+	project.undoStack()->undo();
+	QCOMPARE(axis->heatmap(), heatmap);
+	QCOMPARE(dock.cbHeatmap->currentAspect(), heatmap);
+
+	dock.setAxes({axis, otherAxis});
+	QCOMPARE(dock.ui.cbAxisType->currentIndex(), -1);
+	QVERIFY(!dock.cbHeatmap->isEnabled());
+	dock.ui.cbAxisType->setCurrentIndex(dock.ui.cbAxisType->findData(static_cast<int>(Axis::AxisType::ColorBar)));
+	QCOMPARE(otherAxis->axisType(), Axis::AxisType::ColorBar);
+	QVERIFY(dock.cbHeatmap->isEnabled());
+	QVERIFY(!dock.cbHeatmap->currentAspect());
+	QVERIFY(selectHeatmap(otherHeatmap));
+	QCOMPARE(axis->heatmap(), otherHeatmap);
+	QCOMPARE(otherAxis->heatmap(), otherHeatmap);
+	project.undoStack()->undo();
+	QCOMPARE(axis->heatmap(), heatmap);
+	QVERIFY(!otherAxis->heatmap());
+	project.undoStack()->undo();
+	QCOMPARE(otherAxis->axisType(), Axis::AxisType::Normal);
+	QVERIFY(!dock.cbHeatmap->isEnabled());
+
+	// Rebinding the dock disconnects every previously selected axis.
+	dock.setAxes({axis});
+	otherAxis->setAxisType(Axis::AxisType::ColorBar);
+	QCOMPARE(dock.cbHeatmap->currentAspect(), heatmap);
+	QVERIFY(dock.cbHeatmap->isEnabled());
+	const int count = project.undoStack()->count();
+	dock.setAxes({axis});
+	QCOMPARE(project.undoStack()->count(), count);
+	auto* addedLater = new Heatmap(QStringLiteral("added later"));
+	plot->addChild(addedLater);
+	QVERIFY(dock.m_heatmapModel->modelIndexOfAspect(addedLater).isValid());
+	QVERIFY(selectHeatmap(addedLater));
+	QCOMPARE(axis->heatmap(), addedLater);
+}
+
+void AxisTest::colorBarGeometryDock_data() {
+	QTest::addColumn<Axis::Orientation>("orientation");
+	QTest::newRow("vertical") << Axis::Orientation::Vertical;
+	QTest::newRow("horizontal") << Axis::Orientation::Horizontal;
+}
+
+void AxisTest::colorBarGeometryDock() {
+	QFETCH(Axis::Orientation, orientation);
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+	auto* heatmap = new Heatmap(QStringLiteral("heatmap"));
+	plot->addChild(heatmap);
+	auto* axis = new Axis(QStringLiteral("color"), orientation, Axis::AxisType::ColorBar);
+	plot->addChild(axis);
+	axis->setHeatmap(heatmap);
+	const bool horizontal = orientation == Axis::Orientation::Horizontal;
+	const auto anchored = horizontal ? Axis::Position::Bottom : Axis::Position::Right;
+	axis->setPosition(anchored);
+	AxisDock dock(nullptr);
+	dock.setAxes({axis});
+	const auto scene = [&dock](double value) {
+		return Worksheet::convertToSceneUnits(value, dock.m_worksheetUnit);
+	};
+	QCOMPARE(dock.ui.cbPosition->findData(static_cast<int>(Axis::Position::Logical)), -1);
+	QVERIFY(dock.ui.cbPosition->findData(static_cast<int>(Axis::Position::Custom)) >= 0);
+	QVERIFY(dock.ui.sbPositionLogical->isHidden());
+	QVERIFY(dock.ui.sbColorBarPositionX->isHidden());
+	QVERIFY(!dock.ui.sbColorBarWidth->isHidden());
+	QVERIFY(!dock.ui.sbColorBarHeight->isHidden());
+	auto* thickness = horizontal ? dock.ui.sbColorBarHeight : dock.ui.sbColorBarWidth;
+	auto* length = horizontal ? dock.ui.sbColorBarWidth : dock.ui.sbColorBarHeight;
+	QVERIFY(thickness->isEnabled());
+	QVERIFY(!length->isEnabled());
+	plot->setRect(QRectF(0, 0, 1200., 1000.));
+	plot->setHorizontalPadding(25.);
+	plot->setVerticalPadding(35.);
+	QCOMPARE(length->value(), Worksheet::convertFromSceneUnits(horizontal ? plot->dataRect().width() : plot->dataRect().height(), dock.m_worksheetUnit));
+	axis->setPosition(Axis::Position::Logical);
+	QCOMPARE(axis->position(), anchored);
+
+	const auto initialWidth = thickness->value();
+	project.undoStack()->clear();
+	thickness->setValue(0.75);
+	QCOMPARE(axis->colorBarWidth(), scene(0.75));
+	QCOMPARE(horizontal ? axis->d_func()->colorBarRect.height() : axis->d_func()->colorBarRect.width(), scene(0.75));
+	QCOMPARE(project.undoStack()->count(), 1);
+	project.undoStack()->undo();
+	QCOMPARE(thickness->value(), initialWidth);
+	project.undoStack()->redo();
+	QCOMPARE(thickness->value(), 0.75);
+
+	dock.ui.cbPosition->setCurrentIndex(dock.ui.cbPosition->findData(static_cast<int>(Axis::Position::Custom)));
+	QCOMPARE(axis->position(), Axis::Position::Custom);
+	QVERIFY(dock.ui.sbPosition->isHidden());
+	QVERIFY(!dock.ui.sbColorBarPositionX->isHidden());
+	QVERIFY(!dock.ui.sbColorBarPositionY->isHidden());
+	QVERIFY(length->isEnabled());
+	project.undoStack()->undo();
+	QCOMPARE(axis->position(), anchored);
+	QVERIFY(dock.ui.sbColorBarPositionX->isHidden());
+	QVERIFY(!length->isEnabled());
+	project.undoStack()->redo();
+	QVERIFY(length->isEnabled());
+	length->setValue(4.);
+	dock.ui.sbColorBarPositionX->setValue(-2.);
+	dock.ui.sbColorBarPositionY->setValue(-1.);
+	QCOMPARE(axis->colorBarPosition(), QPointF(scene(-2.), scene(-1.)));
+	QCOMPARE(axis->colorBarLength(), scene(4.));
+	QCOMPARE(axis->d_func()->colorBarRect.bottomLeft(), plot->dataRect().bottomLeft() + QPointF(scene(-2.), scene(1.)));
+	project.undoStack()->undo();
+	QCOMPARE(dock.ui.sbColorBarPositionY->value(), 0.);
+	project.undoStack()->redo();
+	QCOMPARE(dock.ui.sbColorBarPositionY->value(), -1.);
+
+	// Changing orientation preserves custom placement and rotates the size controls.
+	dock.ui.cbOrientation->setCurrentIndex(static_cast<int>(horizontal ? Axis::Orientation::Vertical : Axis::Orientation::Horizontal));
+	QCOMPARE(axis->position(), Axis::Position::Custom);
+	QCOMPARE(dock.ui.sbColorBarWidth->value(), horizontal ? 0.75 : 4.);
+	QCOMPARE(dock.ui.sbColorBarHeight->value(), horizontal ? 4. : 0.75);
+	project.undoStack()->undo();
+	QCOMPARE(axis->orientation(), orientation);
+	QCOMPARE(thickness->value(), 0.75);
+	QCOMPARE(length->value(), 4.);
+
+	// Type changes replace the unsupported position and undo restores both together.
+	dock.ui.cbAxisType->setCurrentIndex(dock.ui.cbAxisType->findData(static_cast<int>(Axis::AxisType::Normal)));
+	QCOMPARE(axis->position(), Axis::Position::Logical);
+	QVERIFY(dock.ui.sbColorBarWidth->isHidden());
+	QVERIFY(!dock.ui.sbPositionLogical->isHidden());
+	QCOMPARE(dock.ui.cbPosition->findData(static_cast<int>(Axis::Position::Custom)), -1);
+	project.undoStack()->undo();
+	QCOMPARE(axis->axisType(), Axis::AxisType::ColorBar);
+	QCOMPARE(axis->position(), Axis::Position::Custom);
+	QVERIFY(dock.ui.sbPositionLogical->isHidden());
+	project.undoStack()->redo();
+	dock.ui.cbOrientation->setCurrentIndex(static_cast<int>(horizontal ? Axis::Orientation::Vertical : Axis::Orientation::Horizontal));
+	QCOMPARE(axis->position(), Axis::Position::Logical);
+	dock.ui.cbAxisType->setCurrentIndex(dock.ui.cbAxisType->findData(static_cast<int>(Axis::AxisType::ColorBar)));
+	QCOMPARE(axis->position(), Axis::Position::Custom);
+
+	// Custom geometry is retained in templates and editing a selection is one undo step.
+	QTemporaryDir tempDir;
+	KConfig config(tempDir.filePath(QStringLiteral("axis-template")), KConfig::SimpleConfig);
+	dock.saveConfigAsTemplate(config);
+	auto* other = new Axis(QStringLiteral("other"), orientation);
+	plot->addChild(other);
+	dock.setAxes({other});
+	dock.loadConfig(config);
+	QCOMPARE(other->axisType(), Axis::AxisType::ColorBar);
+	QCOMPARE(other->position(), Axis::Position::Custom);
+	QCOMPARE(other->orientation(), axis->orientation());
+	QCOMPARE(other->colorBarPosition(), axis->colorBarPosition());
+	QCOMPARE(other->colorBarWidth(), axis->colorBarWidth());
+	QCOMPARE(other->colorBarLength(), axis->colorBarLength());
+	dock.setAxes({axis, other});
+	project.undoStack()->clear();
+	dock.ui.sbColorBarWidth->setValue(1.25);
+	QCOMPARE(axis->colorBarWidth(), other->colorBarWidth());
+	QCOMPARE(axis->colorBarLength(), other->colorBarLength());
+	QCOMPARE(project.undoStack()->count(), 1);
+	project.undoStack()->undo();
+	QCOMPARE(dock.ui.sbColorBarWidth->value(), horizontal ? 0.75 : 4.);
+	other->setAxisType(Axis::AxisType::Normal);
+	QCOMPARE(dock.ui.cbPosition->findData(static_cast<int>(Axis::Position::Logical)), -1);
+	QCOMPARE(dock.ui.cbPosition->findData(static_cast<int>(Axis::Position::Custom)), -1);
+	QVERIFY(!dock.ui.sbColorBarWidth->isEnabled());
 }
 
 QTEST_MAIN(AxisTest)

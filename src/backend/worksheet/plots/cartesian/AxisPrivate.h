@@ -16,12 +16,14 @@
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QFont>
 #include <QPen>
+#include <memory>
 
 class QGraphicsSceneHoverEvent;
 
 class AxisGrid;
 class Line;
 class TextLabel;
+class Heatmap;
 
 class AxisPrivate : public WorksheetElementPrivate {
 public:
@@ -31,6 +33,15 @@ public:
 	void retransformRange();
 	void retransformLine();
 	void retransformArrow();
+	void retransformColorBar();
+	void connectHeatmap();
+	bool hasColorBar() const {
+		return axisType == Axis::AxisType::ColorBar && heatmap;
+	}
+	Range<double> coordinateRange(Dimension) const;
+	QPointF colorBarCenter() const;
+	QPointF colorBarOutward(const QPointF&) const;
+	void addColorBarTick(QPainterPath&, const QPointF&, Axis::TicksDirection, double) const;
 	void retransformTicks();
 	void retransformTickLabelPositions();
 	void retransformTickLabelStrings();
@@ -113,6 +124,17 @@ public:
 	qreal labelsOpacity{1.0};
 	QString labelsPrefix;
 	QString labelsSuffix;
+
+	Axis::AxisType axisType{Axis::AxisType::Normal};
+	const Heatmap* heatmap{nullptr};
+	QVector<QMetaObject::Connection> heatmapConnections;
+	std::unique_ptr<CartesianCoordinateSystem> colorBarSystem;
+	QRectF colorBarRect;
+	QVector<QPair<QRectF, QColor>> colorBarBands;
+	QString heatmapPath;
+	double colorBarWidth{Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter)};
+	double colorBarLength{Worksheet::convertToSceneUnits(5., Worksheet::Unit::Centimeter)};
+	QPointF colorBarPosition; //!< custom lower-left corner relative to the data rectangle, x rightwards and y upwards
 
 	// Grid
 	AxisGrid* gridItem{nullptr};

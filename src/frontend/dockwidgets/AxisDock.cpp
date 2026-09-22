@@ -10,6 +10,10 @@
 
 #include "AxisDock.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Project.h"
+#include "backend/core/Settings.h"
+#include "backend/worksheet/plots/cartesian/Heatmap.h"
+
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/DateTimeSpinBox.h"
 #include "frontend/widgets/LabelWidget.h"
@@ -21,6 +25,8 @@
 
 #include <QPainter>
 
+#include <algorithm>
+
 #include <gsl/gsl_math.h>
 
 namespace {
@@ -28,7 +34,7 @@ enum PositionAlignmentComboBoxIndex {
 	Top_Left = 0,
 	Bottom_Right = 1,
 	Center = 2,
-	Logical = 3,
+	CustomLogical = 3,
 };
 }
 
@@ -46,6 +52,15 @@ AxisDock::AxisDock(QWidget* parent)
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible);
 	ui.kfrLabelsFont->setFixedHeight(ui.leName->sizeHint().height());
+
+	cbHeatmap = new TreeViewComboBox(ui.tabGeneral);
+	cbHeatmap->setObjectName(QStringLiteral("cbHeatmap"));
+	ui.heatmapLayout->addWidget(cbHeatmap);
+	ui.lHeatmap->setBuddy(cbHeatmap);
+	QWidget::setTabOrder(ui.cbAxisType, cbHeatmap);
+	QWidget::setTabOrder(cbHeatmap, ui.cbOrientation);
+	ui.sbColorBarWidth->setMinimumNotEqual(0.);
+	ui.sbColorBarHeight->setMinimumNotEqual(0.);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -117,11 +132,25 @@ AxisDock::AxisDock(QWidget* parent)
 	//**********************************  Slots **********************************************
 
 	//"General"-tab
+	connect(ui.cbAxisType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::axisTypeChanged);
+	connect(cbHeatmap, &TreeViewComboBox::currentModelIndexChanged, this, &AxisDock::heatmapChanged);
 	connect(ui.kcbAxisColor, &KColorButton::changed, this, &AxisDock::colorChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::orientationChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&AxisDock::positionChanged));
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
 	connect(ui.sbPositionLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
+	connect(ui.sbColorBarPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, [this](double value) {
+		colorBarPositionChanged(Dimension::X, value);
+	});
+	connect(ui.sbColorBarPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, [this](double value) {
+		colorBarPositionChanged(Dimension::Y, value);
+	});
+	connect(ui.sbColorBarWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, [this](double value) {
+		colorBarSizeChanged(Dimension::X, value);
+	});
+	connect(ui.sbColorBarHeight, QOverload<double>::of(&NumberSpinBox::valueChanged), this, [this](double value) {
+		colorBarSizeChanged(Dimension::Y, value);
+	});
 	connect(ui.cbScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::scaleChanged);
 	connect(ui.cbRangeScale, &QCheckBox::toggled, this, &AxisDock::rangeScaleChanged);
 
@@ -221,11 +250,21 @@ AxisDock::~AxisDock() = default;
 void AxisDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
+	ui.cbAxisType->clear();
+	ui.cbAxisType->addItem(i18n("Normal"), static_cast<int>(Axis::AxisType::Normal));
+	ui.cbAxisType->addItem(i18n("Color Bar"), static_cast<int>(Axis::AxisType::ColorBar));
+
 	ui.cbPosition->clear();
 	ui.cbPosition->addItem(i18n("Top")); // Left
 	ui.cbPosition->addItem(i18n("Bottom")); // Right
 	ui.cbPosition->addItem(i18n("Centered"));
 	ui.cbPosition->addItem(i18n("Logical"));
+	updatePositionText(m_axis ? m_axis->orientation() : Axis::Orientation::Horizontal);
+	const QString suffix = m_units == Units::Metric ? i18n(" cm") : i18n(" in");
+	for (auto* spinBox : {ui.sbPosition, ui.sbColorBarPositionX, ui.sbColorBarPositionY, ui.sbColorBarWidth, ui.sbColorBarHeight})
+		spinBox->setSuffix(suffix);
+	ui.sbColorBarPositionX->setToolTip(i18n("Horizontal distance from the left edge of the plot area to the left edge of the color bar."));
+	ui.sbColorBarPositionY->setToolTip(i18n("Vertical distance upwards from the bottom edge of the plot area to the bottom edge of the color bar."));
 
 	// range types
 	ui.cbRangeType->clear();
@@ -399,6 +438,13 @@ void AxisDock::setModel() {
 	cbMajorTicksColumn->setModel(model);
 	cbMinorTicksColumn->setModel(model);
 	cbLabelsTextColumn->setModel(model);
+
+	auto* oldModel = m_heatmapModel;
+	m_heatmapModel = new AspectTreeModel(m_axis->project(), this);
+	m_heatmapModel->setSelectableAspects({AspectType::Heatmap});
+	cbHeatmap->setTopLevelClasses({AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot, AspectType::Heatmap});
+	cbHeatmap->setModel(m_heatmapModel);
+	delete oldModel;
 }
 
 /*!
@@ -407,6 +453,9 @@ void AxisDock::setModel() {
 void AxisDock::setAxes(QList<Axis*> list) {
 	QDEBUG(Q_FUNC_INFO << ", Axis LIST =" << list)
 	CONDITIONAL_LOCK_RETURN;
+	for (const auto& connection : std::as_const(m_colorBarConnections))
+		disconnect(connection);
+	m_colorBarConnections.clear();
 	m_axesList = list;
 	m_axis = list.first();
 	setAspects(list);
@@ -453,6 +502,28 @@ void AxisDock::setAxes(QList<Axis*> list) {
 }
 
 void AxisDock::initConnections() {
+	for (auto* axis : m_axesList) {
+		m_colorBarConnections << connect(axis, &Axis::axisTypeChanged, this, &AxisDock::axisColorBarChanged);
+		m_colorBarConnections << connect(axis, &Axis::heatmapChanged, this, &AxisDock::axisColorBarChanged);
+		m_colorBarConnections << connect(axis, &Axis::colorBarWidthChanged, this, &AxisDock::axisColorBarChanged);
+		m_colorBarConnections << connect(axis, &Axis::colorBarLengthChanged, this, &AxisDock::axisColorBarChanged);
+		m_colorBarConnections << connect(axis, &Axis::colorBarPositionChanged, this, &AxisDock::axisColorBarChanged);
+		if (axis != m_axis) {
+			m_colorBarConnections << connect(axis, &Axis::orientationChanged, this, &AxisDock::axisColorBarChanged);
+			m_colorBarConnections << connect(axis, QOverload<Axis::Position>::of(&Axis::positionChanged), this, &AxisDock::axisColorBarChanged);
+		}
+	}
+	m_colorBarConnections << connect(m_axis->plot(), &CartesianPlot::rectChanged, this, &AxisDock::axisColorBarChanged);
+	for (auto signal : {&CartesianPlot::horizontalPaddingChanged,
+						&CartesianPlot::verticalPaddingChanged,
+						&CartesianPlot::rightPaddingChanged,
+						&CartesianPlot::bottomPaddingChanged})
+		m_colorBarConnections << connect(m_axis->plot(), signal, this, &AxisDock::axisColorBarChanged);
+	m_colorBarConnections << connect(m_axis->plot(), &CartesianPlot::symmetricPaddingChanged, this, &AxisDock::axisColorBarChanged);
+	m_colorBarConnections << connect(m_axis, &Axis::rangeChanged, this, [this] {
+		if (m_axis->axisType() == Axis::AxisType::ColorBar)
+			axisColorBarChanged();
+	});
 	// general
 	connect(m_axis, &Axis::orientationChanged, this, QOverload<Axis::Orientation>::of(&AxisDock::axisOrientationChanged));
 	connect(m_axis, QOverload<Axis::Position>::of(&Axis::positionChanged), this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
@@ -525,6 +596,10 @@ void AxisDock::updateLocale() {
 	// update the QLineEdits, avoid the change events
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPosition->setLocale(numberLocale);
+	ui.sbColorBarPositionX->setLocale(numberLocale);
+	ui.sbColorBarPositionY->setLocale(numberLocale);
+	ui.sbColorBarWidth->setLocale(numberLocale);
+	ui.sbColorBarHeight->setLocale(numberLocale);
 	ui.sbStart->setLocale(numberLocale);
 	ui.sbEnd->setLocale(numberLocale);
 
@@ -541,7 +616,36 @@ void AxisDock::updateLocale() {
 	minorGridLineWidget->updateLocale();
 }
 
+void AxisDock::updateUnits() {
+	CONDITIONAL_LOCK_RETURN;
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
+	m_units = static_cast<Units>(group.readEntry("Units", static_cast<int>(Units::Metric)));
+	m_worksheetUnit = m_units == Units::Metric ? Worksheet::Unit::Centimeter : Worksheet::Unit::Inch;
+	const QString suffix = m_units == Units::Metric ? i18n(" cm") : i18n(" in");
+	for (auto* spinBox : {ui.sbPosition, ui.sbColorBarPositionX, ui.sbColorBarPositionY, ui.sbColorBarWidth, ui.sbColorBarHeight})
+		spinBox->setSuffix(suffix);
+	if (m_axis) {
+		ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
+		updatePositionWidgets();
+	}
+}
+
 void AxisDock::updatePositionText(Axis::Orientation orientation) {
+	ui.cbPosition->setItemData(Top_Left, static_cast<int>(orientation == Axis::Orientation::Horizontal ? Axis::Position::Top : Axis::Position::Left));
+	ui.cbPosition->setItemData(Bottom_Right, static_cast<int>(orientation == Axis::Orientation::Horizontal ? Axis::Position::Bottom : Axis::Position::Right));
+	ui.cbPosition->setItemData(Center, static_cast<int>(Axis::Position::Centered));
+	const bool colorBar = m_axis && m_axis->axisType() == Axis::AxisType::ColorBar;
+	const bool sameType = std::all_of(m_axesList.cbegin(), m_axesList.cend(), [this](const Axis* axis) {
+		return axis->axisType() == m_axis->axisType();
+	});
+	if (!sameType)
+		ui.cbPosition->removeItem(CustomLogical);
+	else {
+		if (ui.cbPosition->count() == CustomLogical)
+			ui.cbPosition->addItem(QString());
+		ui.cbPosition->setItemText(CustomLogical, colorBar ? i18n("Custom") : i18n("Logical"));
+		ui.cbPosition->setItemData(CustomLogical, static_cast<int>(colorBar ? Axis::Position::Custom : Axis::Position::Logical));
+	}
 	switch (orientation) {
 	case Axis::Orientation::Horizontal: {
 		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
@@ -562,6 +666,53 @@ void AxisDock::updatePositionText(Axis::Orientation orientation) {
 	case Axis::Orientation::Both:
 		break;
 	}
+	if (m_axis && m_axis->axisType() == Axis::AxisType::ColorBar) {
+		ui.cbLabelsPosition->setItemText(1, i18n("Inside"));
+		ui.cbLabelsPosition->setItemText(2, i18n("Outside"));
+	}
+}
+
+void AxisDock::updatePositionWidgets() {
+	updatePositionText(m_axis->orientation());
+	ui.cbPosition->setCurrentIndex(ui.cbPosition->findData(static_cast<int>(m_axis->position())));
+	const bool allColorBars = std::all_of(m_axesList.cbegin(), m_axesList.cend(), [](const Axis* axis) {
+		return axis->axisType() == Axis::AxisType::ColorBar;
+	});
+	const bool anyColorBar = std::any_of(m_axesList.cbegin(), m_axesList.cend(), [](const Axis* axis) {
+		return axis->axisType() == Axis::AxisType::ColorBar;
+	});
+	const bool custom = allColorBars && m_axis->position() == Axis::Position::Custom;
+	const bool logical = !anyColorBar && m_axis->position() == Axis::Position::Logical;
+	ui.sbPosition->setVisible(!custom && !logical);
+	ui.sbPositionLogical->setVisible(logical);
+	ui.lColorBarPositionX->setVisible(custom);
+	ui.sbColorBarPositionX->setVisible(custom);
+	ui.lColorBarPositionY->setVisible(custom);
+	ui.sbColorBarPositionY->setVisible(custom);
+	ui.lColorBarWidth->setVisible(anyColorBar);
+	ui.sbColorBarWidth->setVisible(anyColorBar);
+	ui.lColorBarHeight->setVisible(anyColorBar);
+	ui.sbColorBarHeight->setVisible(anyColorBar);
+	const bool horizontal = m_axis->orientation() == Axis::Orientation::Horizontal;
+	const bool sameOrientation = std::all_of(m_axesList.cbegin(), m_axesList.cend(), [this](const Axis* axis) {
+		return axis->orientation() == m_axis->orientation();
+	});
+	const bool allCustom = std::all_of(m_axesList.cbegin(), m_axesList.cend(), [](const Axis* axis) {
+		return axis->position() == Axis::Position::Custom;
+	});
+	ui.sbColorBarPositionX->setEnabled(allCustom);
+	ui.sbColorBarPositionY->setEnabled(allCustom);
+	ui.sbColorBarWidth->setEnabled(allColorBars && (allCustom || (sameOrientation && !horizontal)));
+	ui.sbColorBarHeight->setEnabled(allColorBars && (allCustom || (sameOrientation && horizontal)));
+	const QString automaticLength = i18n("The length follows the plot area. Select Custom position to set it manually.");
+	ui.sbColorBarWidth->setToolTip(!custom && horizontal ? automaticLength : QString());
+	ui.sbColorBarHeight->setToolTip(!custom && !horizontal ? automaticLength : QString());
+	const auto rect = m_axis->plot()->dataRect();
+	const double length = custom ? m_axis->colorBarLength() : (horizontal ? rect.width() : rect.height());
+	ui.sbColorBarWidth->setValue(Worksheet::convertFromSceneUnits(horizontal ? length : m_axis->colorBarWidth(), m_worksheetUnit));
+	ui.sbColorBarHeight->setValue(Worksheet::convertFromSceneUnits(horizontal ? m_axis->colorBarWidth() : length, m_worksheetUnit));
+	ui.sbColorBarPositionX->setValue(Worksheet::convertFromSceneUnits(m_axis->colorBarPosition().x(), m_worksheetUnit));
+	ui.sbColorBarPositionY->setValue(Worksheet::convertFromSceneUnits(m_axis->colorBarPosition().y(), m_worksheetUnit));
 }
 
 void AxisDock::activateTitleTab() {
@@ -577,6 +728,15 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 
 void AxisDock::updatePlotRangeList() {
 	BaseDock::updatePlotRangeList();
+	if (!m_axis)
+		return;
+	const bool allColorBars = std::all_of(m_axesList.cbegin(), m_axesList.cend(), [](const Axis* axis) {
+		return axis->axisType() == Axis::AxisType::ColorBar;
+	});
+	ui.lPlotRange->setVisible(!allColorBars);
+	ui.cbPlotRanges->setVisible(!allColorBars);
+	if (m_axis->axisType() == Axis::AxisType::ColorBar)
+		return;
 
 	if (m_axis->coordinateSystemCount() == 0)
 		return;
@@ -588,6 +748,74 @@ void AxisDock::updatePlotRangeList() {
 	else
 		logicalRange = m_axis->plot()->range(Dimension::X, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::X));
 	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, ui.sbPositionLogical->value());
+}
+
+void AxisDock::updateTypeWidgets() {
+	const auto type = m_axis->axisType();
+	const bool sameType = std::all_of(m_axesList.cbegin(), m_axesList.cend(), [type](const Axis* axis) {
+		return axis->axisType() == type;
+	});
+	const bool allColorBars = sameType && type == Axis::AxisType::ColorBar;
+	const bool anyColorBar = std::any_of(m_axesList.cbegin(), m_axesList.cend(), [](const Axis* axis) {
+		return axis->axisType() == Axis::AxisType::ColorBar;
+	});
+	ui.cbAxisType->setCurrentIndex(sameType ? ui.cbAxisType->findData(static_cast<int>(type)) : -1);
+	ui.lHeatmap->setVisible(anyColorBar);
+	cbHeatmap->setVisible(anyColorBar);
+	ui.lHeatmap->setEnabled(allColorBars);
+	cbHeatmap->setEnabled(allColorBars);
+	const bool sameHeatmap = std::all_of(m_axesList.cbegin(), m_axesList.cend(), [this](const Axis* axis) {
+		return axis->heatmap() == m_axis->heatmap() && axis->heatmapPath() == m_axis->heatmapPath();
+	});
+	cbHeatmap->setAspect(sameHeatmap ? m_axis->heatmap() : nullptr, sameHeatmap ? m_axis->heatmapPath() : QString());
+	ui.tabWidget->setTabVisible(ui.tabWidget->indexOf(ui.tabGrid), !allColorBars);
+	ui.cbRangeScale->setVisible(!allColorBars && !m_axis->rangeScale());
+	ui.cbScale->setVisible(!allColorBars && !m_axis->rangeScale());
+	ui.lScale->setVisible(!allColorBars && !m_axis->rangeScale());
+	const QString rangeInfo = type == Axis::AxisType::ColorBar
+		? i18n("Auto and Auto Data use the heatmap color limits. Custom allows entering a range manually.")
+		: i18n("Auto uses the plot range. Auto Data uses the plotted data range. Custom allows entering a range manually.");
+	ui.lRangeType->setToolTip(rangeInfo);
+	ui.cbRangeType->setToolTip(rangeInfo);
+}
+
+void AxisDock::axisTypeChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+	if (index < 0)
+		return;
+	const auto type = static_cast<Axis::AxisType>(ui.cbAxisType->itemData(index).toInt());
+	m_axis->beginMacro(i18n("Set axis type"));
+	for (auto* axis : m_axesList)
+		axis->setAxisType(type);
+	m_axis->endMacro();
+	load();
+	updatePlotRangeList();
+}
+
+void AxisDock::heatmapChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
+	if (!cbHeatmap->isEnabled())
+		return;
+	const auto* aspect = index.isValid() ? static_cast<const AbstractAspect*>(index.internalPointer()) : nullptr;
+	const auto* heatmap = dynamic_cast<const Heatmap*>(aspect);
+	if (aspect && !heatmap) {
+		updateTypeWidgets();
+		return;
+	}
+	m_axis->beginMacro(i18n("Set color bar heatmap"));
+	for (auto* axis : m_axesList)
+		axis->setHeatmap(heatmap);
+	m_axis->endMacro();
+	load();
+	updatePlotRangeList();
+}
+
+void AxisDock::axisColorBarChanged() {
+	if (!aspect())
+		return;
+	CONDITIONAL_LOCK_RETURN;
+	load();
+	updatePlotRangeList();
 }
 
 void AxisDock::updateAutoScale() {
@@ -662,27 +890,21 @@ void AxisDock::orientationChanged(int item) {
 
 	// depending on the current orientation we need to update axis position and labels position
 
-	// axis position, map from the current index in the combobox to the enum value in Axis::Position
-	Axis::Position axisPosition;
-	int posIndex = ui.cbPosition->currentIndex();
-	if (orientation == Axis::Orientation::Horizontal) {
-		if (posIndex > 1)
-			posIndex += 2;
-		axisPosition = Axis::Position(posIndex);
-	} else
-		axisPosition = Axis::Position(posIndex + 2);
+	const auto axisPosition = static_cast<Axis::Position>(ui.cbPosition->currentData().toInt());
 
 	// labels position
-	posIndex = ui.cbLabelsPosition->currentIndex();
+	const int posIndex = ui.cbLabelsPosition->currentIndex();
 	auto labelsPosition = Axis::LabelsPosition(posIndex);
 
 	for (auto* axis : m_axesList) {
 		axis->beginMacro(i18n("%1: set axis orientation", axis->name()));
 		axis->setOrientation(orientation);
-		axis->setPosition(axisPosition);
+		if (ui.cbPosition->currentIndex() >= 0)
+			axis->setPosition(axisPosition);
 		axis->setLabelsPosition(labelsPosition);
 		axis->endMacro();
 	}
+	updatePositionWidgets();
 }
 
 /*!
@@ -690,49 +912,48 @@ void AxisDock::orientationChanged(int item) {
 	(top, bottom, left, right, center or custom) was changed.
 */
 void AxisDock::positionChanged(int index) {
-	if (index == -1)
-		return; // we occasionally get -1 here, nothing to do in this case
-
+	if (index < 0)
+		return;
 	CONDITIONAL_LOCK_RETURN;
-
-	// map from the current index in the combo box to the enum value in Axis::Position,
-	// depends on the current orientation
-	bool logical = false;
-	Axis::Position position;
-	if (index == Logical) {
-		position = Axis::Position::Logical;
-		logical = true;
-	} else if (index == Center)
-		position = Axis::Position::Centered;
-	else if (ui.cbOrientation->currentIndex() == 0) {
-		// horizontal
-		switch (index) {
-		case Bottom_Right:
-			position = Axis::Position::Bottom;
-			break;
-		case Top_Left:
-		default:
-			position = Axis::Position::Top;
-			break;
-		}
-	} else {
-		// vertical
-		switch (index) {
-		case Bottom_Right:
-			position = Axis::Position::Right;
-			break;
-		case Top_Left:
-		default:
-			position = Axis::Position::Left;
-			break;
-		}
-	}
-
-	ui.sbPosition->setVisible(!logical);
-	ui.sbPositionLogical->setVisible(logical);
-
+	const auto position = static_cast<Axis::Position>(ui.cbPosition->itemData(index).toInt());
+	m_axis->beginMacro(i18n("Set axis position"));
 	for (auto* axis : m_axesList)
 		axis->setPosition(position);
+	m_axis->endMacro();
+	updatePositionWidgets();
+}
+
+void AxisDock::colorBarPositionChanged(Dimension dimension, double value) {
+	CONDITIONAL_LOCK_RETURN;
+	m_axis->beginMacro(i18n("Set color bar position"));
+	for (auto* axis : m_axesList) {
+		if (axis->axisType() != Axis::AxisType::ColorBar || axis->position() != Axis::Position::Custom)
+			continue;
+		auto position = axis->colorBarPosition();
+		if (dimension == Dimension::X)
+			position.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+		else
+			position.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+		axis->setColorBarPosition(position);
+	}
+	m_axis->endMacro();
+	updatePositionWidgets();
+}
+
+void AxisDock::colorBarSizeChanged(Dimension dimension, double value) {
+	CONDITIONAL_LOCK_RETURN;
+	const double size = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	m_axis->beginMacro(i18n("Set color bar size"));
+	for (auto* axis : m_axesList) {
+		if (axis->axisType() != Axis::AxisType::ColorBar)
+			continue;
+		if ((dimension == Dimension::X) == (axis->orientation() == Axis::Orientation::Vertical))
+			axis->setColorBarWidth(size);
+		else if (axis->position() == Axis::Position::Custom)
+			axis->setColorBarLength(size);
+	}
+	m_axis->endMacro();
+	updatePositionWidgets();
 }
 
 /*!
@@ -1614,28 +1835,12 @@ void AxisDock::labelsOpacityChanged(int value) {
 void AxisDock::axisOrientationChanged(Axis::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
+	updatePositionWidgets();
 }
 
-void AxisDock::axisPositionChanged(Axis::Position position) {
+void AxisDock::axisPositionChanged(Axis::Position) {
 	CONDITIONAL_LOCK_RETURN;
-
-	// map from the enum Qt::Orientation to the index in the combo box
-	int index{static_cast<int>(position)};
-	switch (index) {
-	case static_cast<int>(Axis::Position::Top):
-	case static_cast<int>(Axis::Position::Left):
-		ui.cbPosition->setCurrentIndex(Top_Left);
-		break;
-	case static_cast<int>(Axis::Position::Bottom):
-	case static_cast<int>(Axis::Position::Right):
-		ui.cbPosition->setCurrentIndex(Bottom_Right);
-		break;
-	case static_cast<int>(Axis::Position::Centered):
-		ui.cbPosition->setCurrentIndex(Center);
-		break;
-	case static_cast<int>(Axis::Position::Logical):
-		ui.cbPosition->setCurrentIndex(Logical);
-	}
+	updatePositionWidgets();
 }
 
 void AxisDock::axisPositionChanged(double value) {
@@ -1925,39 +2130,13 @@ void AxisDock::load() {
 	const auto* cSystem = plot->coordinateSystem(m_axis->coordinateSystemIndex());
 	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
 
-	Range<double> logicalRange(0, 0);
-	if (orientation == Axis::Orientation::Horizontal)
-		logicalRange = plot->range(Dimension::Y, yIndex);
-	else
-		logicalRange = plot->range(Dimension::X, xIndex);
-	updatePositionText(orientation);
-
-	int index{static_cast<int>(m_axis->position())};
-	bool logical = false;
-	switch (index) {
-	case static_cast<int>(Axis::Position::Top):
-	case static_cast<int>(Axis::Position::Left):
-		ui.cbPosition->setCurrentIndex(Top_Left);
-		break;
-	case static_cast<int>(Axis::Position::Bottom):
-	case static_cast<int>(Axis::Position::Right):
-		ui.cbPosition->setCurrentIndex(Bottom_Right);
-		break;
-	case static_cast<int>(Axis::Position::Centered):
-		ui.cbPosition->setCurrentIndex(Center);
-		break;
-	case static_cast<int>(Axis::Position::Logical):
-		ui.cbPosition->setCurrentIndex(Logical);
-		logical = true;
+	if (m_axis->axisType() == Axis::AxisType::Normal) {
+		const auto logicalRange = orientation == Axis::Orientation::Horizontal ? plot->range(Dimension::Y, yIndex) : plot->range(Dimension::X, xIndex);
+		spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
 	}
-
-	ui.sbPositionLogical->setVisible(logical);
-	ui.sbPosition->setVisible(!logical);
-
-	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
-
-	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
 	ui.sbPositionLogical->setValue(m_axis->logicalPosition());
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
+	updatePositionWidgets();
 
 	updateScale();
 	const bool rangeScale = m_axis->rangeScale();
@@ -1971,7 +2150,7 @@ void AxisDock::load() {
 	ui.cbScale->setVisible(!rangeScale);
 	ui.lScale->setVisible(!rangeScale);
 
-	index = static_cast<int>(m_axis->rangeType());
+	int index = static_cast<int>(m_axis->rangeType());
 	ui.cbRangeType->setCurrentIndex(index);
 	rangeTypeChanged(index);
 	ui.sbStart->setValue(m_axis->range().start());
@@ -2086,6 +2265,7 @@ void AxisDock::load() {
 	minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	labelsTextTypeChanged(ui.cbLabelsTextType->currentIndex());
 	labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
+	updateTypeWidgets();
 }
 
 void AxisDock::setAxisColor() {
@@ -2126,13 +2306,17 @@ void AxisDock::loadConfig(KConfig& config) {
 	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
+	ui.cbAxisType->setCurrentIndex(ui.cbAxisType->findData(group.readEntry(QStringLiteral("AxisType"), static_cast<int>(m_axis->axisType()))));
 	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_axis->orientation()));
 
-	int index = group.readEntry(QStringLiteral("Position"), (int)m_axis->position());
-	if (index > 1)
-		ui.cbPosition->setCurrentIndex(index - 2);
-	else
-		ui.cbPosition->setCurrentIndex(index);
+	int index = group.readEntry(QStringLiteral("Position"), static_cast<int>(m_axis->position()));
+	ui.cbPosition->setCurrentIndex(ui.cbPosition->findData(index));
+	for (auto* axis : m_axesList) {
+		axis->setColorBarWidth(group.readEntry(QStringLiteral("ColorBarWidth"), axis->colorBarWidth()));
+		axis->setColorBarLength(group.readEntry(QStringLiteral("ColorBarLength"), axis->colorBarLength()));
+		axis->setColorBarPosition(QPointF(group.readEntry(QStringLiteral("ColorBarPositionX"), axis->colorBarPosition().x()),
+										  group.readEntry(QStringLiteral("ColorBarPositionY"), axis->colorBarPosition().y())));
+	}
 
 	ui.sbPositionLogical->setValue(group.readEntry(QStringLiteral("LogicalPosition"), m_axis->logicalPosition()));
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("PositionOffset"), m_axis->offset()), m_worksheetUnit));
@@ -2232,19 +2416,15 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
+	group.writeEntry(QStringLiteral("AxisType"), static_cast<int>(m_axis->axisType()));
 	auto orientation = (WorksheetElement::Orientation)ui.cbOrientation->currentIndex();
 	group.writeEntry(QStringLiteral("Orientation"), (int)orientation);
 
-	if (ui.cbPosition->currentIndex() == 2) {
-		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
-	} else if (ui.cbPosition->currentIndex() == 3) {
-		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
-	} else {
-		if (ui.cbOrientation->currentIndex() == static_cast<int>(Axis::Orientation::Horizontal))
-			group.writeEntry(QStringLiteral("Position"), ui.cbPosition->currentIndex());
-		else
-			group.writeEntry(QStringLiteral("Position"), ui.cbPosition->currentIndex() + 2);
-	}
+	group.writeEntry(QStringLiteral("Position"), static_cast<int>(m_axis->position()));
+	group.writeEntry(QStringLiteral("ColorBarWidth"), m_axis->colorBarWidth());
+	group.writeEntry(QStringLiteral("ColorBarLength"), m_axis->colorBarLength());
+	group.writeEntry(QStringLiteral("ColorBarPositionX"), m_axis->colorBarPosition().x());
+	group.writeEntry(QStringLiteral("ColorBarPositionY"), m_axis->colorBarPosition().y());
 
 	group.writeEntry(QStringLiteral("LogicalPosition"), ui.sbPositionLogical->value());
 	group.writeEntry(QStringLiteral("PositionOffset"), Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));

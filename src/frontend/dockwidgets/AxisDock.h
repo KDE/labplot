@@ -31,6 +31,7 @@ public:
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
 	void updateLocale() override;
+	void updateUnits() override;
 	void retranslateUi() override;
 	void updateAutoScale();
 
@@ -39,6 +40,9 @@ private:
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
 	LabelWidget* labelWidget; // for title
+	TreeViewComboBox* cbHeatmap{nullptr};
+	AspectTreeModel* m_heatmapModel{nullptr};
+	QVector<QMetaObject::Connection> m_colorBarConnections;
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	TreeViewComboBox* cbLabelsTextColumn;
@@ -50,6 +54,8 @@ private:
 	bool m_dataChanged{false};
 
 	void setModel();
+	void updateTypeWidgets();
+	void axisColorBarChanged();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 	void updatePlotRangeList() override;
 	void updateMajorTicksStartType(bool visible);
@@ -58,6 +64,9 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 	void updatePositionText(Axis::Orientation);
+	void updatePositionWidgets();
+	void colorBarSizeChanged(Dimension, double);
+	void colorBarPositionChanged(Dimension, double);
 	void updateLabelsPosition(Axis::LabelsPosition);
 	void updateLabelsFormatWidgets(Axis::LabelsFormat format);
 	void updateAxisColor();
@@ -75,6 +84,8 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered in AxisDock
 	//"General"-tab
+	void axisTypeChanged(int);
+	void heatmapChanged(const QModelIndex&);
 	void colorChanged(const QColor&);
 	void orientationChanged(int);
 	void positionChanged(int);

@@ -74,5 +74,7 @@ private Q_SLOTS:
 
 	// legend
 	void legendSingleInstance();
+	void addHeatmapColorBar();
+	void addColorBarActions();
 };
 #endif

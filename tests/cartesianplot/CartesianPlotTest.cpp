@@ -10,6 +10,7 @@
 */
 
 #include "CartesianPlotTest.h"
+#include "backend/worksheet/plots/cartesian/Heatmap.h"
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
@@ -1814,6 +1815,101 @@ void CartesianPlotTest::legendSingleInstance() {
 	QCOMPARE(plot->childCount<CartesianPlotLegend>(), 1);
 
 	delete project;
+}
+
+void CartesianPlotTest::addHeatmapColorBar() {
+	QString savePath;
+	{
+		Project project;
+		auto* ws = new Worksheet(QStringLiteral("worksheet"));
+		project.addChild(ws);
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		plot->setType(CartesianPlot::Type::TwoAxes);
+		ws->addChild(plot);
+		auto* verticalAxis = plot->verticalAxis();
+		project.undoStack()->clear();
+		QAction action;
+		action.setData(static_cast<int>(Plot::PlotType::Heatmap));
+		plot->addPlot(&action);
+		QCOMPARE(project.undoStack()->count(), 1);
+		QCOMPARE(plot->children<Heatmap>().size(), 1);
+		QCOMPARE(plot->children<Axis>().size(), 3);
+		auto* heatmap = plot->child<Heatmap>(0);
+		auto* bar = plot->children<Axis>().last();
+		QCOMPARE(bar->axisType(), Axis::AxisType::ColorBar);
+		QCOMPARE(bar->orientation(), Axis::Orientation::Vertical);
+		QCOMPARE(bar->position(), Axis::Position::Right);
+		QCOMPARE(bar->offset(), 0.);
+		QCOMPARE(bar->rangeType(), Axis::RangeType::Auto);
+		QCOMPARE(bar->heatmap(), heatmap);
+		QCOMPARE(plot->verticalAxis(), verticalAxis);
+		QCOMPARE(bar->range().start(), heatmap->formatMin());
+		QCOMPARE(bar->range().end(), heatmap->formatMax());
+		QVERIFY(bar->coordinateSystem() != plot->coordinateSystem(0));
+		for (int i = 0; i < 2; ++i) {
+			project.undoStack()->undo();
+			QCOMPARE(plot->children<Heatmap>().size(), 0);
+			QCOMPARE(plot->children<Axis>().size(), 2);
+			project.undoStack()->redo();
+			QCOMPARE(plot->children<Heatmap>().size(), 1);
+			QCOMPARE(plot->children<Axis>().size(), 3);
+			QCOMPARE(plot->children<Axis>().last(), bar);
+			QCOMPARE(bar->heatmap(), heatmap);
+			QVERIFY(bar->coordinateSystem() != plot->coordinateSystem(0));
+		}
+		plot->addPlot(&action);
+		QCOMPARE(project.undoStack()->count(), 2);
+		QCOMPARE(plot->children<Heatmap>().size(), 2);
+		QCOMPARE(plot->children<Axis>().size(), 4);
+		QCOMPARE(plot->children<Axis>().last()->heatmap(), plot->children<Heatmap>().last());
+		SAVE_PROJECT("heatmap-auto-color-bars");
+	}
+	Project project;
+	QVERIFY(project.load(savePath));
+	auto* plot = project.child<Worksheet>(0)->child<CartesianPlot>(0);
+	QCOMPARE(plot->children<Heatmap>().size(), 2);
+	QCOMPARE(plot->children<Axis>().size(), 4);
+	const auto axes = plot->children<Axis>();
+	for (int i = 0; i < 2; ++i) {
+		QCOMPARE(axes.at(i + 2)->axisType(), Axis::AxisType::ColorBar);
+		QCOMPARE(axes.at(i + 2)->heatmap(), plot->child<Heatmap>(i));
+	}
+	// Backend insertion creates only the requested object.
+	plot->addChild(new Heatmap(QStringLiteral("raw heatmap")));
+	QCOMPARE(plot->children<Heatmap>().size(), 3);
+	QCOMPARE(plot->children<Axis>().size(), 4);
+}
+
+void CartesianPlotTest::addColorBarActions() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+	plot->initMenus();
+	project.undoStack()->clear();
+	plot->addHorizontalColorBarAction->trigger();
+	QCOMPARE(project.undoStack()->count(), 1);
+	QCOMPARE(plot->children<Axis>().size(), 1);
+	auto* horizontal = plot->child<Axis>(0);
+	QCOMPARE(horizontal->axisType(), Axis::AxisType::ColorBar);
+	QCOMPARE(horizontal->orientation(), Axis::Orientation::Horizontal);
+	QCOMPARE(horizontal->position(), Axis::Position::Bottom);
+	QVERIFY(!horizontal->heatmap());
+	QVERIFY(!plot->horizontalAxis());
+	plot->addVerticalColorBarAction->trigger();
+	QCOMPARE(project.undoStack()->count(), 2);
+	QCOMPARE(plot->children<Axis>().size(), 2);
+	auto* vertical = plot->child<Axis>(1);
+	QCOMPARE(vertical->axisType(), Axis::AxisType::ColorBar);
+	QCOMPARE(vertical->orientation(), Axis::Orientation::Vertical);
+	QCOMPARE(vertical->position(), Axis::Position::Right);
+	QVERIFY(!vertical->heatmap());
+	QVERIFY(!plot->verticalAxis());
+	project.undoStack()->undo();
+	QCOMPARE(plot->children<Axis>().size(), 1);
+	project.undoStack()->redo();
+	QCOMPARE(plot->child<Axis>(1), vertical);
 }
 
 QTEST_MAIN(CartesianPlotTest)

@@ -453,6 +453,8 @@ void CartesianPlot::initActions() {
 
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal Axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical Axis"), this);
+	addHorizontalColorBarAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal Color Bar"), this);
+	addVerticalColorBarAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical Color Bar"), this);
 	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), this);
 	addImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), this);
 	addInfoElementAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Info Element"), this);
@@ -483,6 +485,8 @@ void CartesianPlot::initActions() {
 	connect(addLegendAction, &QAction::triggered, this, static_cast<void (CartesianPlot::*)()>(&CartesianPlot::addLegend));
 	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
 	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
+	connect(addHorizontalColorBarAction, &QAction::triggered, this, &CartesianPlot::addHorizontalColorBar);
+	connect(addVerticalColorBarAction, &QAction::triggered, this, &CartesianPlot::addVerticalColorBar);
 	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
 	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
 	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
@@ -535,6 +539,8 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addHorizontalAxisAction);
 	m_addNewMenu->addAction(addVerticalAxisAction);
+	m_addNewMenu->addAction(addHorizontalColorBarAction);
+	m_addNewMenu->addAction(addVerticalColorBarAction);
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 	m_addNewMenu->addAction(addImageAction);
@@ -2048,9 +2054,14 @@ void CartesianPlot::addPlot(const QAction* action) {
 		addChild(new ParetoChart(i18n("Pareto Chart")));
 		break;
 	}
-	case Plot::PlotType::Heatmap:
-		addChild(new Heatmap(i18n("Heatmap")));
+	case Plot::PlotType::Heatmap: {
+		beginMacro(i18n("%1: add heatmap with color bar", name()));
+		auto* heatmap = new Heatmap(i18n("Heatmap"));
+		addChild(heatmap);
+		addColorBar(Axis::Orientation::Vertical, heatmap);
+		endMacro();
 		break;
+	}
 	}
 }
 
@@ -2134,7 +2145,7 @@ Axis* CartesianPlot::horizontalAxis() const {
 	const auto& axes = children(AspectType::Axis);
 	for (auto a : axes) {
 		auto axis = static_cast<Axis*>(a);
-		if (axis->orientation() == Axis::Orientation::Horizontal)
+		if (axis->axisType() == Axis::AxisType::Normal && axis->orientation() == Axis::Orientation::Horizontal)
 			return axis;
 	}
 
@@ -2150,7 +2161,7 @@ Axis* CartesianPlot::verticalAxis() const {
 	const auto& axes = children(AspectType::Axis);
 	for (auto a : axes) {
 		auto axis = static_cast<Axis*>(a);
-		if (axis->orientation() == Axis::Orientation::Vertical)
+		if (axis->axisType() == Axis::AxisType::Normal && axis->orientation() == Axis::Orientation::Vertical)
 			return axis;
 	}
 
@@ -2188,6 +2199,29 @@ void CartesianPlot::addVerticalAxis() {
 	}
 	axis->setSuppressRetransform(false);
 	axis->retransform();
+}
+
+Axis* CartesianPlot::addColorBar(WorksheetElement::Orientation orientation, const Heatmap* heatmap) {
+	auto* axis = new Axis(i18n("Color Bar"), orientation, Axis::AxisType::ColorBar);
+	axis->setUndoAware(false);
+	axis->setSuppressRetransform(true);
+	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+	axis->setPosition(orientation == Axis::Orientation::Vertical ? Axis::Position::Right : Axis::Position::Bottom);
+	axis->setOffset(0.);
+	axis->setRangeType(Axis::RangeType::Auto);
+	axis->setSuppressRetransform(false);
+	axis->setUndoAware(true);
+	addChild(axis);
+	axis->setHeatmap(heatmap);
+	return axis;
+}
+
+void CartesianPlot::addHorizontalColorBar() {
+	addColorBar(Axis::Orientation::Horizontal);
+}
+
+void CartesianPlot::addVerticalColorBar() {
+	addColorBar(Axis::Orientation::Vertical);
 }
 
 void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution type) {
@@ -3941,6 +3975,9 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		rangep.prev = rangep.range;
 
 		for (auto* axis : q->children<Axis>()) {
+			if ((axis->axisType() == Axis::AxisType::ColorBar && axis->heatmap())
+				|| axis->coordinateSystemSource() == WorksheetElement::CoordinateSystemSource::Custom)
+				continue;
 			QDEBUG(Q_FUNC_INFO << ", auto-scale axis" << axis->name() << "of scale" << axis->scale())
 			// use ranges of axis
 			auto range = axis->range();

@@ -67,6 +67,17 @@ private Q_SLOTS:
 	void autoScaleLog10();
 	void autoScaleLog102();
 	void autoScaleLog102Vertical();
+
+	void colorBar();
+
+	void colorBarPlacement_data();
+	void colorBarPlacement();
+	void customCoordinateSystem();
+	void colorBarSaveLoad_data();
+	void colorBarSaveLoad();
+	void colorBarDock();
+	void colorBarGeometryDock_data();
+	void colorBarGeometryDock();
 };
 
 #endif // AXISTEST_H

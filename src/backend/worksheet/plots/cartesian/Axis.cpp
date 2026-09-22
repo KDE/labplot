@@ -9,6 +9,7 @@
 */
 
 #include "AxisPrivate.h"
+#include "Heatmap.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/Time.h"
@@ -95,18 +96,33 @@ private:
  *
  * Note, this class doesn't define the acttualy coordinate system and the data range to be plotted - this is
  * done in \c CartesianPlot. In this class only the properties and the drawing of the visual object "axis" is
- * handled.
+ * handled. Color bars use a private coordinate system mapping heatmap values to the plot data rectangle or a custom rectangle.
  *
  * \ingroup CartesianPlotArea
  */
-Axis::Axis(const QString& name, Orientation orientation, bool loading)
+Axis::Axis(const QString& name, Orientation orientation, AxisType type, bool loading)
 	: WorksheetElement(name, new AxisPrivate(this), AspectType::Axis) {
+	Q_D(Axis);
+	d->axisType = type;
 	init(orientation, loading);
+}
+
+Axis::Axis(const QString& name, Orientation orientation, bool loading)
+	: Axis(name, orientation, AxisType::Normal, loading) {
 }
 
 Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
 	: WorksheetElement(name, dd, AspectType::Axis) {
 	init(orientation);
+}
+
+void Axis::finalizeAdd() {
+	WorksheetElement::finalizeAdd();
+	Q_D(Axis);
+	// Adding an axis (including redo) assigns its plot coordinate system.
+	// A preconfigured color bar must rebuild its own mapping afterwards.
+	if (d->axisType == AxisType::ColorBar)
+		retransform();
 }
 
 void Axis::init(Orientation orientation, bool loading) {
@@ -440,6 +456,8 @@ BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, rangeScale, rangeScale)
 RangeT::Scale Axis::scale() const {
 	Q_D(const Axis);
+	if (d->hasColorBar())
+		return RangeT::Scale::Linear;
 	if (d->rangeScale)
 		return d->range.scale();
 	return d->scale;
@@ -521,6 +539,96 @@ BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsBackgroundColor, labelsBackground
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisType, axisType, axisType)
+BASIC_SHARED_D_READER_IMPL(Axis, double, colorBarWidth, colorBarWidth)
+BASIC_SHARED_D_READER_IMPL(Axis, double, colorBarLength, colorBarLength)
+BASIC_SHARED_D_READER_IMPL(Axis, QPointF, colorBarPosition, colorBarPosition)
+BASIC_SHARED_D_READER_IMPL(Axis, const Heatmap*, heatmap, heatmap)
+BASIC_SHARED_D_READER_IMPL(Axis, QString, heatmapPath, heatmapPath)
+
+void Axis::setHeatmapPath(const QString& path) {
+	Q_D(Axis);
+	d->heatmapPath = path;
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetAxisType, Axis::AxisType, axisType, retransformRange)
+void Axis::setAxisType(AxisType type) {
+	Q_D(Axis);
+	if (type == d->axisType)
+		return;
+	const bool changePosition =
+		(type == AxisType::ColorBar && d->position == Position::Logical) || (type == AxisType::Normal && d->position == Position::Custom);
+	if (changePosition)
+		beginMacro(i18n("%1: set axis type", name()));
+	exec(new AxisSetAxisTypeCmd(d, type, ki18n("%1: set axis type")));
+	if (changePosition) {
+		setPosition(type == AxisType::ColorBar ? Position::Custom : Position::Logical);
+		endMacro();
+	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetColorBarWidth, double, colorBarWidth, retransform)
+void Axis::setColorBarWidth(double width) {
+	Q_D(Axis);
+	if (std::isfinite(width) && width > 0 && width != d->colorBarWidth)
+		exec(new AxisSetColorBarWidthCmd(d, width, ki18n("%1: set color bar width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetColorBarLength, double, colorBarLength, retransform)
+void Axis::setColorBarLength(double length) {
+	Q_D(Axis);
+	if (std::isfinite(length) && length > 0 && length != d->colorBarLength)
+		exec(new AxisSetColorBarLengthCmd(d, length, ki18n("%1: set color bar length")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetColorBarPosition, QPointF, colorBarPosition, retransform)
+void Axis::setColorBarPosition(QPointF position) {
+	Q_D(Axis);
+	if (std::isfinite(position.x()) && std::isfinite(position.y()) && position != d->colorBarPosition)
+		exec(new AxisSetColorBarPositionCmd(d, position, ki18n("%1: set color bar position")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetHeatmap, const Heatmap*, heatmap, connectHeatmap)
+void Axis::setHeatmap(const Heatmap* heatmap) {
+	Q_D(Axis);
+	if (heatmap != d->heatmap)
+		exec(new AxisSetHeatmapCmd(d, heatmap, ki18n("%1: set heatmap")));
+}
+
+void Axis::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
+	Q_D(Axis);
+	if (path == d->heatmapPath) {
+		const bool undo = isUndoAware();
+		setUndoAware(false);
+		setHeatmap(dynamic_cast<const Heatmap*>(aspect));
+		setUndoAware(undo);
+	}
+}
+
+void AxisPrivate::connectHeatmap() {
+	for (const auto& connection : std::as_const(heatmapConnections))
+		QObject::disconnect(connection);
+	heatmapConnections.clear();
+	heatmapPath = heatmap ? heatmap->path() : QString();
+	if (heatmap) {
+		heatmapConnections << QObject::connect(heatmap, &Heatmap::formatChanged, q, [this] {
+			retransformRange();
+		});
+		heatmapConnections << QObject::connect(heatmap, &AbstractAspect::aspectDescriptionChanged, q, [this] {
+			heatmapPath = heatmap->path();
+		});
+		heatmapConnections << QObject::connect(heatmap, &AbstractAspect::aspectAboutToBeRemoved, q, [this](const AbstractAspect* aspect) {
+			if (aspect != heatmap)
+				return;
+			const auto path = heatmapPath;
+			heatmap = nullptr;
+			connectHeatmap();
+			heatmapPath = path;
+			Q_EMIT q->heatmapChanged(nullptr);
+		});
+	}
+	retransformRange();
+}
 
 int Axis::maxNumberMajorTicksCustomColumn() {
 	return _maxNumberMajorTicksCustomColumn;
@@ -557,6 +665,10 @@ bool Axis::isDefault() const {
 
 bool Axis::isNumeric() const {
 	Q_D(const Axis);
+	if (d->hasColorBar())
+		return true;
+	if (!cSystem)
+		return d->range.format() == RangeT::Format::Numeric;
 	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
 	bool numeric = ((d->orientation == Axis::Orientation::Horizontal && d->m_plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 					|| (d->orientation == Axis::Orientation::Vertical && d->m_plot->yRangeFormat(yIndex) == RangeT::Format::Numeric));
@@ -573,6 +685,8 @@ void Axis::setOrientation(Orientation orientation) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetPosition, Axis::Position, position, retransform)
 void Axis::setPosition(Position position) {
 	Q_D(Axis);
+	if ((d->axisType == AxisType::ColorBar && position == Position::Logical) || (d->axisType == AxisType::Normal && position == Position::Custom))
+		return;
 	if (position != d->position)
 		exec(new AxisSetPositionCmd(d, position, ki18n("%1: set axis position")));
 }
@@ -1139,6 +1253,19 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformRange() {
+	if (!plot())
+		return;
+	if (hasColorBar()) {
+		if (rangeType != Axis::RangeType::Custom) {
+			const auto format = heatmap->format();
+			range = Range<double>(format.min, format.max);
+			Q_EMIT q->rangeChanged(range);
+		}
+		retransform();
+		return;
+	}
+	if (!q->cSystem)
+		return;
 	switch (rangeType) { // also if not changing (like on plot range changes)
 	case Axis::RangeType::Auto: {
 		if (orientation == Axis::Orientation::Horizontal)
@@ -1158,6 +1285,8 @@ void AxisPrivate::retransformRange() {
 		DEBUG(Q_FUNC_INFO << ", new auto data range = " << range.toStdString())
 		break;
 	case Axis::RangeType::Custom:
+		// if (colorBarSystem)
+		// 	retransform();
 		return;
 	}
 
@@ -1166,6 +1295,17 @@ void AxisPrivate::retransformRange() {
 }
 
 void AxisPrivate::retransformLine() {
+	retransformColorBar();
+	if (!q->cSystem) {
+		linePath = majorTicksPath = minorTicksPath = arrowPath = majorGridPath = minorGridPath = QPainterPath();
+		lines.clear();
+		majorTickPoints.clear();
+		minorTickPoints.clear();
+		tickLabelPoints.clear();
+		tickLabelStrings.clear();
+		tickLabelValues.clear();
+		return;
+	}
 	DEBUG(Q_FUNC_INFO << ", \"" << STDSTRING(title->name()) << "\", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range is x range " << q->cSystem->index(Dimension::X) + 1)
 	DEBUG(Q_FUNC_INFO << ", y range is y range " << q->cSystem->index(Dimension::Y) + 1)
@@ -1179,9 +1319,25 @@ void AxisPrivate::retransformLine() {
 
 	linePath = QPainterPath();
 	lines.clear();
+	if (hasColorBar() && (!q->cSystem->isValid() || !std::isfinite(range.start()) || !std::isfinite(range.end()) || range.start() >= range.end())) {
+		majorTicksPath = minorTicksPath = arrowPath = QPainterPath();
+		majorTickPoints.clear();
+		minorTickPoints.clear();
+		tickLabelPoints.clear();
+		tickLabelStrings.clear();
+		tickLabelValues.clear();
+		recalcShapeAndBoundingRect();
+		return;
+	}
 
 	QPointF startPoint, endPoint;
-	if (orientation == Axis::Orientation::Horizontal) {
+	if (hasColorBar() && position == Axis::Position::Custom) {
+		// Custom bars use their own physical rectangle, including outside the plot area.
+		if (orientation == Axis::Orientation::Horizontal)
+			lines.append(QLineF(colorBarRect.bottomLeft(), colorBarRect.bottomRight()));
+		else
+			lines.append(QLineF(colorBarRect.bottomRight(), colorBarRect.topRight()));
+	} else if (orientation == Axis::Orientation::Horizontal) {
 		if (position == Axis::Position::Logical) {
 			startPoint = QPointF(range.start(), logicalPosition);
 			endPoint = QPointF(range.end(), logicalPosition);
@@ -1264,9 +1420,45 @@ void AxisPrivate::retransformLine() {
 		}
 	}
 
-	for (const auto& l : std::as_const(lines)) {
-		linePath.moveTo(l.p1());
-		linePath.lineTo(l.p2());
+	if (hasColorBar() && !lines.isEmpty()) {
+		const auto axisLine = lines.first();
+		const auto center = colorBarCenter();
+		if (orientation == Axis::Orientation::Horizontal) {
+			const double dy = axisLine.y1() >= center.y() ? -colorBarWidth : colorBarWidth;
+			colorBarRect = QRectF(axisLine.p1(), axisLine.p2() + QPointF(0, dy)).normalized();
+		} else {
+			const double dx = axisLine.x1() < center.x() ? colorBarWidth : -colorBarWidth;
+			colorBarRect = QRectF(axisLine.p1(), axisLine.p2() + QPointF(dx, 0)).normalized();
+		}
+		linePath.addRect(colorBarRect);
+		const auto format = heatmap->format();
+		const int count = format.colors.size();
+		if (count && std::isfinite(format.min) && std::isfinite(format.max) && std::isfinite(format.max - format.min) && format.max > format.min) {
+			for (int i = 0; i < count; ++i) {
+				double start = i == 0 ? range.start() : std::max(range.start(), format.min + (format.max - format.min) * i / count);
+				double end = i == count - 1 ? range.end() : std::min(range.end(), format.min + (format.max - format.min) * (i + 1) / count);
+				if (start >= end)
+					continue;
+				QRectF band = colorBarRect;
+				if (orientation == Axis::Orientation::Horizontal) {
+					q->cSystem->mapXLogicalToScene(start);
+					q->cSystem->mapXLogicalToScene(end);
+					band.setLeft(start);
+					band.setRight(end);
+				} else {
+					q->cSystem->mapYLogicalToScene(start);
+					q->cSystem->mapYLogicalToScene(end);
+					band.setBottom(start);
+					band.setTop(end);
+				}
+				colorBarBands.append({band.normalized(), format.colors.at(i)});
+			}
+		}
+	} else {
+		for (const auto& axisLine : std::as_const(lines)) {
+			linePath.moveTo(axisLine.p1());
+			linePath.lineTo(axisLine.p2());
+		}
 	}
 
 	if (linePath.isEmpty()) {
@@ -1277,6 +1469,84 @@ void AxisPrivate::retransformLine() {
 		retransformArrow();
 		retransformTicks();
 	}
+}
+
+Range<double> AxisPrivate::coordinateRange(Dimension dimension) const {
+	if (hasColorBar())
+		return (dimension == Dimension::X) == (orientation == Axis::Orientation::Horizontal) ? range : Range<double>(0., 1.);
+	return plot()->range(dimension, q->cSystem->index(dimension));
+}
+
+QPointF AxisPrivate::colorBarCenter() const {
+	if (position == Axis::Position::Custom)
+		return colorBarRect.center();
+	// Explicit anchors retain their side even when an offset crosses the plot center.
+	QPointF center = plot()->dataRect().center();
+	if (position == Axis::Position::Top)
+		center.setY(plot()->dataRect().top() - offset + 1);
+	else if (position == Axis::Position::Bottom)
+		center.setY(plot()->dataRect().bottom() - offset - 1);
+	else if (position == Axis::Position::Left)
+		center.setX(plot()->dataRect().left() + offset + 1);
+	else if (position == Axis::Position::Right)
+		center.setX(plot()->dataRect().right() + offset - 1);
+	return center;
+}
+
+QPointF AxisPrivate::colorBarOutward(const QPointF& anchor) const {
+	const auto center = colorBarCenter();
+	if (orientation == Axis::Orientation::Horizontal)
+		return QPointF(0, anchor.y() >= center.y() ? 1 : -1);
+	return QPointF(anchor.x() < center.x() ? -1 : 1, 0);
+}
+
+void AxisPrivate::addColorBarTick(QPainterPath& path, const QPointF& anchor, Axis::TicksDirection direction, double length) const {
+	const auto outward = colorBarOutward(anchor);
+	if (direction & Axis::ticksOut) {
+		path.moveTo(anchor);
+		path.lineTo(anchor + outward * length);
+	}
+	if (direction & Axis::ticksIn) {
+		const auto inner = anchor - outward * colorBarWidth;
+		path.moveTo(inner);
+		path.lineTo(inner - outward * length);
+	}
+}
+
+void AxisPrivate::retransformColorBar() {
+	colorBarBands.clear();
+	colorBarRect = QRectF();
+	if (!hasColorBar()) {
+		updateCoordinateSystem(false);
+		return;
+	}
+	if (rangeType != Axis::RangeType::Custom) {
+		const auto format = heatmap->format();
+		const Range<double> heatmapRange(format.min, format.max);
+		if (range != heatmapRange) {
+			range = heatmapRange;
+			Q_EMIT q->rangeChanged(range);
+		}
+	}
+	if (!colorBarSystem)
+		colorBarSystem = std::make_unique<CartesianCoordinateSystem>(plot());
+	auto rect = plot()->dataRect();
+	if (position == Axis::Position::Custom) {
+		const bool horizontal = orientation == Axis::Orientation::Horizontal;
+		const QSizeF size(horizontal ? colorBarLength : colorBarWidth, horizontal ? colorBarWidth : colorBarLength);
+		rect = QRectF(rect.bottomLeft() + QPointF(colorBarPosition.x(), -colorBarPosition.y() - size.height()), size);
+		colorBarRect = rect;
+	}
+	for (auto dimension : {Dimension::X, Dimension::Y}) {
+		const auto logical = coordinateRange(dimension);
+		const Range<double> scene = dimension == Dimension::X ? Range<double>(rect.left(), rect.right()) : Range<double>(rect.bottom(), rect.top());
+		QVector<CartesianScale*> scales;
+		if (!rect.isEmpty() && std::isfinite(logical.start()) && std::isfinite(logical.end()) && std::isfinite(logical.end() - logical.start())
+			&& logical.start() < logical.end())
+			scales << CartesianScale::createLinearScale(logical, scene, logical);
+		colorBarSystem->setScales(dimension, scales);
+	}
+	q->cSystem = colorBarSystem.get();
 }
 
 void AxisPrivate::retransformArrow() {
@@ -1403,7 +1673,9 @@ bool AxisPrivate::calculateTickHorizontal(Axis::TicksDirection tickDirection,
 										  QPointF& anchorPointOut,
 										  QPointF& startPointOut,
 										  QPointF& endPointOut) {
-	const bool valid = q->cSystem->mapXLogicalToScene(xTickPos);
+	const bool valid = q->cSystem->mapXLogicalToScene(xTickPos,
+													  hasColorBar() ? CartesianCoordinateSystem::MappingFlag::SuppressPageClipping
+																	: CartesianCoordinateSystem::MappingFlag::DefaultMapping);
 	if (valid)
 		anchorPointOut.setX(xTickPos);
 	else
@@ -1430,7 +1702,9 @@ bool AxisPrivate::calculateTickVertical(Axis::TicksDirection tickDirection,
 										QPointF& anchorPointOut,
 										QPointF& startPointOut,
 										QPointF& endPointOut) {
-	const bool valid = q->cSystem->mapYLogicalToScene(yTickPos);
+	const bool valid = q->cSystem->mapYLogicalToScene(yTickPos,
+													  hasColorBar() ? CartesianCoordinateSystem::MappingFlag::SuppressPageClipping
+																	: CartesianCoordinateSystem::MappingFlag::DefaultMapping);
 	if (valid)
 		anchorPointOut.setY(yTickPos);
 	else
@@ -1639,7 +1913,9 @@ void AxisPrivate::retransformTicks() {
 	tickLabelValues.clear();
 	tickLabelValuesString.clear();
 
-	if (!q->cSystem) {
+	if (!q->cSystem || (hasColorBar() && !q->cSystem->isValid())) {
+		tickLabelStrings.clear();
+		tickLabelPoints.clear();
 		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
 		return;
 	}
@@ -1772,9 +2048,8 @@ void AxisPrivate::retransformTicks() {
 
 	//	const int xIndex{ q->cSystem->index(Dimension::X) }, yIndex{ q->cSystem->index(Dimension::Y) };
 	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const int xRangeDirection = plot()->range(Dimension::X, cs->index(Dimension::X)).direction();
-	const int yRangeDirection = plot()->range(Dimension::Y, cs->index(Dimension::Y)).direction();
+	const int xRangeDirection = coordinateRange(Dimension::X).direction();
+	const int yRangeDirection = coordinateRange(Dimension::Y).direction();
 	const int xDirection = q->cSystem->direction(Dimension::X) * xRangeDirection;
 	const int yDirection = q->cSystem->direction(Dimension::Y) * yRangeDirection;
 
@@ -1784,12 +2059,15 @@ void AxisPrivate::retransformTicks() {
 	bool valid = true;
 	double center_other_dim = std::nan("0");
 	if (orientation == Axis::Orientation::Horizontal) {
-		center_other_dim = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		center_other_dim = coordinateRange(Dimension::Y).center();
 		valid = q->cSystem->mapYLogicalToScene(center_other_dim);
 	} else {
-		center_other_dim = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
+		center_other_dim = coordinateRange(Dimension::X).center();
 		valid = q->cSystem->mapXLogicalToScene(center_other_dim);
 	}
+
+	if (hasColorBar())
+		center_other_dim = orientation == Axis::Orientation::Horizontal ? colorBarCenter().y() : colorBarCenter().x();
 
 	const bool dateTimeSpacing = !q->isNumeric() && q->scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
 	DateTime::DateTime dt;
@@ -1975,8 +2253,12 @@ void AxisPrivate::retransformTicks() {
 			// add major tick's line to the painter path
 			if (valid) {
 				if (majorTicksLine->pen().style() != Qt::NoPen) {
-					majorTicksPath.moveTo(startPoint);
-					majorTicksPath.lineTo(endPoint);
+					if (hasColorBar())
+						addColorBarTick(majorTicksPath, anchorPoint, majorTicksDirection, majorTicksLength);
+					else {
+						majorTicksPath.moveTo(startPoint);
+						majorTicksPath.lineTo(endPoint);
+					}
 				}
 				majorTickPoints << anchorPoint;
 				if (majorTicksType == Axis::TicksType::CustomColumnLabels) {
@@ -2079,8 +2361,12 @@ void AxisPrivate::retransformTicks() {
 				// add minor tick's line to the painter path
 				if (valid) {
 					if (minorTicksLine->pen().style() != Qt::NoPen) {
-						minorTicksPath.moveTo(startPoint);
-						minorTicksPath.lineTo(endPoint);
+						if (hasColorBar())
+							addColorBarTick(minorTicksPath, anchorPoint, minorTicksDirection, minorTicksLength);
+						else {
+							minorTicksPath.moveTo(startPoint);
+							minorTicksPath.lineTo(endPoint);
+						}
 					}
 					minorTickPoints << anchorPoint;
 				}
@@ -2105,7 +2391,6 @@ void AxisPrivate::retransformTickLabelStrings() {
 		return;
 	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
 
-	const auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 
 	// automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	// and back to decimal when the numbers get smaller after the auto-switch
@@ -2149,8 +2434,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	if (majorTicksType == Axis::TicksType::CustomColumnLabels)
 		text = true;
 	else if (labelsTextType == Axis::LabelsTextType::PositionValues) {
-		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
-		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+		auto xRangeFormat{coordinateRange(Dimension::X).format()};
+		auto yRangeFormat{coordinateRange(Dimension::Y).format()};
 		numeric = ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 				   || (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric));
 
@@ -2601,10 +2886,11 @@ void AxisPrivate::retransformTickLabelPositions() {
 	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system index = " << q->m_cSystemIndex)
 	//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
 	//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double middleX = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
-	const double middleY = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
+	const double middleX = coordinateRange(Dimension::X).center();
+	const double middleY = coordinateRange(Dimension::Y).center();
 	QPointF center(middleX, middleY);
+	if (hasColorBar())
+		center = colorBarCenter();
 	//	const int xDirection = q->cSystem->direction(Dimension::X);
 	//	const int yDirection = q->cSystem->direction(Dimension::Y);
 
@@ -2616,8 +2902,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double sine = std::sin(qDegreesToRadians(labelsRotationAngle)); // calculate only once
 
 	int size = std::min(majorTickPoints.size(), tickLabelStrings.size());
-	auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
-	auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+	auto xRangeFormat{coordinateRange(Dimension::X).format()};
+	auto yRangeFormat{coordinateRange(Dimension::Y).format()};
 	for (int i = 0; i < size; i++) {
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 			|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
@@ -2643,8 +2929,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 		QPointF anchorPoint = majorTickPoints.at(i);
 
 		// center align all labels with respect to the end point of the tick line
-		const int xRangeDirection = plot()->range(Dimension::X, cs->index(Dimension::X)).direction();
-		const int yRangeDirection = plot()->range(Dimension::Y, cs->index(Dimension::Y)).direction();
+		const int xRangeDirection = coordinateRange(Dimension::X).direction();
+		const int yRangeDirection = coordinateRange(Dimension::Y).direction();
 		//		DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
 		const int xDirection = q->cSystem->direction(Dimension::X) * xRangeDirection;
 		const int yDirection = q->cSystem->direction(Dimension::Y) * yRangeDirection;
@@ -2754,6 +3040,24 @@ void AxisPrivate::retransformTickLabelPositions() {
 				}
 			}
 		}
+		if (hasColorBar()) {
+			auto direction = colorBarOutward(anchorPoint);
+			auto edge = anchorPoint;
+			const bool outside = labelsPosition == Axis::LabelsPosition::Out;
+			if (!outside) {
+				edge -= direction * colorBarWidth;
+				direction = -direction;
+			}
+			const bool hasTick = majorTicksDirection & (outside ? Axis::ticksOut : Axis::ticksIn);
+			edge += direction * (labelsOffset + (hasTick ? majorTicksLength : 0));
+			QTransform rotation;
+			rotation.rotate(-labelsRotationAngle);
+			const auto bounds = rotation.mapRect(QRectF(0, -height, width, height));
+			if (orientation == Axis::Orientation::Horizontal)
+				pos = QPointF(edge.x() - bounds.center().x(), edge.y() - (direction.y() > 0 ? bounds.top() : bounds.bottom()));
+			else
+				pos = QPointF(edge.x() - (direction.x() > 0 ? bounds.left() : bounds.right()), edge.y() - bounds.center().y());
+		}
 		tickLabelPoints << pos;
 	}
 
@@ -2761,6 +3065,11 @@ void AxisPrivate::retransformTickLabelPositions() {
 }
 
 void AxisPrivate::retransformMajorGrid() {
+	if (hasColorBar()) {
+		majorGridPath = QPainterPath();
+		gridItem->update();
+		return;
+	}
 	if (suppressRetransform)
 		return;
 
@@ -2783,9 +3092,8 @@ void AxisPrivate::retransformMajorGrid() {
 	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->index(Dimension::X) + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->index(Dimension::Y) + 1)
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
-	const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
+	const auto& xRange = coordinateRange(Dimension::X);
+	const auto& yRange = coordinateRange(Dimension::Y);
 
 	// TODO:
 	// when iterating over all grid lines, skip the first and the last points for auto scaled axes,
@@ -2843,6 +3151,11 @@ void AxisPrivate::retransformMajorGrid() {
 }
 
 void AxisPrivate::retransformMinorGrid() {
+	if (hasColorBar()) {
+		minorGridPath = QPainterPath();
+		gridItem->update();
+		return;
+	}
 	if (suppressRetransform)
 		return;
 
@@ -2862,14 +3175,13 @@ void AxisPrivate::retransformMinorGrid() {
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->index(Dimension::Y) + 1)
 
 	QVector<QLineF> gridLines;
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	if (orientation == Axis::Orientation::Horizontal) { // horizontal axis
-		const Range<double> yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+		const Range<double> yRange{coordinateRange(Dimension::Y)};
 
 		for (const auto& point : logicalMinorTickPoints)
 			gridLines.append(QLineF(point.x(), yRange.start(), point.x(), yRange.end()));
 	} else { // vertical axis
-		const Range<double> xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
+		const Range<double> xRange{coordinateRange(Dimension::X)};
 
 		for (const auto& point : logicalMinorTickPoints)
 			gridLines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
@@ -2903,6 +3215,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	QPainterPath tmpPath; // temp path used to calculate the bounding box for all elements that the axis consists of
 
 	if (linePath.isEmpty()) {
+		m_shape = QPainterPath();
 		m_boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
 		if (plot())
@@ -2914,6 +3227,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	const auto& linePen = line->pen();
 	tmpPath = WorksheetElement::shapeFromPath(linePath, linePen);
 	tmpPath.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
+	if (hasColorBar())
+		tmpPath.addRect(colorBarRect);
 
 	const bool hasMajorTicks = !majorTicksPath.isEmpty();
 	const bool hasMinorTicks = !minorTicksPath.isEmpty();
@@ -2966,16 +3281,28 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			QRectF rect = linePath.boundingRect();
 			qreal offsetX = titleOffsetX, offsetY = titleOffsetY;
 
-			if (orientation == Axis::Orientation::Horizontal) {
-				offsetY -= titleRect.height() * title->scale() / 2.;
-				if (labelsPosition == Axis::LabelsPosition::Out)
-					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
-				title->setPositionScene(QPointF((rect.topLeft().x() + rect.topRight().x()) / 2. + titleOffsetX, rect.bottomLeft().y() - offsetY));
+			if (hasColorBar() && !lines.isEmpty()) {
+				const auto direction = colorBarOutward(lines.first().p1());
+				const auto size = title->graphicsItem()->mapRectToParent(titleRect).size();
+				if (orientation == Axis::Orientation::Horizontal) {
+					const double edge = direction.y() > 0 ? axisRect.bottom() : axisRect.top();
+					title->setPositionScene(QPointF(colorBarRect.center().x() + titleOffsetX, edge + direction.y() * (size.height() / 2. + titleOffsetY)));
+				} else {
+					const double edge = direction.x() > 0 ? axisRect.right() : axisRect.left();
+					title->setPositionScene(QPointF(edge + direction.x() * (size.width() / 2. + titleOffsetX), colorBarRect.center().y() - titleOffsetY));
+				}
 			} else {
-				offsetX -= titleRect.height() * title->scale() / 2.;
-				if (labelsPosition == Axis::LabelsPosition::Out)
-					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
-				title->setPositionScene(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
+				if (orientation == Axis::Orientation::Horizontal) {
+					offsetY -= titleRect.height() * title->scale() / 2.;
+					if (labelsPosition == Axis::LabelsPosition::Out)
+						offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
+					title->setPositionScene(QPointF((rect.topLeft().x() + rect.topRight().x()) / 2. + titleOffsetX, rect.bottomLeft().y() - offsetY));
+				} else {
+					offsetX -= titleRect.height() * title->scale() / 2.;
+					if (labelsPosition == Axis::LabelsPosition::Out)
+						offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
+					title->setPositionScene(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
+				}
 			}
 
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
@@ -3064,6 +3391,9 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 	if (!isVisible() || linePath.isEmpty())
 		return;
 
+	for (const auto& band : colorBarBands)
+		painter->fillRect(band.first, band.second);
+
 	// draw the line
 	if (line->pen().style() != Qt::NoPen) {
 		painter->setOpacity(line->opacity());
@@ -3097,15 +3427,14 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 	// draw tick labels
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
-		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
 		painter->setFont(labelsFont);
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetricsF fm(labelsFont);
-		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
-		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
+		auto xRangeFormat{coordinateRange(Dimension::X).format()};
+		auto yRangeFormat{coordinateRange(Dimension::Y).format()};
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 			|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			// QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
@@ -3164,11 +3493,11 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 			}
 
 			// used to determinde direction (up/down, left/right)
-			const qreal middleX = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
-			const qreal middleY = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			const qreal middleX = coordinateRange(Dimension::X).center();
+			const qreal middleY = coordinateRange(Dimension::Y).center();
 			QPointF center(middleX, middleY);
 			bool valid = true;
-			center = q->cSystem->mapLogicalToScene(center, valid);
+			center = hasColorBar() ? colorBarCenter() : q->cSystem->mapLogicalToScene(center, valid);
 
 			QPointF lastTickPoint = tickLabelPoints.at(tickLabelPoints.size() - 1);
 			QPointF labelPosition;
@@ -3226,6 +3555,8 @@ void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if (hasColorBar())
+		return;
 	if (m_panningStarted) {
 		Dimension dim = Dimension::X;
 		int delta = 0;
@@ -3273,6 +3604,12 @@ void Axis::save(QXmlStreamWriter* writer) const {
 
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("axisType"), QString::number(static_cast<int>(d->axisType)));
+	writer->writeAttribute(QStringLiteral("colorBarWidth"), QString::number(d->colorBarWidth));
+	writer->writeAttribute(QStringLiteral("colorBarLength"), QString::number(d->colorBarLength));
+	writer->writeAttribute(QStringLiteral("colorBarPositionX"), QString::number(d->colorBarPosition.x()));
+	writer->writeAttribute(QStringLiteral("colorBarPositionY"), QString::number(d->colorBarPosition.y()));
+	writer->writeAttribute(QStringLiteral("heatmap"), d->heatmap ? d->heatmap->path() : d->heatmapPath);
 	writer->writeAttribute(QStringLiteral("rangeType"), QString::number(static_cast<int>(d->rangeType)));
 	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute(QStringLiteral("position"), QString::number(static_cast<int>(d->position)));
@@ -3386,6 +3723,22 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
+			d->axisType = attribs.value(QStringLiteral("axisType")).toInt() == static_cast<int>(AxisType::ColorBar) ? AxisType::ColorBar : AxisType::Normal;
+			if (attribs.hasAttribute(QStringLiteral("colorBarWidth"))) {
+				const double width = attribs.value(QStringLiteral("colorBarWidth")).toDouble();
+				if (std::isfinite(width) && width > 0)
+					d->colorBarWidth = width;
+			}
+			if (attribs.hasAttribute(QStringLiteral("colorBarLength"))) {
+				const double length = attribs.value(QStringLiteral("colorBarLength")).toDouble();
+				if (std::isfinite(length) && length > 0)
+					d->colorBarLength = length;
+			}
+			const QPointF colorBarPosition(attribs.value(QStringLiteral("colorBarPositionX")).toDouble(),
+										   attribs.value(QStringLiteral("colorBarPositionY")).toDouble());
+			if (std::isfinite(colorBarPosition.x()) && std::isfinite(colorBarPosition.y()))
+				d->colorBarPosition = colorBarPosition;
+			d->heatmapPath = attribs.value(QStringLiteral("heatmap")).toString();
 			if (Project::xmlVersion() < 5) {
 				bool autoScale = attribs.value(QStringLiteral("autoScale")).toInt();
 				if (autoScale)
@@ -3397,6 +3750,8 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			READ_INT_VALUE("position", position, Axis::Position);
+			if (d->axisType == AxisType::ColorBar && d->position == Position::Logical)
+				d->position = Position::Custom;
 			// scale
 			str = attribs.value(QStringLiteral("scale")).toString();
 			if (str.isEmpty())

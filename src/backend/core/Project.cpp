@@ -1036,6 +1036,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	}
 
 	// axes
+	const auto heatmapsAll = project->children<Heatmap>(ChildIndexFlag::Recursive);
 	QVector<Axis*> axes;
 	if (hasChildren)
 		axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
@@ -1048,6 +1049,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
 		RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
 		RESTORE_COLUMN_POINTER(axis, labelsTextColumn, LabelsTextColumn);
+		RESTORE_POINTER(axis, heatmap, Heatmap, Heatmap, heatmapsAll);
 	}
 
 	// histograms

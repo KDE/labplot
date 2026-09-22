@@ -1272,4 +1272,80 @@ void WorksheetElementTest::positionRelativeDockWithBinding() {
 // Testing without setCoordinateBindingEnabled
 // Undo redo of moving the position, keyboard, mousemove, manual setting
 
+void WorksheetElementTest::customCoordinateSystemOwnership() {
+	class TrackedCoordinateSystem : public CartesianCoordinateSystem {
+	public:
+		TrackedCoordinateSystem(CartesianPlot* plot, bool& destroyed)
+			: CartesianCoordinateSystem(plot)
+			, m_destroyed(destroyed) {
+		}
+		~TrackedCoordinateSystem() override {
+			m_destroyed = true;
+		}
+
+	private:
+		bool& m_destroyed;
+	};
+
+	bool firstDestroyed = false;
+	bool secondDestroyed = false;
+	bool thirdDestroyed = false;
+	bool fourthDestroyed = false;
+	bool lastDestroyed = false;
+	{
+		Project project;
+		auto* ws = new Worksheet(QStringLiteral("worksheet"));
+		project.addChild(ws);
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		ws->addChild(plot);
+		auto* point = new CustomPoint(plot, QStringLiteral("point"));
+		plot->addChild(point);
+
+		auto first = std::make_unique<TrackedCoordinateSystem>(plot, firstDestroyed);
+		const auto* firstSystem = first.get();
+		point->setCoordinateSystem(std::move(first));
+		QVERIFY(!first);
+		point->setCoordinateSystemSource(WorksheetElement::CoordinateSystemSource::Custom);
+		project.undoStack()->clear();
+		QCOMPARE(point->coordinateSystem(), firstSystem);
+		QVERIFY(!firstDestroyed);
+
+		auto second = std::make_unique<TrackedCoordinateSystem>(plot, secondDestroyed);
+		const auto* secondSystem = second.get();
+		point->setCoordinateSystem(std::move(second));
+		QVERIFY(!second);
+		QCOMPARE(point->coordinateSystem(), secondSystem);
+		QVERIFY(!firstDestroyed);
+		project.undoStack()->undo();
+		QCOMPARE(point->coordinateSystem(), firstSystem);
+		QVERIFY(!secondDestroyed);
+		project.undoStack()->redo();
+		QCOMPARE(point->coordinateSystem(), secondSystem);
+		QVERIFY(!firstDestroyed);
+		project.undoStack()->undo();
+
+		// Discarding redo deletes the inactive system, and clearing undo preserves the active one.
+		auto third = std::make_unique<TrackedCoordinateSystem>(plot, thirdDestroyed);
+		const auto* thirdSystem = third.get();
+		point->setCoordinateSystem(std::move(third));
+		QVERIFY(secondDestroyed);
+		QVERIFY(!firstDestroyed);
+		project.undoStack()->clear();
+		QVERIFY(firstDestroyed);
+		QVERIFY(!thirdDestroyed);
+		QCOMPARE(point->coordinateSystem(), thirdSystem);
+
+		point->setCoordinateSystem(std::make_unique<TrackedCoordinateSystem>(plot, fourthDestroyed), false);
+		QVERIFY(thirdDestroyed);
+		QCOMPARE(project.undoStack()->count(), 0);
+		point->setCoordinateSystem(nullptr, false);
+		QVERIFY(fourthDestroyed);
+		QVERIFY(!point->coordinateSystem());
+
+		point->setCoordinateSystem(std::make_unique<TrackedCoordinateSystem>(plot, lastDestroyed));
+		QVERIFY(!lastDestroyed);
+	}
+	QVERIFY(lastDestroyed);
+}
+
 QTEST_MAIN(WorksheetElementTest)
