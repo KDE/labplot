@@ -931,21 +931,20 @@ void HeatmapPrivate::updatePixmap() {
 	m_pixmap = QPixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 }
 
 void HeatmapPrivate::draw(QPainter* painter) {
-	auto pen = painter->pen();
-	pen.setStyle(Qt::PenStyle::SolidLine);
-	pen.setBrush(Qt::NoBrush);
+	painter->save();
+	// Antialiasing adjacent cells leaves partially transparent seams at fractional edges.
+	painter->setRenderHint(QPainter::Antialiasing, false);
 
-	for (const auto& d : data) {
-		painter->setPen(pen);
+	for (const auto& d : data)
 		painter->fillRect(d.rect, QBrush(d.color));
-	}
+
+	painter->restore();
 }
 
 #define DEBUG_BOUNDING_RECT 0
