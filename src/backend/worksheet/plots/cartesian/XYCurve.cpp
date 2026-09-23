@@ -2341,9 +2341,9 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 					 const AbstractColumn* errorMinusColumn,
 					 const Range<int>& indexRange,
 					 Range<double>& range,
-					 bool includeErrorBars) const {
+					 bool includeErrorBars) {
 #ifdef PERFTRACE_AUTOSCALE
-	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 #endif
 	if (!column1)
 		return false;
@@ -2798,7 +2798,6 @@ void XYCurvePrivate::updatePixmap() {
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
-	painter.end();
 
 	update();
 	Q_EMIT q->changed();

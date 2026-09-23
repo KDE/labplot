@@ -835,7 +835,8 @@ MatrixPrivate::~MatrixPrivate() {
 
 void MatrixPrivate::updateViewHeader() {
 #ifndef SDK
-	q->m_view->model()->updateHeader();
+	if (q->m_model)
+		q->m_model->updateHeader();
 #endif
 }
 
@@ -1353,6 +1354,13 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	// For some reason, some projects do not have any row_heights
+	if (rowCount() != d->rowHeights.count()) {
+		d->rowHeights.resize(rowCount());
+		for (int i = 0; i < d->rowHeights.count(); i++)
+			d->rowHeights[i] = 0;
+	}
+
 	return true;
 }
 
@@ -1474,6 +1482,11 @@ void Matrix::finalizeImport(size_t /*columnOffset*/,
 	// update rowCount
 	d->rowHeights.clear();
 	d->rowHeights.reserve(d->rowCount());
+
+	// the number of rows was determined only while reading the data and the underlying
+	// data vectors were resized directly, bypassing insertRows()/removeRows() and thus
+	// not emitting rowCountChanged(). Notify dependent objects (e.g. MatrixDock) explicitly.
+	Q_EMIT rowCountChanged(d->rowCount());
 
 	setSuppressDataChangedSignal(false);
 	setChanged();

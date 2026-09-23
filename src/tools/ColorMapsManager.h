@@ -25,6 +25,7 @@ public:
 	QStringList colorMapNames(const QString& collectionName);
 	QVector<QColor> colors(const QString& colorMapNname);
 	QPixmap previewPixmap(const QString& colorMapNname);
+	static void render(QPixmap&, const QVector<QColor>&, int width = 200, int height = 80);
 
 private:
 	ColorMapsManager();

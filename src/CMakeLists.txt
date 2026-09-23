@@ -79,6 +79,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/CursorDock.cpp
     ${FRONTEND_DIR}/dockwidgets/ImageDock.cpp
     ${FRONTEND_DIR}/dockwidgets/InfoElementDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/HeatmapDock.cpp
     ${FRONTEND_DIR}/dockwidgets/NoteDock.cpp
     ${FRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
     ${FRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
@@ -262,6 +263,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/heatmapdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/barplotdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/columndock.ui
@@ -458,6 +460,7 @@ set(LABPLOT_WORKSHEET_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/PlotAreaBackground.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/Heatmap.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
