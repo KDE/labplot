@@ -1845,7 +1845,7 @@ void CartesianPlotTest::addHeatmapColorBar() {
 		QCOMPARE(plot->verticalAxis(), verticalAxis);
 		QCOMPARE(bar->range().start(), heatmap->formatMin());
 		QCOMPARE(bar->range().end(), heatmap->formatMax());
-		QVERIFY(bar->coordinateSystem() != plot->coordinateSystem(0));
+		QVERIFY(bar->cSystem != plot->coordinateSystem(0));
 		for (int i = 0; i < 2; ++i) {
 			project.undoStack()->undo();
 			QCOMPARE(plot->children<Heatmap>().size(), 0);
@@ -1855,7 +1855,7 @@ void CartesianPlotTest::addHeatmapColorBar() {
 			QCOMPARE(plot->children<Axis>().size(), 3);
 			QCOMPARE(plot->children<Axis>().last(), bar);
 			QCOMPARE(bar->heatmap(), heatmap);
-			QVERIFY(bar->coordinateSystem() != plot->coordinateSystem(0));
+			QVERIFY(bar->cSystem != plot->coordinateSystem(0));
 		}
 		plot->addPlot(&action);
 		QCOMPARE(project.undoStack()->count(), 2);

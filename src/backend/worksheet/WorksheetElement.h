@@ -187,6 +187,8 @@ Q_SIGNALS:
 	friend class WorksheetElementTest;
 	friend class SetCoordinateSystemIndexCmd;
 	friend class DecompositionTest;
+	friend class AxisTest;
+	friend class CartesianPlotTest;
 };
 
 #endif

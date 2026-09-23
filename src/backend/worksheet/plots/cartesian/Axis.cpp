@@ -1253,16 +1253,22 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformRange() {
-	if (!plot())
-		return;
 	if (hasColorBar()) {
-		if (rangeType != Axis::RangeType::Custom) {
+		if (!colorBarSystem)
+			colorBarSystem = std::make_unique<CartesianCoordinateSystem>(plot());
+		q->cSystem = colorBarSystem.get();
+		if (rangeType != Axis::RangeType::Custom && heatmap) {
 			const auto format = heatmap->format();
 			range = Range<double>(format.min, format.max);
 			Q_EMIT q->rangeChanged(range);
 		}
 		retransform();
 		return;
+	} else {
+		if (m_plot)
+			q->cSystem = m_plot->coordinateSystem(q->coordinateSystemIndex());
+		else
+			q->cSystem = nullptr;
 	}
 	if (!q->cSystem)
 		return;
@@ -1285,8 +1291,6 @@ void AxisPrivate::retransformRange() {
 		DEBUG(Q_FUNC_INFO << ", new auto data range = " << range.toStdString())
 		break;
 	case Axis::RangeType::Custom:
-		// if (colorBarSystem)
-		// 	retransform();
 		return;
 	}
 
@@ -1420,7 +1424,7 @@ void AxisPrivate::retransformLine() {
 		}
 	}
 
-	if (hasColorBar() && !lines.isEmpty()) {
+	if (hasColorBar() && heatmap && !lines.isEmpty()) {
 		const auto axisLine = lines.first();
 		const auto center = colorBarCenter();
 		if (orientation == Axis::Orientation::Horizontal) {
@@ -1516,10 +1520,9 @@ void AxisPrivate::addColorBarTick(QPainterPath& path, const QPointF& anchor, Axi
 void AxisPrivate::retransformColorBar() {
 	colorBarBands.clear();
 	colorBarRect = QRectF();
-	if (!hasColorBar()) {
-		updateCoordinateSystem(false);
+	if (!hasColorBar() || !heatmap)
 		return;
-	}
+
 	if (rangeType != Axis::RangeType::Custom) {
 		const auto format = heatmap->format();
 		const Range<double> heatmapRange(format.min, format.max);
@@ -1528,8 +1531,7 @@ void AxisPrivate::retransformColorBar() {
 			Q_EMIT q->rangeChanged(range);
 		}
 	}
-	if (!colorBarSystem)
-		colorBarSystem = std::make_unique<CartesianCoordinateSystem>(plot());
+	assert(colorBarSystem);
 	auto rect = plot()->dataRect();
 	if (position == Axis::Position::Custom) {
 		const bool horizontal = orientation == Axis::Orientation::Horizontal;
@@ -1913,7 +1915,7 @@ void AxisPrivate::retransformTicks() {
 	tickLabelValues.clear();
 	tickLabelValuesString.clear();
 
-	if (!q->cSystem || (hasColorBar() && !q->cSystem->isValid())) {
+	if (!q->cSystem || (hasColorBar() && !heatmap && !q->cSystem->isValid())) {
 		tickLabelStrings.clear();
 		tickLabelPoints.clear();
 		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")

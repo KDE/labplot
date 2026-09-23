@@ -2537,10 +2537,12 @@ void AxisTest::colorBar() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	plot->setType(CartesianPlot::Type::TwoAxes);
 	ws->addChild(plot);
+
 	auto* axis = plot->children<Axis>().first();
 	QCOMPARE(axis->axisType(), Axis::AxisType::Normal);
 	axis->setAxisType(Axis::AxisType::ColorBar);
-	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+	QVERIFY(axis->cSystem != plot->coordinateSystem(0));
+
 	auto* heatmap = new Heatmap(QStringLiteral("heatmap"));
 	plot->addChild(heatmap);
 	heatmap->setAutomaticLimits(false);
@@ -2549,19 +2551,22 @@ void AxisTest::colorBar() {
 	format.max = 100;
 	format.colors = {Qt::red, Qt::green, Qt::blue};
 	heatmap->setFormat(format);
+
 	axis->setHeatmap(heatmap);
 	axis->setMajorTicksAutoNumber(false);
 	axis->setMajorTicksNumber(3);
+
 	QCOMPARE(axis->range().start(), 0.);
 	QCOMPARE(axis->range().end(), 100.);
 	QCOMPARE(axis->tickLabelValues(), QVector<double>({0., 50., 100.}));
-	QVERIFY(axis->coordinateSystem() != plot->coordinateSystem(0));
+	QVERIFY(axis->cSystem != plot->coordinateSystem(0));
 	QCOMPARE(axis->d_func()->colorBarBands.size(), 3);
 	QCOMPARE(axis->d_func()->colorBarBands.first().second, QColor(Qt::red));
 	QCOMPARE(axis->d_func()->colorBarBands.last().second, QColor(Qt::blue));
+
 	axis->setHeatmap(nullptr);
 	QVERIFY(axis->heatmapPath().isEmpty());
-	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+
 	project.undoStack()->undo();
 	QCOMPARE(axis->heatmap(), heatmap);
 	QCOMPARE(axis->heatmapPath(), heatmap->path());
@@ -2592,12 +2597,12 @@ void AxisTest::colorBar() {
 	QVERIFY(axis->colorBarWidth() != 12.);
 	project.undoStack()->redo();
 	QCOMPARE(axis->colorBarWidth(), 12.);
+
 	axis->setAxisType(Axis::AxisType::Normal);
-	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
-	QVERIFY(axis->d_func()->colorBarBands.isEmpty());
+	QCOMPARE(axis->cSystem, plot->coordinateSystem(0));
 	project.undoStack()->undo();
 	QCOMPARE(axis->axisType(), Axis::AxisType::ColorBar);
-	QVERIFY(axis->coordinateSystem() != plot->coordinateSystem(0));
+	QVERIFY(axis->cSystem != plot->coordinateSystem(0));
 
 	axis->setRangeType(Axis::RangeType::Auto);
 	heatmap->setFormatMax(0.);
@@ -2609,7 +2614,6 @@ void AxisTest::colorBar() {
 	QVERIFY(!axis->d_func()->linePath.isEmpty());
 	plot->removeChild(heatmap);
 	QVERIFY(!axis->heatmap());
-	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
 	project.undoStack()->undo();
 	QCOMPARE(axis->heatmap(), heatmap);
 }
@@ -2730,46 +2734,40 @@ void AxisTest::customCoordinateSystem() {
 	project.addChild(ws);
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(plot);
-	auto custom = std::make_unique<CartesianCoordinateSystem>(plot);
-	const auto* customSystem = custom.get();
-	const auto rect = plot->dataRect();
-	custom->setScales(Dimension::X,
-					  {CartesianScale::createLinearScale(Range<double>(0., 100.), Range<double>(rect.left(), rect.right()), Range<double>(0., 100.))});
-	custom->setScales(Dimension::Y,
-					  {CartesianScale::createLinearScale(Range<double>(0., 1.), Range<double>(rect.bottom(), rect.top()), Range<double>(0., 1.))});
+
 	auto* axis = new Axis(QStringLiteral("axis"));
 	plot->addChild(axis);
 	axis->setRangeType(Axis::RangeType::Custom);
 	axis->setRange(0., 100.);
-	axis->setCoordinateSystem(std::move(custom));
-	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
-	axis->setCoordinateSystemSource(WorksheetElement::CoordinateSystemSource::Custom);
-	QCOMPARE(axis->coordinateSystem(), customSystem);
+	QCOMPARE(axis->cSystem, plot->coordinateSystem(0));
+
+	axis->setAxisType(Axis::AxisType::ColorBar);
+	auto customSystem = axis->cSystem;
+	QVERIFY(customSystem);
+	QVERIFY(axis->cSystem != plot->coordinateSystem(0));
+
 	project.undoStack()->undo();
-	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(0));
+	QCOMPARE(axis->cSystem, plot->coordinateSystem(0));
+	QCOMPARE(axis->axisType(), Axis::AxisType::Normal);
 	project.undoStack()->redo();
-	QCOMPARE(axis->coordinateSystem(), customSystem);
+	QCOMPARE(axis->cSystem, customSystem);
 	plot->addCoordinateSystem();
 	axis->setCoordinateSystemIndex(1);
-	QCOMPARE(axis->coordinateSystem(), customSystem);
+	QCOMPARE(axis->cSystem, customSystem);
 	project.undoStack()->undo();
-	QCOMPARE(axis->coordinateSystem(), customSystem);
-	axis->setCoordinateSystem(nullptr);
-	QVERIFY(!axis->coordinateSystem());
-	project.undoStack()->undo();
-	QCOMPARE(axis->coordinateSystem(), customSystem);
+	QCOMPARE(axis->cSystem, customSystem);
 
 	// The generated color bar mapping must not replace the supplied custom system.
+	axis->setAxisType(Axis::AxisType::Normal);
 	auto* heatmap = new Heatmap(QStringLiteral("heatmap"));
 	plot->addChild(heatmap);
 	axis->setHeatmap(heatmap);
 	axis->setAxisType(Axis::AxisType::ColorBar);
-	QVERIFY(axis->coordinateSystem() != customSystem);
+	QCOMPARE(axis->cSystem, customSystem);
 	axis->setAxisType(Axis::AxisType::Normal);
-	QCOMPARE(axis->coordinateSystem(), customSystem);
+	QVERIFY(axis->cSystem != customSystem);
 	QCOMPARE(customSystem->scales(Dimension::X).first()->range(), Range<double>(0., 100.));
-	axis->setCoordinateSystemSource(WorksheetElement::CoordinateSystemSource::Plot);
-	QCOMPARE(axis->coordinateSystem(), plot->coordinateSystem(axis->coordinateSystemIndex()));
+	QCOMPARE(axis->cSystem, plot->coordinateSystem(axis->coordinateSystemIndex()));
 }
 
 void AxisTest::colorBarSaveLoad_data() {

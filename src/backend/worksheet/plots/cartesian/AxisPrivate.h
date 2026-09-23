@@ -36,7 +36,7 @@ public:
 	void retransformColorBar();
 	void connectHeatmap();
 	bool hasColorBar() const {
-		return axisType == Axis::AxisType::ColorBar && heatmap;
+		return axisType == Axis::AxisType::ColorBar;
 	}
 	Range<double> coordinateRange(Dimension) const;
 	QPointF colorBarCenter() const;
@@ -128,6 +128,8 @@ public:
 	Axis::AxisType axisType{Axis::AxisType::Normal};
 	const Heatmap* heatmap{nullptr};
 	QVector<QMetaObject::Connection> heatmapConnections;
+	// The color bar has it's own coordinate system. So we can map the heatmap range on it
+	// and don't depend on a CartesianPlot
 	std::unique_ptr<CartesianCoordinateSystem> colorBarSystem;
 	QRectF colorBarRect;
 	QVector<QPair<QRectF, QColor>> colorBarBands;

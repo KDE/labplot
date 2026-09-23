@@ -3975,8 +3975,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		rangep.prev = rangep.range;
 
 		for (auto* axis : q->children<Axis>()) {
-			if ((axis->axisType() == Axis::AxisType::ColorBar && axis->heatmap())
-				|| axis->coordinateSystemSource() == WorksheetElement::CoordinateSystemSource::Custom)
+			if ((axis->axisType() == Axis::AxisType::ColorBar && axis->heatmap()))
 				continue;
 			QDEBUG(Q_FUNC_INFO << ", auto-scale axis" << axis->name() << "of scale" << axis->scale())
 			// use ranges of axis
