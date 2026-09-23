@@ -51,6 +51,8 @@ private Q_SLOTS:
 	void testActivatePlot();
 	void testRenderingWithoutSeams_data();
 	void testRenderingWithoutSeams();
+
+	void plotAutoScale();
 };
 
 #endif // HEATMAPTEST_H
