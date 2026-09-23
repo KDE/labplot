@@ -116,6 +116,52 @@ bool CartesianCoordinateSystem::mapYLogicalToScene(double& y, MappingFlags flags
 	return false;
 }
 
+void CartesianCoordinateSystem::mapLogicalToSceneFast(Points& points, MappingFlags flags) const {
+	// DEBUG(Q_FUNC_INFO << ", (points with flags)")
+	const QRectF pageRect = d->plot->dataRect();
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
+
+	int index = 0;
+	for (const auto* xScale : d->xScales) {
+		if (!xScale)
+			continue;
+
+		for (const auto* yScale : d->yScales) {
+			if (!yScale)
+				continue;
+
+			for (const auto& point : points) {
+				double x = point.x(), y = point.y();
+
+				if (!xScale->contains(x) || !yScale->contains(y))
+					continue;
+				if (!xScale->map(&x) || !yScale->map(&y))
+					continue;
+
+				if (limit) {
+					// set to max/min if passed over
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
+				}
+
+				if (noPageClippingY)
+					y = yPage + h / 2.;
+
+				const QPointF mappedPoint(x, y);
+				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
+					points[index] = mappedPoint;
+					index++;
+				}
+			}
+		}
+	}
+	points.resize(index);
+}
+
 Points CartesianCoordinateSystem::mapLogicalToScene(const Points& points, MappingFlags flags) const {
 	// DEBUG(Q_FUNC_INFO << ", (points with flags)")
 	const QRectF pageRect = d->plot->dataRect();

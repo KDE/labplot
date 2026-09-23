@@ -136,14 +136,16 @@ void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
 			colors << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
 	}
 
+	render(pixmap, colors, 200, 80);
+}
+
+void ColorMapsManager::render(QPixmap& pixmap, const QVector<QColor>& colorMap, int width, int height) {
 	// render the preview pixmap
-	int height = 80;
-	int width = 200;
-	int count = colors.count();
+	int count = colorMap.count();
 	pixmap = QPixmap(width, height);
 	QPainter p(&pixmap);
 	int i = 0;
-	for (auto& color : colors) {
+	for (auto& color : colorMap) {
 		p.setPen(color);
 		p.setBrush(color);
 		p.drawRect(i * width / count, 0, width / count, height);

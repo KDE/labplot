@@ -1,0 +1,2692 @@
+/*
+	File                 : HeatmapTest.cpp
+	Project              : LabPlot
+	Description          : Tests for Heatmap
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
+
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+#include "HeatmapTest.h"
+#include "src/backend/core/Project.h"
+#include "src/backend/core/column/Column.h"
+#include "src/backend/lib/UndoStack.h"
+#include "src/backend/matrix/Matrix.h"
+#include "src/backend/spreadsheet/Spreadsheet.h"
+#include "src/backend/worksheet/Worksheet.h"
+#include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "src/backend/worksheet/plots/cartesian/Heatmap.h"
+
+#include <QUndoStack>
+
+#define COMPARE_VALUES(xPosStart_, yPosStart_, xPosEnd_, yPosEnd_, value_)                                                                                     \
+	do {                                                                                                                                                       \
+		QCOMPARE(xPosStart, xPosStart_);                                                                                                                       \
+		QCOMPARE(yPosStart, yPosStart_);                                                                                                                       \
+		QCOMPARE(xPosEnd, xPosEnd_);                                                                                                                           \
+		QCOMPARE(yPosEnd, yPosEnd_);                                                                                                                           \
+		QCOMPARE(value, value_);                                                                                                                               \
+	} while (false);
+
+#define CONNECT_DATA_CHANGED                                                                                                                                   \
+	do {                                                                                                                                                       \
+		connect(hm, &Heatmap::dataChanged, [&dataChangedCounter] {                                                                                             \
+			dataChangedCounter++;                                                                                                                              \
+		});                                                                                                                                                    \
+		connect(hm, &Heatmap::xDataChanged, [&dataChangedCounter] {                                                                                            \
+			dataChangedCounter++;                                                                                                                              \
+		});                                                                                                                                                    \
+		connect(hm, &Heatmap::yDataChanged, [&dataChangedCounter] {                                                                                            \
+			dataChangedCounter++;                                                                                                                              \
+		});                                                                                                                                                    \
+	} while (false);
+
+/*!
+ * \brief HeatmapTest::testSetMatrix
+ * Testing setting a matrix
+ * - Testing undo redo
+ * - Testing set of column has no effect
+ */
+void HeatmapTest::testSetMatrix() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	hm->setXColumn(xColumn);
+	hm->setYColumn(yColumn);
+
+	QCOMPARE(dataChangedCounter, 0); // Datasource set to matrix
+	auto* matrix1 = new Matrix(QStringLiteral("Matrix1"));
+	hm->setMatrix(matrix1);
+	QCOMPARE(dataChangedCounter, 1);
+	QCOMPARE(hm->matrix(), matrix1);
+
+	xColumn->setValueAt(0, 5);
+	QCOMPARE(dataChangedCounter, 1); // Datasource set to matrix
+	yColumn->setValueAt(0, 3);
+	QCOMPARE(dataChangedCounter, 1); // Datasource set to matrix
+
+	auto* matrix2 = new Matrix(QStringLiteral("Matrix2"));
+	hm->setMatrix(matrix2);
+	QCOMPARE(hm->matrix(), matrix2);
+	QCOMPARE(dataChangedCounter, 2);
+
+	hm->undoStack()->undo();
+	QCOMPARE(hm->matrix(), matrix1);
+	QCOMPARE(dataChangedCounter, 3);
+
+	hm->undoStack()->undo();
+	QCOMPARE(hm->matrix(), nullptr);
+	QCOMPARE(dataChangedCounter, 4);
+
+	hm->undoStack()->redo();
+	QCOMPARE(hm->matrix(), matrix1);
+	QCOMPARE(dataChangedCounter, 5);
+
+	matrix1->setCell(0, 0, 1.);
+	QCOMPARE(dataChangedCounter, 6);
+}
+
+/*!
+ * \brief HeatmapTest::testSetSpreadsheetColumn
+ * Testing setting a column
+ * - Testing undo redo
+ * - Testing set of matrix has no effect
+ */
+void HeatmapTest::testSetSpreadsheetColumn() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	auto* matrix1 = new Matrix(QStringLiteral("Matrix1"));
+	hm->setMatrix(matrix1);
+	QCOMPARE(dataChangedCounter, 2); // Datasource set to column
+
+	xColumn->setValueAt(0, 5.);
+	QCOMPARE(dataChangedCounter, 3);
+	yColumn->setValueAt(0, 3.);
+	QCOMPARE(dataChangedCounter, 4);
+
+	hm->undoStack()->undo(); // yColumn->setValueAt(0, 3.);
+	QCOMPARE(hm->matrix(), matrix1);
+	QCOMPARE(dataChangedCounter, 5);
+
+	hm->undoStack()->redo(); // xColumn->setValueAt(0, 5.);
+	QCOMPARE(hm->matrix(), matrix1);
+	QCOMPARE(dataChangedCounter, 6);
+
+	spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet2"));
+	columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn2 = columns.at(0);
+	auto* yColumn2 = columns.at(1);
+
+	dataChangedCounter = 0; // reset
+
+	hm->setXColumn(xColumn2);
+	QCOMPARE(hm->xColumn(), xColumn2);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn2);
+	QCOMPARE(hm->yColumn(), yColumn2);
+	QCOMPARE(dataChangedCounter, 2);
+
+	hm->undoStack()->undo(); // hm->setYColumn(yColumn2);
+
+	QCOMPARE(hm->xColumn(), xColumn2);
+	QCOMPARE(hm->yColumn(), yColumn);
+
+	matrix1->setCell(0, 0, 5.);
+	QCOMPARE(dataChangedCounter, 3); // Does not have any effect
+}
+
+/*!
+ * \brief HeatmapTest::testSetDataSource
+ * Testing to set the datasource
+ * - Undo redo testing
+ */
+void HeatmapTest::testSetDataSource() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	auto* matrix1 = new Matrix(QStringLiteral("Matrix1"));
+	project.addChild(matrix1);
+	hm->setMatrix(matrix1);
+	QCOMPARE(dataChangedCounter, 2);
+
+	xColumn->setValueAt(0, 5.);
+	QCOMPARE(dataChangedCounter, 3);
+	yColumn->setValueAt(0, 3.);
+	QCOMPARE(dataChangedCounter, 4);
+
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+	QCOMPARE(hm->dataSource(), Heatmap::DataSource::Matrix);
+	QCOMPARE(dataChangedCounter, 5);
+
+	matrix1->setCell(0, 0, 5.);
+	QCOMPARE(dataChangedCounter, 6);
+
+	hm->undoStack()->undo(); // matrix1->setCell(0, 0, 5.);
+	QCOMPARE(dataChangedCounter, 7);
+	hm->undoStack()->undo(); // hm->setDataSource(Heatmap::DataSource::Matrix);
+	QCOMPARE(dataChangedCounter, 8);
+	QCOMPARE(hm->dataSource(), Heatmap::DataSource::Spreadsheet);
+
+	hm->undoStack()->redo(); // hm->setDataSource(Heatmap::DataSource::Matrix);
+	QCOMPARE(dataChangedCounter, 9);
+	QCOMPARE(hm->dataSource(), Heatmap::DataSource::Matrix);
+}
+
+/*!
+ * \brief HeatmapTest::testNumberBins
+ * Testing changing number bins
+ */
+void HeatmapTest::testNumberBins() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	hm->setEqualNumberBins(false);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(12);
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(10.);
+		plot->setXRange(0, range);
+	}
+
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(100.);
+		plot->setYRange(0, range);
+	}
+
+	CHECK_RANGE(plot, hm, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, hm, Dimension::Y, 0., 100.);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 0.0);
+	yColumn->setValueAt(1, 100.0); // Border values are included
+
+	xColumn->setValueAt(2, 2.0);
+	yColumn->setValueAt(2, 20.0);
+	xColumn->setValueAt(3, 6.0);
+	yColumn->setValueAt(3, 20.0);
+
+	xColumn->setValueAt(4, 4.0); // center
+	yColumn->setValueAt(4, 40.0); // center
+
+	xColumn->setValueAt(5, 2.0);
+	yColumn->setValueAt(5, 60.0);
+	xColumn->setValueAt(6, 6.0);
+	yColumn->setValueAt(6, 60.0);
+
+	xColumn->setValueAt(7, 10.); // 10 Would be already in the next bin. But border values are included
+	yColumn->setValueAt(7, 0.);
+	xColumn->setValueAt(8, 10.0);
+	yColumn->setValueAt(8, 100.0);
+
+	xColumn->setValueAt(9, 4.5); // Testing Duplicates
+	yColumn->setValueAt(9, 45.0); // Testing Duplicates
+	xColumn->setValueAt(10, 9.0); // Testing Duplicates
+	yColumn->setValueAt(10, 90.0); // Testing Duplicates
+	xColumn->setValueAt(11, 6.5); // Testing Duplicates ( The corresponding y set is below the connect)
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0);
+			break;
+		case 1:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 1.0);
+			break;
+		case 2:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 1.0);
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 1.0);
+			break;
+		case 4:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 2.0);
+			break;
+		case 5:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 1.0);
+			break;
+		case 6:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 2.0);
+			break;
+		case 7:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 1.0);
+			break;
+		case 8:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 2.0);
+			break;
+		default:
+			QVERIFY(false);
+		}
+		valueDrawnCounter++;
+	});
+	yColumn->setValueAt(11, 65.0); // Testing Duplicates
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	// 5 Bins X
+	// 0     2     4     6     8     10
+	// |-----|-----|-----|-----|-----|   0
+	// |  X  |     |     |     |  X  |   20  5
+	// |     |  X  |     |  X  |     |   40  Bins
+	// |     |     | XX  |     |     |   60  Y
+	// |     |  X  |     | XX  |     |   80
+	// |  X  |     |     |     | XX  |   100
+
+	QCOMPARE(valueDrawnCounter, 9);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
+
+	// 3 Bins X
+	// 0        3.3       6.6        10
+	// |---------|---------|---------|   0
+	// |   XX    |   XXX   |   X     |   50  2 Bins
+	// |   XX    |   XX    |   XX    |   100 Y
+	hm->setXNumberBins(3);
+
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(0., 0., 10. / 3., 50., 2.);
+			break;
+		case 1:
+			COMPARE_VALUES(10. / 3., 0., 20. / 3., 50., 3.);
+			break;
+		case 2:
+			COMPARE_VALUES(20. / 3., 0., 10, 50., 1.);
+			break;
+
+		case 3:
+			COMPARE_VALUES(0., 50., 10. / 3., 100., 2.);
+			break;
+		case 4:
+			COMPARE_VALUES(10. / 3., 50.0, 20. / 3., 100., 2.);
+			break;
+		case 5:
+			COMPARE_VALUES(20. / 3., 50., 10., 100., 2.);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	hm->setYNumberBins(2);
+	QCOMPARE(valueDrawnCounter, 6);
+}
+
+/*!
+ * \brief HeatmapTest::indicesMinMaxMatrix
+ */
+void HeatmapTest::indicesMinMaxMatrix() {
+	{
+		Heatmap hm(QStringLiteral("Heatmap"));
+		auto* matrix1 = new Matrix(10, 10, QStringLiteral("Matrix1"), AbstractColumn::ColumnMode::Double);
+		hm.setMatrix(matrix1);
+		matrix1->setXStart(7);
+		matrix1->setXEnd(27);
+
+		int start = -1;
+		int end = -1;
+		QCOMPARE(hm.indicesMinMaxMatrix(Dimension::X, 16, 19, start, end), true);
+		QCOMPARE(start, 4);
+		// 7  9.22  11.44  13.66  15.88  18.11 20.33 22.55 24.77 27
+		//                          ^            ^
+		//                          |            |
+		//                        start         end
+		QCOMPARE(end, 6);
+	}
+
+	{
+		// Start and end are inverted
+		Heatmap hm(QStringLiteral("Heatmap"));
+		auto* matrix1 = new Matrix(10, 10, QStringLiteral("Matrix1"), AbstractColumn::ColumnMode::Double);
+		hm.setMatrix(matrix1);
+		matrix1->setXStart(27);
+		matrix1->setXEnd(7);
+
+		int start = -1;
+		int end = -1;
+		QCOMPARE(hm.indicesMinMaxMatrix(Dimension::X, 19, 16, start, end), true);
+		QCOMPARE(start, 4);
+		QCOMPARE(end, 6);
+	}
+
+	{
+		Heatmap hm(QStringLiteral("Heatmap"));
+		auto* matrix1 = new Matrix(10, 10, QStringLiteral("Matrix1"), AbstractColumn::ColumnMode::Double);
+		hm.setMatrix(matrix1);
+		matrix1->setXStart(7);
+		matrix1->setXEnd(27);
+
+		int start = -1;
+		int end = -1;
+		QCOMPARE(hm.indicesMinMaxMatrix(Dimension::X, 1, 50, start, end), true);
+		QCOMPARE(start, 0);
+		QCOMPARE(end, 9);
+	}
+}
+
+void HeatmapTest::minMaxMatrix() {
+}
+
+void HeatmapTest::testFormat() {
+	{
+		QVector<QColor> colorVector;
+		for (int i = 0; i < 17; i++) {
+			colorVector.push_back(QColor(5, 5, i));
+		}
+		Heatmap::Format format{0, 10, QStringLiteral("Test"), colorVector};
+
+		QCOMPARE(format.index(-1), 0);
+		QCOMPARE(format.index(0), 0);
+		// QCOMPARE(format.index(5), ...); // TODO:
+		// QCOMPARE(format.index(3.1239), ...) // TODO:
+		QCOMPARE(format.index(10), colorVector.size() - 1);
+		QCOMPARE(format.index(100), colorVector.size() - 1);
+	}
+
+	{
+		QVector<QColor> colorVector;
+		for (int i = 0; i < 17; i++) {
+			colorVector.push_back(QColor(5, 5, i));
+		}
+		Heatmap::Format format{10., -5., QStringLiteral("Test"), colorVector};
+
+		QCOMPARE(format.index(-6), colorVector.size() - 1);
+		QCOMPARE(format.index(-5), colorVector.size() - 1);
+		//		QCOMPARE(format.index(5), ...);  TODO:
+		//		QCOMPARE(format.index(3.1239), ...)  TODO:
+		QCOMPARE(format.index(10), 0);
+		QCOMPARE(format.index(100), 0);
+	}
+}
+
+void HeatmapTest::testRepresentationMatrix() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
+	project.addChild(matrix);
+	hm->setMatrix(matrix);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setXStart(1);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setXEnd(11);
+	QCOMPARE(dataChangedCounter, 3);
+	matrix->setYStart(1);
+	QCOMPARE(dataChangedCounter, 4);
+	matrix->setYEnd(101);
+	QCOMPARE(dataChangedCounter, 5);
+
+	matrix->setXStart(0);
+	matrix->setXEnd(10);
+	matrix->setYStart(0);
+	matrix->setYEnd(100);
+	dataChangedCounter = 0; // reset
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(10.);
+		plot->setXRange(0, range);
+	}
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(100.);
+		plot->setYRange(0, range);
+	}
+	CHECK_RANGE(plot, hm, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, hm, Dimension::Y, 0., 100.);
+
+	QCOMPARE(matrix->rowCount(), 5);
+	QCOMPARE(matrix->columnCount(), 5);
+
+	matrix->setCell(0, 0, 1.0);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setCell(0, 1, 2.0);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setCell(0, 2, 3.0);
+	matrix->setCell(0, 3, 4.0);
+	matrix->setCell(0, 4, 5.0);
+
+	matrix->setCell(1, 0, 6.0);
+	matrix->setCell(1, 1, 7.0);
+	matrix->setCell(1, 2, 8.0);
+	matrix->setCell(1, 3, 9.0);
+	matrix->setCell(1, 4, 10.0);
+
+	matrix->setCell(2, 0, 11.0);
+	matrix->setCell(2, 1, 12.0);
+	matrix->setCell(2, 2, 13.0);
+	matrix->setCell(2, 3, 14.0);
+	matrix->setCell(2, 4, 15.0);
+
+	matrix->setCell(3, 0, 16.0);
+	matrix->setCell(3, 1, 17.0);
+	matrix->setCell(3, 2, 18.0);
+	matrix->setCell(3, 3, 19.0);
+	matrix->setCell(3, 4, 20.0);
+
+	matrix->setCell(4, 0, 21.0);
+	matrix->setCell(4, 1, 22.0);
+	matrix->setCell(4, 2, 23.0);
+	matrix->setCell(4, 3, 24.0);
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0); // (0, 0)
+			break;
+		case 1:
+			COMPARE_VALUES(2.0, 0.0, 4.0, 20.0, 2.0); // (0, 1)
+			break;
+		case 2:
+			COMPARE_VALUES(4.0, 0.0, 6.0, 20.0, 3.0); // (0, 2)
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 0.0, 8.0, 20.0, 4.0); // (0, 3)
+			break;
+		case 4:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 5.0); // (0, 4)
+			break;
+
+		case 5:
+			COMPARE_VALUES(0.0, 20.0, 2.0, 40.0, 6.0); // (1, 0)
+			break;
+		case 6:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 7.0); // (1, 1)
+			break;
+		case 7:
+			COMPARE_VALUES(4.0, 20.0, 6.0, 40.0, 8.0); // (1, 2)
+			break;
+		case 8:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 9.0); // (1, 3)
+			break;
+		case 9:
+			COMPARE_VALUES(8.0, 20.0, 10.0, 40.0, 10.0); // (1, 4)
+			break;
+
+		case 10:
+			COMPARE_VALUES(0.0, 40.0, 2.0, 60.0, 11.0); // (2, 0)
+			break;
+		case 11:
+			COMPARE_VALUES(2.0, 40.0, 4.0, 60.0, 12.0); // (2, 1)
+			break;
+		case 12:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 13.0); // (2, 2)
+			break;
+		case 13:
+			COMPARE_VALUES(6.0, 40.0, 8.0, 60.0, 14.0); // (2, 3)
+			break;
+		case 14:
+			COMPARE_VALUES(8.0, 40.0, 10.0, 60.0, 15.0); // (2, 4)
+			break;
+
+		case 15:
+			COMPARE_VALUES(0.0, 60.0, 2.0, 80.0, 16.0); // (3, 0)
+			break;
+		case 16:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 17.0); // (3, 1)
+			break;
+		case 17:
+			COMPARE_VALUES(4.0, 60.0, 6.0, 80.0, 18.0); // (3, 2)
+			break;
+		case 18:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 19.0); // (3, 3)
+			break;
+		case 19:
+			COMPARE_VALUES(8.0, 60.0, 10.0, 80.0, 20.0); // (3, 4)
+			break;
+
+		case 20:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 21.0); // (4, 0)
+			break;
+		case 21:
+			COMPARE_VALUES(2.0, 80.0, 4.0, 100.0, 22.0); // (4, 1)
+			break;
+		case 22:
+			COMPARE_VALUES(4.0, 80.0, 6.0, 100.0, 23.0); // (4, 2)
+			break;
+		case 23:
+			COMPARE_VALUES(6.0, 80.0, 8.0, 100.0, 24.0); // (4, 3)
+			break;
+		case 24:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 25.0); // (4, 4)
+			break;
+		}
+		valueDrawnCounter++;
+	});
+
+	matrix->setCell(4, 4, 25.0);
+	QCOMPARE(valueDrawnCounter, 25);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
+
+	{
+		// first column is cut away completely, second column is half
+		valueDrawnCounter = 0;
+		connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+			switch (valueDrawnCounter) {
+			case 0:
+				COMPARE_VALUES(2.0, 0.0, 4.0, 20.0, 2.0); // (0, 1)
+				break;
+			case 1:
+				COMPARE_VALUES(4.0, 0.0, 6.0, 20.0, 3.0); // (0, 2)
+				break;
+			case 2:
+				COMPARE_VALUES(6.0, 0.0, 8.0, 20.0, 4.0); // (0, 3)
+				break;
+
+			case 3:
+				COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 7.0); // (1, 1)
+				break;
+			case 4:
+				COMPARE_VALUES(4.0, 20.0, 6.0, 40.0, 8.0); // (1, 2)
+				break;
+			case 5:
+				COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 9.0); // (1, 3)
+				break;
+
+			case 6:
+				COMPARE_VALUES(2.0, 40.0, 4.0, 60.0, 12.0); // (2, 1)
+				break;
+			case 7:
+				COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 13.0); // (2, 2)
+				break;
+			case 8:
+				COMPARE_VALUES(6.0, 40.0, 8.0, 60.0, 14.0); // (2, 3)
+				break;
+
+			case 9:
+				COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 17.0); // (3, 1)
+				break;
+			case 10:
+				COMPARE_VALUES(4.0, 60.0, 6.0, 80.0, 18.0); // (3, 2)
+				break;
+			case 11:
+				COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 19.0); // (3, 3)
+				break;
+
+			case 12:
+				COMPARE_VALUES(2.0, 80.0, 4.0, 100.0, 22.0); // (4, 1)
+				break;
+			case 13:
+				COMPARE_VALUES(4.0, 80.0, 6.0, 100.0, 23.0); // (4, 2)
+				break;
+			case 14:
+				COMPARE_VALUES(6.0, 80.0, 8.0, 100.0, 24.0); // (4, 3)
+				break;
+			}
+			valueDrawnCounter++;
+		});
+
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(3.);
+		range.setEnd(7.);
+		plot->setXRange(0, range);
+
+		QCOMPARE(valueDrawnCounter, 15);
+		disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+	}
+
+	// first row/column cut away completely, second row/column is half
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 7.0); // (1, 1)
+			break;
+		case 1:
+			COMPARE_VALUES(4.0, 20.0, 6.0, 40.0, 8.0); // (1, 2)
+			break;
+		case 2:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 9.0); // (1, 3)
+			break;
+
+		case 3:
+			COMPARE_VALUES(2.0, 40.0, 4.0, 60.0, 12.0); // (2, 1)
+			break;
+		case 4:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 13.0); // (2, 2)
+			break;
+		case 5:
+			COMPARE_VALUES(6.0, 40.0, 8.0, 60.0, 14.0); // (2, 3)
+			break;
+
+		case 6:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 17.0); // (3, 1)
+			break;
+		case 7:
+			COMPARE_VALUES(4.0, 60.0, 6.0, 80.0, 18.0); // (3, 2)
+			break;
+		case 8:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 19.0); // (3, 3)
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(30.);
+		range.setEnd(70.);
+		plot->setYRange(0, range);
+	}
+	QCOMPARE(valueDrawnCounter, 9);
+}
+
+void HeatmapTest::testRepresentationMatrixMinMax() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
+	project.addChild(matrix);
+	hm->setMatrix(matrix);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setXStart(1);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setXEnd(11);
+	QCOMPARE(dataChangedCounter, 3);
+	matrix->setYStart(1);
+	QCOMPARE(dataChangedCounter, 4);
+	matrix->setYEnd(101);
+	QCOMPARE(dataChangedCounter, 5);
+
+	matrix->setXStart(0);
+	matrix->setXEnd(10);
+	matrix->setYStart(0);
+	matrix->setYEnd(100);
+	dataChangedCounter = 0; // reset
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(10.);
+		plot->setXRange(0, range);
+	}
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(100.);
+		plot->setYRange(0, range);
+	}
+	CHECK_RANGE(plot, hm, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, hm, Dimension::Y, 0., 100.);
+
+	QCOMPARE(matrix->rowCount(), 5);
+	QCOMPARE(matrix->columnCount(), 5);
+
+	matrix->setCell(0, 0, 1.0);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setCell(0, 1, 2.0);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setCell(0, 2, 3.0);
+	matrix->setCell(0, 3, 4.0);
+	matrix->setCell(0, 4, 5.0);
+
+	matrix->setCell(1, 0, 6.0);
+	matrix->setCell(1, 1, 7.0);
+	matrix->setCell(1, 2, 8.0);
+	matrix->setCell(1, 3, 9.0);
+	matrix->setCell(1, 4, 10.0);
+
+	matrix->setCell(2, 0, 11.0);
+	matrix->setCell(2, 1, 12.0);
+	matrix->setCell(2, 2, 13.0);
+	matrix->setCell(2, 3, 14.0);
+	matrix->setCell(2, 4, 15.0);
+
+	matrix->setCell(3, 0, 16.0);
+	matrix->setCell(3, 1, 17.0);
+	matrix->setCell(3, 2, 18.0);
+	matrix->setCell(3, 3, 19.0);
+	matrix->setCell(3, 4, 20.0);
+
+	matrix->setCell(4, 0, 21.0);
+	matrix->setCell(4, 1, 22.0);
+	matrix->setCell(4, 2, 23.0);
+	matrix->setCell(4, 3, 24.0);
+	matrix->setCell(4, 4, 25.0);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
+
+	QCOMPARE(hm->automaticLimits(), true);
+	QCOMPARE(hm->formatMin(), 1.);
+	QCOMPARE(hm->formatMax(), 25.); // Check that limits are set correctly
+}
+
+void HeatmapTest::testRepresentationSpreadsheet() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(7);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 10.);
+	yColumn->setValueAt(1, 0.);
+	xColumn->setValueAt(2, 0.0);
+	yColumn->setValueAt(2, 100.0);
+	xColumn->setValueAt(3, 2.0);
+	yColumn->setValueAt(3, 20.0);
+	xColumn->setValueAt(4, 6.0);
+	yColumn->setValueAt(4, 20.0);
+	xColumn->setValueAt(5, 2.0);
+	yColumn->setValueAt(5, 60.0);
+	xColumn->setValueAt(6, 6.0);
+	yColumn->setValueAt(6, 60.0);
+	xColumn->setValueAt(7, 4.0); // center
+	yColumn->setValueAt(7, 40.0); // center
+	xColumn->setValueAt(8, 10.0);
+	yColumn->setValueAt(8, 100.0);
+	xColumn->setValueAt(9, 4.5); // Testing Duplicates
+	yColumn->setValueAt(9, 45.0); // Testing Duplicates
+	xColumn->setValueAt(10, 9.0); // Testing Duplicates
+	yColumn->setValueAt(10, 90.0); // Testing Duplicates
+	xColumn->setValueAt(11, 6.5); // Testing Duplicates
+
+	// |-----|-----|-----|-----|-----|
+	// |  X  |     |     |     |  X  |
+	// |     |  X  |     |  X  |     |
+	// |     |     | XX  |     |     |
+	// |     |  X  |     | XX  |     |
+	// |  X  |     |     |     | XX  |
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		// Row 0
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0);
+			break;
+		case 1:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 1.0);
+			break;
+
+		// Row 1
+		case 2:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 1.0);
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 1.0);
+			break;
+
+		// Row 2
+		case 4:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 2.0);
+			break;
+
+		// Row 3
+		case 5:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 1.0);
+			break;
+		case 6:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 2.0);
+			break;
+
+		// Row 4
+		case 7:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 1.0);
+			break;
+		case 8:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 2.0);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	yColumn->setValueAt(11, 65.0); // Testing Duplicates
+	QCOMPARE(valueDrawnCounter, 9);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100.);
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(3.);
+		range.setEnd(7.);
+		plot->setXRange(0, range);
+	}
+
+	// first are cut away completely, second row/column is half
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 1.0);
+			break;
+		case 1:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 1.0);
+			break;
+		case 2:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 2.0);
+			break;
+		case 3:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 1.0);
+			break;
+		case 4:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 2.0);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(30.);
+		range.setEnd(70.);
+		plot->setYRange(0, range);
+	}
+	QCOMPARE(valueDrawnCounter, 5);
+}
+
+/*!
+ * Testing with drawEmpty() is true
+ */
+void HeatmapTest::testRepresentationSpreadsheetDrawEmpty() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	hm->setDrawEmpty(true);
+	QCOMPARE(hm->drawEmpty(), true); // difference to testRepresentationSpreadsheet()
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(7);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 10.);
+	yColumn->setValueAt(1, 0.);
+	xColumn->setValueAt(2, 0.0);
+	yColumn->setValueAt(2, 100.0);
+	xColumn->setValueAt(3, 2.0);
+	yColumn->setValueAt(3, 20.0);
+	xColumn->setValueAt(4, 6.0);
+	yColumn->setValueAt(4, 20.0);
+	xColumn->setValueAt(5, 2.0);
+	yColumn->setValueAt(5, 60.0);
+	xColumn->setValueAt(6, 6.0);
+	yColumn->setValueAt(6, 60.0);
+	xColumn->setValueAt(7, 4.0); // center
+	yColumn->setValueAt(7, 40.0); // center
+	xColumn->setValueAt(8, 10.0);
+	yColumn->setValueAt(8, 100.0);
+	xColumn->setValueAt(9, 4.5); // Testing Duplicates
+	yColumn->setValueAt(9, 45.0); // Testing Duplicates
+	xColumn->setValueAt(10, 9.0); // Testing Duplicates
+	yColumn->setValueAt(10, 90.0); // Testing Duplicates
+	xColumn->setValueAt(11, 6.5); // Testing Duplicates
+
+	// |-----|-----|-----|-----|-----|
+	// |  X  |     |     |     |  X  |
+	// |     |  X  |     |  X  |     |
+	// |     |     | XX  |     |     |
+	// |     |  X  |     | XX  |     |
+	// |  X  |     |     |     | XX  |
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		// Row 0
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0);
+			break;
+		case 1:
+			COMPARE_VALUES(2.0, 0.0, 4.0, 20.0, 0.0);
+			break;
+		case 2:
+			COMPARE_VALUES(4.0, 0.0, 6.0, 20.0, 0.0);
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 0.0, 8.0, 20.0, 0.0);
+			break;
+		case 4:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 1.0);
+			break;
+
+		// Row 1
+		case 5:
+			COMPARE_VALUES(0.0, 20.0, 2.0, 40.0, 0.0);
+			break;
+		case 6:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 1.0);
+			break;
+		case 7:
+			COMPARE_VALUES(4.0, 20.0, 6.0, 40.0, 0.0);
+			break;
+		case 8:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 1.0);
+			break;
+		case 9:
+			COMPARE_VALUES(8.0, 20.0, 10.0, 40.0, 0.0);
+			break;
+
+		// Row 2
+		case 10:
+			COMPARE_VALUES(0.0, 40.0, 2.0, 60.0, 0.0);
+			break;
+		case 11:
+			COMPARE_VALUES(2.0, 40.0, 4.0, 60.0, 0.0);
+			break;
+		case 12:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 2.0);
+			break;
+		case 13:
+			COMPARE_VALUES(6.0, 40.0, 8.0, 60.0, 0.0);
+			break;
+		case 14:
+			COMPARE_VALUES(8.0, 40.0, 10.0, 60.0, 0.0);
+			break;
+
+		// Row 3
+		case 15:
+			COMPARE_VALUES(0.0, 60.0, 2.0, 80.0, 0.0);
+			break;
+		case 16:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 1.0);
+			break;
+		case 17:
+			COMPARE_VALUES(4.0, 60.0, 6.0, 80.0, 0.0);
+			break;
+		case 18:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 2.0);
+			break;
+		case 19:
+			COMPARE_VALUES(8.0, 60.0, 10.0, 80.0, 0.0);
+			break;
+
+		// Row 4
+		case 20:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 1.0);
+			break;
+		case 21:
+			COMPARE_VALUES(2.0, 80.0, 4.0, 100.0, 0.0);
+			break;
+		case 22:
+			COMPARE_VALUES(4.0, 80.0, 6.0, 100.0, 0.0);
+			break;
+		case 23:
+			COMPARE_VALUES(6.0, 80.0, 8.0, 100.0, 0.0);
+			break;
+		case 24:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 2.0);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	yColumn->setValueAt(11, 65.0); // Testing Duplicates
+	QCOMPARE(valueDrawnCounter, 25);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(3.);
+		range.setEnd(7.);
+		plot->setXRange(0, range);
+	}
+
+	// first are cut away completely, second row/column is half
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 1.0);
+			break;
+		case 1:
+			COMPARE_VALUES(4.0, 20.0, 6.0, 40.0, 0.0);
+			break;
+		case 2:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 1.0);
+			break;
+
+		case 3:
+			COMPARE_VALUES(2.0, 40.0, 4.0, 60.0, 0.0);
+			break;
+		case 4:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 2.0);
+			break;
+		case 5:
+			COMPARE_VALUES(6.0, 40.0, 8.0, 60.0, 0.0);
+			break;
+
+		case 6:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 1.0);
+			break;
+		case 7:
+			COMPARE_VALUES(4.0, 60.0, 6.0, 80.0, 0.0);
+			break;
+		case 8:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 2.0);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(30.);
+		range.setEnd(70.);
+		plot->setYRange(0, range);
+	}
+	QCOMPARE(valueDrawnCounter, 9);
+}
+
+/*!
+ * \brief HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange
+ * Completly outside of the plot so nothing will be drawn
+ */
+void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(7);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 10.);
+	yColumn->setValueAt(1, 0.);
+	xColumn->setValueAt(2, 0.0);
+	yColumn->setValueAt(2, 100.0);
+	xColumn->setValueAt(3, 2.0);
+	yColumn->setValueAt(3, 20.0);
+	xColumn->setValueAt(4, 6.0);
+	yColumn->setValueAt(4, 20.0);
+	xColumn->setValueAt(5, 2.0);
+	yColumn->setValueAt(5, 60.0);
+	xColumn->setValueAt(6, 6.0);
+	yColumn->setValueAt(6, 60.0);
+	xColumn->setValueAt(7, 4.0); // center
+	yColumn->setValueAt(7, 40.0); // center
+	xColumn->setValueAt(8, 10.0);
+	yColumn->setValueAt(8, 100.0);
+	xColumn->setValueAt(9, 4.5); // Testing Duplicates
+	yColumn->setValueAt(9, 45.0); // Testing Duplicates
+	xColumn->setValueAt(10, 9.0); // Testing Duplicates
+	yColumn->setValueAt(10, 90.0); // Testing Duplicates
+	xColumn->setValueAt(11, 6.5); // Testing Duplicates
+
+	// |-----|-----|-----|-----|-----|
+	// |  X  |     |     |     |  X  |
+	// |     |  X  |     |  X  |     |
+	// |     |     | XX  |     |     |
+	// |     |  X  |     | XX  |     |
+	// |  X  |     |     |     | XX  |
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		// Row 0
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0);
+			break;
+		case 1:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 1.0);
+			break;
+
+		// Row 1
+		case 2:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 1.0);
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 1.0);
+			break;
+
+		// Row 2
+		case 4:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 2.0);
+			break;
+
+		// Row 3
+		case 5:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 1.0);
+			break;
+		case 6:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 2.0);
+			break;
+
+		// Row 4
+		case 7:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 1.0);
+			break;
+		case 8:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 2.0);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	yColumn->setValueAt(11, 65.0); // Testing Duplicates
+	QCOMPARE(valueDrawnCounter, 9);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100.);
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(-3.);
+		range.setEnd(-2.);
+		plot->setXRange(0, range); // Heatmap is not in this range
+	}
+
+	// first are cut away completely, second row/column is half
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		valueDrawnCounter++;
+	});
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(200.);
+		range.setEnd(2000.);
+		plot->setYRange(0, range); // Heatmap is not in this range
+	}
+	QCOMPARE(valueDrawnCounter, 0);
+}
+
+/*!
+ * \brief HeatmapTest::testColorAutomatic
+ * Automatic limits set to true
+ */
+void HeatmapTest::testColorAutomatic() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
+	QCOMPARE(hm->automaticLimits(), true);
+	// TODO
+	//	hm->setFormatMin();
+	//	hm->setFormatMax();
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	hm->setXColumn(xColumn);
+	hm->setYColumn(yColumn);
+
+	spreadsheet->setRowCount(12);
+
+	xColumn->setValueAt(0, 0);
+	yColumn->setValueAt(0, 0);
+	xColumn->setValueAt(1, 0.0);
+	yColumn->setValueAt(1, 100.0);
+
+	xColumn->setValueAt(2, 2.0);
+	yColumn->setValueAt(2, 20.0);
+	xColumn->setValueAt(3, 6.0);
+	yColumn->setValueAt(3, 20.0);
+
+	xColumn->setValueAt(4, 4.0); // center
+	yColumn->setValueAt(4, 40.0); // center
+
+	xColumn->setValueAt(5, 2.0);
+	yColumn->setValueAt(5, 60.0);
+	xColumn->setValueAt(6, 6.0);
+	yColumn->setValueAt(6, 60.0);
+
+	xColumn->setValueAt(7, 10);
+	yColumn->setValueAt(7, 0);
+	xColumn->setValueAt(8, 10.0);
+	yColumn->setValueAt(8, 100.0);
+
+	xColumn->setValueAt(9, 4.5); // Testing Duplicates
+	yColumn->setValueAt(9, 45.0); // Testing Duplicates
+	xColumn->setValueAt(10, 9.0); // Testing Duplicates
+	yColumn->setValueAt(10, 90.0); // Testing Duplicates
+	xColumn->setValueAt(11, 6.5); // Testing Duplicates
+	yColumn->setValueAt(11, 65.0); // Testing Duplicates
+
+	QCOMPARE(hm->format().min, 1);
+	QCOMPARE(hm->format().max, 2);
+
+	// 5 Bins X
+	// 0     2     4     6     8     10
+	// |-----|-----|-----|-----|-----|   0
+	// |  X  |     |     |     |  X  |   20  5
+	// |     |  X  |     |  X  |     |   40  Bins
+	// |     |     | XX  |     |     |   60  Y
+	// |     |  X  |     | XX  |     |   80
+	// |  X  |     |     |     | XX  |   100
+
+	// 3 Bins X
+	// 0        3.3       6.6        10
+	// |---------|---------|---------|   0
+	// |   XX    |   XXX   |   XX    |   50  2 Bins
+	// |   X     |   XX    |   XX    |   100 Y
+	hm->setXNumberBins(3);
+	hm->setYNumberBins(2);
+	QCOMPARE(hm->format().min, 1.);
+	QCOMPARE(hm->format().max, 3.);
+
+	hm->setAutomaticLimits(false);
+
+	QCOMPARE(hm->format().min, 1.);
+	QCOMPARE(hm->format().max, 3.);
+}
+
+void HeatmapTest::testColorManual() {
+	Project project;
+
+	constexpr auto manualFormatMin = -10.;
+	constexpr auto manualFormatMax = 11.;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
+	hm->setAutomaticLimits(false);
+	QCOMPARE(hm->automaticLimits(), false);
+	double defaultFormatMin = hm->formatMin();
+	double defaultFormatMax = hm->formatMax();
+	QVERIFY(defaultFormatMin != manualFormatMin);
+	QVERIFY(defaultFormatMax != manualFormatMax);
+	hm->setFormatMin(manualFormatMin);
+	QCOMPARE(hm->formatMin(), manualFormatMin);
+	hm->setFormatMax(manualFormatMax);
+	QCOMPARE(hm->formatMax(), manualFormatMax);
+
+	hm->undoStack()->undo(); // hm->setFormatMax(manualFormatMax);
+	QCOMPARE(hm->formatMax(), defaultFormatMax);
+	hm->undoStack()->undo(); // hm->setFormatMin(manualFormatMin);
+	QCOMPARE(hm->formatMin(), defaultFormatMin);
+	hm->undoStack()->redo(); // hm->setFormatMin(manualFormatMin);
+	QCOMPARE(hm->formatMin(), manualFormatMin);
+	hm->undoStack()->redo(); // hm->setFormatMax(manualFormatMax);
+	QCOMPARE(hm->formatMax(), manualFormatMax);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(12);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 0.);
+	yColumn->setValueAt(1, 100.0);
+
+	xColumn->setValueAt(2, 2.0);
+	yColumn->setValueAt(2, 20.0);
+	xColumn->setValueAt(3, 6.0);
+	yColumn->setValueAt(3, 20.0);
+
+	xColumn->setValueAt(4, 4.0); // center
+	yColumn->setValueAt(4, 40.0); // center
+
+	xColumn->setValueAt(5, 2.0);
+	yColumn->setValueAt(5, 60.0);
+	xColumn->setValueAt(6, 6.0);
+	yColumn->setValueAt(6, 60.0);
+
+	xColumn->setValueAt(7, 10);
+	yColumn->setValueAt(7, 0);
+	xColumn->setValueAt(8, 10.0);
+	yColumn->setValueAt(8, 100.0);
+
+	xColumn->setValueAt(9, 4.5); // Testing Duplicates
+	yColumn->setValueAt(9, 45.0); // Testing Duplicates
+	xColumn->setValueAt(10, 9.0); // Testing Duplicates
+	yColumn->setValueAt(10, 90.0); // Testing Duplicates
+	xColumn->setValueAt(11, 6.5); // Testing Duplicates
+	yColumn->setValueAt(11, 65.0); // Testing Duplicates
+
+	QCOMPARE(hm->format().min, manualFormatMin);
+	QCOMPARE(hm->format().max, manualFormatMax);
+
+	// 5 Bins X
+	// 0     2     4     6     8     10
+	// |-----|-----|-----|-----|-----|   0
+	// |  X  |     |     |     |  X  |   20  5
+	// |     |  X  |     |  X  |     |   40  Bins
+	// |     |     | XX  |     |     |   60  Y
+	// |     |  X  |     | XX  |     |   80
+	// |  X  |     |     |     | XX  |   100
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
+
+	hm->setXNumberBins(3);
+
+	// 3 Bins X
+	// 0        3.3       6.6        10
+	// |---------|---------|---------|   0
+	// |   XX    |   XXX   |   X     |   50  2 Bins
+	// |   XX    |   XX    |   XX    |   100 Y
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		// Row 0
+		case 0:
+			COMPARE_VALUES(0., 0., 10. / 3., 50., 2.);
+			break;
+		case 1:
+			COMPARE_VALUES(10. / 3., 0., 20. / 3., 50, 3.);
+			break;
+		case 2:
+			COMPARE_VALUES(20. / 3., 0., 10., 50., 1.);
+			break;
+
+		// Row 1
+		case 3:
+			COMPARE_VALUES(0., 50.0, 10. / 3., 100., 2.);
+			break;
+		case 4:
+			COMPARE_VALUES(10. / 3., 50., 20. / 3., 100., 2.);
+			break;
+		case 5:
+			COMPARE_VALUES(20. / 3., 50., 10., 100., 2.);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	hm->setYNumberBins(2);
+	QCOMPARE(valueDrawnCounter, 6);
+	QCOMPARE(hm->format().min, manualFormatMin); // Min did not change
+	QCOMPARE(hm->format().max, manualFormatMax); // Max did not change
+}
+
+void HeatmapTest::testClippingBottomLeft() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
+	hm->setAutomaticLimits(false);
+	QCOMPARE(hm->automaticLimits(), false);
+	hm->setFormatMin(0.);
+	hm->setFormatMax(3.);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(12);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 1.);
+	yColumn->setValueAt(1, 1.);
+
+	xColumn->setValueAt(2, 2.0);
+	yColumn->setValueAt(2, 2.);
+	xColumn->setValueAt(3, 3.);
+	yColumn->setValueAt(3, 3.);
+
+	xColumn->setValueAt(4, 4.0);
+	yColumn->setValueAt(4, 4.0);
+
+	xColumn->setValueAt(5, 5.);
+	yColumn->setValueAt(5, 5.);
+	xColumn->setValueAt(6, 6.);
+	yColumn->setValueAt(6, 6.);
+
+	xColumn->setValueAt(7, 7.);
+	yColumn->setValueAt(7, 7.);
+	xColumn->setValueAt(8, 8.);
+	yColumn->setValueAt(8, 8.);
+
+	xColumn->setValueAt(9, 9.);
+	yColumn->setValueAt(9, 9.);
+	xColumn->setValueAt(10, 10.);
+	yColumn->setValueAt(10, 10.);
+
+	QCOMPARE(hm->format().min, 0);
+	QCOMPARE(hm->format().max, 3.);
+
+	// 5 Bins X
+	// 0     2     4     6     8     10
+	// |-----|-----|-----|-----|-----|   0
+	// |     |     |     |     |  X  |   2  5
+	// |     |     |     |  X  |     |   4  Bins
+	// |     |     |  X  |     |     |   6  Y
+	// |     |  X  |     |     |     |   8
+	// |  X  |     |     |     |     |   10
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 10.);
+
+	hm->setXNumberBins(4);
+	hm->setYNumberBins(3);
+
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(4.47824);
+		range.setEnd(14.4782);
+		plot->setYRange(0, range);
+	}
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		// Row 0
+		case 0:
+			COMPARE_VALUES(2.5, 10. / 3., 5., 20. / 3., 1.);
+			break;
+		case 1:
+			COMPARE_VALUES(5., 10. / 3., 7.5, 20. / 3., 2.);
+			break;
+		// Row 1
+		case 2:
+			COMPARE_VALUES(5., 20. / 3., 7.5, 10., 1.);
+			break;
+		case 3:
+			COMPARE_VALUES(7.5, 20. / 3., 10., 10., 3.);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(4.05971);
+		range.setEnd(14.0597);
+		plot->setXRange(0, range);
+	}
+	QCOMPARE(valueDrawnCounter, 4);
+}
+
+void HeatmapTest::testClippingBottomRight() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
+	hm->setAutomaticLimits(false);
+	QCOMPARE(hm->automaticLimits(), false);
+	hm->setFormatMin(0.);
+	hm->setFormatMax(3.);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(12);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 1.);
+	yColumn->setValueAt(1, 1.);
+
+	xColumn->setValueAt(2, 2.0);
+	yColumn->setValueAt(2, 2.);
+	xColumn->setValueAt(3, 3.);
+	yColumn->setValueAt(3, 3.);
+
+	xColumn->setValueAt(4, 4.0);
+	yColumn->setValueAt(4, 4.0);
+
+	xColumn->setValueAt(5, 5.);
+	yColumn->setValueAt(5, 5.);
+	xColumn->setValueAt(6, 6.);
+	yColumn->setValueAt(6, 6.);
+
+	xColumn->setValueAt(7, 7.);
+	yColumn->setValueAt(7, 7.);
+	xColumn->setValueAt(8, 8.);
+	yColumn->setValueAt(8, 8.);
+
+	xColumn->setValueAt(9, 9.);
+	yColumn->setValueAt(9, 9.);
+	xColumn->setValueAt(10, 10.);
+	yColumn->setValueAt(10, 10.);
+
+	QCOMPARE(hm->format().min, 0);
+	QCOMPARE(hm->format().max, 3.);
+
+	// 5 Bins X
+	// 0     2     4     6     8     10
+	// |-----|-----|-----|-----|-----|   0
+	// |     |     |     |     |  X  |   2  5
+	// |     |     |     |  X  |     |   4  Bins
+	// |     |     |  X  |     |     |   6  Y
+	// |     |  X  |     |     |     |   8
+	// |  X  |     |     |     |     |   10
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 10.);
+
+	hm->setXNumberBins(4);
+	hm->setYNumberBins(3);
+
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(4.27734);
+		range.setEnd(18.2773);
+		plot->setYRange(0, range);
+	}
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		// Row 0
+		case 0:
+			COMPARE_VALUES(2.5, 10. / 3., 5., 20. / 3., 1.);
+			break;
+		case 1:
+			COMPARE_VALUES(5., 10. / 3., 7.5, 20. / 3., 2.);
+			break;
+		// Row 1
+		case 2:
+			COMPARE_VALUES(5., 20. / 3., 7.5, 10., 1.);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(-7.37109);
+		range.setEnd(6.62891);
+		plot->setXRange(0, range);
+	}
+	QCOMPARE(valueDrawnCounter, 3);
+}
+
+void HeatmapTest::testClippingBottomRight2() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
+	hm->setAutomaticLimits(false);
+	QCOMPARE(hm->automaticLimits(), false);
+	hm->setFormatMin(0.);
+	hm->setFormatMax(3.);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(12);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 1.);
+	yColumn->setValueAt(1, 1.);
+
+	xColumn->setValueAt(2, 2.0);
+	yColumn->setValueAt(2, 2.);
+	xColumn->setValueAt(3, 3.);
+	yColumn->setValueAt(3, 3.);
+
+	xColumn->setValueAt(4, 4.0);
+	yColumn->setValueAt(4, 4.0);
+
+	xColumn->setValueAt(5, 5.);
+	yColumn->setValueAt(5, 5.);
+	xColumn->setValueAt(6, 6.);
+	yColumn->setValueAt(6, 6.);
+
+	xColumn->setValueAt(7, 7.);
+	yColumn->setValueAt(7, 7.);
+	xColumn->setValueAt(8, 8.);
+	yColumn->setValueAt(8, 8.);
+
+	xColumn->setValueAt(9, 9.);
+	yColumn->setValueAt(9, 9.);
+	xColumn->setValueAt(10, 10.);
+	yColumn->setValueAt(10, 10.);
+
+	QCOMPARE(hm->format().min, 0);
+	QCOMPARE(hm->format().max, 3.);
+
+	// 5 Bins X
+	// 0     2     4     6     8     10
+	// |-----|-----|-----|-----|-----|   0
+	// |     |     |     |     |  X  |   2  5
+	// |     |     |     |  X  |     |   4  Bins
+	// |     |     |  X  |     |     |   6  Y
+	// |     |  X  |     |     |     |   8
+	// |  X  |     |     |     |     |   10
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 10.);
+
+	hm->setXNumberBins(4);
+	hm->setYNumberBins(3);
+
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(4.40848);
+		range.setEnd(18.2773);
+		plot->setYRange(0, range);
+	}
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		// Row 0
+		case 0:
+			COMPARE_VALUES(2.5, 10. / 3., 5., 20. / 3., 1.);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(-6.20815);
+		range.setEnd(3.79185);
+		plot->setXRange(0, range);
+	}
+	QCOMPARE(valueDrawnCounter, 1);
+}
+
+void HeatmapTest::saveLoad() {
+	QString savePath;
+	{
+		Project project;
+
+		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+		project.addChild(ws);
+
+		auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+		ws->addChild(plot);
+
+		Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+		plot->addChild(hm);
+
+		hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+		QCOMPARE(hm->drawEmpty(), false);
+		hm->setXNumberBins(5);
+		hm->setYNumberBins(5);
+		QCOMPARE(hm->xNumberBins(), 5);
+		QCOMPARE(hm->yNumberBins(), 5);
+		hm->setAutomaticLimits(false);
+		QCOMPARE(hm->automaticLimits(), false);
+
+		auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+		project.addChild(spreadsheet);
+		auto columns = spreadsheet->children<Column>();
+		QCOMPARE(columns.count(), 2);
+
+		auto* xColumn = columns.at(0);
+		auto* yColumn = columns.at(1);
+
+		int dataChangedCounter = 0;
+		CONNECT_DATA_CHANGED;
+
+		QCOMPARE(dataChangedCounter, 0);
+		hm->setXColumn(xColumn);
+		QCOMPARE(hm->xColumn(), xColumn);
+		QCOMPARE(dataChangedCounter, 1);
+		hm->setYColumn(yColumn);
+		QCOMPARE(hm->yColumn(), yColumn);
+		QCOMPARE(dataChangedCounter, 2);
+
+		spreadsheet->setRowCount(12);
+
+		xColumn->setValueAt(0, 0);
+		yColumn->setValueAt(0, 0);
+		xColumn->setValueAt(1, 0.0);
+		yColumn->setValueAt(1, 100.0);
+
+		xColumn->setValueAt(2, 2.0);
+		yColumn->setValueAt(2, 20.0);
+		xColumn->setValueAt(3, 6.0);
+		yColumn->setValueAt(3, 20.0);
+
+		xColumn->setValueAt(4, 4.0); // center
+		yColumn->setValueAt(4, 40.0); // center
+
+		xColumn->setValueAt(5, 2.0);
+		yColumn->setValueAt(5, 60.0);
+		xColumn->setValueAt(6, 6.0);
+		yColumn->setValueAt(6, 60.0);
+
+		xColumn->setValueAt(7, 10);
+		yColumn->setValueAt(7, 0);
+		xColumn->setValueAt(8, 10.0);
+		yColumn->setValueAt(8, 100.0);
+
+		xColumn->setValueAt(9, 4.5); // Testing Duplicates
+		yColumn->setValueAt(9, 45.0); // Testing Duplicates
+		xColumn->setValueAt(10, 9.0); // Testing Duplicates
+		yColumn->setValueAt(10, 90.0); // Testing Duplicates
+		xColumn->setValueAt(11, 6.5); // Testing Duplicates
+		yColumn->setValueAt(11, 65.0); // Testing Duplicates
+
+		hm->setXNumberBins(3);
+		hm->setYNumberBins(2);
+		hm->setAutomaticLimits(false);
+		hm->setFormatMin(-2.);
+		hm->setFormatMax(2.67);
+
+		auto format = hm->format();
+		format.name = QStringLiteral("CustomColorTheme13");
+		format.colors = QVector<QColor>{
+			QColor(Qt::blue),
+			QColor(Qt::green),
+			QColor(Qt::gray),
+		};
+		hm->setFormat(format);
+
+		auto* matrix = new Matrix(QStringLiteral("matrix123"));
+		project.addChild(matrix);
+		hm->setMatrix(matrix);
+
+		SAVE_PROJECT("HeatmapSaveLoad");
+	}
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* p = ws->child<CartesianPlot>(0);
+		QVERIFY(p);
+		const auto* hm = p->child<Heatmap>(0);
+		QVERIFY(hm);
+
+		const auto* sh = p->child<Spreadsheet>(0);
+
+		QCOMPARE(hm->xNumberBins(), 3);
+		QCOMPARE(hm->yNumberBins(), 2);
+		QCOMPARE(hm->automaticLimits(), false);
+		QCOMPARE(hm->formatMin(), -2.);
+		QCOMPARE(hm->formatMax(), 2.67);
+		const auto format = hm->format();
+		QCOMPARE(format.name, QStringLiteral("CustomColorTheme13"));
+		QCOMPARE(format.colors.count(), 3);
+		QCOMPARE(format.colors.at(0), QColor(Qt::blue));
+		QCOMPARE(format.colors.at(1), QColor(Qt::green));
+		QCOMPARE(format.colors.at(2), QColor(Qt::gray));
+		QCOMPARE(hm->dataSource(), Heatmap::DataSource::Spreadsheet);
+		QCOMPARE(hm->xColumnPath(), QStringLiteral("Project/Spreadsheet/1"));
+		QVERIFY(hm->xColumn() != nullptr);
+		QCOMPARE(hm->yColumnPath(), QStringLiteral("Project/Spreadsheet/2"));
+		QVERIFY(hm->yColumn() != nullptr);
+		QCOMPARE(hm->matrixPath(), QStringLiteral("Project/matrix123"));
+		QVERIFY(hm->matrix() != nullptr);
+
+		QCOMPARE(hm->isVisible(), true);
+
+		QCOMPARE(hm->coordinateSystemIndex(), 0);
+	}
+}
+
+// Test if the matrixNumBins works as expected
+void HeatmapTest::testMatrixNumBins() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+	hm->setXNumberBins(1);
+	hm->setYNumberBins(1);
+	hm->setMatrixNumberBins(false);
+	QCOMPARE(hm->xNumberBins(), 1);
+	QCOMPARE(hm->yNumberBins(), 1);
+
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
+	project.addChild(matrix);
+	hm->setMatrix(matrix);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setXStart(1.);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setXEnd(11.);
+	QCOMPARE(dataChangedCounter, 3);
+	matrix->setYStart(1.);
+	QCOMPARE(dataChangedCounter, 4);
+	matrix->setYEnd(101.);
+	QCOMPARE(dataChangedCounter, 5);
+
+	matrix->setXStart(0);
+	matrix->setXEnd(10);
+	matrix->setYStart(0);
+	matrix->setYEnd(100);
+	dataChangedCounter = 0; // reset
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(10.);
+		plot->setXRange(0, range);
+	}
+
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(100.);
+		plot->setYRange(0, range);
+	}
+	CHECK_RANGE(plot, hm, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, hm, Dimension::Y, 0., 100.);
+
+	QCOMPARE(matrix->rowCount(), 5);
+	QCOMPARE(matrix->columnCount(), 5);
+
+	matrix->setCell(0, 0, 1.0);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setCell(0, 1, 2.0);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setCell(0, 2, 3.0);
+	matrix->setCell(0, 3, 4.0);
+	matrix->setCell(0, 4, 5.0);
+
+	matrix->setCell(1, 0, 6.0);
+	matrix->setCell(1, 1, 7.0);
+	matrix->setCell(1, 2, 8.0);
+	matrix->setCell(1, 3, 9.0);
+	matrix->setCell(1, 4, 10.0);
+
+	matrix->setCell(2, 0, 11.0);
+	matrix->setCell(2, 1, 12.0);
+	matrix->setCell(2, 2, 13.0);
+	matrix->setCell(2, 3, 14.0);
+	matrix->setCell(2, 4, 15.0);
+
+	matrix->setCell(3, 0, 16.0);
+	matrix->setCell(3, 1, 17.0);
+	matrix->setCell(3, 2, 18.0);
+	matrix->setCell(3, 3, 19.0);
+	matrix->setCell(3, 4, 20.0);
+
+	matrix->setCell(4, 0, 21.0);
+	matrix->setCell(4, 1, 22.0);
+	matrix->setCell(4, 2, 23.0);
+	matrix->setCell(4, 3, 24.0);
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		QCOMPARE(xPosStart, 0.);
+		QCOMPARE(yPosStart, 0.);
+		QCOMPARE(xPosEnd, 10.);
+		QCOMPARE(yPosEnd, 100.);
+		QCOMPARE(value, 25.); // Last value is used currently
+		valueDrawnCounter++;
+	});
+	matrix->setCell(4, 4, 25.0); // Set last cell to trigger a redraw of the heatmap
+	QCOMPARE(valueDrawnCounter, 1);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	hm->setMatrixNumberBins(true);
+
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0); // (0, 0)
+			break;
+		case 1:
+			COMPARE_VALUES(2.0, 0.0, 4.0, 20.0, 2.0); // (0, 1)
+			break;
+		case 2:
+			COMPARE_VALUES(4.0, 0.0, 6.0, 20.0, 3.0); // (0, 2)
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 0.0, 8.0, 20.0, 4.0); // (0, 3)
+			break;
+		case 4:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 5.0); // (0, 4)
+			break;
+
+		case 5:
+			COMPARE_VALUES(0.0, 20.0, 2.0, 40.0, 6.0); // (1, 0)
+			break;
+		case 6:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 7.0); // (1, 1)
+			break;
+		case 7:
+			COMPARE_VALUES(4.0, 20.0, 6.0, 40.0, 8.0); // (1, 2)
+			break;
+		case 8:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 9.0); // (1, 3)
+			break;
+		case 9:
+			COMPARE_VALUES(8.0, 20.0, 10.0, 40.0, 10.0); // (1, 4)
+			break;
+
+		case 10:
+			COMPARE_VALUES(0.0, 40.0, 2.0, 60.0, 11.0); // (2, 0)
+			break;
+		case 11:
+			COMPARE_VALUES(2.0, 40.0, 4.0, 60.0, 12.0); // (2, 1)
+			break;
+		case 12:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 13.0); // (2, 2)
+			break;
+		case 13:
+			COMPARE_VALUES(6.0, 40.0, 8.0, 60.0, 14.0); // (2, 3)
+			break;
+		case 14:
+			COMPARE_VALUES(8.0, 40.0, 10.0, 60.0, 15.0); // (2, 4)
+			break;
+
+		case 15:
+			COMPARE_VALUES(0.0, 60.0, 2.0, 80.0, 16.0); // (3, 0)
+			break;
+		case 16:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 17.0); // (3, 1)
+			break;
+		case 17:
+			COMPARE_VALUES(4.0, 60.0, 6.0, 80.0, 18.0); // (3, 2)
+			break;
+		case 18:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 19.0); // (3, 3)
+			break;
+		case 19:
+			COMPARE_VALUES(8.0, 60.0, 10.0, 80.0, 20.0); // (3, 4)
+			break;
+
+		case 20:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 21.0); // (4, 0)
+			break;
+		case 21:
+			COMPARE_VALUES(2.0, 80.0, 4.0, 100.0, 22.0); // (4, 1)
+			break;
+		case 22:
+			COMPARE_VALUES(4.0, 80.0, 6.0, 100.0, 23.0); // (4, 2)
+			break;
+		case 23:
+			COMPARE_VALUES(6.0, 80.0, 8.0, 100.0, 24.0); // (4, 3)
+			break;
+		case 24:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 25.0); // (4, 4)
+			break;
+		}
+		valueDrawnCounter++;
+	});
+
+	matrix->setCell(4, 4, 25.0); // Set last cell to trigger a redraw of the heatmap
+	QCOMPARE(valueDrawnCounter, 25);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
+}
+
+// Test that an inverted matrix range (start > end) is handled the same way as a non-inverted one
+void HeatmapTest::rangeInverted() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+	hm->setXNumberBins(1);
+	hm->setYNumberBins(1);
+	hm->setMatrixNumberBins(false);
+	QCOMPARE(hm->xNumberBins(), 1);
+	QCOMPARE(hm->yNumberBins(), 1);
+
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
+	project.addChild(matrix);
+	hm->setMatrix(matrix);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setXStart(11.);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setXEnd(2.); // != Matrix's default xEnd of 1.0, so this actually changes the value and triggers a signal
+	QCOMPARE(dataChangedCounter, 3);
+	matrix->setYStart(101.);
+	QCOMPARE(dataChangedCounter, 4);
+	matrix->setYEnd(2.); // != Matrix's default yEnd of 1.0, so this actually changes the value and triggers a signal
+	QCOMPARE(dataChangedCounter, 5);
+
+	matrix->setXStart(10);
+	matrix->setXEnd(0);
+	matrix->setYStart(100);
+	matrix->setYEnd(0);
+	dataChangedCounter = 0; // reset
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(10.);
+		plot->setXRange(0, range);
+	}
+
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(100.);
+		plot->setYRange(0, range);
+	}
+	CHECK_RANGE(plot, hm, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, hm, Dimension::Y, 0., 100.);
+
+	QCOMPARE(matrix->rowCount(), 5);
+	QCOMPARE(matrix->columnCount(), 5);
+
+	matrix->setCell(0, 0, 1.0);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setCell(0, 1, 2.0);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setCell(0, 2, 3.0);
+	matrix->setCell(0, 3, 4.0);
+	matrix->setCell(0, 4, 5.0);
+
+	matrix->setCell(1, 0, 6.0);
+	matrix->setCell(1, 1, 7.0);
+	matrix->setCell(1, 2, 8.0);
+	matrix->setCell(1, 3, 9.0);
+	matrix->setCell(1, 4, 10.0);
+
+	matrix->setCell(2, 0, 11.0);
+	matrix->setCell(2, 1, 12.0);
+	matrix->setCell(2, 2, 13.0);
+	matrix->setCell(2, 3, 14.0);
+	matrix->setCell(2, 4, 15.0);
+
+	matrix->setCell(3, 0, 16.0);
+	matrix->setCell(3, 1, 17.0);
+	matrix->setCell(3, 2, 18.0);
+	matrix->setCell(3, 3, 19.0);
+	matrix->setCell(3, 4, 20.0);
+
+	matrix->setCell(4, 0, 21.0);
+	matrix->setCell(4, 1, 22.0);
+	matrix->setCell(4, 2, 23.0);
+	matrix->setCell(4, 3, 24.0);
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		QCOMPARE(xPosStart, 0.);
+		QCOMPARE(yPosStart, 0.);
+		QCOMPARE(xPosEnd, 10.);
+		QCOMPARE(yPosEnd, 100.);
+		QCOMPARE(value, 25.); // Last value is used currently
+		valueDrawnCounter++;
+	});
+	matrix->setCell(4, 4, 25.0); // Set last cell to trigger a redraw of the heatmap
+	QCOMPARE(valueDrawnCounter, 1);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	hm->setMatrixNumberBins(true);
+
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0); // (0, 0)
+			break;
+		case 1:
+			COMPARE_VALUES(2.0, 0.0, 4.0, 20.0, 2.0); // (0, 1)
+			break;
+		case 2:
+			COMPARE_VALUES(4.0, 0.0, 6.0, 20.0, 3.0); // (0, 2)
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 0.0, 8.0, 20.0, 4.0); // (0, 3)
+			break;
+		case 4:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 5.0); // (0, 4)
+			break;
+
+		case 5:
+			COMPARE_VALUES(0.0, 20.0, 2.0, 40.0, 6.0); // (1, 0)
+			break;
+		case 6:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 7.0); // (1, 1)
+			break;
+		case 7:
+			COMPARE_VALUES(4.0, 20.0, 6.0, 40.0, 8.0); // (1, 2)
+			break;
+		case 8:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 9.0); // (1, 3)
+			break;
+		case 9:
+			COMPARE_VALUES(8.0, 20.0, 10.0, 40.0, 10.0); // (1, 4)
+			break;
+
+		case 10:
+			COMPARE_VALUES(0.0, 40.0, 2.0, 60.0, 11.0); // (2, 0)
+			break;
+		case 11:
+			COMPARE_VALUES(2.0, 40.0, 4.0, 60.0, 12.0); // (2, 1)
+			break;
+		case 12:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 13.0); // (2, 2)
+			break;
+		case 13:
+			COMPARE_VALUES(6.0, 40.0, 8.0, 60.0, 14.0); // (2, 3)
+			break;
+		case 14:
+			COMPARE_VALUES(8.0, 40.0, 10.0, 60.0, 15.0); // (2, 4)
+			break;
+
+		case 15:
+			COMPARE_VALUES(0.0, 60.0, 2.0, 80.0, 16.0); // (3, 0)
+			break;
+		case 16:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 17.0); // (3, 1)
+			break;
+		case 17:
+			COMPARE_VALUES(4.0, 60.0, 6.0, 80.0, 18.0); // (3, 2)
+			break;
+		case 18:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 19.0); // (3, 3)
+			break;
+		case 19:
+			COMPARE_VALUES(8.0, 60.0, 10.0, 80.0, 20.0); // (3, 4)
+			break;
+
+		case 20:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 21.0); // (4, 0)
+			break;
+		case 21:
+			COMPARE_VALUES(2.0, 80.0, 4.0, 100.0, 22.0); // (4, 1)
+			break;
+		case 22:
+			COMPARE_VALUES(4.0, 80.0, 6.0, 100.0, 23.0); // (4, 2)
+			break;
+		case 23:
+			COMPARE_VALUES(6.0, 80.0, 8.0, 100.0, 24.0); // (4, 3)
+			break;
+		case 24:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 25.0); // (4, 4)
+			break;
+		}
+		valueDrawnCounter++;
+	});
+
+	matrix->setCell(4, 4, 25.0); // Set last cell to trigger a redraw of the heatmap
+	QCOMPARE(valueDrawnCounter, 25);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
+}
+
+// Heatmap used to have a custom Heatmap::activatePlot() override which was an unfinished
+// stub that unconditionally returned false. Since Plot::activatePlot() is not virtual, this
+// silently hid the working, inherited implementation (PlotPrivate::activatePlot(), which
+// checks m_shape.contains(...)) whenever activatePlot() was called through a Heatmap*
+// (rather than a Plot*) pointer. In the running application this meant clicking on a Heatmap
+// never selected it.
+void HeatmapTest::testActivatePlot() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	auto* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
+	project.addChild(matrix);
+	matrix->setXStart(0);
+	matrix->setXEnd(10);
+	matrix->setYStart(0);
+	matrix->setYEnd(100);
+	for (int r = 0; r < 5; r++)
+		for (int c = 0; c < 5; c++)
+			matrix->setCell(r, c, (double)(r * 5 + c));
+
+	hm->setMatrix(matrix);
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(10.);
+		plot->setXRange(0, range);
+	}
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(100.);
+		plot->setYRange(0, range);
+	}
+
+	plot->retransform();
+
+	// a point at the center of the plotted data range must be reported as inside the heatmap ...
+	const auto* cSystem = plot->coordinateSystem(hm->coordinateSystemIndex());
+	QVector<QPointF> points{QPointF(5., 50.)};
+	cSystem->mapLogicalToSceneFast(points, AbstractCoordinateSystem::MappingFlag::Limit);
+	QVERIFY(hm->activatePlot(points.at(0)));
+
+	// ... while a point far away from the plot must not be
+	QVERIFY(!hm->activatePlot(QPointF(1.e6, 1.e6)));
+}
+
+QTEST_MAIN(HeatmapTest)

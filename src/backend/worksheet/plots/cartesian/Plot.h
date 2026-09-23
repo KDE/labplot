@@ -58,16 +58,52 @@ public:
 		// continuous improvement plots
 		ProcessBehaviorChart,
 		RunChart,
-		ParetoChart
+		ParetoChart,
+
+		Heatmap,
 	};
 
 	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
 	using Dimension = CartesianCoordinateSystem::Dimension;
-	virtual bool minMax(Dimension, const Range<int>& indexRange, Range<double>& rOut, bool includeErrorBars = true) const = 0;
-	virtual double minimum(Dimension) const = 0;
-	virtual double maximum(Dimension) const = 0;
-	virtual bool indicesMinMax(const Dimension, double v1, double v2, int& start, int& end) const = 0;
-	virtual int dataCount(Dimension) const = 0;
+	/*!
+	 * \brief minMax
+	 * \param dim
+	 * \param indexRange
+	 * \param rOut
+	 * \param includeErrorBars
+	 * \return The minimum and maximum in the range \p rOut between the indices \p indexRange for dimension \p dim
+	 */
+	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& rOut, bool includeErrorBars = true) const = 0;
+	/*!
+	 * \brief minimum
+	 * \param dim
+	 * \return Returns the absolute minimum value for the dimension \p dim
+	 */
+	virtual double minimum(Dimension dim) const = 0;
+	/*!
+	 * \brief maximum
+	 * \param dim
+	 * \return Returns the absolute maximum value for the dimension \p dim
+	 */
+	virtual double maximum(Dimension dim) const = 0;
+	/*!
+	 * \brief indicesMinMax
+	 * \param dim
+	 * \param v1 Start value
+	 * \param v2 End value
+	 * \param start Found start index
+	 * \param end Found end index
+	 * \return true if the indices can be found otherwise false. Return false, for example if a required column is not available, ...
+	 */
+	virtual bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const = 0;
+
+	/*!
+	 * \brief dataCount
+	 * Number of elements in a specific direction
+	 * \param dim
+	 * \return Number of data or -1 if the plot is invalid (so it will not be considered for autoscale)
+	 */
+	virtual int dataCount(Dimension dim) const = 0;
 	virtual bool hasData() const = 0;
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
 	virtual QColor color() const = 0; // Color of the plot. If the plot consists multiple colors, return the main Color (This is used in the cursor dock as

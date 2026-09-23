@@ -2952,6 +2952,71 @@ void AsciiFilterTest::testMatrixHeader() {
 	QCOMPARE(matrix.cell<double>(4, 2), -0.284112);
 }
 
+// matrices only support the Double column mode, so importing integer data without
+// converting it to double must be rejected
+void AsciiFilterTest::testMatrixIntegerColumnModeRejected() {
+	Matrix matrix(QStringLiteral("test"), false);
+
+	QStringList fileContent = {
+		QStringLiteral("1 2 3"),
+		QStringLiteral("4 5 6"),
+		QStringLiteral("7 8 9"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = true;
+	p.separator = QStringLiteral(" ");
+	p.headerEnabled = false;
+	p.intAsDouble = false; // integer data is not supported for matrices
+	filter.setProperties(p);
+
+	filter.readDataFromFile(savePath, &matrix, AbstractFileFilter::ImportMode::Replace);
+
+	QVERIFY(!filter.lastError().isEmpty());
+	QCOMPARE(filter.d_ptr->lastStatus.type(), Status::Type::MatrixUnsupportedColumnMode);
+}
+
+// with intAsDouble enabled, integer data is converted to double on the fly and the import into a matrix succeeds
+void AsciiFilterTest::testMatrixIntegerAsDouble() {
+	Matrix matrix(QStringLiteral("test"), false);
+
+	QStringList fileContent = {
+		QStringLiteral("1 2 3"),
+		QStringLiteral("4 5 6"),
+		QStringLiteral("7 8 9"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = true;
+	p.separator = QStringLiteral(" ");
+	p.headerEnabled = false;
+	p.intAsDouble = true;
+	filter.setProperties(p);
+
+	filter.readDataFromFile(savePath, &matrix, AbstractFileFilter::ImportMode::Replace);
+	QVERIFY(filter.lastError().isEmpty());
+
+	QCOMPARE(matrix.rowCount(), 3);
+	QCOMPARE(matrix.columnCount(), 3);
+	QCOMPARE(matrix.mode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(matrix.cell<double>(0, 0), 1.);
+	QCOMPARE(matrix.cell<double>(0, 1), 2.);
+	QCOMPARE(matrix.cell<double>(0, 2), 3.);
+	QCOMPARE(matrix.cell<double>(1, 0), 4.);
+	QCOMPARE(matrix.cell<double>(1, 1), 5.);
+	QCOMPARE(matrix.cell<double>(1, 2), 6.);
+	QCOMPARE(matrix.cell<double>(2, 0), 7.);
+	QCOMPARE(matrix.cell<double>(2, 1), 8.);
+	QCOMPARE(matrix.cell<double>(2, 2), 9.);
+}
+
 // ##############################################################################
 // ############# updates in the dependent objects after the import ##############
 // ##############################################################################
