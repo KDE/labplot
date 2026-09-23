@@ -10,6 +10,7 @@
 #ifndef PLOTDATADIALOG_H
 #define PLOTDATADIALOG_H
 
+#include "backend/matrix/Matrix.h"
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
@@ -37,6 +38,7 @@ public:
 	explicit PlotDataDialog(AbstractAspect*, Plot::PlotType = Plot::PlotType::Line, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
+	void setSelectedMatrix(Matrix* matrix);
 	void setSelectedColumns(QVector<Column*>);
 	void setAnalysisAction(XYAnalysisCurve::AnalysisAction);
 	void setFitDistribution(nsl_sf_stats_distribution);
@@ -47,6 +49,7 @@ private:
 	AbstractAspect* m_parentAspect;
 	TreeViewComboBox* cbExistingPlots;
 	TreeViewComboBox* cbExistingWorksheets;
+	Matrix* m_matrix{nullptr};
 	QVector<Column*> m_columns;
 	QVector<QComboBox*> m_columnComboBoxes;
 	AspectTreeModel* m_plotsModel;
@@ -83,11 +86,15 @@ private:
 
 	void setAxesColumnLabels(CartesianPlot*, const Column*);
 
+	bool plotMatrixSource() { return m_matrix != nullptr; };
+
 private Q_SLOTS:
 	void plot();
 	void curvePlacementChanged();
 	void plotPlacementChanged();
 	void checkOkButton();
+	void plotSpreadsheet();
+	void plotMatrix();
 };
 
 #endif

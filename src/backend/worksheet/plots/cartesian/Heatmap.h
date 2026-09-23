@@ -63,7 +63,7 @@ public:
 	 * the size of the Bins. The size of the bin is defined as (maxVal - minVal) / numBins
 	 */
 	BASIC_D_ACCESSOR_DECL(bool, equalNumberBins, EqualNumberBins)
-	BASIC_D_ACCESSOR_DECL(bool, matrixNumberBins, MatrixNumberBins)
+	BASIC_D_ACCESSOR_DECL(bool, sourceNumberBins, SourceNumberBins)
 	BASIC_D_ACCESSOR_DECL(unsigned int, xNumberBins, XNumberBins)
 	BASIC_D_ACCESSOR_DECL(unsigned int, yNumberBins, YNumberBins)
 	/*!
@@ -120,7 +120,7 @@ Q_SIGNALS:
 	void equalNumberBinsChanged(bool);
 	void xNumberBinsChanged(unsigned int);
 	void yNumberBinsChanged(unsigned int);
-	void matrixNumberBinsChanged(bool);
+	void sourceNumberBinsChanged(bool);
 
 	void formatChanged(const Format&);
 

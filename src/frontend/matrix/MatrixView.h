@@ -125,6 +125,7 @@ private:
 	QAction* action_image_view;
 	QAction* action_fill_function;
 	QAction* action_fill_const;
+	QAction* plot_heatmap{nullptr};
 
 	QAction* zoomInAction{nullptr};
 	QAction* zoomOutAction{nullptr};
@@ -136,6 +137,7 @@ private:
 	QMenu* m_rowMenu{nullptr};
 	QMenu* m_headerFormatMenu{nullptr};
 	QMenu* m_generateDataMenu{nullptr};
+	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_manipulateDataMenu{nullptr};
 	QMenu* m_viewMenu{nullptr};
 	QMenu* m_zoomMenu{nullptr};
@@ -159,6 +161,7 @@ private Q_SLOTS:
 	void clearSelectedCells();
 
 	void headerFormatChanged(QAction*);
+	void plotMatrix();
 
 	void modifyValues();
 

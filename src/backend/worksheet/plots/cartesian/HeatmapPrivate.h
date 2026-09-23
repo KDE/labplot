@@ -25,7 +25,7 @@ public:
 	Heatmap::DataSource dataSource{Heatmap::DataSource::Matrix};
 	bool drawEmpty{false};
 	bool equalNumberBins{true};
-	bool matrixNumberBins{true}; // Use number of cells of the matrix as bins
+	bool sourceNumberBins{true}; // Use number of cells of the matrix as bins
 	unsigned int xNumberBins{10};
 	unsigned int yNumberBins{10};
 	const AbstractColumn* xColumn{nullptr};
@@ -37,9 +37,9 @@ public:
 	bool automaticLimits{true};
 	Heatmap::Format format;
 
-	void retransform();
+	void retransform() override;
 	void recalc();
-	void recalcShapeAndBoundingRect();
+	void recalcShapeAndBoundingRect() override;
 	void recalcShapeAndBoundingRect(const QRectF&);
 
 	struct Data {
@@ -52,7 +52,7 @@ public:
 
 private:
 	void draw(QPainter*);
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr);
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* = nullptr) override;
 	QRectF update();
 	void updatePixmap();
 };
