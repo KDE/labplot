@@ -70,6 +70,14 @@ public:
 	QDateTime yDateTime(double x, bool& valueFound) const;
 
 	bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const override;
+	static bool minMax(const AbstractColumn* column1,
+					   const AbstractColumn* column2,
+					   const ErrorBar::ErrorType errorType,
+					   const AbstractColumn* errorPlusColumn,
+					   const AbstractColumn* errorMinusColumn,
+					   const Range<int>& indexRange,
+					   Range<double>& range,
+					   bool includeErrorBars);
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
 	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
 	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
@@ -136,14 +144,6 @@ private:
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);
 
-	bool minMax(const AbstractColumn* column1,
-				const AbstractColumn* column2,
-				const ErrorBar::ErrorType errorType,
-				const AbstractColumn* errorPlusColumn,
-				const AbstractColumn* errorMinusColumn,
-				const Range<int>& indexRange,
-				Range<double>& yRange,
-				bool includeErrorBars) const;
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 

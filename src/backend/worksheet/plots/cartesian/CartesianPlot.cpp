@@ -11,6 +11,7 @@
 
 #include "CartesianPlot.h"
 #include "CartesianPlotPrivate.h"
+#include "Heatmap.h"
 #include "PlotAreaBackground.h"
 
 #include "backend/core/Project.h"
@@ -689,6 +690,10 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	addNewCIPlotsMenu->addAction(action);
 
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-heatmap")), i18n("Heatmap"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::Heatmap));
+	addNewPlotMenu->addAction(action);
 }
 
 void CartesianPlot::fillFitMenu(QMenu* menu, QActionGroup* actionGroup) {
@@ -2043,6 +2048,9 @@ void CartesianPlot::addPlot(const QAction* action) {
 		addChild(new ParetoChart(i18n("Pareto Chart")));
 		break;
 	}
+	case Plot::PlotType::Heatmap:
+		addChild(new Heatmap(i18n("Heatmap")));
+		break;
 	}
 }
 
@@ -2642,6 +2650,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 	const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(child);
+	const auto* heatmap = dynamic_cast<const Heatmap*>(child);
 	const auto* paretoChart = dynamic_cast<const ParetoChart*>(child);
 
 	const auto* axis = dynamic_cast<const Axis*>(child);
@@ -2726,6 +2735,17 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// TODO: connect to data changes of the pareto chart when implemented
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
+	} else if (heatmap) {
+		connect(heatmap, &Heatmap::xDataChanged, [this, heatmap]() {
+			this->dataChanged(const_cast<Heatmap*>(heatmap), Dimension::X);
+		});
+		connect(heatmap, &Heatmap::yDataChanged, [this, heatmap]() {
+			this->dataChanged(const_cast<Heatmap*>(heatmap), Dimension::Y);
+		});
+		connect(heatmap, &Heatmap::dataChanged, [this, heatmap]() {
+			this->dataChanged(const_cast<Heatmap*>(heatmap));
+		});
+		// Heatmap::dataChanged is handled above
 	} else {
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
@@ -3409,6 +3429,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 				DEBUG("Invalid data");
 				continue;
 			}
+
 			DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
 			switch (d->rangeType) {
 			case RangeType::Free:
@@ -5925,6 +5946,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete hist;
 				return false;
 			}
+		} else if (reader->name() == Heatmap::saveName) {
+			auto* heatmap = new Heatmap(QStringLiteral("Heatmap"));
+			heatmap->setIsLoading(true);
+			if (heatmap->load(reader, preview))
+				addChildFast(heatmap);
+			else {
+				removeChild(heatmap);
+				return false;
+			}
 		} else if (reader->name() == QLatin1String("QQPlot")) {
 			auto* plot = new QQPlot(QStringLiteral("Q-Q Plot"));
 			if (plot->load(reader, preview))
@@ -6096,6 +6126,5 @@ const QList<QColor>& CartesianPlot::plotColors() const {
 const QColor CartesianPlot::plotColor(int index) const {
 	Q_D(const CartesianPlot);
 	const int i = index % d->plotColors.count();
-
 	return d->plotColors.at(i);
 }

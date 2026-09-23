@@ -44,7 +44,19 @@ MatrixModel::MatrixModel(Matrix* matrix)
 }
 
 void MatrixModel::setSuppressDataChangedSignal(bool b) {
+	if (b == m_suppressDataChangedSignal)
+		return;
+
 	m_suppressDataChangedSignal = b;
+
+	// this is used to bracket bulk operations like the ascii import where the row count
+	// is only known once all the data was read and the underlying vectors were resized
+	// directly, bypassing insertRows()/removeRows(). A full model reset makes sure the
+	// view picks up the correct row and column count after such an operation.
+	if (b)
+		beginResetModel();
+	else
+		endResetModel();
 }
 
 void MatrixModel::setChanged() {
@@ -220,49 +232,66 @@ void MatrixModel::updateHeader() {
 }
 
 void MatrixModel::handleColumnsAboutToBeInserted(int before, int count) {
+	// while suppressed (e.g. during an import), the row/column count is only known once
+	// all the data was read; a single model reset in setSuppressDataChangedSignal(false)
+	// takes care of it, so individual structural changes must not be reported in between,
+	// they would clash with the pending model reset.
+	if (m_suppressDataChangedSignal)
+		return;
 	beginInsertColumns(QModelIndex(), before, before + count - 1);
 }
 
 void MatrixModel::handleColumnsInserted(int /*first*/, int /*count*/) {
+	if (m_suppressDataChangedSignal)
+		return;
 	endInsertColumns();
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT changed();
+	Q_EMIT changed();
 }
 
 void MatrixModel::handleColumnsAboutToBeRemoved(int first, int count) {
+	if (m_suppressDataChangedSignal)
+		return;
 	beginRemoveColumns(QModelIndex(), first, first + count - 1);
 }
 
 void MatrixModel::handleColumnsRemoved(int /*first*/, int /*count*/) {
+	if (m_suppressDataChangedSignal)
+		return;
 	endRemoveColumns();
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT changed();
+	Q_EMIT changed();
 }
 
 void MatrixModel::handleRowsAboutToBeInserted(int before, int count) {
+	if (m_suppressDataChangedSignal)
+		return;
 	beginInsertRows(QModelIndex(), before, before + count - 1);
 }
 
 void MatrixModel::handleRowsInserted(int /*first*/, int /*count*/) {
+	if (m_suppressDataChangedSignal)
+		return;
 	endInsertRows();
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT changed();
+	Q_EMIT changed();
 }
 
 void MatrixModel::handleRowsAboutToBeRemoved(int first, int count) {
+	if (m_suppressDataChangedSignal)
+		return;
 	beginRemoveRows(QModelIndex(), first, first + count - 1);
 }
 
 void MatrixModel::handleRowsRemoved(int /*first*/, int /*count*/) {
+	if (m_suppressDataChangedSignal)
+		return;
 	endRemoveRows();
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT changed();
+	Q_EMIT changed();
 }
 
 void MatrixModel::handleDataChanged(int top, int left, int bottom, int right) {
+	if (m_suppressDataChangedSignal)
+		return;
 	Q_EMIT dataChanged(index(top, left), index(bottom, right));
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT changed();
+	Q_EMIT changed();
 }
 
 void MatrixModel::handleCoordinatesChanged() {
