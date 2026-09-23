@@ -31,7 +31,11 @@ ColorMapsManager* ColorMapsManager::m_instance{nullptr};
 	\ingroup frontend
  */
 ColorMapsManager::ColorMapsManager() {
+#ifdef COLOR_MAP_PATH
+	m_jsonDir = QStringLiteral(COLOR_MAP_PATH);
+#else
 	m_jsonDir = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("colormaps"), QStandardPaths::LocateDirectory);
+#endif
 	loadCollections();
 }
 
