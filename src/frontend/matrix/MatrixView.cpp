@@ -21,6 +21,7 @@
 #include "frontend/matrix/MatrixFunctionDialog.h"
 #include "frontend/spreadsheet/AddSubtractValueDialog.h"
 #endif
+#include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/StatisticsDialog.h"
 #include "tools/ColorMapsManager.h"
 
@@ -139,6 +140,8 @@ void MatrixView::initActions() {
 	action_clear_matrix = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
 
+	plot_heatmap = new QAction(QIcon::fromTheme(QStringLiteral("labplot-heatmap")), i18n("Plot Heatmap"), this);
+
 	action_transpose = new QAction(i18n("&Transpose"), this);
 	action_mirror_horizontally = new QAction(QIcon::fromTheme(QStringLiteral("object-flip-horizontal")), i18n("Mirror &Horizontally"), this);
 	action_mirror_vertically = new QAction(QIcon::fromTheme(QStringLiteral("object-flip-vertical")), i18n("Mirror &Vertically"), this);
@@ -208,6 +211,7 @@ void MatrixView::initActions() {
 	connect(action_fill_const, &QAction::triggered, this, &MatrixView::fillWithConstValues);
 
 	connect(action_go_to_cell, &QAction::triggered, this, QOverload<>::of(&MatrixView::goToCell));
+	connect(plot_heatmap, &QAction::triggered, this, &MatrixView::plotMatrix);
 	// connect(action_duplicate, &QAction::triggered, this, &MatrixView::duplicate);
 	connect(action_clear_matrix, &QAction::triggered, m_matrix, &Matrix::clear);
 	connect(action_transpose, &QAction::triggered, m_matrix, &Matrix::transpose);
@@ -270,6 +274,9 @@ void MatrixView::initMenus() {
 	m_generateDataMenu->addAction(action_fill_const);
 	m_generateDataMenu->addAction(action_fill_function);
 
+	m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
+	m_plotDataMenu->addAction(plot_heatmap);
+
 	// Data manipulation sub-menu
 	m_manipulateDataMenu = new QMenu(i18n("Manipulate Data"), this);
 	m_manipulateDataMenu->addAction(action_add_value);
@@ -320,6 +327,9 @@ void MatrixView::createContextMenu(QMenu* menu) {
 	// and insert the action at the beginning of the menu.
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
+
+	menu->insertMenu(firstAction, m_plotDataMenu);
+	menu->insertSeparator(firstAction);
 
 	const bool dataView = (m_stackedWidget->currentIndex() == 0);
 	if (dataView) {
@@ -907,6 +917,13 @@ void MatrixView::headerFormatChanged(QAction* action) {
 		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderValues);
 	else
 		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderRowsColumnsValues);
+}
+
+void MatrixView::plotMatrix() {
+	auto type = Plot::PlotType::Heatmap;
+	auto* dlg = new PlotDataDialog(m_matrix, type);
+	dlg->setSelectedMatrix(m_matrix);
+	dlg->exec();
 }
 
 // ############################# column related slots ###########################
