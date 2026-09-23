@@ -33,7 +33,11 @@ ExamplesManager* ExamplesManager::m_instance{nullptr};
 	\ingroup frontend
  */
 ExamplesManager::ExamplesManager() {
+#ifdef EXAMPLES_PATH
+	m_jsonDir = QStringLiteral(EXAMPLES_PATH);
+#else
 	m_jsonDir = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("examples"), QStandardPaths::LocateDirectory);
+#endif
 	loadCollections();
 }
 
