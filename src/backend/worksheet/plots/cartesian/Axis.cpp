@@ -3393,8 +3393,12 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 	if (!isVisible() || linePath.isEmpty())
 		return;
 
+	painter->save();
+	// Antialiasing adjacent cells leaves partially transparent seams at fractional edges.
+	painter->setRenderHint(QPainter::Antialiasing, false);
 	for (const auto& band : colorBarBands)
 		painter->fillRect(band.first, band.second);
+	painter->restore();
 
 	// draw the line
 	if (line->pen().style() != Qt::NoPen) {
