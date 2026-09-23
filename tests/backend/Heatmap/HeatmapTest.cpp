@@ -10,6 +10,7 @@
 
 #include "HeatmapTest.h"
 #include "src/backend/core/Project.h"
+#include "src/backend/core/Settings.h"
 #include "src/backend/core/column/Column.h"
 #include "src/backend/lib/UndoStack.h"
 #include "src/backend/matrix/Matrix.h"
@@ -17,7 +18,10 @@
 #include "src/backend/worksheet/Worksheet.h"
 #include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "src/backend/worksheet/plots/cartesian/Heatmap.h"
+#include "src/backend/worksheet/plots/cartesian/HeatmapPrivate.h"
 
+#include <QPainter>
+#include <QScopeGuard>
 #include <QUndoStack>
 
 #define COMPARE_VALUES(xPosStart_, yPosStart_, xPosEnd_, yPosEnd_, value_)                                                                                     \
@@ -2235,7 +2239,7 @@ void HeatmapTest::testMatrixNumBins() {
 	plot->addChild(hm);
 	hm->setXNumberBins(1);
 	hm->setYNumberBins(1);
-	hm->setMatrixNumberBins(false);
+	hm->setSourceNumberBins(false);
 	QCOMPARE(hm->xNumberBins(), 1);
 	QCOMPARE(hm->yNumberBins(), 1);
 
@@ -2328,7 +2332,7 @@ void HeatmapTest::testMatrixNumBins() {
 	QCOMPARE(valueDrawnCounter, 1);
 	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
 
-	hm->setMatrixNumberBins(true);
+	hm->setSourceNumberBins(true);
 
 	valueDrawnCounter = 0;
 	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
@@ -2440,7 +2444,7 @@ void HeatmapTest::rangeInverted() {
 	plot->addChild(hm);
 	hm->setXNumberBins(1);
 	hm->setYNumberBins(1);
-	hm->setMatrixNumberBins(false);
+	hm->setSourceNumberBins(false);
 	QCOMPARE(hm->xNumberBins(), 1);
 	QCOMPARE(hm->yNumberBins(), 1);
 
@@ -2533,7 +2537,7 @@ void HeatmapTest::rangeInverted() {
 	QCOMPARE(valueDrawnCounter, 1);
 	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
 
-	hm->setMatrixNumberBins(true);
+	hm->setSourceNumberBins(true);
 
 	valueDrawnCounter = 0;
 	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
@@ -2687,6 +2691,61 @@ void HeatmapTest::testActivatePlot() {
 
 	// ... while a point far away from the plot must not be
 	QVERIFY(!hm->activatePlot(QPointF(1.e6, 1.e6)));
+}
+
+void HeatmapTest::testRenderingWithoutSeams_data() {
+	QTest::addColumn<bool>("doubleBuffering");
+	QTest::addColumn<bool>("printing");
+	QTest::addColumn<double>("scale");
+	for (const auto scale : {1.0, 1.25, 2.0}) {
+		QTest::newRow(qPrintable(QStringLiteral("cached-%1").arg(scale))) << true << false << scale;
+		QTest::newRow(qPrintable(QStringLiteral("direct-%1").arg(scale))) << false << false << scale;
+		QTest::newRow(qPrintable(QStringLiteral("printing-%1").arg(scale))) << true << true << scale;
+	}
+}
+
+void HeatmapTest::testRenderingWithoutSeams() {
+	QFETCH(bool, doubleBuffering);
+	QFETCH(bool, printing);
+	QFETCH(double, scale);
+
+	auto settings = Settings::group(QStringLiteral("Settings_Worksheet"));
+	const bool hadDoubleBuffering = settings.hasKey("DoubleBuffering");
+	const bool previousDoubleBuffering = settings.readEntry("DoubleBuffering", true);
+	const auto restoreSettings = qScopeGuard([&] {
+		if (hadDoubleBuffering)
+			settings.writeEntry("DoubleBuffering", previousDoubleBuffering);
+		else
+			settings.deleteEntry("DoubleBuffering");
+	});
+	settings.writeEntry("DoubleBuffering", doubleBuffering);
+
+	Heatmap heatmap(QStringLiteral("Heatmap"));
+	heatmap.setPrinting(printing);
+	auto* d = heatmap.d_func();
+	const QColor color(16, 16, 16);
+	const QRectF bounds(3.2, 4.4, 51.5, 43.5);
+	// Fractional cell edges expose partial coverage caused by antialiasing.
+	for (int y = 0; y < 5; ++y)
+		for (int x = 0; x < 5; ++x)
+			d->data.push_back({QRectF(bounds.x() + x * 10.3, bounds.y() + y * 8.7, 10.3, 8.7), color});
+	d->recalcShapeAndBoundingRect(bounds);
+
+	QImage image(160, 160, QImage::Format_ARGB32_Premultiplied);
+	image.fill(Qt::transparent);
+	QPainter painter(&image);
+	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.translate(5.25, 4.75);
+	painter.scale(scale, scale);
+	const auto interior = painter.transform().mapRect(bounds).adjusted(2, 2, -2, -2);
+	heatmap.graphicsItem()->paint(&painter, nullptr, nullptr);
+	QVERIFY(painter.testRenderHint(QPainter::Antialiasing));
+	painter.end();
+
+	// Exclude the outer edge, which may be interpolated when scaling the cached pixmap.
+	for (int y = qCeil(interior.top()); y < qFloor(interior.bottom()); ++y)
+		for (int x = qCeil(interior.left()); x < qFloor(interior.right()); ++x)
+			QCOMPARE(image.pixelColor(x, y), color);
 }
 
 QTEST_MAIN(HeatmapTest)
