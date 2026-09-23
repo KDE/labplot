@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-22 00:40+0000\n"
-"PO-Revision-Date: 2026-09-13 09:27+0200\n"
+"PO-Revision-Date: 2026-09-20 11:20+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -17229,6 +17229,10 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"Mètode per detectar punts de canvi:<ul><li>Segmentació binària: dividix les "
+"dades recursivament en segments per a detectar punts de canvi.</li><li>PELT "
+"(«Pruned Exact Linear Time», en català «Temps de podat lineal exacte»): "
+"detecció de punts de canvi amb un cost computacional lineal.</li></ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:401
 #, kde-format
@@ -17269,6 +17273,8 @@ msgid ""
 "X-range of the data used for the fit. Only data points within this range are "
 "considered."
 msgstr ""
+"Interval X de les dades utilitzades per a l'ajust. Només es consideren els "
+"punts de dades dins d'este interval."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:417
 #, kde-format
@@ -17276,18 +17282,19 @@ msgid ""
 "If checked, the data range used for the fit is automatically determined from "
 "the data. A custom range can be specified otherwise."
 msgstr ""
+"Si està marcada, l'interval de dades utilitzat per a l'ajust es determina "
+"automàticament a partir de les dades. En cas contrari, es pot especificar un "
+"interval personalitzat."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:420
-#, fuzzy, kde-format
-#| msgid "The fraction of the data used to perform the local fit."
+#, kde-format
 msgid "Minimum X-value of the data used for the fit."
-msgstr "La fracció de les dades utilitzades per a efectuar l'ajust local."
+msgstr "Valor X mínim de les dades utilitzades per a l'ajust."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:422
-#, fuzzy, kde-format
-#| msgid "The fraction of the data used to perform the local fit."
+#, kde-format
 msgid "Maximum X-value of the data used for the fit."
-msgstr "La fracció de les dades utilitzades per a efectuar l'ajust local."
+msgstr "Valor X màxim de les dades utilitzades per a l'ajust."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -19227,10 +19234,9 @@ msgid "Automatically show output when a script produces output"
 msgstr "Mostra automàticament l'eixida si un script genera eixida"
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "Guarda les dades en el fitxer del projecte:"
+msgstr "Guarda l'eixida de l'script en el fitxer del projecte"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -25955,10 +25961,9 @@ msgstr "Mida mín. de segment:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFitRange)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:248
-#, fuzzy, kde-format
-#| msgid "Plot Range:"
+#, kde-format
 msgid "Fit Range:"
-msgstr "Interval del diagrama:"
+msgstr "Interval d'ajust:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:367
@@ -28420,6 +28425,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Method for detecting changepoints."
-#~ msgstr "Mètode per detectar canvis de punts."
