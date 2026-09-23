@@ -138,9 +138,9 @@
         </widget>
        </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="lSameNumberBins">
+        <widget class="QLabel" name="lEqualNumberBins">
          <property name="text">
-          <string>Same Number</string>
+          <string>Equal Number Bins</string>
          </property>
         </widget>
        </item>
@@ -294,14 +294,14 @@
         <widget class="ResizableTextEdit" name="teComment"/>
        </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="lMatrixNumberBins">
+        <widget class="QLabel" name="lSourceNumberBins">
          <property name="text">
-          <string>Matrix Count</string>
+          <string>Source Number Bins</string>
          </property>
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="QCheckBox" name="cbMatrixNumberBins">
+        <widget class="QCheckBox" name="cbSourceNumberBins">
          <property name="text">
           <string/>
          </property>

@@ -29,7 +29,7 @@ class HeatmapDock : public BaseDock {
 public:
 	explicit HeatmapDock(QWidget*);
 	void setPlots(QList<Heatmap*>);
-	//	void updateLocale() override;
+	void updateLocale() override;
 
 	void retranslateUi() override;
 
@@ -37,18 +37,17 @@ private:
 	Ui::HeatmapDock ui;
 	Heatmap* m_plot{nullptr};
 	QList<Heatmap*> m_plots;
-	AspectTreeModel* m_aspectTreeModelColumn{nullptr};
+	AspectTreeModel* m_aspectTreeModelColumn;
 	AspectTreeModel* m_aspectTreeModelMatrix{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};
 	TreeViewComboBox* cbYColumn{nullptr};
 	TreeViewComboBox* cbMatrix{nullptr};
 
 	void setModel();
-	//	void load();
-	//	void loadConfig(KConfig&);
-	//	void setDataColumns() const;
-	//	void loadDataColumns();
+	bool load(XmlStreamReader*, bool);
+	void save(QXmlStreamWriter*) const;
 	void dataSourceWidgetAppearance(Heatmap::DataSource datasource);
+	void checkBinSettings();
 
 private Q_SLOTS:
 	void selectColorMap();
@@ -67,7 +66,7 @@ private Q_SLOTS:
 	void xNumBinsChanged(int);
 	void yNumBinsChanged(int);
 	void equalNumberBinsChanged(bool);
-	void matrixNumberBinsChanged(bool);
+	void sourceNumberBinsChanged(bool);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in the Heatmap
@@ -79,7 +78,7 @@ private Q_SLOTS:
 	void plotXNumBinsChanged(unsigned int);
 	void plotYNumBinsChanged(unsigned int);
 	void plotEqualNumberBinsChanged(bool);
-	void plotMatrixNumberBinsChanged(bool);
+	void plotSourceNumberBinsChanged(bool);
 
 	void plotAutomaticLimitsChanged(bool);
 	void plotLimitsMinChanged(double);

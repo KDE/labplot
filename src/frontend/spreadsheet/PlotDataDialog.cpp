@@ -222,6 +222,19 @@ void PlotDataDialog::setFitDistribution(nsl_sf_stats_distribution distribution) 
 	m_fitDistributionMode = true;
 }
 
+void PlotDataDialog::setSelectedMatrix(Matrix* matrix) {
+	m_matrix = matrix;
+
+	ui->gbCurvePlacement->setVisible(false);
+
+	ui->lYColumn->setVisible(false);
+	ui->cbYColumn->setVisible(false);
+
+	ui->lXColumn->setText(i18n("Matrix:"));
+	ui->cbXColumn->addItem(m_matrix->name(), QVariant::fromValue(static_cast<void*>(m_matrix)));
+	ui->cbXColumn->setEnabled(false); // No possibility to change because we have only one matrix
+}
+
 void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 	// for bar plots and lollipop plots, extract the first text column to use as tick labels on the x-axis
 	if (m_plotType == Plot::PlotType::BarPlot || m_plotType == Plot::PlotType::LollipopPlot) {
@@ -428,6 +441,78 @@ void PlotDataDialog::processColumnsForHistogram() {
 
 void PlotDataDialog::plot() {
 	WAIT_CURSOR_AUTO_RESET;
+	if (plotMatrixSource())
+		plotMatrix();
+	else
+		plotSpreadsheet();
+}
+
+void PlotDataDialog::plotMatrix() {
+	m_parentAspect->project()->setSuppressAspectAddedSignal(true);
+
+	auto add_plot = [this](CartesianPlot* plot) {
+		switch (m_plotType) {
+		case Plot::PlotType::Heatmap: {
+			auto* heatmap = new Heatmap(m_matrix->name());
+			heatmap->setSuppressRetransform(true);
+			heatmap->setDataSource(Heatmap::DataSource::Matrix);
+			heatmap->setMatrix(m_matrix);
+			heatmap->setSuppressRetransform(false);
+			plot->addChild(heatmap);
+		}
+		default: {}
+		}
+	};
+
+	if (ui->rbPlotPlacementExistingPlotArea->isChecked()) {
+		// add curves to an existing plot
+		auto* plot = static_cast<CartesianPlot*>(cbExistingPlots->currentAspect());
+		plot->beginMacro(i18n("Plot Area - %1", m_parentAspect->name()));
+		add_plot(plot);
+		plot->endMacro();
+	} else if (ui->rbPlotPlacementExistingWorksheet->isChecked()) {
+		// add curves to a new plot in an existing worksheet
+		auto* worksheet = static_cast<Worksheet*>(cbExistingWorksheets->currentAspect());
+		worksheet->beginMacro(i18n("Worksheet - %1", m_parentAspect->name()));
+
+		auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_parentAspect->name()));
+		plot->setType(CartesianPlot::Type::FourAxes);
+		worksheet->addChild(plot);
+		add_plot(plot);
+		setAxesTitles(plot);
+
+		worksheet->endMacro();
+	} else if (ui->rbPlotPlacementNewWorksheet->isChecked()) { // add curves to a new plot in a new worksheet
+		// determine the parent folder first where the worksheet will be added as a child
+		auto* parent = determineParentFolder();
+		parent->beginMacro(i18n("Plot data from %1", m_parentAspect->name()));
+		auto* worksheet = new Worksheet(i18n("Worksheet - %1", m_parentAspect->name()));
+		parent->addChild(worksheet);
+
+		auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_parentAspect->name()));
+		plot->setType(CartesianPlot::Type::FourAxes);
+		worksheet->addChild(plot);
+		add_plot(plot);
+		setAxesTitles(plot);
+
+		parent->endMacro();
+	} else if (ui->rbPlotPlacementNewWorksheets->isChecked()) { // add curves to a new plot in a new worksheet for each of them
+		// determine the parent folder first where the new worksheets will be added as children
+		auto* parent = determineParentFolder();
+
+		parent->beginMacro(i18n("Plot data from %1", m_parentAspect->name()));
+		addCurvesToWorksheets(parent);
+		parent->endMacro();
+	}
+
+	// if new curves are created via this dialog, select the parent plot
+	m_parentAspect->project()->setSuppressAspectAddedSignal(false);
+	QString path = m_matrix->parentAspect()->path();
+	Q_EMIT m_parentAspect->project()->requestNavigateTo(path);
+
+}
+
+void PlotDataDialog::plotSpreadsheet() {
 	m_parentAspect->project()->setSuppressAspectAddedSignal(true);
 	m_lastAddedCurve = nullptr;
 
@@ -588,6 +673,35 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 			addCurve(name, xColumn, yColumn, plot);
 		}
 		break;
+	}
+	case Plot::PlotType::Heatmap: {
+		Column* xColumn = columnFromComboBox(ui->cbXColumn);
+		for (auto* comboBox : m_columnComboBoxes) {
+			const QString& name = comboBox->currentText();
+			Column* yColumn = columnFromComboBox(comboBox);
+
+			const auto create_heatmap = [plot](const QString& name, AbstractColumn* xColumn, AbstractColumn* yColumn) {
+				auto* heatmap = new Heatmap(name);
+				heatmap->setSuppressRetransform(true);
+				heatmap->setDataSource(Heatmap::DataSource::Spreadsheet);
+				heatmap->setXColumn(xColumn);
+				heatmap->setYColumn(yColumn);
+				heatmap->setSuppressRetransform(false);
+				plot->addChild(heatmap);
+			};
+
+		   // if only one column was selected, allow to use this column for x and for y.
+		   // otherwise, don't assign xColumn to y
+			if (yColumn == xColumn) {
+				if (m_columns.size() == 1) {
+					create_heatmap(name, xColumn, yColumn);
+					break;
+				} else
+					continue;
+			}
+
+			create_heatmap(name, xColumn, yColumn);
+		}
 	}
 	case Plot::PlotType::Histogram:
 	case Plot::PlotType::KDEPlot:
@@ -964,24 +1078,30 @@ void PlotDataDialog::addMultiSourceColumnsPlot(const QVector<const AbstractColum
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	Plot* plot{nullptr};
-	if (m_plotType == Plot::PlotType::BoxPlot) {
-		auto* boxPlot = new BoxPlot(name);
-		boxPlot->setSuppressRetransform(true);
-		boxPlot->setDataColumns(columns);
-		boxPlot->setSuppressRetransform(false);
-		plot = boxPlot;
-	} else if (m_plotType == Plot::PlotType::BarPlot) {
-		auto* barPlot = new BarPlot(name);
-		barPlot->setSuppressRetransform(true);
-		barPlot->setDataColumns(columns);
-		barPlot->setSuppressRetransform(false);
-		plot = barPlot;
-	} else if (m_plotType == Plot::PlotType::LollipopPlot) {
-		auto* lollipopPlot = new LollipopPlot(name);
-		lollipopPlot->setSuppressRetransform(true);
-		lollipopPlot->setDataColumns(columns);
-		lollipopPlot->setSuppressRetransform(false);
-		plot = lollipopPlot;
+
+	switch (m_plotType) {
+		case Plot::PlotType::BoxPlot: {
+			auto* boxPlot = new BoxPlot(name);
+			boxPlot->setSuppressRetransform(true);
+			boxPlot->setDataColumns(columns);
+			boxPlot->setSuppressRetransform(false);
+			plot = boxPlot;
+		}
+		case Plot::PlotType::BarPlot: {
+			auto* barPlot = new BarPlot(name);
+			barPlot->setSuppressRetransform(true);
+			barPlot->setDataColumns(columns);
+			barPlot->setSuppressRetransform(false);
+			plot = barPlot;
+		}
+		case Plot::PlotType::LollipopPlot: {
+			auto* lollipopPlot = new LollipopPlot(name);
+			lollipopPlot->setSuppressRetransform(true);
+			lollipopPlot->setDataColumns(columns);
+			lollipopPlot->setSuppressRetransform(false);
+			plot = lollipopPlot;
+		}
+		default: {}
 	}
 
 	if (plot) {

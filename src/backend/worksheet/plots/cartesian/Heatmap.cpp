@@ -95,7 +95,7 @@ BASIC_SHARED_D_READER_IMPL(Heatmap, Heatmap::DataSource, dataSource, dataSource)
 BASIC_SHARED_D_READER_IMPL(Heatmap, bool, equalNumberBins, equalNumberBins)
 BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, xNumberBins, xNumberBins)
 BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, yNumberBins, yNumberBins)
-BASIC_SHARED_D_READER_IMPL(Heatmap, bool, matrixNumberBins, matrixNumberBins)
+BASIC_SHARED_D_READER_IMPL(Heatmap, bool, sourceNumberBins, sourceNumberBins)
 BASIC_SHARED_D_READER_IMPL(Heatmap, bool, drawEmpty, drawEmpty)
 BASIC_SHARED_D_READER_IMPL(Heatmap, bool, automaticLimits, automaticLimits)
 BASIC_SHARED_D_READER_IMPL(Heatmap, Heatmap::Format, format, format)
@@ -296,11 +296,11 @@ void Heatmap::setMatrix(const Matrix* matrix) {
 		exec(new HeatmapSetMatrixCmd(d, matrix, ki18n("%1: matrix changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetMatrixNumberBins, bool, matrixNumberBins, retransform)
-void Heatmap::setMatrixNumberBins(bool matrixNumberBins) {
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetSourceNumberBins, bool, sourceNumberBins, retransform)
+void Heatmap::setSourceNumberBins(bool sourceNumberBins) {
 	Q_D(Heatmap);
-	if (matrixNumberBins != d->matrixNumberBins)
-		exec(new HeatmapSetMatrixNumberBinsCmd(d, matrixNumberBins, ki18n("%1: Set matrix number bins")));
+	if (sourceNumberBins != d->sourceNumberBins)
+		exec(new HeatmapSetSourceNumberBinsCmd(d, sourceNumberBins, ki18n("%1: Set matrix number bins")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Heatmap, SetEqualNumberBins, bool, equalNumberBins, retransform)
@@ -548,7 +548,7 @@ int Heatmap::dataCount(Dimension dim) const {
 	return 0;
 }
 
-bool Heatmap::usingColumn(const AbstractColumn* column, bool indirect) const {
+bool Heatmap::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const Heatmap);
 	if (d->dataSource == DataSource::Spreadsheet) {
 		return d->xColumn == column || d->yColumn == column;
@@ -717,11 +717,6 @@ QRectF HeatmapPrivate::update() {
 	if (xNumValues == 0 || yNumValues == 0)
 		return QRectF();
 
-	// Range<double> xRange;
-	// minMax(Dimension::X, Range<int>(0, xColumn->rowCount(), xRange);
-	// Range<double> yRange;
-	// minMax(Dimension::Y, Range<int>(0, yColumn->rowCount(), yRange);
-	// TODO: Bin size for linear ranges. Required also for logarithmic?
 	auto xMin = q->minimum(Dimension::X);
 	auto yMin = q->minimum(Dimension::Y);
 	auto xMax = q->maximum(Dimension::X);
@@ -729,7 +724,7 @@ QRectF HeatmapPrivate::update() {
 
 	auto xBinSize = xMax - xMin;
 	auto yBinSize = yMax - yMin;
-	if (matrixNumberBins && dataSource == Heatmap::DataSource::Matrix) {
+	if (sourceNumberBins) {
 		xBinSize /= xNumValues;
 		yBinSize /= yNumValues;
 	} else if (equalNumberBins) {
@@ -745,9 +740,7 @@ QRectF HeatmapPrivate::update() {
 
 	// Check which region is visible
 	const auto xPlotRange = q->plot()->range(Dimension::X, q->coordinateSystemIndex());
-	const auto xIncreasing = xPlotRange.length() > 0;
 	const auto yPlotRange = q->plot()->range(Dimension::Y, q->coordinateSystemIndex());
-	const auto yIncreasing = yPlotRange.length() > 0;
 
 	const double xRangeMin = qMin(xPlotRange.start(), xPlotRange.end());
 	const double xRangeMax = qMax(xPlotRange.start(), xPlotRange.end());
@@ -898,8 +891,7 @@ QRectF HeatmapPrivate::update() {
 			points[1] = QPointF(xPosEnd, yPosEnd);
 			cSystem->mapLogicalToSceneFast(points, AbstractCoordinateSystem::MappingFlag::Limit);
 			assert(points.size() == 2);
-			data.push_back({QRectF(points.at(0), points.at(1)), format.color(value)}); // TODO: storing QColor or just value and convertering every time
-			// TODO: sort and cluster the rectangles?
+			data.push_back({QRectF(points.at(0), points.at(1)), format.color(value)});
 		}
 	}
 
@@ -1037,7 +1029,7 @@ const QLatin1String matrix("matrix");
 const QLatin1String equalNumberBins("equalNumberBins");
 const QLatin1String xNumberBins("xNumberBins");
 const QLatin1String yNumberBins("yNumberBins");
-const QLatin1String matrixNumberBins("matrixNumberBins");
+const QLatin1String sourceNumberBins("sourceNumberBins");
 const QLatin1String drawEmpty("drawEmpty");
 const QLatin1String automaticLimits("automaticLimits");
 
@@ -1049,6 +1041,10 @@ const QLatin1String formatMax("max");
 } // namespace XML
 
 constexpr QLatin1String configGroupName("Heatmap");
+constexpr QLatin1String configTheme("Theme");
+constexpr QLatin1String configColorName("ColorName");
+constexpr QLatin1String configNumberColors("NumberColors");
+constexpr QLatin1String configColor("Color");
 } // anonymous namespace
 
 // ##############################################################################
@@ -1090,7 +1086,7 @@ void Heatmap::save(QXmlStreamWriter* writer) const {
 
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
 	writer->writeAttribute(XML::equalNumberBins, QString::number(d->equalNumberBins));
-	writer->writeAttribute(XML::matrixNumberBins, QString::number(d->matrixNumberBins));
+	writer->writeAttribute(XML::sourceNumberBins, QString::number(d->sourceNumberBins));
 	writer->writeAttribute(XML::automaticLimits, QString::number(d->automaticLimits));
 	writer->writeAttribute(XML::xNumberBins, QString::number(d->xNumberBins));
 	writer->writeAttribute(XML::yNumberBins, QString::number(d->yNumberBins));
@@ -1101,7 +1097,7 @@ void Heatmap::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(XML::formatMin, QString::number(d->format.min));
 	writer->writeAttribute(XML::formatMax, QString::number(d->format.max));
 	writer->writeStartElement(XML::formatColors);
-	for (size_t i = 0; i < d->format.colors.size(); i++) {
+	for (qsizetype i = 0; i < d->format.colors.size(); i++) {
 		const auto i_str = QStringLiteral("i") + QString::number(i);
 		WRITE_QCOLOR3(d->format.colors.at(i), i_str);
 	}
@@ -1151,7 +1147,7 @@ bool Heatmap::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE(XML::automaticLimits, automaticLimits, bool)
 			READ_INT_VALUE(XML::equalNumberBins, equalNumberBins, bool)
-			READ_INT_VALUE(XML::matrixNumberBins, matrixNumberBins, bool)
+			READ_INT_VALUE(XML::sourceNumberBins, sourceNumberBins, bool)
 			READ_INT_VALUE(XML::xNumberBins, xNumberBins, unsigned int)
 			READ_INT_VALUE(XML::yNumberBins, yNumberBins, unsigned int)
 			READ_INT_VALUE(XML::drawEmpty, drawEmpty, bool)
@@ -1195,59 +1191,32 @@ bool Heatmap::load(XmlStreamReader* reader, bool preview) {
 void Heatmap::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group(configGroupName);
 
-	//	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
-	//	if (!plot)
-	//		return;
-	//	const int index = plot->curveChildIndex(this);
-	//	const QColor themeColor = plot->themeColorPalette(index);
+	Q_D(Heatmap);
 
-	//	Q_D(XYCurve);
-	//	d->suppressRecalc = true;
+	d->suppressRecalc = true;
 
-	//	d->line->loadThemeConfig(group, themeColor);
-	//	d->dropLine->loadThemeConfig(group, themeColor);
-	//	d->symbol->loadThemeConfig(group, themeColor);
-	//	d->background->loadThemeConfig(group);
-	//	d->errorBarsLine->loadThemeConfig(group, themeColor);
+	d->format.colors.clear();
 
-	//	// Values
-	//	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
-	//	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
+	KConfigGroup themeGroup = group.group(configTheme);
+	const auto numberColors = themeGroup.readEntry(configNumberColors, 3);
+	d->format.name = themeGroup.readEntry(configColorName, QStringLiteral());
+	for (int i = 0; i < numberColors; i++) {
+		d->format.colors.append(themeGroup.readEntry(configColor + QString::number(i + 1), QColor()));
+	}
 
-	//	// margins
-	//	if (plot->theme() == QLatin1String("Tufte")) {
-	//		if (d->xColumn && d->xColumn->rowCount() < 100) {
-	//			setRugEnabled(true);
-	//			setRugOrientation(WorksheetElement::Orientation::Both);
-	//		}
-	//	} else
-	//		setRugEnabled(false);
-
-	//	d->suppressRecalc = false;
-	//	d->recalcShapeAndBoundingRect();
+	d->suppressRecalc = false;
+	d->recalcShapeAndBoundingRect();
 }
 
 void Heatmap::saveThemeConfig(const KConfig& config) {
-	//	KConfigGroup group = config.group(configGroupName);
-	//	Q_D(const Heatmap);
+	KConfigGroup group = config.group(configGroupName);
+	Q_D(const Heatmap);
 
-	//	d->line->saveThemeConfig(group);
-	//	d->dropLine->saveThemeConfig(group);
-	//	d->background->saveThemeConfig(group);
-	//	d->symbol->saveThemeConfig(group);
-	//	d->errorBarsLine->saveThemeConfig(group);
-
-	//	// Values
-	//	group.writeEntry("ValuesOpacity", this->valuesOpacity());
-	//	group.writeEntry("ValuesColor", (QColor)this->valuesColor());
-	//	group.writeEntry("ValuesFont", this->valuesFont());
-
-	//	const int index = parentAspect()->indexOfChild<XYCurve>(this);
-	//	if (index < 5) {
-	//		KConfigGroup themeGroup = config.group("Theme");
-	//		for (int i = index; i < 5; i++) {
-	//			QString s = QStringLiteral("ThemePaletteColor") + QString::number(i + 1);
-	//			themeGroup.writeEntry(s, (QColor)d->line->pen().color());
-	//		}
-	//	}
+	KConfigGroup themeGroup = group.group(configTheme);
+	themeGroup.writeEntry(configColorName, d->format.name);
+	themeGroup.writeEntry(configNumberColors, (int)d->format.colors.count());
+	for (int i = 0; i < d->format.colors.count(); i++) {
+		QString s = configColor + QString::number(i + 1);
+		themeGroup.writeEntry(s, (QColor)d->format.colors.at(i));
+	}
 }
