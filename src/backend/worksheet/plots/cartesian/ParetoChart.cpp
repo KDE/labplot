@@ -317,7 +317,6 @@ void ParetoChart::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 ParetoChartPrivate::ParetoChartPrivate(ParetoChart* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
-	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
 }
 

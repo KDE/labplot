@@ -118,6 +118,7 @@ void Plot::setLegendVisible(bool visible) {
 PlotPrivate::PlotPrivate(Plot* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 bool PlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {

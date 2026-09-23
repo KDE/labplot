@@ -835,7 +835,6 @@ void ProcessBehaviorChart::labelsBorderOpacityChanged(float opacity) {
 ProcessBehaviorChartPrivate::ProcessBehaviorChartPrivate(ProcessBehaviorChart* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
-	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
 }
 

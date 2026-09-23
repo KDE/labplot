@@ -610,7 +610,6 @@ void Histogram::updateErrorBars() {
 HistogramPrivate::HistogramPrivate(Histogram* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
-	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
 }
 
