@@ -67,33 +67,20 @@ function(generate_shiboken_sources)
 
     cmake_parse_arguments(PB "${options}" "${oneValueArgs}" "${multiValueArgs}"  ${ARGN})
 
-    # Ugly hacks because PySide6::pyside6 only includes /usr/includes/PySide6 and none of the sub directory
-    # Qt bugreport: PYSIDE-2882
+    # PySide6 headers are available from the package include root. Qt module
+    # headers are provided separately through the Qt target include directories.
     get_property(PYSIDE_INCLUDE_DIRS TARGET "PySide6::pyside6" PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-    if(NOT PYSIDE_INCLUDE_DIR)
-        set(PYSIDE_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/PySide${QT_MAJOR_VERSION}")
+    set(PYSIDE_FALLBACK_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/PySide${QT_MAJOR_VERSION}")
+    if(EXISTS "${PYSIDE_FALLBACK_INCLUDE_DIR}" AND NOT PYSIDE_FALLBACK_INCLUDE_DIR IN_LIST PYSIDE_INCLUDE_DIRS)
+        list(APPEND PYSIDE_INCLUDE_DIRS "${PYSIDE_FALLBACK_INCLUDE_DIR}")
     endif()
-    if(NOT PYSIDE_INCLUDE_DIR IN_LIST PYSIDE_INCLUDE_DIRS)
-        list(APPEND PYSIDE_INCLUDE_DIRS "${PYSIDE_INCLUDE_DIR}")
-    endif()
-    foreach(PYSIDE_INCLUDE_DIR ${PYSIDE_INCLUDE_DIRS})
-        file(GLOB PYSIDE_SUBDIRS LIST_DIRECTORIES true "${PYSIDE_INCLUDE_DIR}/*")
-        foreach (PYSIDE_SUBDIR ${PYSIDE_SUBDIRS})
-            if (IS_DIRECTORY ${PYSIDE_SUBDIR})
-                set_property(TARGET PySide6::pyside6
-                    APPEND
-                    PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                    ${PYSIDE_SUBDIR}
-                )
-            endif()
-        endforeach()
-    endforeach()
+    set_property(TARGET PySide6::pyside6 PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${PYSIDE_INCLUDE_DIRS}")
 
     list(APPEND PB_DEPENDENCIES PySide6::pyside6)
-    list(APPEND PB_DEPENDENCIES Shiboken6::libshiboken)
 
     # Get the relevant include dirs, to pass them on to shiboken.
     set(INCLUDES "")
+    set(FORCE_PROCESS_INCLUDE_DIRS "")
 
     if(WIN32)
         set(PATH_SEP "\;")
@@ -106,22 +93,51 @@ function(generate_shiboken_sources)
         string(REPLACE ";" "${PATH_SEP}" ${varname} "${ARGN}")
     endmacro()
 
+    macro(filter_existing_include_dirs output_var)
+        set(${output_var} "")
+        foreach(_include_dir ${ARGN})
+            if(_include_dir MATCHES "^\\$<BUILD_INTERFACE:(.*)>$")
+                set(_include_dir "${CMAKE_MATCH_1}")
+            elseif(_include_dir MATCHES "^\\$<")
+                continue()
+            endif()
+
+            if(EXISTS "${_include_dir}")
+                list(APPEND ${output_var} "${_include_dir}")
+            endif()
+        endforeach()
+    endmacro()
+
+    macro(append_shiboken_include_options include_dirs)
+        make_path(_include_paths ${${include_dirs}})
+        if(_include_paths)
+            list(APPEND INCLUDES "--include-paths=${_include_paths}")
+        endif()
+        foreach(_include_dir ${${include_dirs}})
+            list(APPEND FORCE_PROCESS_INCLUDE_DIRS "${_include_dir}")
+        endforeach()
+    endmacro()
+
+    filter_existing_include_dirs(PB_EXISTING_INCLUDES ${PB_INCLUDES})
+    set(PB_INCLUDES ${PB_EXISTING_INCLUDES})
+
     foreach(_dependency ${PB_DEPENDENCIES})
         get_property(DEPENDENCY_INCLUDE_DIRS TARGET "${_dependency}" PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
 
-        make_path(_include_dirs $<JOIN:$<TARGET_PROPERTY:${_dependency},INTERFACE_INCLUDE_DIRECTORIES>,${PATH_SEP}>)
-        list(APPEND INCLUDES "--include-paths=${_include_dirs}")
+        filter_existing_include_dirs(DEPENDENCY_EXISTING_INCLUDE_DIRS ${DEPENDENCY_INCLUDE_DIRS})
+        append_shiboken_include_options(DEPENDENCY_EXISTING_INCLUDE_DIRS)
     endforeach()
 
-    make_path(PBC_INCLUDES ${PB_INCLUDES})
+    append_shiboken_include_options(PB_INCLUDES)
+
+    make_path(FORCE_PROCESS_INCLUDE_PATHS ${FORCE_PROCESS_INCLUDE_DIRS})
 
     # Set up the options to pass to shiboken.
     set(shiboken_options --enable-pyside-extensions
         --keywords=scripting
         --clang-option=-DSCRIPTING
-        "${INCLUDES}${PATH_SEP}${PBC_INCLUDES}"
-        --include-paths=${CMAKE_SOURCE_DIR}
-        --typesystem-paths=${CMAKE_SOURCE_DIR}
+        ${INCLUDES}
+        --force-process-system-include-paths=${FORCE_PROCESS_INCLUDE_PATHS}
         --typesystem-paths="${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems"
 	--typesystem-paths="${PySide6_TYPESYSTEMS}"
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})

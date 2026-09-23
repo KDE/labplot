@@ -261,6 +261,10 @@ get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINI
 list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
 
+get_target_property(QtCore_INCLUDE_DIRECTORIES Qt${QT_MAJOR_VERSION}::Core INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(QtGui_INCLUDE_DIRECTORIES Qt${QT_MAJOR_VERSION}::Gui INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(QtWidgets_INCLUDE_DIRECTORIES Qt${QT_MAJOR_VERSION}::Widgets INTERFACE_INCLUDE_DIRECTORIES)
+
 generate_python_bindings(
     PACKAGE_NAME ${bindings_library}
     VERSION ${PROJECT_VERSION}
@@ -268,6 +272,7 @@ generate_python_bindings(
     TYPESYSTEM ${typesystem_file}
     GENERATED_SOURCES ${generated_sources}
     DEPENDENCIES LabPlot::SDK
+    INCLUDES ${CMAKE_BINARY_DIR}/lib ${QtCore_INCLUDE_DIRECTORIES} ${QtGui_INCLUDE_DIRECTORIES} ${QtWidgets_INCLUDE_DIRECTORIES}
     QT_VERSION ${QT_MIN_VERSION}
     HOMEPAGE_URL "https://invent.kde.org/education/labplot"
     ISSUES_URL "https://bugs.kde.org/describecomponents.cgi?product=labplot2"
@@ -277,7 +282,7 @@ generate_python_bindings(
 
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     # Only proceed if we actually found the Python packages
-    if(NOT Shiboken6_INCLUDE_DIRS)
+	if(NOT Shiboken6_EXECUTABLE)
     	message(FATAL_ERROR "Python package support requested (ENABLE_PYTHON_SDK or ENABLE_PYTHON_SCRIPTING) but Shiboken6 not found. Please install or disable Python support.")
     endif()
     if (NOT PySide6_INCLUDE_DIRS)
@@ -286,7 +291,6 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
 	target_include_directories(${bindings_library} PUBLIC
 	    ${Python3_INCLUDE_DIRS}
 	    ${PySide6_INCLUDE_DIRS}
-	    ${Shiboken6_INCLUDE_DIRS}
 	)
 
     if(PySide6_ABI3_LIBRARY)
