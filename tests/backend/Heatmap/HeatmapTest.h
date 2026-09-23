@@ -49,6 +49,8 @@ private Q_SLOTS:
 	void rangeInverted();
 
 	void testActivatePlot();
+	void testRenderingWithoutSeams_data();
+	void testRenderingWithoutSeams();
 };
 
 #endif // HEATMAPTEST_H
