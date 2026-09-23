@@ -2748,4 +2748,63 @@ void HeatmapTest::testRenderingWithoutSeams() {
 			QCOMPARE(image.pixelColor(x, y), color);
 }
 
+void HeatmapTest::plotAutoScale() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	auto* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
+	project.addChild(matrix);
+	matrix->setXStart(0);
+	matrix->setXEnd(10);
+	matrix->setYStart(0);
+	matrix->setYEnd(100);
+	for (int r = 0; r < 5; r++)
+		for (int c = 0; c < 5; c++)
+			matrix->setCell(r, c, (double)(r * 5 + c));
+
+	hm->setMatrix(matrix);
+
+	plot->setNiceExtend(false);
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(true);
+		range.setStart(-1.);
+		range.setEnd(1.);
+		plot->setXRange(0, range);
+	}
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(true);
+		range.setStart(-3.);
+		range.setEnd(-5.);
+		plot->setYRange(0, range);
+	}
+
+	plot->scaleAuto();
+
+	{
+		const auto range = plot->range(Dimension::X, 0);
+		QCOMPARE(range.autoScale(), true);
+		QCOMPARE(range.start(), 0);
+		QCOMPARE(range.end(), 11); // The last bin must be completely included!
+	}
+
+	{
+		const auto range = plot->range(Dimension::Y, 0);
+		QCOMPARE(range.autoScale(), true);
+		QCOMPARE(range.start(), 0);
+		QCOMPARE(range.end(), 110); // The last bin must be completely included!
+	}
+}
+
 QTEST_MAIN(HeatmapTest)
