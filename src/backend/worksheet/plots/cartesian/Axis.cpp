@@ -2393,7 +2393,6 @@ void AxisPrivate::retransformTickLabelStrings() {
 		return;
 	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
 
-
 	// automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	// and back to decimal when the numbers get smaller after the auto-switch
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat))
