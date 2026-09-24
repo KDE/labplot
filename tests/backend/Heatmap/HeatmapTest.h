@@ -51,6 +51,11 @@ private Q_SLOTS:
 	void testActivatePlot();
 	void testRenderingWithoutSeams_data();
 	void testRenderingWithoutSeams();
+	void testCachedSpreadsheetRetransform();
+	void testCachedSourceBeforeAttachment();
+	void testCachedCoordinateSystem();
+	void testCachedSpreadsheetChanges();
+	void testCachedMatrixChanges();
 
 	void plotAutoScale();
 };

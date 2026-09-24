@@ -24,6 +24,18 @@
 #include <QScopeGuard>
 #include <QUndoStack>
 
+namespace {
+class CountingColumn : public Column {
+public:
+	using Column::Column;
+	double valueAt(int row) const override {
+		++valueReads;
+		return Column::valueAt(row);
+	}
+	mutable int valueReads{0};
+};
+}
+
 #define COMPARE_VALUES(xPosStart_, yPosStart_, xPosEnd_, yPosEnd_, value_)                                                                                     \
 	do {                                                                                                                                                       \
 		QCOMPARE(xPosStart, xPosStart_);                                                                                                                       \
@@ -493,6 +505,51 @@ void HeatmapTest::indicesMinMaxMatrix() {
 }
 
 void HeatmapTest::minMaxMatrix() {
+	Project project;
+	auto* matrix = new Matrix(5, 4, QStringLiteral("Matrix"));
+	project.addChild(matrix);
+	matrix->setXStart(0.);
+	matrix->setXEnd(8.);
+	matrix->setYStart(-10.);
+	matrix->setYEnd(10.);
+	Heatmap hm(QStringLiteral("Heatmap"));
+	Range<double> range;
+	QVERIFY(!hm.minMaxMatrix(Dimension::X, Range<int>(0, 3), range));
+	hm.setMatrix(matrix);
+	QVERIFY(hm.minMaxMatrix(Dimension::X, Range<int>(0, 3), range));
+	QCOMPARE(range.start(), 0.);
+	QCOMPARE(range.end(), 9.);
+	QVERIFY(hm.minMaxMatrix(Dimension::Y, Range<int>(0, 4), range));
+	QCOMPARE(range.start(), -10.);
+	QCOMPARE(range.end(), 12.);
+
+	// A selection of rows on the other axis must not truncate the matrix extent.
+	QVERIFY(hm.minMaxMatrix(Dimension::X, Range<int>(1, 1), range));
+	QCOMPARE(range.start(), 0.);
+	QCOMPARE(range.end(), 9.);
+	matrix->setXStart(8.);
+	matrix->setXEnd(0.);
+	matrix->setYStart(10.);
+	matrix->setYEnd(-10.);
+	QVERIFY(hm.minMaxMatrix(Dimension::X, Range<int>(0, 3), range));
+	QCOMPARE(range.start(), 0.);
+	QCOMPARE(range.end(), 9.);
+	QVERIFY(hm.minMaxMatrix(Dimension::Y, Range<int>(0, 4), range));
+	QCOMPARE(range.start(), -10.);
+	QCOMPARE(range.end(), 12.);
+
+	hm.setSourceNumberBins(false);
+	hm.setEqualNumberBins(false);
+	hm.setXNumberBins(2);
+	hm.setYNumberBins(4);
+	QVERIFY(hm.minMaxMatrix(Dimension::X, Range<int>(0, 3), range));
+	QCOMPARE(range.end(), 10.);
+	QVERIFY(hm.minMaxMatrix(Dimension::Y, Range<int>(0, 4), range));
+	QCOMPARE(range.end(), 12.5);
+	hm.setXNumberBins(0);
+	QVERIFY(!hm.minMaxMatrix(Dimension::X, Range<int>(0, 3), range));
+	hm.setMatrix(nullptr);
+	QVERIFY(!hm.minMaxMatrix(Dimension::Y, Range<int>(0, 4), range));
 }
 
 void HeatmapTest::testFormat() {
@@ -2222,6 +2279,8 @@ void HeatmapTest::saveLoad() {
 		QCOMPARE(hm->isVisible(), true);
 
 		QCOMPARE(hm->coordinateSystemIndex(), 0);
+		// Restoring the source pointers must populate the cache before the initial rendering.
+		QVERIFY(!hm->d_func()->data.empty());
 	}
 }
 
@@ -2748,6 +2807,316 @@ void HeatmapTest::testRenderingWithoutSeams() {
 			QCOMPARE(image.pixelColor(x, y), color);
 }
 
+void HeatmapTest::testCachedSpreadsheetRetransform() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+	Range<double> range(0., 10.);
+	range.setAutoScale(false);
+	plot->setXRange(0, range);
+	plot->setYRange(0, range);
+
+	auto* x = new CountingColumn(QStringLiteral("X"), QVector<double>{0., 2., 2., 8., 10.});
+	auto* y = new CountingColumn(QStringLiteral("Y"), QVector<double>{0., 2., 2., 8., 10.});
+	project.addChild(x);
+	project.addChild(y);
+	auto* hm = new Heatmap(QStringLiteral("Heatmap"));
+	plot->addChild(hm);
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	hm->setXNumberBins(2);
+	hm->setXColumn(x);
+	hm->setYColumn(y);
+	auto* d = hm->d_func();
+	QCOMPARE(d->data.size(), 2);
+	const auto initialRect = d->data.front().rect;
+	QSignalSpy drawn(hm, &Heatmap::valueDrawn);
+	x->valueReads = y->valueReads = 0;
+
+	// Zoom and pan using only cached counts, including cells initially outside the view.
+	range.setEnd(5.);
+	plot->setXRange(0, range);
+	QCOMPARE(drawn.size(), 1);
+	QCOMPARE(drawn.at(0).at(4).toDouble(), 3.);
+	QCOMPARE(hm->formatMax(), 3.);
+	QVERIFY(d->data.front().rect != initialRect);
+	drawn.clear();
+	range.setStart(5.);
+	range.setEnd(10.);
+	plot->setXRange(0, range);
+	QCOMPARE(drawn.size(), 1);
+	QCOMPARE(drawn.at(0).at(4).toDouble(), 2.);
+	QCOMPARE(hm->formatMax(), 2.);
+
+	range.setStart(11.);
+	range.setEnd(15.);
+	plot->setXRange(0, range);
+	QVERIFY(d->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+	range.setStart(0.);
+	range.setEnd(10.);
+	plot->setXRange(0, range);
+	QCOMPARE(d->data.size(), 2);
+	QCOMPARE(d->data.front().rect, initialRect);
+	QCOMPARE(hm->formatMax(), 3.);
+
+	hm->setAutomaticLimits(false);
+	hm->setFormatMin(0.);
+	hm->setFormatMax(10.);
+	hm->setFormatColors({Qt::green, Qt::red});
+	QCOMPARE(d->data.front().color, QColor(Qt::green));
+	hm->setDrawEmpty(true);
+	QCOMPARE(d->data.size(), 4);
+	hm->setAutomaticLimits(true);
+	QCOMPARE(hm->formatMin(), 0.);
+	QCOMPARE(hm->formatMax(), 3.);
+	for (int i = 0; i < 3; ++i)
+		hm->retransform();
+	plot->setRect(QRectF(0., 0., 1200., 800.));
+	QVERIFY(d->data.front().rect != initialRect);
+	QCOMPARE(x->valueReads, 0);
+	QCOMPARE(y->valueReads, 0);
+}
+
+void HeatmapTest::testCachedSpreadsheetChanges() {
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+	Range<double> range(0., 10.);
+	range.setAutoScale(false);
+	plot->setXRange(0, range);
+	plot->setYRange(0, range);
+	auto* x = new Column(QStringLiteral("X"), QVector<double>{0., 2., 2., 8., 10.});
+	auto* y = new Column(QStringLiteral("Y"), QVector<double>{0., 2., 2., 8., 10.});
+	project.addChild(x);
+	project.addChild(y);
+	auto* hm = new Heatmap(QStringLiteral("Heatmap"));
+	plot->addChild(hm);
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	hm->setXNumberBins(2);
+	hm->setXColumn(x);
+	hm->setYColumn(y);
+	QSignalSpy drawn(hm, &Heatmap::valueDrawn);
+	auto values = [&] {
+		drawn.clear();
+		hm->retransform();
+		QList<double> result;
+		for (const auto& cell : drawn)
+			result.append(cell.at(4).toDouble());
+		return result;
+	};
+	QCOMPARE(values(), (QList<double>{3., 2.}));
+	y->setValueAt(2, 8.);
+	QCOMPARE(values(), (QList<double>{2., 1., 2.}));
+	drawn.clear();
+	x->setMasked(1);
+	QVERIFY(drawn.size() >= 3); // Masking must refresh immediately, without an explicit retransform.
+	QCOMPARE(drawn.at(drawn.size() - 3).at(4).toDouble(), 1.);
+	QCOMPARE(values(), (QList<double>{1., 1., 2.}));
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{2., 1., 2.}));
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{3., 2.}));
+
+	hm->setXNumberBins(1);
+	QCOMPARE(values(), (QList<double>{5.}));
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{3., 2.}));
+	hm->setXNumberBins(0);
+	QVERIFY(hm->d_func()->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{3., 2.}));
+
+	y->removeRows(4, 1); // Mismatched column lengths invalidate the cache.
+	QVERIFY(hm->d_func()->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{3., 2.}));
+	hm->setYColumn(nullptr);
+	QVERIFY(hm->d_func()->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{3., 2.}));
+	y->setColumnMode(AbstractColumn::ColumnMode::Text);
+	QVERIFY(hm->d_func()->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{3., 2.}));
+	project.removeChild(y);
+	QVERIFY(hm->d_func()->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+}
+
+void HeatmapTest::testCachedMatrixChanges() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+	Range<double> range(0., 10.);
+	range.setAutoScale(false);
+	plot->setXRange(0, range);
+	plot->setYRange(0, range);
+	auto* matrix = new Matrix(2, 2, QStringLiteral("Matrix"));
+	project.addChild(matrix);
+	matrix->setXStart(0.);
+	matrix->setXEnd(10.);
+	matrix->setYStart(0.);
+	matrix->setYEnd(10.);
+	for (int row = 0; row < 2; ++row)
+		for (int col = 0; col < 2; ++col)
+			matrix->setCell(row, col, 1. + row * 2 + col);
+	auto* hm = new Heatmap(QStringLiteral("Heatmap"));
+	plot->addChild(hm);
+	hm->setMatrix(matrix);
+	QSignalSpy drawn(hm, &Heatmap::valueDrawn);
+	auto values = [&] {
+		drawn.clear();
+		hm->retransform();
+		QList<double> result;
+		for (const auto& cell : drawn)
+			result.append(cell.at(4).toDouble());
+		return result;
+	};
+	QCOMPARE(values(), (QList<double>{1., 2., 3., 4.}));
+	matrix->setCell(1, 1, 9.);
+	QCOMPARE(values(), (QList<double>{1., 2., 3., 9.}));
+	QCOMPARE(hm->formatMax(), 9.);
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{1., 2., 3., 4.}));
+
+	// Matrix color limits include source values outside the visible region.
+	range.setEnd(5.);
+	plot->setXRange(0, range);
+	QCOMPARE(values(), (QList<double>{1., 3.}));
+	QCOMPARE(hm->formatMin(), 1.);
+	QCOMPARE(hm->formatMax(), 4.);
+	range.setEnd(10.);
+	plot->setXRange(0, range);
+	matrix->setRowCount(1);
+	QCOMPARE(hm->d_func()->data.size(), 2);
+	QCOMPARE(values(), (QList<double>{1., 2.}));
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{1., 2., 3., 4.}));
+	matrix->setColumnCount(1);
+	QCOMPARE(hm->d_func()->data.size(), 2);
+	QCOMPARE(values(), (QList<double>{1., 3.}));
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{1., 2., 3., 4.}));
+	matrix->setXEnd(0.); // A zero-width source must clear both cached and rendered state.
+	QVERIFY(hm->d_func()->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{1., 2., 3., 4.}));
+
+	auto* x = new Column(QStringLiteral("X"), QVector<double>{0., 10.});
+	auto* y = new Column(QStringLiteral("Y"), QVector<double>{0., 10.});
+	project.addChild(x);
+	project.addChild(y);
+	hm->setXColumn(x);
+	hm->setYColumn(y);
+	hm->setXNumberBins(2);
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(values(), (QList<double>{1., 1.}));
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{1., 2., 3., 4.}));
+	project.undoStack()->redo();
+	QCOMPARE(values(), (QList<double>{1., 1.}));
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+	hm->setMatrix(nullptr);
+	QVERIFY(hm->d_func()->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+	project.undoStack()->undo();
+	QCOMPARE(values(), (QList<double>{1., 2., 3., 4.}));
+	project.removeChild(matrix);
+	QVERIFY(hm->d_func()->data.empty());
+	QVERIFY(hm->graphicsItem()->boundingRect().isEmpty());
+}
+
+void HeatmapTest::testCachedSourceBeforeAttachment() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+	Range<double> range(0., 10.);
+	range.setAutoScale(false);
+	plot->setYRange(0, range);
+	range.setEnd(5.);
+	plot->setXRange(0, range);
+	auto* x = new CountingColumn(QStringLiteral("X"), QVector<double>{0., 2., 2., 8., 10.});
+	auto* y = new CountingColumn(QStringLiteral("Y"), QVector<double>{0., 2., 2., 8., 10.});
+	project.addChild(x);
+	project.addChild(y);
+	auto* hm = new Heatmap(QStringLiteral("Heatmap"));
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	hm->setXNumberBins(2);
+	hm->setXColumn(x);
+	hm->setYColumn(y);
+	x->valueReads = y->valueReads = 0;
+	plot->addChild(hm);
+	QCOMPARE(hm->d_func()->data.size(), 1);
+	QCOMPARE(hm->formatMax(), 3.);
+
+	// Reveal a bin that was outside the viewport when the cache was first built.
+	QSignalSpy drawn(hm, &Heatmap::valueDrawn);
+	range.setStart(5.);
+	range.setEnd(10.);
+	plot->setXRange(0, range);
+	QCOMPARE(drawn.size(), 1);
+	QCOMPARE(drawn.at(0).at(4).toDouble(), 2.);
+	QCOMPARE(hm->formatMax(), 2.);
+	QCOMPARE(x->valueReads, 0);
+	QCOMPARE(y->valueReads, 0);
+}
+
+void HeatmapTest::testCachedCoordinateSystem() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+	Range<double> range(0., 10.);
+	range.setAutoScale(false);
+	plot->setXRange(0, range);
+	plot->setYRange(0, range);
+	range.setEnd(5.);
+	plot->addYRange(range);
+	auto* cSystem = new CartesianCoordinateSystem(plot);
+	cSystem->setIndex(Dimension::X, 0);
+	cSystem->setIndex(Dimension::Y, 1);
+	plot->addCoordinateSystem(cSystem);
+	plot->retransformScales();
+	auto* matrix = new Matrix(2, 2, QStringLiteral("Matrix"));
+	project.addChild(matrix);
+	matrix->setXEnd(10.);
+	matrix->setYEnd(10.);
+	for (int row = 0; row < 2; ++row)
+		for (int col = 0; col < 2; ++col)
+			matrix->setCell(row, col, 1. + row * 2 + col);
+	auto* hm = new Heatmap(QStringLiteral("Heatmap"));
+	hm->setMatrix(matrix);
+	plot->addChild(hm);
+	hm->setCoordinateSystemIndex(1);
+	QSignalSpy drawn(hm, &Heatmap::valueDrawn);
+	hm->retransform();
+	QCOMPARE(drawn.size(), 2);
+	QCOMPARE(drawn.at(0).at(4).toDouble(), 1.);
+	QCOMPARE(drawn.at(1).at(4).toDouble(), 2.);
+	drawn.clear();
+	range.setStart(10.);
+	range.setEnd(5.); // Inverting the visible range must retain the same bin selection.
+	plot->setYRange(1, range);
+	QCOMPARE(drawn.size(), 2);
+	QCOMPARE(drawn.at(0).at(4).toDouble(), 3.);
+	QCOMPARE(drawn.at(1).at(4).toDouble(), 4.);
+}
+
 void HeatmapTest::plotAutoScale() {
 	Project project;
 
@@ -2805,6 +3174,14 @@ void HeatmapTest::plotAutoScale() {
 		QCOMPARE(range.start(), 0);
 		QCOMPARE(range.end(), 110); // The last bin must be completely included!
 	}
+
+	// Changing the effective bin width must also update the autoscale margin.
+	hm->setEqualNumberBins(false);
+	hm->setXNumberBins(2);
+	hm->setYNumberBins(4);
+	hm->setSourceNumberBins(false);
+	QCOMPARE(plot->range(Dimension::X, 0).end(), 12.5);
+	QCOMPARE(plot->range(Dimension::Y, 0).end(), 112.5);
 }
 
 QTEST_MAIN(HeatmapTest)
