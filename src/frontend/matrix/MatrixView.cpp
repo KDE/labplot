@@ -383,9 +383,14 @@ void MatrixView::adjustHeaders() {
 	// resize rows to the saved sizes or to fit the contents if the height is 0
 	int rows = m_matrix->rowCount();
 	for (int i = 0; i < rows; i++) {
-		if (m_matrix->rowHeight(i) == 0)
-			m_tableView->resizeRowToContents(i);
-		else
+		if (m_matrix->rowHeight(i) == 0) {
+			if (rows > 10000)
+				m_tableView->setRowHeight(i, 10);
+			else {
+				// Takes too long if there are too many rows
+				m_tableView->resizeRowToContents(i);
+			}
+		} else
 			m_tableView->setRowHeight(i, m_matrix->rowHeight(i));
 	}
 
