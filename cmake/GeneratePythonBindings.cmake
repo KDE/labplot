@@ -103,6 +103,13 @@ function(generate_python_bindings)
         string(REPLACE ";" "${PATH_SEP}" ${varname} "${ARGN}")
     endmacro()
 
+    # Shiboken cannot resolve CMake generator expressions or nonexistent paths,
+    # used before constructing:
+    # --include-paths=...
+    # --force-process-system-include-paths=...
+    # for the flatpak build, the PySide6 include path is not available at build time
+    # and need to add it to the force process system include paths.
+    # Removing it would reintroduce invalid paths into Shiboken’s command line.
     macro(filter_existing_include_dirs output_var)
         set(${output_var} "")
         foreach(_include_dir ${ARGN})
