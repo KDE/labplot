@@ -272,7 +272,7 @@ generate_python_bindings(
     TYPESYSTEM ${typesystem_file}
     GENERATED_SOURCES ${generated_sources}
     DEPENDENCIES LabPlot::SDK
-    INCLUDES ${CMAKE_BINARY_DIR}/lib ${QtCore_INCLUDE_DIRECTORIES} ${QtGui_INCLUDE_DIRECTORIES} ${QtWidgets_INCLUDE_DIRECTORIES}
+    INCLUDES ${CMAKE_BINARY_DIR}/lib ${GSL_INCLUDE_DIR} ${QtCore_INCLUDE_DIRECTORIES} ${QtGui_INCLUDE_DIRECTORIES} ${QtWidgets_INCLUDE_DIRECTORIES}
     QT_VERSION ${QT_MIN_VERSION}
     HOMEPAGE_URL "https://invent.kde.org/education/labplot"
     ISSUES_URL "https://bugs.kde.org/describecomponents.cgi?product=labplot2"
