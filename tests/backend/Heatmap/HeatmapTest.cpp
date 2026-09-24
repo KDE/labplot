@@ -2867,23 +2867,23 @@ void HeatmapTest::testCachedSpreadsheetRetransform() {
 
 	// Turn off automatic limits
 	hm->setAutomaticLimits(false); // < 1. Recalc
-	hm->setFormatMin(0.); // < 2. Recalc
-	hm->setFormatMax(10.); // < 3. Recalc
-	hm->setFormatColors({Qt::green, Qt::red}); // < 4. Recalc
+	hm->setFormatMin(0.); // No recalc required sinze we change only the part for the scene point calculation
+	hm->setFormatMax(10.);
+	hm->setFormatColors({Qt::green, Qt::red});
 	QCOMPARE(d->data.front().color, QColor(Qt::green));
-	hm->setDrawEmpty(true); // < 5. Recalc
+	hm->setDrawEmpty(true); // < 2. Recalc
 	QCOMPARE(d->data.size(), 4);
 
 	// Turn on automatic limits
-	hm->setAutomaticLimits(true); // < 6. Recalc
+	hm->setAutomaticLimits(true); // < 3. Recalc
 	QCOMPARE(hm->formatMin(), 0.); // Draw empty is true
 	QCOMPARE(hm->formatMax(), 3.);
 	for (int i = 0; i < 3; ++i)
 		hm->retransform();
 	plot->setRect(QRectF(0., 0., 1200., 800.));
 	QVERIFY(d->data.front().rect != initialRect);
-	QCOMPARE(x->valueReads, 6 * 5); // 6 recalcs with 5 values
-	QCOMPARE(y->valueReads, 6 * 5); // 6 recalcs with 5 values
+	QCOMPARE(x->valueReads, 3 * 5); // 3 recalcs with 5 values
+	QCOMPARE(y->valueReads, 3 * 5); // 3 recalcs with 5 values
 }
 
 void HeatmapTest::testCachedSpreadsheetChanges() {

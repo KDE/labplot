@@ -31,8 +31,6 @@
 		/* after the curve was updated, emit the signal to update the plot ranges */                                                                           \
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::recalc_func); /* must be before DataChanged*/                                         \
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged); /* triggers a retransform in the plot and in its children */    \
-		connect(column, &AbstractColumn::maskingChanged, this, &class_name::recalc_func);                                                                      \
-		connect(column, &AbstractColumn::modeChanged, this, &class_name::recalc_func);                                                                         \
 	}
 
 #define CURVE_COLUMN_CONNECT_CALL(curve, column, Prefix)                                                                                                       \
