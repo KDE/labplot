@@ -129,6 +129,7 @@ private:
 
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);
+	void connectColumn(const AbstractColumn*, Dimension);
 	void connectMatrix(const Matrix*);
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void yColumnAboutToBeRemoved(const AbstractAspect*);
