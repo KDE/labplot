@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 00:40+0000\n"
+"POT-Creation-Date: 2026-09-24 00:40+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -2438,7 +2438,7 @@ msgstr "सञ्चिकायाः विश्लेषणं कर्त�
 #: src/backend/datasources/MQTTClient.cpp:1188
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:499
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:498
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "'%1' विशेषता अनुपलब्धा अथवा रिक्तं, पूर्वनिर्धारितं मूल्यं उपयुज्यते"
@@ -8115,7 +8115,7 @@ msgstr "स्वातन्त्र्यस्य उपाधयः"
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:646
 #: src/backend/statistics/HypothesisTest.cpp:648
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1103
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "स्वातन्त्र्यस्य उपाधयः"
@@ -9627,7 +9627,7 @@ msgstr "शीर्षक"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:150
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:375
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:296
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:458
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:379
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:394
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:63
@@ -10521,7 +10521,7 @@ msgstr "%1: सेट् बिन् श्रेणीः आरभ्यन�
 msgid "%1: set bin ranges end"
 msgstr "%1: सेट् बिन् श्रेणीः समाप्ताः"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:865
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:864
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -10655,13 +10655,13 @@ msgstr "%1: लेबल्स् प्रारूपं सेट् कु�
 msgid "%1: set labels border color"
 msgstr "%1: लेबलवर्णं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:919
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, fuzzy, kde-format
 #| msgid "Not enough data points available."
 msgid "Not enough data provided."
 msgstr "पर्याप्तं दत्तांशबिन्दवः उपलब्धाः न सन्ति।"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1022
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "अन्तिमः नमूना अपूर्णः अस्ति, तत् च लोपितम् आसीत् ।"
@@ -11192,22 +11192,22 @@ msgstr "%1: प्रक्षेपबिन्दुसङ्ख्यां �
 msgid "%1: set rug orientation"
 msgstr "%1: गलीचा अभिविन्यासं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1462
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1461
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "त्रुटिः - अकिमा स्प्लाइन् प्रक्षेपणार्थं न्यूनातिन्यूनं ५ बिन्दवः आवश्यकाः सन्ति ।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1464
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1463
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "त्रुटिः: स्प्लाइन्-कार्यं प्रारम्भं कर्तुं न शक्तम् ।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1477
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1476
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "x मूल्यानि एकरसरूपेण वर्धमानाः भवितुमर्हन्ति।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1480
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1479
 #, kde-format
 msgid "Error: %1"
 msgstr "त्रुटिः %1"
@@ -11310,7 +11310,7 @@ msgstr "GOODNESS OF FIT इति"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:986
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:907
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "वर्गावशेषाणां योगः"
@@ -11327,14 +11327,14 @@ msgstr "मूल माध्य वर्गविचलन"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1967
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1016
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:937
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "निर्धारणस्य गुणांकः"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1968
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1026
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:947
 #, kde-format
 msgid "Adj. coefficient of determination"
 msgstr "Adj. निर्धारणस्य गुणांकः"
@@ -11565,7 +11565,7 @@ msgstr "खण्डाः"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:784
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:705
 #, kde-format
 msgid "Parameters:"
 msgstr "मापदण्डः :"
@@ -11712,7 +11712,7 @@ msgstr "%1: अनलॉक्"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:67
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:382
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:232
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:372
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:411
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:407
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:40
@@ -15333,7 +15333,7 @@ msgstr "भूखण्ड श्रेणियाँ :"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:117
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:365
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:132
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:878
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:799
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:306
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:362
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:200
@@ -16689,7 +16689,7 @@ msgstr "t सांख्यिकी"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:353
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:95
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:366
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:287
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:418
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:63
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:443
@@ -16707,7 +16707,7 @@ msgstr "हिस्टोग्राम :"
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:755
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:809
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:730
 #, kde-format
 msgid "Model:"
 msgstr "प्रतिकृति:"
@@ -16726,7 +16726,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:857
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:536
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:457
 #, kde-format
 msgid "Degree:"
 msgstr "उपाधि:"
@@ -17773,7 +17773,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:124
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:49
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:377
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:288
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:209
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:246
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:43
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:124
@@ -21177,7 +21177,7 @@ msgstr "प्रतिशतं"
 #. i18n: ectx: property (text), widget (QPushButton, pbLoadFunction)
 #: src/frontend/TemplateHandler.cpp:181
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:257
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:64
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1200
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
 #, kde-format
 msgid "Load"
@@ -21191,7 +21191,7 @@ msgstr "टेम्पलेट् तः गुणाः लोड् कु�
 #. i18n: ectx: property (text), widget (QPushButton, pbSaveFunction)
 #: src/frontend/TemplateHandler.cpp:183
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:270
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:77
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1213
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:99
 #, kde-format
 msgid "Save"
@@ -21393,7 +21393,7 @@ msgstr "Y-त्रुटिप्रकारः :"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:32
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:23
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:118
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:39
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:33
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:304
@@ -22545,7 +22545,7 @@ msgstr "सञ्चिकासूचना दर्शयतु"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:265
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:133
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:78
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:324
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:245
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:292
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:103
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:579
@@ -23464,7 +23464,7 @@ msgstr "x: 1 ."
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:119
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:89
 #: src/frontend/ui/dockwidgets/runchartdock.ui:86
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:244
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
 #, kde-format
 msgid "Data:"
 msgstr "दत्तांश:"
@@ -24102,7 +24102,7 @@ msgstr "अद्यतन"
 #: src/frontend/ui/dockwidgets/columndock.ui:134
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:105
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:207
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:621
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:542
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:265
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:172
@@ -24114,7 +24114,7 @@ msgstr "नित्याः"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbLoadFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:144
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:254
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1197
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
 #, fuzzy, kde-format
 #| msgid "Clausen function"
@@ -24127,7 +24127,7 @@ msgstr "क्लाउसेन् फंक्शन"
 #: src/frontend/ui/dockwidgets/columndock.ui:157
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:95
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:197
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:608
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:529
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:275
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
@@ -24139,7 +24139,7 @@ msgstr "कार्याणि"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSaveFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:167
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:267
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1210
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:96
 #, fuzzy, kde-format
 #| msgid "Clausen function"
@@ -24869,7 +24869,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:126
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:74
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:102
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:888
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:809
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:88
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:135
@@ -24888,7 +24888,7 @@ msgstr "एक्स-दत्तांशः :"
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:125
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:110
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:109
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:376
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:297
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:441
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:95
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:60
@@ -24906,7 +24906,7 @@ msgstr "य-दत्तांशः :"
 #. i18n: ectx: property (text), widget (QLabel, lOptions)
 #. i18n: ectx: property (text), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:123
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:102
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1254
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:192
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:240
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:319
@@ -25130,7 +25130,7 @@ msgstr "समाप्ति अनुपातः :"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:206
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:39
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:294
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:495
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:416
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:325
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:275
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:166
@@ -25201,7 +25201,7 @@ msgstr "Y-दत्तांशसंकेतः १:"
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:442
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1212
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1133
 #, kde-format
 msgid "Correlation"
 msgstr "सहसंबन्धः"
@@ -25288,298 +25288,298 @@ msgstr "बिन्दुसङ्ख्या :"
 msgid "Automatically calculate the number of points based on plot pixel width"
 msgstr "दशमलवबिन्दुस्य अनन्तरं अङ्कानां इष्टतमसङ्ख्यां स्वयमेव निर्धारयन्तु"
 
-#. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
-#, kde-format
-msgid "Advanced fit options"
-msgstr "उन्नत फिट विकल्प"
-
-#. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:96
-#, kde-format
-msgid "Opens a dialog to change advanced fit options"
-msgstr "उन्नत-फिट्-विकल्पान् परिवर्तयितुं संवादं उद्घाटयति"
-
 #. i18n: ectx: property (toolTip), widget (QLabel, lName)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:115
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:36
 #, kde-format
 msgid "Name of the fit curve"
 msgstr "फिट वक्रस्य नाम"
 
 #. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
 #. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:397
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:86
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:318
 #, kde-format
 msgid "col ="
 msgstr "कोल ="
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:177
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:98
 #, kde-format
 msgid "Weight for y data"
 msgstr "y दत्तांशस्य कृते भारः"
 
 #. i18n: ectx: property (text), widget (QLabel, lYWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:180
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:101
 #, kde-format
 msgid "Y-Weight:"
 msgstr "य-भारः :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:187
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:108
 #, kde-format
 msgid "Weight for x data"
 msgstr "x दत्तांशस्य कृते भारः"
 
 #. i18n: ectx: property (text), widget (QLabel, lXWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:190
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:111
 #, kde-format
 msgid "X-Weight:"
 msgstr "X-भारः :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:220
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:141
 #, kde-format
 msgid "Fit model category"
 msgstr "मॉडल श्रेणीं फिट् कुर्वन्तु"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:223
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:144
 #, kde-format
 msgid "Category:"
 msgstr "कोटी:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbData)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:241
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:162
 #, kde-format
 msgid "Data to fit"
 msgstr "दत्तांशं फिट् कर्तुं"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lComment)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:285
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:206
 #, kde-format
 msgid "Optional comment"
 msgstr "वैकल्पिक टिप्पणी"
 
 #. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:314
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:235
 #, kde-format
 msgid "Algorithm:"
 msgstr "एल्गोरिदम् :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:321
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:242
 #, kde-format
 msgid "Type of data source"
 msgstr "दत्तांशस्रोतस्य प्रकारः"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:363
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:284
 #, kde-format
 msgid "Source curve"
 msgstr "स्रोत वक्र"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:373
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:294
 #, kde-format
 msgid "Source of y data"
 msgstr "य दत्तांशस्य स्रोतः"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbWeights)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:420
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:341
 #, kde-format
 msgid "How to weight the data points"
 msgstr "दत्तांशबिन्दून् कथं भारं कर्तव्यम्"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbWeights)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:426
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:347
 #, kde-format
 msgid "Weights:"
 msgstr "भाराः :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:448
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:369
 #, kde-format
 msgid "Show fit curve"
 msgstr "फिट वक्रं दर्शयतु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbResults)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:492
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:413
 #, kde-format
 msgid "Fit results"
 msgstr "परिणामः उपयुक्तः"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:533
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:454
 #, kde-format
 msgid "Degree of fit model"
 msgstr "फिट मॉडलस्य डिग्री"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:611
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:532
 #, kde-format
 msgid "Select predefined function"
 msgstr "पूर्वनिर्धारितं कार्यं चिनोतु"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:624
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:545
 #, kde-format
 msgid "Select predefined constants"
 msgstr "पूर्वनिर्धारितनित्यं चिनोतु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFit)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:658
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:579
 #, kde-format
 msgid "Function to fit and options"
 msgstr "कार्यं फिट् कर्तुं विकल्पाः च"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbFit)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:667
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:588
 #, kde-format
 msgid "Fit:"
 msgstr "योग्यः:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:751
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:672
 #, kde-format
 msgid "Run fit"
 msgstr "रन फिट"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:754
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:675
 #, kde-format
 msgid "Run"
 msgstr "धावनं करोतु"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbParameters)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:781
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:702
 #, kde-format
 msgid "Specify parameters and their properties"
 msgstr "पैरामीटर्स् तथा तेषां गुणाः निर्दिशन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lModel)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:806
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:727
 #, kde-format
 msgid "Fit model type"
 msgstr "मॉडल प्रकारं फिट् कुर्वन्तु"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:865
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:786
 #, kde-format
 msgid "Function of fit model"
 msgstr "फिट मॉडल का कार्य"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:868
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:789
 #, kde-format
 msgid "f(x) ="
 msgstr "च(x) ="
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:885
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:806
 #, kde-format
 msgid "Source of x data"
 msgstr "x दत्तांशस्य स्रोतः"
 
 #. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:895
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:816
 #, kde-format
 msgid "Resulting fit parameter and properties"
 msgstr "परिणामतः फिट पैरामीटर् तथा गुण"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:905
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1192
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:826
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1113
 #, kde-format
 msgid "Parameters"
 msgstr "पैरामीटर्"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:942
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:863
 #, kde-format
 msgid "Goodness of fit"
 msgstr "फिटस्य सद्भावः"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:996
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:917
 #, kde-format
 msgid "Residual mean square"
 msgstr "अवशिष्ट माध्य वर्ग"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1006
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:927
 #, kde-format
 msgid "Root mean square deviation (RMSD, SD)"
 msgstr "मूल माध्य वर्गविचलन (RMSD, SD) 1.1."
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1046
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:967
 #, kde-format
 msgid "F test"
 msgstr "च परीक्षणम्"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1056
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:977
 #, kde-format
 msgid "P > F"
 msgstr "प > च"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1066
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:987
 #, kde-format
 msgid "Mean absolute error (MAE)"
 msgstr "माध्य निरपेक्ष त्रुटि (MAE) 1.1."
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1076
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:997
 #, kde-format
 msgid "Akaike information criterion (AIC)"
 msgstr "अकाइके सूचना मानदण्ड (AIC) 1.1."
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1086
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1007
 #, kde-format
 msgid "Bayesian information criterion (BIC)"
 msgstr "बेयसियन सूचना मानदण्ड (BIC) 1.1."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1100
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1021
 #, kde-format
 msgid "Log"
 msgstr "वृत्त"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1142
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1063
 #, kde-format
 msgid "Status"
 msgstr "स्थितिः"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1152
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1222
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1073
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1143
 #, kde-format
 msgid "Iterations"
 msgstr "पुनरावृत्तयः"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1162
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1083
 #, kde-format
 msgid "Tolerance"
 msgstr "सहनशीलता"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1172
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1093
 #, kde-format
 msgid "Calculation time"
 msgstr "गणनाकालः"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1202
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1123
 #, kde-format
 msgid "X range"
 msgstr "X श्रेणी"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1245
+#, kde-format
+msgid "Advanced fit options"
+msgstr "उन्नत फिट विकल्प"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1248
+#, kde-format
+msgid "Opens a dialog to change advanced fit options"
+msgstr "उन्नत-फिट्-विकल्पान् परिवर्तयितुं संवादं उद्घाटयति"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff2)
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:54

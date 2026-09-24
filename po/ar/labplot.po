@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 00:40+0000\n"
-"PO-Revision-Date: 2026-09-15 17:20+0400\n"
+"POT-Creation-Date: 2026-09-24 00:40+0000\n"
+"PO-Revision-Date: 2026-09-23 19:03+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -2424,7 +2424,7 @@ msgstr "فشل تحليل الملف."
 #: src/backend/datasources/MQTTClient.cpp:1188
 #: src/backend/datasources/MQTTTopic.cpp:208
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:499
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:498
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "السمة '%1' مفقودة أو فارغة، يُستعمل القيمة المبدئية"
@@ -8154,7 +8154,7 @@ msgstr "درجات حرية البواقي"
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:646
 #: src/backend/statistics/HypothesisTest.cpp:648
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1103
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "درجات الحرية"
@@ -9621,7 +9621,7 @@ msgstr "العنوان"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:150
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:375
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:296
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:458
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:379
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:394
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:63
@@ -10493,7 +10493,7 @@ msgstr "%1: اضبط بداية نطاقات الصناديق"
 msgid "%1: set bin ranges end"
 msgstr "%1: اضبط نهاية نطاقات الصناديق"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:865
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:864
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -10613,12 +10613,12 @@ msgstr "%1: اضبط عرض حدود اللصائق"
 msgid "%1: set labels border color"
 msgstr "%1: اضبط لون حدود اللصائق"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:919
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
 msgstr "وفّر بيانات كافية."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1022
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "أُهمِلت العينة الأخيرة الناقصة."
@@ -11145,22 +11145,22 @@ msgstr "%1: اِضبط عدد نقاط الاستيفاء"
 msgid "%1: set rug orientation"
 msgstr "%1: اِضبط اتجاه اللبدة"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1462
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1461
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "خطأ: يتطلب الاستيفاء الأكيمي بـ Akima 5 نقاط كحد أدنى."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1464
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1463
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "خطأ: لا استطاعة تهيئة دالة الـ spline."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1477
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1476
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "يجب أن تتزايد قيم س بشكل رتيب."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1480
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1479
 #, kde-format
 msgid "Error: %1"
 msgstr "الخطأ: %1"
@@ -11263,7 +11263,7 @@ msgstr "جودة الملاءمة"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:986
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:907
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "مجموع المربعات المتبقية"
@@ -11280,14 +11280,14 @@ msgstr "جذر متوسط مربع الانحراف"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1967
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1016
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:937
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "معامل التحديد"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1968
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1026
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:947
 #, kde-format
 msgid "Adj. coefficient of determination"
 msgstr "مُعامِل التحديد المُعدل"
@@ -11510,7 +11510,7 @@ msgstr "الجزء %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:784
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:705
 #, kde-format
 msgid "Parameters:"
 msgstr "المعاملات:"
@@ -11656,7 +11656,7 @@ msgstr "%1: اِفتح القفل"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:67
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:382
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:232
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:372
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:411
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:407
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:40
@@ -15246,7 +15246,7 @@ msgstr "نطاقات الرسم البياني:"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:117
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:365
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:132
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:878
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:799
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:306
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:362
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:200
@@ -16634,7 +16634,7 @@ msgstr "إحصائية t"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:353
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:95
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:366
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:287
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:418
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:63
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:443
@@ -16652,7 +16652,7 @@ msgstr "المخطّط الدّرجيّ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:755
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:809
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:730
 #, kde-format
 msgid "Model:"
 msgstr "الطّراز:"
@@ -16670,7 +16670,7 @@ msgstr "نموذج يُحدد من قبل المستخدم"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:857
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:536
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:457
 #, kde-format
 msgid "Degree:"
 msgstr "الدرجة:"
@@ -16974,6 +16974,9 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"طريقة كشف نقاط التغير:<ul><li>التقسيم الثنائي: تقسيم البيانات عوديًا إلى "
+"مقاطع لكشف نقاط التغير.</li><li>PELT (الزمن الخطي الدقيق المشذّب): كشف نقاط "
+"التغير بتكلفة حسابية خطية.</li></ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:401
 #, kde-format
@@ -17014,6 +17017,8 @@ msgid ""
 "X-range of the data used for the fit. Only data points within this range are "
 "considered."
 msgstr ""
+"مدى X للبيانات المستخدمة في المطابقة. تُعتبر نقاط البيانات الواقعة ضمن هذا "
+"المدى فقط."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:417
 #, kde-format
@@ -17021,18 +17026,18 @@ msgid ""
 "If checked, the data range used for the fit is automatically determined from "
 "the data. A custom range can be specified otherwise."
 msgstr ""
+"إذا حُدد، يُعيَّن مدى البيانات المستخدم في المطابقة آليًا من البيانات. ويمكن "
+"تحديد مدى مخصص بخلاف ذلك."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:420
-#, fuzzy, kde-format
-#| msgid "The fraction of the data used to perform the local fit."
+#, kde-format
 msgid "Minimum X-value of the data used for the fit."
-msgstr "كسر البيانات المستخدم لإجراء التوافق المحلي."
+msgstr "أدنى قيمة X للبيانات المستخدمة في المطابقة."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:422
-#, fuzzy, kde-format
-#| msgid "The fraction of the data used to perform the local fit."
+#, kde-format
 msgid "Maximum X-value of the data used for the fit."
-msgstr "كسر البيانات المستخدم لإجراء التوافق المحلي."
+msgstr "أقصى قيمة X للبيانات المستخدمة في المطابقة."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -17733,7 +17738,7 @@ msgstr "اِختر ملفًّا لحفظ تعريف الدالّة"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:124
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:49
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:377
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:288
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:209
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:246
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:43
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:124
@@ -18963,10 +18968,9 @@ msgid "Automatically show output when a script produces output"
 msgstr "عرض الناتج آليًا عندما ينتج البرنامج النصي ناتجًا"
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "احفظ البيانات في ملف المشروع:"
+msgstr "احفظ خَرْج النص البرمجي في ملفات المشروع"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -21129,7 +21133,7 @@ msgstr "النسبة المئوية"
 #. i18n: ectx: property (text), widget (QPushButton, pbLoadFunction)
 #: src/frontend/TemplateHandler.cpp:181
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:257
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:64
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1200
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
 #, kde-format
 msgid "Load"
@@ -21143,7 +21147,7 @@ msgstr "حمِّل الخصائص من قالب"
 #. i18n: ectx: property (text), widget (QPushButton, pbSaveFunction)
 #: src/frontend/TemplateHandler.cpp:183
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:270
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:77
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1213
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:99
 #, kde-format
 msgid "Save"
@@ -21345,7 +21349,7 @@ msgstr "نوع خطأ Y:"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:32
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:23
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:118
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:39
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:33
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:304
@@ -22494,7 +22498,7 @@ msgstr "اِعرِض معلومات الملف"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:265
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:133
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:78
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:324
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:245
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:292
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:103
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:579
@@ -23411,7 +23415,7 @@ msgstr "س:"
 #: src/frontend/ui/dockwidgets/paretochartdock.ui:119
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:89
 #: src/frontend/ui/dockwidgets/runchartdock.ui:86
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:244
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
 #, kde-format
 msgid "Data:"
 msgstr "البيانات:"
@@ -24046,7 +24050,7 @@ msgstr "تحديث آلي"
 #: src/frontend/ui/dockwidgets/columndock.ui:134
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:105
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:207
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:621
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:542
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:265
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:172
@@ -24058,7 +24062,7 @@ msgstr "ثوابت"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbLoadFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:144
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:254
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1197
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
 #, kde-format
 msgid "Load a custom function"
@@ -24070,7 +24074,7 @@ msgstr "حمّل دالة مخصصة"
 #: src/frontend/ui/dockwidgets/columndock.ui:157
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:95
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:197
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:608
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:529
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:275
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
@@ -24082,7 +24086,7 @@ msgstr "دوال"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSaveFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:167
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:267
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1210
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:96
 #, kde-format
 msgid "Save a custom function"
@@ -24797,7 +24801,7 @@ msgstr "وقت التشغيل:"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:126
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:74
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:102
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:888
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:809
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:88
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:135
@@ -24816,7 +24820,7 @@ msgstr "بيانات X:"
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:125
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:110
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:109
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:376
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:297
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:441
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:95
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:60
@@ -24834,7 +24838,7 @@ msgstr "بيانات Y:"
 #. i18n: ectx: property (text), widget (QLabel, lOptions)
 #. i18n: ectx: property (text), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:123
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:102
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1254
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:192
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:240
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:319
@@ -25047,7 +25051,7 @@ msgstr "نسبة الإنهاء:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:206
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:39
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:294
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:495
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:416
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:325
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:275
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:166
@@ -25118,7 +25122,7 @@ msgstr "إشارة بيانات Y 1:"
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:442
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1212
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1133
 #, kde-format
 msgid "Correlation"
 msgstr "ارتباط"
@@ -25201,298 +25205,298 @@ msgstr "عدد النقاط المطلوب تقييمها"
 msgid "Automatically calculate the number of points based on plot pixel width"
 msgstr "حساب عدد النقاط آليًا بناءً على عرض بكسل الرسم البياني"
 
-#. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
-#, kde-format
-msgid "Advanced fit options"
-msgstr "خيارات الملاءمة المتقدمة"
-
-#. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:96
-#, kde-format
-msgid "Opens a dialog to change advanced fit options"
-msgstr "يفتح حوارًا لتغيير خيارات الملاءمة المتقدمة"
-
 #. i18n: ectx: property (toolTip), widget (QLabel, lName)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:115
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:36
 #, kde-format
 msgid "Name of the fit curve"
 msgstr "اسم منحنى الملاءمة"
 
 #. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
 #. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:397
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:86
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:318
 #, kde-format
 msgid "col ="
 msgstr "عمد ="
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:177
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:98
 #, kde-format
 msgid "Weight for y data"
 msgstr "وزن لبيانات ص"
 
 #. i18n: ectx: property (text), widget (QLabel, lYWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:180
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:101
 #, kde-format
 msgid "Y-Weight:"
 msgstr "وزن ص:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:187
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:108
 #, kde-format
 msgid "Weight for x data"
 msgstr "وزن لبيانات س"
 
 #. i18n: ectx: property (text), widget (QLabel, lXWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:190
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:111
 #, kde-format
 msgid "X-Weight:"
 msgstr "وزن س:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:220
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:141
 #, kde-format
 msgid "Fit model category"
 msgstr "فئة نموذج الملاءمة"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:223
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:144
 #, kde-format
 msgid "Category:"
 msgstr "الفئة:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbData)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:241
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:162
 #, kde-format
 msgid "Data to fit"
 msgstr "البيانات للملاءمة"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lComment)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:285
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:206
 #, kde-format
 msgid "Optional comment"
 msgstr "تعليق اختياري"
 
 #. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:314
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:235
 #, kde-format
 msgid "Algorithm:"
 msgstr "الخوارزمية:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:321
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:242
 #, kde-format
 msgid "Type of data source"
 msgstr "نوع مصدر البيانات"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:363
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:284
 #, kde-format
 msgid "Source curve"
 msgstr "منحنى المصدر"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:373
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:294
 #, kde-format
 msgid "Source of y data"
 msgstr "مصدر بيانات ص"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbWeights)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:420
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:341
 #, kde-format
 msgid "How to weight the data points"
 msgstr "كيفية وزن نقاط البيانات"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbWeights)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:426
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:347
 #, kde-format
 msgid "Weights:"
 msgstr "الأوزان:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:448
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:369
 #, kde-format
 msgid "Show fit curve"
 msgstr "أظهر منحنى الملاءمة"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbResults)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:492
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:413
 #, kde-format
 msgid "Fit results"
 msgstr "نتائج الملاءمة"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:533
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:454
 #, kde-format
 msgid "Degree of fit model"
 msgstr "درجة نموذج الملاءمة"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:611
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:532
 #, kde-format
 msgid "Select predefined function"
 msgstr "اختر دالة مسبقة التحديد"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:624
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:545
 #, kde-format
 msgid "Select predefined constants"
 msgstr "اختر ثوابت مسبقة التحديد"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFit)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:658
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:579
 #, kde-format
 msgid "Function to fit and options"
 msgstr "الدالة للملاءمة والخيارات"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbFit)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:667
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:588
 #, kde-format
 msgid "Fit:"
 msgstr "ناسب:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:751
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:672
 #, kde-format
 msgid "Run fit"
 msgstr "أجرِ الملاءمة"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:754
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:675
 #, kde-format
 msgid "Run"
 msgstr "تشغيل"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbParameters)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:781
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:702
 #, kde-format
 msgid "Specify parameters and their properties"
 msgstr "حدد المعاملات وخصائصها"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lModel)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:806
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:727
 #, kde-format
 msgid "Fit model type"
 msgstr "نوع نموذج الملاءمة"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:865
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:786
 #, kde-format
 msgid "Function of fit model"
 msgstr "دالة نموذج الملاءمة"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:868
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:789
 #, kde-format
 msgid "f(x) ="
 msgstr "f(x) ="
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:885
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:806
 #, kde-format
 msgid "Source of x data"
 msgstr "مصدر بيانات س"
 
 #. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:895
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:816
 #, kde-format
 msgid "Resulting fit parameter and properties"
 msgstr "معاملات وخصائص الملاءمة الناتجة"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:905
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1192
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:826
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1113
 #, kde-format
 msgid "Parameters"
 msgstr "معاملات"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:942
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:863
 #, kde-format
 msgid "Goodness of fit"
 msgstr "جودة الملاءمة"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:996
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:917
 #, kde-format
 msgid "Residual mean square"
 msgstr "متوسط مربع البواقي"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1006
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:927
 #, kde-format
 msgid "Root mean square deviation (RMSD, SD)"
 msgstr "جذر متوسط مربع الانحراف (RMSD، SD)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1046
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:967
 #, kde-format
 msgid "F test"
 msgstr "اختبار F"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1056
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:977
 #, kde-format
 msgid "P > F"
 msgstr "P > F"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1066
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:987
 #, kde-format
 msgid "Mean absolute error (MAE)"
 msgstr "متوسط الخطأ المطلق (MAE)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1076
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:997
 #, kde-format
 msgid "Akaike information criterion (AIC)"
 msgstr "معيار أكايكي للمعلومات (AIC)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1086
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1007
 #, kde-format
 msgid "Bayesian information criterion (BIC)"
 msgstr "معيار بايزي للمعلومات (BIC)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1100
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1021
 #, kde-format
 msgid "Log"
 msgstr "سجل"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1142
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1063
 #, kde-format
 msgid "Status"
 msgstr "الحالة"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1152
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1222
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1073
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1143
 #, kde-format
 msgid "Iterations"
 msgstr "تكرارات"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1162
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1083
 #, kde-format
 msgid "Tolerance"
 msgstr "التسامح"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1172
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1093
 #, kde-format
 msgid "Calculation time"
 msgstr "حسابات الوقت"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1202
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1123
 #, kde-format
 msgid "X range"
 msgstr "نطاق س"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1245
+#, kde-format
+msgid "Advanced fit options"
+msgstr "خيارات الملاءمة المتقدمة"
+
+#. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1248
+#, kde-format
+msgid "Opens a dialog to change advanced fit options"
+msgstr "يفتح حوارًا لتغيير خيارات الملاءمة المتقدمة"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff2)
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:54
@@ -25651,10 +25655,9 @@ msgstr "الحد الأدنى لحجم الجزء:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFitRange)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:248
-#, fuzzy, kde-format
-#| msgid "Plot Range:"
+#, kde-format
 msgid "Fit Range:"
-msgstr "نطاق الرسم:"
+msgstr "مدى المطابقة:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:367
