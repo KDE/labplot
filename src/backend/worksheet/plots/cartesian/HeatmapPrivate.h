@@ -14,6 +14,8 @@
 #include "Heatmap.h"
 #include "PlotPrivate.h"
 
+#include <vector>
+
 class AbstractColumn;
 class Matrix;
 
@@ -38,9 +40,10 @@ public:
 	Heatmap::Format format;
 
 	void retransform() override;
-	void recalc();
+	void recalcAndRetransform();
 	void recalcShapeAndBoundingRect() override;
 	void recalcShapeAndBoundingRect(const QRectF&);
+	void recalc();
 
 	struct Data {
 		QRectF rect;
@@ -53,8 +56,19 @@ public:
 private:
 	void draw(QPainter*);
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* = nullptr) override;
-	QRectF update();
+	QRectF calculateScenePoints();
 	void updatePixmap();
+
+	// Full logical grid, independent of the visible plot ranges.
+	std::vector<std::vector<double>> map;
+	int xBinCount{0};
+	int yBinCount{0};
+	double xMin{0.};
+	double yMin{0.};
+	double xBinSize{0.};
+	double yBinSize{0.};
+	double matrixMin{0.};
+	double matrixMax{0.};
 };
 
 #endif // HEATMAPPRIVATE_H

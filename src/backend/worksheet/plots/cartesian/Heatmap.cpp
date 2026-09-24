@@ -22,6 +22,10 @@
 
 #include <KConfigGroup>
 
+#include <algorithm>
+#include <cmath>
+#include <limits>
+
 QLatin1String Heatmap::saveName = QLatin1String("Heatmap");
 namespace {
 // When setting a matrix with a large amount of entries, we disable
@@ -51,6 +55,8 @@ bool Heatmap::Format::operator!=(const Format& rhs) const {
 int Heatmap::Format::index(double value) const {
 	if (colors.size() == 0)
 		return -1;
+	if (min == max || !std::isfinite(value))
+		return 0;
 	const auto index = static_cast<int>((value - min) / (max - min) * colors.size());
 	if (index < 0)
 		return 0;
@@ -66,8 +72,26 @@ QColor Heatmap::Format::color(double value) const {
 	return QColor();
 }
 
-CURVE_COLUMN_CONNECT(Heatmap, X, x, recalc)
-CURVE_COLUMN_CONNECT(Heatmap, Y, y, recalc)
+void Heatmap::connectXColumn(const AbstractColumn* column) {
+	connectColumn(column, Dimension::X);
+}
+
+void Heatmap::connectYColumn(const AbstractColumn* column) {
+	connectColumn(column, Dimension::Y);
+}
+
+void Heatmap::connectColumn(const AbstractColumn* column, Dimension dim) {
+	const auto removed = dim == Dimension::X ? &Heatmap::xColumnAboutToBeRemoved : &Heatmap::yColumnAboutToBeRemoved;
+	const auto changed = dim == Dimension::X ? &Heatmap::xDataChanged : &Heatmap::yDataChanged;
+	connect(column, &AbstractAspect::aspectAboutToBeRemoved, this, removed);
+	connect(column, &AbstractColumn::aboutToReset, this, removed);
+	for (const auto signal : {&AbstractColumn::dataChanged, &AbstractColumn::maskingChanged, &AbstractColumn::modeChanged}) {
+		// The plot must see the rebuilt cache when it autoscales and retransforms.
+		connect(column, signal, this, &Heatmap::recalc);
+		connect(column, signal, this, changed);
+	}
+}
+
 void Heatmap::connectMatrix(const Matrix* matrix) {
 	connect(matrix, &AbstractAspect::aspectAboutToBeRemoved, this, &Heatmap::matrixAboutToBeRemoved);
 	/* When the matrix is reused with different name, the heatmap should be informed to disconnect */
@@ -79,12 +103,16 @@ void Heatmap::connectMatrix(const Matrix* matrix) {
 	connect(matrix, &Matrix::xEndChanged, this, &Heatmap::recalc);
 	connect(matrix, &Matrix::yStartChanged, this, &Heatmap::recalc);
 	connect(matrix, &Matrix::yEndChanged, this, &Heatmap::recalc);
+	connect(matrix, &Matrix::rowCountChanged, this, &Heatmap::recalc);
+	connect(matrix, &Matrix::columnCountChanged, this, &Heatmap::recalc);
 
 	connect(matrix, &Matrix::dataChanged, this, &Heatmap::dataChanged);
 	connect(matrix, &Matrix::xStartChanged, this, &Heatmap::xDataChanged);
 	connect(matrix, &Matrix::xEndChanged, this, &Heatmap::xDataChanged);
 	connect(matrix, &Matrix::yStartChanged, this, &Heatmap::yDataChanged);
 	connect(matrix, &Matrix::yEndChanged, this, &Heatmap::yDataChanged);
+	connect(matrix, &Matrix::rowCountChanged, this, &Heatmap::dataChanged);
+	connect(matrix, &Matrix::columnCountChanged, this, &Heatmap::dataChanged);
 }
 
 Heatmap::Heatmap(const QString& name)
@@ -121,8 +149,6 @@ BASIC_SHARED_D_READER_IMPL(Heatmap, QString, matrixPath, matrixPath)
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
 
-// TODO: disconnect matrix (only if currently active)!
-//  TODO: disconnect columns if matrix will be connected (conenct matrix, only if currently active!)
 class HeatmapSetDataSourceCmd : public StandardSetterCmd<Heatmap::Private, Heatmap::DataSource> {
 public:
 	HeatmapSetDataSourceCmd(Heatmap::Private* target, Heatmap::DataSource newValue, const KLocalizedString& description)
@@ -143,7 +169,7 @@ public:
 			if (m_target->xColumn)
 				CURVE_COLUMN_CONNECT_CALL(m_target->q, m_target->xColumn, X);
 			if (m_target->yColumn)
-				CURVE_COLUMN_CONNECT_CALL(m_target->q, m_target->yColumn, X);
+				CURVE_COLUMN_CONNECT_CALL(m_target->q, m_target->yColumn, Y);
 			if (m_target->matrix)
 				QObject::disconnect(m_target->matrix, nullptr, m_target->q, nullptr);
 			break;
@@ -153,6 +179,7 @@ public:
 
 	void finalize() override {
 		connectDisconnect(m_target->dataSource);
+		m_target->recalc();
 		/* emit DataChanged() in order to notify the plot about the changes */
 		Q_EMIT m_target->q->dataChanged();
 	}
@@ -265,6 +292,8 @@ public:
 		, m_matrix(newValue) {
 	}
 	virtual void finalize() override {
+		if (m_private->dataSource == Heatmap::DataSource::Matrix)
+			m_private->recalc();
 		Q_EMIT m_target->q->matrixChanged(m_target->*m_field); // TODO: why this works????
 		if (m_private->dataSource == Heatmap::DataSource::Matrix) { /* emit dataChanged() in order to notify the plot about the changes */
 			Q_EMIT m_private->q->dataChanged();
@@ -314,28 +343,28 @@ void Heatmap::setMatrix(const Matrix* matrix) {
 	endMacro();
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetSourceNumberBins, bool, sourceNumberBins, retransform)
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetSourceNumberBins, bool, sourceNumberBins, recalcAndRetransform)
 void Heatmap::setSourceNumberBins(bool sourceNumberBins) {
 	Q_D(Heatmap);
 	if (sourceNumberBins != d->sourceNumberBins)
 		exec(new HeatmapSetSourceNumberBinsCmd(d, sourceNumberBins, ki18n("%1: Set matrix number bins")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetEqualNumberBins, bool, equalNumberBins, retransform)
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetEqualNumberBins, bool, equalNumberBins, recalcAndRetransform)
 void Heatmap::setEqualNumberBins(bool equal) {
 	Q_D(Heatmap);
 	if (equal != d->equalNumberBins)
 		exec(new HeatmapSetEqualNumberBinsCmd(d, equal, ki18n("%1: Set number bins equal")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetXNumberBins, unsigned int, xNumberBins, retransform)
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetXNumberBins, unsigned int, xNumberBins, recalcAndRetransform)
 void Heatmap::setXNumberBins(unsigned int numBins) {
 	Q_D(Heatmap);
 	if (numBins != d->xNumberBins)
 		exec(new HeatmapSetXNumberBinsCmd(d, numBins, ki18n("%1: number bins for x changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetYNumberBins, unsigned int, yNumberBins, retransform)
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetYNumberBins, unsigned int, yNumberBins, recalcAndRetransform)
 void Heatmap::setYNumberBins(unsigned int numBins) {
 	Q_D(Heatmap);
 	if (numBins != d->yNumberBins)
@@ -370,43 +399,22 @@ bool Heatmap::minMaxSpreadsheet(const CartesianCoordinateSystem::Dimension dim, 
 	return false;
 }
 
-bool Heatmap::minMaxMatrix(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r) const {
+bool Heatmap::minMaxMatrix(const CartesianCoordinateSystem::Dimension dim, const Range<int>&, Range<double>& r) const {
 	Q_D(const Heatmap);
-	double numberElements = 0;
-	double start = std::nan("0");
-	double end = std::nan("0");
-	switch (dim) {
-	case Dimension::X: {
-		start = d->matrix->xStart();
-		end = d->matrix->xEnd();
-		numberElements = d->matrix->columnCount();
-		break;
-	}
-	case Dimension::Y:
-		start = d->matrix->yStart();
-		end = d->matrix->yEnd();
-		numberElements = d->matrix->rowCount();
-		break;
-	}
-
-	if (numberElements == 0)
+	if (!d->matrix || d->matrix->columnCount() == 0 || d->matrix->rowCount() == 0)
 		return false;
 
-	const double diff = end - start;
-	if (indexRange.start() <= 0)
-		r.setStart(start);
-	else if (indexRange.start() >= numberElements - 1)
-		r.setStart(end);
-	else
-		r.setStart(start + diff / numberElements * indexRange.start());
+	const auto binCount = d->sourceNumberBins ? static_cast<unsigned int>(dim == Dimension::X ? d->matrix->columnCount() : d->matrix->rowCount())
+											  : (dim == Dimension::X || d->equalNumberBins ? d->xNumberBins : d->yNumberBins);
+	const double min = minimumMatrix(dim);
+	const double max = maximumMatrix(dim);
+	if (binCount == 0 || !std::isfinite(min) || !std::isfinite(max) || !std::isfinite(max - min))
+		return false;
 
-	if (indexRange.end() >= numberElements - 1)
-		r.setEnd(end);
-	if (indexRange.end() <= 0)
-		r.setEnd(start);
-	else
-		r.setEnd(start + diff / numberElements * indexRange.end());
-	return false;
+	// Matrix axes are independent: indices selected on the other axis do not
+	// restrict this extent. The upper half-bin margin is only for autoscaling.
+	r.setRange(min, max + 0.5 * (max - min) / binCount);
+	return true;
 }
 
 bool Heatmap::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
@@ -589,6 +597,7 @@ void Heatmap::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->xColumn = nullptr;
 		if (d->dataSource == DataSource::Spreadsheet) {
+			d->recalc();
 			CURVE_COLUMN_REMOVED(x);
 		}
 	}
@@ -629,7 +638,8 @@ void Heatmap::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->yColumn = nullptr;
 		if (d->dataSource == DataSource::Spreadsheet) {
-			CURVE_COLUMN_REMOVED(x);
+			d->recalc();
+			CURVE_COLUMN_REMOVED(y);
 		}
 	}
 }
@@ -640,7 +650,7 @@ void Heatmap::matrixAboutToBeRemoved(const AbstractAspect* aspect) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->matrix = nullptr;
 		if (d->dataSource == DataSource::Matrix)
-			d->retransform();
+			d->recalcAndRetransform();
 	}
 }
 
@@ -688,36 +698,47 @@ HeatmapPrivate::HeatmapPrivate(Heatmap* heatmap)
 }
 
 void HeatmapPrivate::retransform() {
-	const QRectF& r = update();
-	recalcShapeAndBoundingRect(r);
+	if (retransformSuppressed())
+		return;
+
+	recalcShapeAndBoundingRect(calculateScenePoints());
 }
 
-void HeatmapPrivate::recalc() {
+void HeatmapPrivate::recalcAndRetransform() {
+	recalc();
+	if (dataSource == Heatmap::DataSource::Matrix && q->plot())
+		Q_EMIT q->dataChanged(); // Bin size also determines the autoscale margin.
+	else
+		retransform();
 }
 
 void HeatmapPrivate::recalcShapeAndBoundingRect() {
 	recalcShapeAndBoundingRect(m_boundingRectangle);
 }
 
-QRectF HeatmapPrivate::update() {
-	// TODO: create CalculateScenePoints
+void HeatmapPrivate::recalc() {
+	map.clear();
 	data.clear();
+	xBinCount = yBinCount = 0;
+	xMin = yMin = xBinSize = yBinSize = 0.;
+	matrixMin = matrixMax = 0.;
+
 	int xNumValues = 0, yNumValues = 0;
 	switch (dataSource) {
 	case Heatmap::DataSource::Spreadsheet:
 		if (!xColumn || !yColumn) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not available");
-			return QRectF();
+			return;
 		}
 
 		if (xColumn->rowCount() != yColumn->rowCount()) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: xColumn and yColumn do not have the same size");
-			return QRectF();
+			return;
 		}
 
 		if (!xColumn->isNumeric() || !yColumn->isNumeric()) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not numeric");
-			return QRectF();
+			return;
 		}
 		xNumValues = xColumn->rowCount();
 		yNumValues = yColumn->rowCount();
@@ -725,7 +746,7 @@ QRectF HeatmapPrivate::update() {
 	case Heatmap::DataSource::Matrix:
 		if (!matrix) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: matrix not available");
-			return QRectF();
+			return;
 		}
 		xNumValues = matrix->columnCount();
 		yNumValues = matrix->rowCount();
@@ -733,197 +754,160 @@ QRectF HeatmapPrivate::update() {
 	}
 
 	if (xNumValues == 0 || yNumValues == 0)
-		return QRectF();
+		return;
 
-	auto xMin = q->minimum(Dimension::X);
-	auto yMin = q->minimum(Dimension::Y);
-	auto xMax = q->maximum(Dimension::X);
-	auto yMax = q->maximum(Dimension::Y);
+	xMin = q->minimum(Dimension::X);
+	yMin = q->minimum(Dimension::Y);
+	const auto xMax = q->maximum(Dimension::X);
+	const auto yMax = q->maximum(Dimension::Y);
+	if (!std::isfinite(xMin) || !std::isfinite(yMin) || !std::isfinite(xMax) || !std::isfinite(yMax))
+		return;
 
-	auto xBinSize = xMax - xMin;
-	auto yBinSize = yMax - yMin;
-	if (sourceNumberBins) {
-		xBinSize /= xNumValues;
-		yBinSize /= yNumValues;
-	} else if (equalNumberBins) {
-		xBinSize /= xNumberBins;
-		yBinSize /= xNumberBins;
+	if (sourceNumberBins && dataSource == Heatmap::DataSource::Matrix) {
+		xBinCount = xNumValues;
+		yBinCount = yNumValues;
 	} else {
-		xBinSize /= xNumberBins;
-		yBinSize /= yNumberBins;
+		const auto yBins = equalNumberBins ? xNumberBins : yNumberBins;
+		if (xNumberBins == 0 || yBins == 0 || xNumberBins > std::numeric_limits<int>::max() || yBins > std::numeric_limits<int>::max())
+			return;
+		xBinCount = xNumberBins;
+		yBinCount = yBins;
 	}
 
-	if (xBinSize <= 0 || yBinSize <= 0)
-		return QRectF();
+	xBinSize = (xMax - xMin) / xBinCount;
+	yBinSize = (yMax - yMin) / yBinCount;
+	if (!std::isfinite(xBinSize) || !std::isfinite(yBinSize) || xBinSize <= 0 || yBinSize <= 0)
+		return;
 
-	// Check which region is visible
-	const auto xPlotRange = q->plot()->range(Dimension::X, q->coordinateSystemIndex());
-	const auto yPlotRange = q->plot()->range(Dimension::Y, q->coordinateSystemIndex());
-
-	const double xRangeMin = qMin(xPlotRange.start(), xPlotRange.end());
-	const double xRangeMax = qMax(xPlotRange.start(), xPlotRange.end());
-	const double yRangeMin = qMin(yPlotRange.start(), yPlotRange.end());
-	const double yRangeMax = qMax(yPlotRange.start(), yPlotRange.end());
-
-	auto calculate_numberBinsVisible = [](double min, double max, double& minValid, double& maxValid, double binSize, double rangeMin, double rangeMax) {
-		// min + nstart * binSize >= rangeMin --> nstart = floor((rangeMin - min) / binSize)
-		int nStart = floor((rangeMin - min) / binSize);
-		// min + nend * binSize >= rangeMax --> nend = ceil((rangeMax - min) / binSize)
-		int nEnd = ceil((qMin(max, rangeMax) - min) / binSize);
-
-		if (nStart < 0) {
-			// min larger than range min
-			nStart = 0;
-		}
-
-		if (nEnd < 0) {
-			// min larger than range max
-			nEnd = 0;
+	map = std::vector<std::vector<double>>(xBinCount, std::vector<double>(yBinCount, 0.));
+	auto calculateIndex = [](double val, double min, double max, double binSize, int count) {
+		if (!std::isfinite(val) || val < min || val > max)
 			return -1;
-		}
-
-		minValid = min + nStart * binSize;
-		maxValid = min + nEnd * binSize;
-		return nEnd - nStart;
-	};
-
-	double xMinValid;
-	double xMaxValid;
-	int xNumberBinsVisible = calculate_numberBinsVisible(xMin, xMax, xMinValid, xMaxValid, xBinSize, xRangeMin, xRangeMax);
-	if (xNumberBinsVisible < 0) {
-		// Can happen if the column does not contain any valid values
-		return QRectF();
-	}
-
-	double yMinValid;
-	double yMaxValid;
-	int yNumberBinsVisible = calculate_numberBinsVisible(yMin, yMax, yMinValid, yMaxValid, yBinSize, yRangeMin, yRangeMax);
-	if (yNumberBinsVisible < 0) {
-		// Can happen if the column does not contain any valid values
-		return QRectF();
-	}
-
-	std::vector<std::vector<double>> map(xNumberBinsVisible, std::vector<double>(yNumberBinsVisible, 0));
-	double minValue = INFINITY;
-	double maxValue = -INFINITY;
-
-	auto calculateIndex = [](double val, double maxData, double minValid, double maxValid, double binSize, int numberBinsVisible) {
-		// TODO: make option if the border shall be included, or not
-		if (val == maxValid && val == maxData)
-			return numberBinsVisible - 1; // include Right Border
-		const auto index = (val - minValid) / binSize;
-		if (index < 0)
-			return -1;
-		return static_cast<int>(floor(index));
+		if (val == max)
+			return count - 1; // Include the source's upper border in the last bin.
+		return qMin(static_cast<int>(floor((val - min) / binSize)), count - 1);
 	};
 
 	switch (dataSource) {
 	case Heatmap::DataSource::Spreadsheet: {
-		// For spreadsheets the values are counts of the occurances
-		if (drawEmpty) {
-			minValue = 0;
-			maxValue = 0;
-		} else {
-			minValue = 1;
-			maxValue = 1;
-		}
-
-		// mapping values to index map
-		// xColumn and yColumn have same size, was checked above
-		int xIndex, yIndex;
+		// Cache counts for all bins, including those outside the current viewport.
 		for (int i = 0; i < xNumValues; i++) {
 			if (!xColumn->isValid(i) || !yColumn->isValid(i) || xColumn->isMasked(i) || yColumn->isMasked(i))
 				continue;
 			const auto xVal = xColumn->valueAt(i);
 			const auto yVal = yColumn->valueAt(i);
 
-			xIndex = calculateIndex(xVal, xMax, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
-			yIndex = calculateIndex(yVal, yMax, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
-
-			if (xIndex >= 0 && xIndex < xNumberBinsVisible && yIndex >= 0 && yIndex < yNumberBinsVisible) {
-				map[xIndex][yIndex] += 1; // Summing up
-				if (map[xIndex][yIndex] > maxValue)
-					maxValue = map[xIndex][yIndex];
-			}
+			const int xIndex = calculateIndex(xVal, xMin, xMax, xBinSize, xBinCount);
+			const int yIndex = calculateIndex(yVal, yMin, yMax, yBinSize, yBinCount);
+			if (xIndex >= 0 && yIndex >= 0)
+				map[xIndex][yIndex] += 1.;
 		}
 		break;
 	}
-	case Heatmap::DataSource::Matrix:
+	case Heatmap::DataSource::Matrix: {
+		matrixMin = INFINITY;
+		matrixMax = -INFINITY;
 		const double xStepSize = (xMax - xMin) / xNumValues;
 		const double yStepSize = (yMax - yMin) / yNumValues;
 		for (int row = 0; row < yNumValues; row++) {
 			const double yVal = yMin + row * yStepSize + 0.5 * yStepSize; // 0.5 * yStepSize because it is assuming that a cell is in the center
-			const int yIndex = calculateIndex(yVal, yMax, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
+			const int yIndex = calculateIndex(yVal, yMin, yMax, yBinSize, yBinCount);
 			for (int column = 0; column < xNumValues; column++) {
 				const double xVal = xMin + column * xStepSize + 0.5 * xStepSize;
-				const int xIndex = calculateIndex(xVal, xMax, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
+				const int xIndex = calculateIndex(xVal, xMin, xMax, xBinSize, xBinCount);
 
 				const double value = matrix->cell<double>(row, column);
-				if (value > maxValue)
-					maxValue = value;
-				if (value < minValue)
-					minValue = value;
+				if (!std::isfinite(value))
+					continue;
+				matrixMin = qMin(matrixMin, value);
+				matrixMax = qMax(matrixMax, value);
 
-				if (xIndex >= 0 && xIndex < xNumberBinsVisible && yIndex >= 0 && yIndex < yNumberBinsVisible)
+				if (xIndex >= 0 && yIndex >= 0)
 					map[xIndex][yIndex] = value;
 			}
 		}
+		if (!std::isfinite(matrixMin) || !std::isfinite(matrixMax)) {
+			map.clear();
+			matrixMin = matrixMax = 0.;
+		}
 		break;
 	}
+	}
+}
 
-	if (xNumberBinsVisible * yNumberBinsVisible <= 25) {
-		// This part is used for the tests only
-		for (int yIndex = 0; yIndex < yNumberBinsVisible; yIndex++) {
-			for (int xIndex = 0; xIndex < xNumberBinsVisible; xIndex++) {
-				const double value = map[xIndex][yIndex];
-				if (dataSource == Heatmap::DataSource::Spreadsheet && !drawEmpty && value == 0)
-					continue;
-				const double xPosStart = xMinValid + xIndex * xBinSize;
-				const double yPosStart = yMinValid + yIndex * yBinSize;
-				const double xPosEnd = xPosStart + xBinSize;
-				const double yPosEnd = yPosStart + yBinSize;
-				Q_EMIT q->valueDrawn(xPosStart, yPosStart, xPosEnd, yPosEnd, value);
-			}
+QRectF HeatmapPrivate::calculateScenePoints() {
+	data.clear();
+	if (map.empty() || !q->plot())
+		return QRectF();
+
+	const auto* cSystem = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	const auto& xRange = q->plot()->range(Dimension::X, cSystem->index(Dimension::X));
+	const auto& yRange = q->plot()->range(Dimension::Y, cSystem->index(Dimension::Y));
+	if (!xRange.finite() || !yRange.finite())
+		return QRectF();
+	const double xRangeMin = qMin(xRange.start(), xRange.end());
+	const double xRangeMax = qMax(xRange.start(), xRange.end());
+	const double yRangeMin = qMin(yRange.start(), yRange.end());
+	const double yRangeMax = qMax(yRange.start(), yRange.end());
+
+	// Clamp before converting to integer, also for ranges far outside the grid.
+	auto visibleBins = [](double min, double binSize, int count, double rangeMin, double rangeMax) {
+		const int start = static_cast<int>(std::clamp(floor((rangeMin - min) / binSize), 0., double(count)));
+		const int end = static_cast<int>(std::clamp(ceil((rangeMax - min) / binSize), 0., double(count)));
+		return Range<int>(start, end); // End is exclusive.
+	};
+	const auto xBins = visibleBins(xMin, xBinSize, xBinCount, xRangeMin, xRangeMax);
+	const auto yBins = visibleBins(yMin, yBinSize, yBinCount, yRangeMin, yRangeMax);
+	if (xBins.start() >= xBins.end() || yBins.start() >= yBins.end())
+		return QRectF();
+
+	if (automaticLimits) {
+		if (dataSource == Heatmap::DataSource::Spreadsheet) {
+			format.min = drawEmpty ? 0. : 1.;
+			format.max = format.min;
+			for (int y = yBins.start(); y < yBins.end(); ++y)
+				for (int x = xBins.start(); x < xBins.end(); ++x)
+					format.max = qMax(format.max, map[x][y]);
+		} else {
+			format.min = matrixMin;
+			format.max = matrixMax;
 		}
 	}
 
-	// Adjust formatting
-	if (automaticLimits) {
-		format.min = minValue;
-		format.max = maxValue;
-	}
-
-	// Calculate rectangles
-	const auto* cSystem = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	const bool notifyValues = qint64(xBins.size()) * yBins.size() <= 25;
 	Points points(2);
-	for (int yIndex = 0; yIndex < yNumberBinsVisible; yIndex++) {
-		for (int xIndex = 0; xIndex < xNumberBinsVisible; xIndex++) {
+	for (int yIndex = yBins.start(); yIndex < yBins.end(); yIndex++) {
+		for (int xIndex = xBins.start(); xIndex < xBins.end(); xIndex++) {
 			const double value = map[xIndex][yIndex];
 			if (dataSource == Heatmap::DataSource::Spreadsheet && !drawEmpty && value == 0)
 				continue;
-			const double xPosStart = xMinValid + xIndex * xBinSize;
-			const double yPosStart = yMinValid + yIndex * yBinSize;
+			const double xPosStart = xMin + xIndex * xBinSize;
+			const double yPosStart = yMin + yIndex * yBinSize;
 			const double xPosEnd = xPosStart + xBinSize;
 			const double yPosEnd = yPosStart + yBinSize;
-			points[0] = QPointF(xPosStart, yPosStart);
-			points[1] = QPointF(xPosEnd, yPosEnd);
+			points.resize(2);
+			points[0] = QPointF(qMax(xPosStart, xRangeMin), qMax(yPosStart, yRangeMin));
+			points[1] = QPointF(qMin(xPosEnd, xRangeMax), qMin(yPosEnd, yRangeMax));
 			cSystem->mapLogicalToSceneFast(points, AbstractCoordinateSystem::MappingFlag::Limit);
-			assert(points.size() == 2);
-			data.push_back({QRectF(points.at(0), points.at(1)), format.color(value)});
+			if (points.size() != 2)
+				continue;
+			data.push_back({QRectF(points.at(0), points.at(1)).normalized(), format.color(value)});
+			if (notifyValues)
+				Q_EMIT q->valueDrawn(xPosStart, yPosStart, xPosEnd, yPosEnd, value);
 		}
 	}
 
-	const auto xEndPoint = xMinValid + xNumberBinsVisible * xBinSize;
-	const auto yEndPoint = yMinValid + yNumberBinsVisible * yBinSize;
+	if (data.empty())
+		return QRectF();
 
-	points[0] = QPointF(xMinValid, yMinValid);
-	points[1] = QPointF(xEndPoint, yEndPoint);
+	points.resize(2);
+	points[0] = QPointF(qMax(xMin + xBins.start() * xBinSize, xRangeMin), qMax(yMin + yBins.start() * yBinSize, yRangeMin));
+	points[1] = QPointF(qMin(xMin + xBins.end() * xBinSize, xRangeMax), qMin(yMin + yBins.end() * yBinSize, yRangeMax));
 	cSystem->mapLogicalToSceneFast(points, AbstractCoordinateSystem::MappingFlag::Limit);
+	if (points.size() != 2)
+		return QRectF();
 
-	return QRectF(qMin(points.at(0).x(), points.at(1).x()),
-				  qMin(points.at(0).y(), points.at(1).y()),
-				  qAbs(points.at(0).x() - points.at(1).x()),
-				  qAbs(points.at(0).y() - points.at(1).y())); // New bounding rectangle
+	return QRectF(points.at(0), points.at(1)).normalized();
 }
 
 void HeatmapPrivate::updatePixmap() {
@@ -1223,7 +1207,7 @@ void Heatmap::loadThemeConfig(const KConfig& config) {
 	}
 
 	d->suppressRecalc = false;
-	d->recalcShapeAndBoundingRect();
+	d->retransform();
 }
 
 void Heatmap::saveThemeConfig(const KConfig& config) {

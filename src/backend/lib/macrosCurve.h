@@ -31,6 +31,8 @@
 		/* after the curve was updated, emit the signal to update the plot ranges */                                                                           \
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::recalc_func); /* must be before DataChanged*/                                         \
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged); /* triggers a retransform in the plot and in its children */    \
+		connect(column, &AbstractColumn::maskingChanged, this, &class_name::recalc_func);                                                                                        \
+		connect(column, &AbstractColumn::modeChanged, this, &class_name::recalc_func);                                                                                           \
 	}
 
 #define CURVE_COLUMN_CONNECT_CALL(curve, column, Prefix)                                                                                                       \
@@ -125,6 +127,8 @@
 			, m_column(newValue) {                                                                                                                             \
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
+			if (m_private->dataSource == class_name::DataSource::Spreadsheet)                                                                                  \
+				m_private->recalc();                                                                                                                           \
 			Q_EMIT m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                     \
 			Q_EMIT m_private->q->prefix##ColumnChanged(m_private->prefix##Column);                                                                             \
 			if (m_private->dataSource == class_name::DataSource::Spreadsheet) {                                                                                \
