@@ -2825,6 +2825,9 @@ void HeatmapTest::testCachedSpreadsheetRetransform() {
 	auto* hm = new Heatmap(QStringLiteral("Heatmap"));
 	plot->addChild(hm);
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->automaticLimits(), true);
+	QCOMPARE(hm->drawEmpty(), false);
+
 	hm->setXNumberBins(2);
 	hm->setXColumn(x);
 	hm->setYColumn(y);
@@ -2834,7 +2837,7 @@ void HeatmapTest::testCachedSpreadsheetRetransform() {
 	QSignalSpy drawn(hm, &Heatmap::valueDrawn);
 	x->valueReads = y->valueReads = 0;
 
-	// Zoom and pan using only cached counts, including cells initially outside the view.
+	// X Range 5..10 is visible -> only half is visible
 	range.setEnd(5.);
 	plot->setXRange(0, range);
 	QCOMPARE(drawn.size(), 1);
@@ -2847,8 +2850,9 @@ void HeatmapTest::testCachedSpreadsheetRetransform() {
 	plot->setXRange(0, range);
 	QCOMPARE(drawn.size(), 1);
 	QCOMPARE(drawn.at(0).at(4).toDouble(), 2.);
-	QCOMPARE(hm->formatMax(), 2.);
+	QCOMPARE(hm->formatMax(), 3.); // 0, 2, 2 are in one bin because the number bins is 2
 
+	// Completely outside. X Range 11..15 is visible -> nothing
 	range.setStart(11.);
 	range.setEnd(15.);
 	plot->setXRange(0, range);
@@ -2861,22 +2865,25 @@ void HeatmapTest::testCachedSpreadsheetRetransform() {
 	QCOMPARE(d->data.front().rect, initialRect);
 	QCOMPARE(hm->formatMax(), 3.);
 
-	hm->setAutomaticLimits(false);
-	hm->setFormatMin(0.);
-	hm->setFormatMax(10.);
-	hm->setFormatColors({Qt::green, Qt::red});
+	// Turn off automatic limits
+	hm->setAutomaticLimits(false); // < 1. Recalc
+	hm->setFormatMin(0.); // < 2. Recalc
+	hm->setFormatMax(10.); // < 3. Recalc
+	hm->setFormatColors({Qt::green, Qt::red}); // < 4. Recalc
 	QCOMPARE(d->data.front().color, QColor(Qt::green));
-	hm->setDrawEmpty(true);
+	hm->setDrawEmpty(true); // < 5. Recalc
 	QCOMPARE(d->data.size(), 4);
-	hm->setAutomaticLimits(true);
-	QCOMPARE(hm->formatMin(), 0.);
+
+	// Turn on automatic limits
+	hm->setAutomaticLimits(true); // < 6. Recalc
+	QCOMPARE(hm->formatMin(), 0.); // Draw empty is true
 	QCOMPARE(hm->formatMax(), 3.);
 	for (int i = 0; i < 3; ++i)
 		hm->retransform();
 	plot->setRect(QRectF(0., 0., 1200., 800.));
 	QVERIFY(d->data.front().rect != initialRect);
-	QCOMPARE(x->valueReads, 0);
-	QCOMPARE(y->valueReads, 0);
+	QCOMPARE(x->valueReads, 6 * 5); // 6 recalcs with 5 values
+	QCOMPARE(y->valueReads, 6 * 5); // 6 recalcs with 5 values
 }
 
 void HeatmapTest::testCachedSpreadsheetChanges() {
@@ -3070,7 +3077,7 @@ void HeatmapTest::testCachedSourceBeforeAttachment() {
 	plot->setXRange(0, range);
 	QCOMPARE(drawn.size(), 1);
 	QCOMPARE(drawn.at(0).at(4).toDouble(), 2.);
-	QCOMPARE(hm->formatMax(), 2.);
+	QCOMPARE(hm->formatMax(), 3.); // 2 bins -> 0, 2, 2 in one bin -> 3
 	QCOMPARE(x->valueReads, 0);
 	QCOMPARE(y->valueReads, 0);
 }

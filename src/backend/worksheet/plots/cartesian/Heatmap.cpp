@@ -193,42 +193,42 @@ void Heatmap::setDataSource(DataSource dataSource) {
 		exec(new HeatmapSetDataSourceCmd(d, dataSource, ki18n("%1: Datasource changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetFormat, Heatmap::Format, format, retransform)
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetFormat, Heatmap::Format, format, recalcAndRetransform)
 void Heatmap::setFormat(const Heatmap::Format& format) {
 	Q_D(Heatmap);
 	if (format != d->format)
 		exec(new HeatmapSetFormatCmd(d, format, ki18n("%1: format changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetAutomaticLimits, bool, automaticLimits, retransform)
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetAutomaticLimits, bool, automaticLimits, recalcAndRetransform)
 void Heatmap::setAutomaticLimits(const bool automatic) {
 	Q_D(Heatmap);
 	if (automatic != d->automaticLimits)
 		exec(new HeatmapSetAutomaticLimitsCmd(d, automatic, ki18n("%1: automatic limits changed")));
 }
 
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, Heatmap::Format, format, min, double, retransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, Heatmap::Format, format, min, double, recalcAndRetransform)
 void Heatmap::setFormatMin(const double min) {
 	Q_D(Heatmap);
 	if (min != d->format.min)
 		exec(new HeatmapSetFormatMinCmd(d, min, ki18n("%1: format min changed")));
 }
 
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMax, Heatmap::Format, format, max, double, retransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMax, Heatmap::Format, format, max, double, recalcAndRetransform)
 void Heatmap::setFormatMax(const double max) {
 	Q_D(Heatmap);
 	if (max != d->format.max)
 		exec(new HeatmapSetFormatMaxCmd(d, max, ki18n("%1: format max changed")));
 }
 
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatName, Heatmap::Format, format, name, QString, retransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatName, Heatmap::Format, format, name, QString, recalcAndRetransform)
 void Heatmap::setFormatName(const QString& name) {
 	Q_D(Heatmap);
 	if (name != d->format.name)
 		exec(new HeatmapSetFormatNameCmd(d, name, ki18n("%1: format name changed")));
 }
 
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatColors, Heatmap::Format, format, colors, QVector<QColor>, retransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatColors, Heatmap::Format, format, colors, QVector<QColor>, recalcAndRetransform)
 void Heatmap::setFormatColors(const QVector<QColor>& colors) {
 	Q_D(Heatmap);
 	if (colors.size() == d->format.colors.size()) {
@@ -245,7 +245,7 @@ void Heatmap::setFormatColors(const QVector<QColor>& colors) {
 	exec(new HeatmapSetFormatColorsCmd(d, colors, ki18n("%1: format colors changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetDrawEmpty, bool, drawEmpty, retransform)
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetDrawEmpty, bool, drawEmpty, recalcAndRetransform)
 void Heatmap::setDrawEmpty(bool drawEmpty) {
 	Q_D(Heatmap);
 	if (drawEmpty != d->drawEmpty)
@@ -723,7 +723,6 @@ void HeatmapPrivate::recalc() {
 	data.clear();
 	xBinCount = yBinCount = 0;
 	xMin = yMin = xBinSize = yBinSize = 0.;
-	matrixMin = matrixMax = 0.;
 
 	int xNumValues = 0, yNumValues = 0;
 	switch (dataSource) {
@@ -790,8 +789,19 @@ void HeatmapPrivate::recalc() {
 		return qMin(static_cast<int>(floor((val - min) / binSize)), count - 1);
 	};
 
+	auto minValue = INFINITY;
+	auto maxValue = -INFINITY;
 	switch (dataSource) {
 	case Heatmap::DataSource::Spreadsheet: {
+		// For spreadsheets the values are counts of the occurances
+		if (drawEmpty) {
+			minValue = 0;
+			maxValue = 0;
+		} else {
+			minValue = 1;
+			maxValue = 1;
+		}
+
 		// Cache counts for all bins, including those outside the current viewport.
 		for (int i = 0; i < xNumValues; i++) {
 			if (!xColumn->isValid(i) || !yColumn->isValid(i) || xColumn->isMasked(i) || yColumn->isMasked(i))
@@ -801,14 +811,14 @@ void HeatmapPrivate::recalc() {
 
 			const int xIndex = calculateIndex(xVal, xMin, xMax, xBinSize, xBinCount);
 			const int yIndex = calculateIndex(yVal, yMin, yMax, yBinSize, yBinCount);
-			if (xIndex >= 0 && yIndex >= 0)
+			if (xIndex >= 0 && yIndex >= 0) {
 				map[xIndex][yIndex] += 1.;
+				maxValue = qMax(maxValue, map[xIndex][yIndex]);
+			}
 		}
 		break;
 	}
 	case Heatmap::DataSource::Matrix: {
-		matrixMin = INFINITY;
-		matrixMax = -INFINITY;
 		const double xStepSize = (xMax - xMin) / xNumValues;
 		const double yStepSize = (yMax - yMin) / yNumValues;
 		for (int row = 0; row < yNumValues; row++) {
@@ -821,19 +831,24 @@ void HeatmapPrivate::recalc() {
 				const double value = matrix->cell<double>(row, column);
 				if (!std::isfinite(value))
 					continue;
-				matrixMin = qMin(matrixMin, value);
-				matrixMax = qMax(matrixMax, value);
+				minValue = qMin(minValue, value);
+				maxValue = qMax(maxValue, value);
 
 				if (xIndex >= 0 && yIndex >= 0)
 					map[xIndex][yIndex] = value;
 			}
 		}
-		if (!std::isfinite(matrixMin) || !std::isfinite(matrixMax)) {
+		if (!std::isfinite(minValue) || !std::isfinite(maxValue)) {
 			map.clear();
-			matrixMin = matrixMax = 0.;
+			minValue = maxValue = 0.;
 		}
 		break;
 	}
+	}
+
+	if (automaticLimits) {
+		format.min = minValue;
+		format.max = maxValue;
 	}
 }
 
@@ -862,19 +877,6 @@ QRectF HeatmapPrivate::calculateScenePoints() {
 	const auto yBins = visibleBins(yMin, yBinSize, yBinCount, yRangeMin, yRangeMax);
 	if (xBins.start() >= xBins.end() || yBins.start() >= yBins.end())
 		return QRectF();
-
-	if (automaticLimits) {
-		if (dataSource == Heatmap::DataSource::Spreadsheet) {
-			format.min = drawEmpty ? 0. : 1.;
-			format.max = format.min;
-			for (int y = yBins.start(); y < yBins.end(); ++y)
-				for (int x = xBins.start(); x < xBins.end(); ++x)
-					format.max = qMax(format.max, map[x][y]);
-		} else {
-			format.min = matrixMin;
-			format.max = matrixMax;
-		}
-	}
 
 	const bool notifyValues = qint64(xBins.size()) * yBins.size() <= 25;
 	Points points(2);
