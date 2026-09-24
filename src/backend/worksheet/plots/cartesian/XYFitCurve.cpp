@@ -2938,16 +2938,15 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 		writer->writeTextElement(QStringLiteral("startValue"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	// use 16 digits to handle -DBL_MAX
 	writer->writeStartElement(QStringLiteral("paramLowerLimits"));
+	const double max = std::numeric_limits<double>::max();
 	for (const double& limit : d->fitData.paramLowerLimits)
-		writer->writeTextElement(QStringLiteral("lowerLimit"), QString::number(limit, 'g', 16));
+		writer->writeTextElement(QStringLiteral("lowerLimit"), limit == -max ? QString() : QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
-	// use 16 digits to handle DBL_MAX
 	writer->writeStartElement(QStringLiteral("paramUpperLimits"));
 	for (const double& limit : d->fitData.paramUpperLimits)
-		writer->writeTextElement(QStringLiteral("upperLimit"), QString::number(limit, 'g', 16));
+		writer->writeTextElement(QStringLiteral("upperLimit"), limit == max ? QString() : QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("paramFixed"));
@@ -3093,20 +3092,24 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitData.paramLowerLimits.clear();
 		} else if (!preview && reader->name() == QLatin1String("lowerLimit")) {
 			bool ok;
-			double x = reader->readElementText().toDouble(&ok);
-			if (ok) // -DBL_MAX results in conversion error
+			const QString value = reader->readElementText();
+			const double x = value.toDouble(&ok);
+			const double max = std::numeric_limits<double>::max();
+			if (ok && x != -max && value != QString::number(-max))
 				d->fitData.paramLowerLimits << x;
 			else
-				d->fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+				d->fitData.paramLowerLimits << -max;
 		} else if (!preview && reader->name() == QLatin1String("paramUpperLimits")) {
 			d->fitData.paramUpperLimits.clear();
 		} else if (!preview && reader->name() == QLatin1String("upperLimit")) {
 			bool ok;
-			double x = reader->readElementText().toDouble(&ok);
-			if (ok) // DBL_MAX results in conversion error
+			const QString value = reader->readElementText();
+			const double x = value.toDouble(&ok);
+			const double max = std::numeric_limits<double>::max();
+			if (ok && x != max && value != QString::number(max))
 				d->fitData.paramUpperLimits << x;
 			else
-				d->fitData.paramUpperLimits << std::numeric_limits<double>::max();
+				d->fitData.paramUpperLimits << max;
 		} else if (!preview && reader->name() == QLatin1String("paramFixed")) {
 			d->fitData.paramFixed.clear();
 		} else if (!preview && reader->name() == QLatin1String("fixed")) {
