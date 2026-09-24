@@ -67,8 +67,6 @@ private:
 	double yMin{0.};
 	double xBinSize{0.};
 	double yBinSize{0.};
-	double matrixMin{0.};
-	double matrixMax{0.};
 };
 
 #endif // HEATMAPPRIVATE_H
