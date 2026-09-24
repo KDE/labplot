@@ -207,28 +207,36 @@ void Heatmap::setAutomaticLimits(const bool automatic) {
 		exec(new HeatmapSetAutomaticLimitsCmd(d, automatic, ki18n("%1: automatic limits changed")));
 }
 
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, Heatmap::Format, format, min, double, recalcAndRetransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, Heatmap::Format, format, min, double, retransform)
 void Heatmap::setFormatMin(const double min) {
 	Q_D(Heatmap);
+	if (automaticLimits()) {
+		Q_EMIT formatChanged(d->format); // We have to notify that we didn't apply
+		return;
+	}
 	if (min != d->format.min)
 		exec(new HeatmapSetFormatMinCmd(d, min, ki18n("%1: format min changed")));
 }
 
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMax, Heatmap::Format, format, max, double, recalcAndRetransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMax, Heatmap::Format, format, max, double, retransform)
 void Heatmap::setFormatMax(const double max) {
 	Q_D(Heatmap);
+	if (automaticLimits()) {
+		Q_EMIT formatChanged(d->format); // We have to notify that we didn't apply
+		return;
+	}
 	if (max != d->format.max)
 		exec(new HeatmapSetFormatMaxCmd(d, max, ki18n("%1: format max changed")));
 }
 
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatName, Heatmap::Format, format, name, QString, recalcAndRetransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatName, Heatmap::Format, format, name, QString, retransform)
 void Heatmap::setFormatName(const QString& name) {
 	Q_D(Heatmap);
 	if (name != d->format.name)
 		exec(new HeatmapSetFormatNameCmd(d, name, ki18n("%1: format name changed")));
 }
 
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatColors, Heatmap::Format, format, colors, QVector<QColor>, recalcAndRetransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatColors, Heatmap::Format, format, colors, QVector<QColor>, retransform)
 void Heatmap::setFormatColors(const QVector<QColor>& colors) {
 	Q_D(Heatmap);
 	if (colors.size() == d->format.colors.size()) {
