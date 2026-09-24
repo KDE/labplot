@@ -23,6 +23,13 @@
 #include <KConfigGroup>
 
 QLatin1String Heatmap::saveName = QLatin1String("Heatmap");
+namespace {
+// When setting a matrix with a large amount of entries, we disable
+// taking the number of bins from the matrix because it will lead to large
+// performance problems. Therefore the user shall enable again if he is really
+// sure he wants to have it.
+constexpr unsigned int maxBinsPlotCreation = 100;
+}
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
@@ -292,8 +299,19 @@ private:
 
 void Heatmap::setMatrix(const Matrix* matrix) {
 	Q_D(Heatmap);
+	beginMacro(i18n("set matrix"));
+	const auto totalExceeded = matrix->columnCount() * matrix->rowCount() > (maxBinsPlotCreation * maxBinsPlotCreation);
+	if (matrix && matrix->columnCount() > maxBinsPlotCreation && totalExceeded) {
+		this->setSourceNumberBins(false);
+		this->setXNumberBins(qMin(maxBinsPlotCreation, xNumberBins()));
+	}
+	if (matrix && matrix->rowCount() > maxBinsPlotCreation && totalExceeded) {
+		this->setSourceNumberBins(false);
+		this->setYNumberBins(qMin(maxBinsPlotCreation, yNumberBins()));
+	}
 	if (matrix != d->matrix)
 		exec(new HeatmapSetMatrixCmd(d, matrix, ki18n("%1: matrix changed")));
+	endMacro();
 }
 
 STD_SETTER_CMD_IMPL_F_S(Heatmap, SetSourceNumberBins, bool, sourceNumberBins, retransform)
