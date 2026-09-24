@@ -329,14 +329,16 @@ private:
 void Heatmap::setMatrix(const Matrix* matrix) {
 	Q_D(Heatmap);
 	beginMacro(i18n("set matrix"));
-	const auto totalExceeded = matrix->columnCount() * matrix->rowCount() > (maxBinsPlotCreation * maxBinsPlotCreation);
-	if (matrix && matrix->columnCount() > maxBinsPlotCreation && totalExceeded) {
-		this->setSourceNumberBins(false);
-		this->setXNumberBins(qMin(maxBinsPlotCreation, xNumberBins()));
-	}
-	if (matrix && matrix->rowCount() > maxBinsPlotCreation && totalExceeded) {
-		this->setSourceNumberBins(false);
-		this->setYNumberBins(qMin(maxBinsPlotCreation, yNumberBins()));
+	if (matrix) {
+		const auto totalExceeded = matrix->columnCount() * matrix->rowCount() > (maxBinsPlotCreation * maxBinsPlotCreation);
+		if (matrix->columnCount() > maxBinsPlotCreation && totalExceeded) {
+			this->setSourceNumberBins(false);
+			this->setXNumberBins(qMin(maxBinsPlotCreation, xNumberBins()));
+		}
+		if (matrix->rowCount() > maxBinsPlotCreation && totalExceeded) {
+			this->setSourceNumberBins(false);
+			this->setYNumberBins(qMin(maxBinsPlotCreation, yNumberBins()));
+		}
 	}
 	if (matrix != d->matrix)
 		exec(new HeatmapSetMatrixCmd(d, matrix, ki18n("%1: matrix changed")));
