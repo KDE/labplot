@@ -150,7 +150,7 @@ function(generate_shiboken_sources)
         COMMAND ${Shiboken6_EXECUTABLE} ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
         DEPENDS ${generated_sources_dependencies}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Running generator \"${Shiboken6_EXECUTABLE}\" for ${PB_TYPESYSTEM}"
+        COMMENT "GenerateShibokenSources: Running generator \"${Shiboken6_EXECUTABLE}\" for ${PB_TYPESYSTEM}"
     )
 
     set_source_files_properties(

@@ -156,7 +156,7 @@ function(generate_python_bindings)
         COMMAND ${Shiboken6_EXECUTABLE} ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
         DEPENDS ${generated_sources_dependencies}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Running generator for ${PB_TYPESYSTEM}"
+        COMMENT "GeneratePythonBindings: Running generator \"${Shiboken6_EXECUTABLE}\" for ${PB_TYPESYSTEM}"
     )
 
     # Set the cpp files which will be used for the bindings library.
