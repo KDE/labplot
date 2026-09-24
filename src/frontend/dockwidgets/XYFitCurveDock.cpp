@@ -1181,6 +1181,14 @@ void XYFitCurveDock::loadFunction() {
 
 	// parameter and settings
 	group = config.group(QLatin1String("Parameter"));
+	const double max = std::numeric_limits<double>::max();
+	for (int i = 0; i < m_fitData.paramNames.size(); ++i) {
+		m_fitData.paramStartValues[i] = 1.0;
+		m_fitData.paramFixed[i] = false;
+		m_fitData.paramLowerLimits[i] = -max;
+		m_fitData.paramUpperLimits[i] = max;
+	}
+
 	auto keys = group.keyList();
 	for (const auto &name : keys) {
 		const int index = m_fitData.paramNames.indexOf(name);
@@ -1188,18 +1196,23 @@ void XYFitCurveDock::loadFunction() {
 			continue;
 
 		const auto settings = group.readEntry(name, QStringList());
-		if (settings.size() < 4)
+		if (settings.size() < 2)
 			continue;
 
 		m_fitData.paramStartValues[index] = settings.at(0).toDouble();
 		m_fitData.paramFixed[index] = QVariant(settings.at(1)).toBool();
-		const double max = std::numeric_limits<double>::max();
-		bool lowerLimitValid;
-		bool upperLimitValid;
-		const double lowerLimit = settings.at(2).toDouble(&lowerLimitValid);
-		const double upperLimit = settings.at(3).toDouble(&upperLimitValid);
-		m_fitData.paramLowerLimits[index] = lowerLimitValid && settings.at(2) != QString::number(-max) ? lowerLimit : -max;
-		m_fitData.paramUpperLimits[index] = upperLimitValid && settings.at(3) != QString::number(max) ? upperLimit : max;
+		if (settings.size() > 2 && !settings.at(2).isEmpty() && settings.at(2) != QString::number(-max)) {
+			bool ok;
+			const double lowerLimit = settings.at(2).toDouble(&ok);
+			if (ok && lowerLimit != -max)
+				m_fitData.paramLowerLimits[index] = lowerLimit;
+		}
+		if (settings.size() > 3 && !settings.at(3).isEmpty() && settings.at(3) != QString::number(max)) {
+			bool ok;
+			const double upperLimit = settings.at(3).toDouble(&ok);
+			if (ok && upperLimit != max)
+				m_fitData.paramUpperLimits[index] = upperLimit;
+		}
 	}
 	// update parameter widget
 	parametersChanged();
@@ -1225,8 +1238,9 @@ void XYFitCurveDock::saveFunction() {
 		QStringList settings;
 		settings << QString::number(m_fitData.paramStartValues.at(i));
 		settings << QString::number(m_fitData.paramFixed.at(i));
-		settings << QString::number(m_fitData.paramLowerLimits.at(i), 'g', 16);
-		settings << QString::number(m_fitData.paramUpperLimits.at(i), 'g', 16);
+		const double max = std::numeric_limits<double>::max();
+		settings << (m_fitData.paramLowerLimits.at(i) == -max ? QString() : QString::number(m_fitData.paramLowerLimits.at(i)));
+		settings << (m_fitData.paramUpperLimits.at(i) == max ? QString() : QString::number(m_fitData.paramUpperLimits.at(i)));
 		group.writeEntry(m_fitData.paramNames.at(i), settings);
 	}
 
