@@ -745,7 +745,7 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"В проекте имеется содержимое, созданное в %1. В текущей установкеLabPlot "
+"В проекте имеется содержимое, созданное в %1. В текущей установке LabPlot "
 "поддержка для работы с таким содержимым отсутствует.\n"
 "\n"
 "Эта часть проекта отображаться не будет, а при изменении и сохранении "
@@ -8937,7 +8937,7 @@ msgstr "%1: изменение ширины строки+символ"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:236
 #, kde-format
 msgid "%1: set border corner radius"
-msgstr "%1: задание радиуса cкругления угла границы"
+msgstr "%1: задание радиуса скругления угла границы"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
 #: src/backend/worksheet/Worksheet.cpp:721
@@ -10073,7 +10073,7 @@ msgstr "%1: изменение типа границы"
 #: src/backend/worksheet/plots/PlotArea.cpp:164
 #, kde-format
 msgid "%1: set plot area corner radius"
-msgstr "%1: задание радиуса cкругления углов области построения"
+msgstr "%1: задание радиуса скругления углов области построения"
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333
@@ -17434,8 +17434,7 @@ msgid ""
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
 "Распределение случайного числа в соответствии с <a href=\"https://www.gnu."
-"org/software/gsl/doc/html/randist.html\"><span style=\" text-decoration: "
-"underline; color:#2980b9;\">документацией GSL</a>"
+"org/software/gsl/doc/html/randist.html\">документацией GSL</a>"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:485
 #, kde-format
@@ -17725,7 +17724,7 @@ msgstr "Сортировка выбранных столбцов"
 #: src/frontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
 msgid "Sort"
-msgstr "Cортировать"
+msgstr "Сортировать"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:305
 #, kde-format
@@ -23339,7 +23338,7 @@ msgid ""
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
 "<html><head/><body><p>Термины необходимо использовать в соответствии с <a "
-"href=\"https://internet-law.ru/gosts/gost/65118/\"> <span style=\" text-"
+"href=\"https://internet-law.ru/gosts/gost/65118/\"><span style=\" text-"
 "decoration: underline; color:#2980b9;\">ГОСТ 34100.1-2017 Руководство по "
 "выражению неопределенности измерения</span></a></p></body></html>"
 
@@ -24540,8 +24539,7 @@ msgid ""
 msgstr ""
 "Режим разметки текста:<ul><li>Текст — разметка осуществляется с применением "
 "расширенного форматирования текста</li> <li>LaTeX — разметка осуществляется "
-"с применением LaTeX, требуется установка LaTeX</li><li>Markdown — разметка "
-"осуществляется с помощью языка разметки Markdown</li></ul>"
+"с применением LaTeX, требуется установка LaTeX</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:543
 #, kde-format
