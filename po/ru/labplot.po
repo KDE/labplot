@@ -770,7 +770,7 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"В проекте имеется содержимое, созданное в %1. В текущей установкеLabPlot "
+"В проекте имеется содержимое, созданное в %1. В текущей установке LabPlot "
 "поддержка для работы с таким содержимым отсутствует.\n"
 "\n"
 "Эта часть проекта отображаться не будет, а при изменении и сохранении "
@@ -10280,7 +10280,7 @@ msgstr "%1: изменение типа границы"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:236
 #, kde-format
 msgid "%1: set border corner radius"
-msgstr "%1: задание радиуса cкругления угла границы"
+msgstr "%1: задание радиуса скругления угла границы"
 
 # BUGME: please add context --aspotashev
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2096
@@ -15178,6 +15178,7 @@ msgstr "Угол (ГМС)"
 msgid "Transparent"
 msgstr "Прозрачный"
 
+# BUGME: unbalanced markup: one <ul> but two </ul> at the end --ayavorsky 2026-09-24
 #: src/frontend/dockwidgets/AxisDock.cpp:335
 #, kde-format
 msgid ""
@@ -15198,6 +15199,7 @@ msgstr ""
 "столбца — позиции определяются метками значений из указанного ниже "
 "пользовательского столбца.</li></ul>"
 
+# BUGME: unbalanced markup: one <ul> but two </ul> at the end --ayavorsky 2026-09-24
 #: src/frontend/dockwidgets/AxisDock.cpp:347
 #, kde-format
 msgid ""
@@ -15220,6 +15222,7 @@ msgstr ""
 "Столбец со значениями, которые должны использоваться в качестве позиций "
 "основных делений."
 
+# BUGME: unbalanced markup: one <ul> but two </ul> at the end --ayavorsky 2026-09-24
 #: src/frontend/dockwidgets/AxisDock.cpp:360
 #, kde-format
 msgid ""
@@ -15243,6 +15246,7 @@ msgstr ""
 "Столбец со значениями, которые используются в качестве текстовых меток для "
 "основных делений."
 
+# BUGME: unbalanced markup: one <ul> but two </ul> at the end --ayavorsky 2026-09-24
 #: src/frontend/dockwidgets/AxisDock.cpp:375
 #, kde-format
 msgid ""
@@ -16193,7 +16197,7 @@ msgstr ""
 "дисперсиями;</li><li><b>%5</b> — проверяет равенство средних трёх и более "
 "независимых выборок;</li><li><b>%6</b> — проверяет равенство средних трёх и "
 "более связанных/повторных измерений;</li><li><b>%7</b> — проверяет различия "
-"медиан между двумя независимыми группами.</li></ul>"
+"медиан между двумя независимыми группами.</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
 #, kde-format
@@ -16221,7 +16225,7 @@ msgstr ""
 "использованием серий выше/ниже медианы;</li><li><b>%8</b> — проверяет "
 "независимость двух категориальных переменных друг от друга;</li><li><b>%9</"
 "b> — проверяет соответствие наблюдаемых данных заданному теоретическому "
-"распределению.</li>"
+"распределению.</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
@@ -20565,8 +20569,7 @@ msgid ""
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
 "Распределение случайного числа в соответствии с <a href=\"https://www.gnu."
-"org/software/gsl/doc/html/randist.html\"><span style=\" text-decoration: "
-"underline; color:#2980b9;\">документацией GSL</a>"
+"org/software/gsl/doc/html/randist.html\">документацией GSL</a>"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:475
 #, kde-format
@@ -20865,7 +20868,7 @@ msgstr "Сортировка выбранных столбцов"
 #: src/frontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
 msgid "Sort"
-msgstr "Cортировать"
+msgstr "Сортировать"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
@@ -26982,7 +26985,7 @@ msgid ""
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
 "<html><head/><body><p>Термины необходимо использовать в соответствии с <a "
-"href=\"https://internet-law.ru/gosts/gost/65118/\"> <span style=\" text-"
+"href=\"https://internet-law.ru/gosts/gost/65118/\"><span style=\" text-"
 "decoration: underline; color:#2980b9;\">ГОСТ 34100.1-2017 Руководство по "
 "выражению неопределенности измерения</span></a></p></body></html>"
 
@@ -28256,8 +28259,7 @@ msgid ""
 msgstr ""
 "Режим разметки текста:<ul><li>Текст — разметка осуществляется с применением "
 "расширенного форматирования текста</li> <li>LaTeX — разметка осуществляется "
-"с применением LaTeX, требуется установка LaTeX</li><li>Markdown — разметка "
-"осуществляется с помощью языка разметки Markdown</li></ul>"
+"с применением LaTeX, требуется установка LaTeX</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
