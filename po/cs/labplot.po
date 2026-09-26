@@ -2,6 +2,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2024 Vít Pelčák <vit@pelcak.org>
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2026 Libor Filipek <libor.filipek@gmail.com>
 #
 # SPDX-FileCopyrightText: 2026 Jan Papez (honyczek)
 msgid ""
@@ -9,21 +10,23 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-24 00:40+0000\n"
-"PO-Revision-Date: 2026-01-21 23:00+0100\n"
-"Last-Translator: Jan Papez (honyczek) <honyczek@centrum.cz>\n"
-"Language-Team: Czech <kde-i18n-cs@kde.org>\n"
+"PO-Revision-Date: 2026-09-25 23:33+0200\n"
+"Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr ""
+"Předpokládaný název \"%1\" byl změněn na \"%2\", aby se zabránilo kolizi "
+"názvů."
 
 #: src/backend/core/AbstractAspect.cpp:254
 #, kde-format
@@ -86,7 +89,7 @@ msgstr "%1: přidat %2"
 #: src/backend/core/AbstractAspect.cpp:596
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
-msgstr ""
+msgstr "Přejmenování \"%1\" na \"%2\", aby se zabránilo kolizi názvů."
 
 #: src/backend/core/AbstractAspect.cpp:594
 #, kde-format
@@ -96,7 +99,7 @@ msgstr "%1: vložit %2 před %3"
 #: src/backend/core/AbstractAspect.cpp:594
 #, kde-format
 msgid "%1: insert %2 before end"
-msgstr ""
+msgstr "%1: vložit %2 před konec"
 
 #: src/backend/core/AbstractAspect.cpp:629
 #: src/backend/core/aspectcommands.h:102
@@ -132,12 +135,12 @@ msgstr "Kopie '%1'"
 #: src/backend/core/AbstractAspect.cpp:995
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
-msgstr ""
+msgstr "Chybí atribut 'name' nebo je prázdný."
 
 #: src/backend/core/AbstractAspect.cpp:1001
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
-msgstr ""
+msgstr "Neplatný čas vytvoření pro '%1'. Použije se aktuální čas."
 
 #: src/backend/core/AbstractColumn.cpp:136
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:69
@@ -167,7 +170,7 @@ msgstr "Hodiny"
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:65
 #, kde-format
 msgid "Days"
-msgstr "Dnů"
+msgstr "Dny"
 
 # žádné parametry funkce v inspektoru funkcí
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
@@ -187,62 +190,62 @@ msgstr "Nic"
 #: src/backend/core/AbstractColumn.cpp:173
 #, kde-format
 msgid "X-Uncertainty"
-msgstr ""
+msgstr "X-Nepřesnost"
 
 #: src/backend/core/AbstractColumn.cpp:175
 #, kde-format
 msgid "X-Error"
-msgstr ""
+msgstr "X-Chyba"
 
 #: src/backend/core/AbstractColumn.cpp:179
 #, kde-format
 msgid "X-Uncertainty +"
-msgstr ""
+msgstr "X-Nepřesnost +"
 
 #: src/backend/core/AbstractColumn.cpp:181
 #, kde-format
 msgid "X-Error +"
-msgstr ""
+msgstr "X-Chyba +"
 
 #: src/backend/core/AbstractColumn.cpp:185
 #, kde-format
 msgid "X-Uncertainty -"
-msgstr ""
+msgstr "X-Nepřesnost -"
 
 #: src/backend/core/AbstractColumn.cpp:187
 #, kde-format
 msgid "X-Error -"
-msgstr ""
+msgstr "X-Chyba -"
 
 #: src/backend/core/AbstractColumn.cpp:191
 #, kde-format
 msgid "Y-Uncertainty"
-msgstr ""
+msgstr "Y-Nepřesnost"
 
 #: src/backend/core/AbstractColumn.cpp:193
 #, kde-format
 msgid "Y-Error"
-msgstr ""
+msgstr "Y-Chyba"
 
 #: src/backend/core/AbstractColumn.cpp:197
 #, kde-format
 msgid "Y-Uncertainty +"
-msgstr ""
+msgstr "Y-Nepřesnost +"
 
 #: src/backend/core/AbstractColumn.cpp:199
 #, kde-format
 msgid "Y-Error +"
-msgstr ""
+msgstr "Y-Chyba +"
 
 #: src/backend/core/AbstractColumn.cpp:203
 #, kde-format
 msgid "Y-Uncertainty -"
-msgstr ""
+msgstr "Y-Nepřesnost -"
 
 #: src/backend/core/AbstractColumn.cpp:205
 #, kde-format
 msgid "Y-Error -"
-msgstr ""
+msgstr "Y-Chyba -"
 
 #: src/backend/core/AbstractColumn.cpp:224
 #: src/backend/datasources/filters/AsciiFilter.cpp:684
@@ -250,7 +253,7 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
 msgid "Double"
-msgstr "Zdvojnásobit"
+msgstr "Dvojnásobek"
 
 #: src/backend/core/AbstractColumn.cpp:226
 #, kde-format
@@ -260,7 +263,7 @@ msgstr "Celé číslo"
 #: src/backend/core/AbstractColumn.cpp:228
 #, kde-format
 msgid "Big Integer"
-msgstr ""
+msgstr "Velké celé číslo"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
@@ -290,17 +293,17 @@ msgstr "Datum a čas"
 #: src/backend/core/AbstractColumn.cpp:234
 #, kde-format
 msgid "Month Names"
-msgstr ""
+msgstr "Názvy měsíců"
 
 #: src/backend/core/AbstractColumn.cpp:236
 #, kde-format
 msgid "Day Names"
-msgstr ""
+msgstr "Názvy dnů"
 
 #: src/backend/core/AbstractColumn.cpp:239
 #, kde-format
 msgid "UNDEFINED"
-msgstr "NEDEFINOVANÝ"
+msgstr "NEDEFINOVÁNO"
 
 #: src/backend/core/AbstractColumn.cpp:324
 #: src/backend/spreadsheet/Spreadsheet.cpp:378
@@ -323,40 +326,40 @@ msgstr[2] "%1: odstranit %2 řádků"
 #: src/backend/core/AbstractColumn.cpp:948
 #, kde-format
 msgid "invalid or missing start or end row"
-msgstr ""
+msgstr "neplatný nebo chybějící počáteční či koncový řádek"
 
 #: src/backend/core/abstractcolumncommands.cpp:40
 #, kde-format
 msgid "%1: clear masks"
-msgstr ""
+msgstr "%1: vymazat maskování"
 
 #: src/backend/core/abstractcolumncommands.cpp:115
 #, kde-format
 msgid "%1: mask cells"
-msgstr ""
+msgstr "%1: maskovat buňky"
 
 #: src/backend/core/abstractcolumncommands.cpp:117
 #, kde-format
 msgid "%1: unmask cells"
-msgstr ""
+msgstr "%1: odmaskovat buňky"
 
 #: src/backend/core/abstractcolumncommands.cpp:301
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2725
 #, kde-format
 msgid "%1: set heatmap format"
-msgstr ""
+msgstr "%1: nastavit formát teplotní mapy"
 
 #: src/backend/core/abstractcolumncommands.cpp:327
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2743
 #, kde-format
 msgid "%1: remove heatmap format"
-msgstr ""
+msgstr "%1: odstranit formát teplotní mapy"
 
 #: src/backend/core/AbstractFilter.cpp:203
 #, kde-format
 msgctxt "default labels of filter input ports"
 msgid "In%1"
-msgstr "v%1"
+msgstr "V%1"
 
 #: src/backend/core/AbstractPart.cpp:129
 #, kde-format
@@ -434,7 +437,7 @@ msgstr "%1: přesunout %2 do %3."
 #: src/backend/core/aspectcommands.h:261
 #, kde-format
 msgid "%1: rename to %2"
-msgstr "%1: Přejmenovat na %2"
+msgstr "%1: přejmenovat na %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/backend/core/AspectTreeModel.cpp:165
@@ -474,22 +477,22 @@ msgstr "Změněno"
 #: src/backend/core/AspectTreeModel.cpp:196
 #, kde-format
 msgid "%1   (non-plottable data)"
-msgstr ""
+msgstr "%1   (data, která nelze vykreslit)"
 
 #: src/backend/core/AspectTreeModel.cpp:198
 #, kde-format
 msgid "%1   (non-numeric data)"
-msgstr ""
+msgstr "%1   (nečíselná data)"
 
 #: src/backend/core/AspectTreeModel.cpp:200
 #, kde-format
 msgid "%1   (no values)"
-msgstr ""
+msgstr "%1   (žádné hodnoty)"
 
 #: src/backend/core/AspectTreeModel.cpp:404
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
-msgstr ""
+msgstr "Název \"%1\" se již používá. Zvolte jiný název."
 
 #: src/backend/core/column/Column.cpp:114
 #, kde-format
@@ -504,7 +507,7 @@ msgstr "Vložit data"
 #: src/backend/core/column/Column.cpp:151
 #, kde-format
 msgid "Used in"
-msgstr ""
+msgstr "Použito v"
 
 #: src/backend/core/column/Column.cpp:168
 #, kde-format
@@ -538,13 +541,13 @@ msgstr "Výpočty"
 #: src/frontend/dockwidgets/ColumnDock.cpp:471
 #, kde-format
 msgid "%1: change column type"
-msgstr ""
+msgstr "%1: změnit typ sloupce"
 
 #: src/backend/core/column/Column.cpp:471
 #: src/backend/core/column/columncommands.cpp:590
 #, kde-format
 msgid "%1: clear column"
-msgstr ""
+msgstr "%1: vymazat sloupec"
 
 #: src/backend/core/column/Column.cpp:564
 #, kde-format
@@ -566,7 +569,7 @@ msgstr "Druh: %1"
 #: src/backend/core/column/Column.cpp:1059
 #, kde-format
 msgid "Plot Designation: %1"
-msgstr ""
+msgstr "Označení grafu: %1"
 
 #: src/backend/core/column/Column.cpp:1063
 #, kde-format
@@ -576,12 +579,12 @@ msgstr "Vzorec:"
 #: src/backend/core/column/Column.cpp:1085
 #, kde-format
 msgid "auto update: true"
-msgstr ""
+msgstr "automatická aktualizace: true"
 
 #: src/backend/core/column/Column.cpp:1087
 #, kde-format
 msgid "auto update: false"
-msgstr ""
+msgstr "automatická aktualizace: false"
 
 #: src/backend/core/column/Column.cpp:1100
 #: src/backend/spreadsheet/Spreadsheet.cpp:233
@@ -593,7 +596,7 @@ msgstr "Použito v grafech:"
 #: src/backend/spreadsheet/Spreadsheet.cpp:250
 #, kde-format
 msgid "Used in Axes:"
-msgstr ""
+msgstr "Použito v osách:"
 
 #: src/backend/core/column/Column.cpp:1138
 #: src/backend/spreadsheet/Spreadsheet.cpp:271
@@ -604,14 +607,14 @@ msgstr "Použito v tabulkových výpočtech:"
 #: src/backend/core/column/Column.cpp:1794
 #, kde-format
 msgid "invalid or missing row index"
-msgstr ""
+msgstr "neplatný nebo chybějící index řádku"
 
 #: src/backend/core/column/Column.cpp:1803
 #: src/backend/core/column/Column.cpp:1812
 #: src/backend/core/column/Column.cpp:1821
 #, kde-format
 msgid "invalid row value"
-msgstr ""
+msgstr "neplatná hodnota řádku"
 
 #: src/backend/core/column/columncommands.cpp:218
 #: src/backend/core/column/columncommands.cpp:339
@@ -623,28 +626,28 @@ msgstr "%1: změnit hodnoty buněk"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2899
 #, kde-format
 msgid "%1: set plot designation"
-msgstr ""
+msgstr "%1: nastavit označení grafu"
 
 #: src/backend/core/column/columncommands.cpp:713
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
-msgstr ""
+msgstr "%1: nastavit vzorec"
 
 #: src/backend/core/column/columncommands.cpp:781
 #, kde-format
 msgid "%1: set cell formula"
-msgstr ""
+msgstr "%1: nastavit vzorec buňky"
 
 #: src/backend/core/column/columncommands.cpp:823
 #, kde-format
 msgid "%1: clear all formulas"
-msgstr ""
+msgstr "%1: vymazat všechny vzorce"
 
 #: src/backend/core/column/columncommands.h:233
 #, kde-format
 msgid "%1: set value for row %2"
-msgstr ""
+msgstr "%1: nastavit hodnotu pro řádek %2"
 
 #: src/backend/core/column/columncommands.h:295
 #: src/backend/matrix/matrixcommands.cpp:104
@@ -656,50 +659,50 @@ msgstr "%1: nahradit hodnoty"
 #: src/backend/core/column/columncommands.h:297
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
-msgstr ""
+msgstr "%1: nahradit hodnoty v řádcích %2 až %3"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:55
 #: src/backend/core/datatypes/String2DateTimeFilter.cpp:131
 #, kde-format
 msgid "%1: set date-time format to %2"
-msgstr ""
+msgstr "%1: nastavit formát data a času na %2"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
 #: src/backend/core/datatypes/String2DateTimeFilter.cpp:133
 #, kde-format
 msgid "set date-time format to %1"
-msgstr ""
+msgstr "nastavit formát data a času na %1"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:81
 #, kde-format
 msgid "%1: set numeric format to '%2'"
-msgstr ""
+msgstr "%1: nastavit číselný formát na '%2'"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:83
 #, kde-format
 msgid "set numeric format to '%1'"
-msgstr ""
+msgstr "nastavit číselný formát na '%1'"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:101
 #, kde-format
 msgid "%1: set decimal digits to %2"
-msgstr ""
+msgstr "%1: nastavit počet desetinných míst na %2"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:103
 #, kde-format
 msgid "set decimal digits to %1"
-msgstr ""
+msgstr "nastavit počet desetinných míst na %1"
 
 #: src/backend/core/Folder.cpp:394
 #, kde-format
 msgid "unknown element '%1' found"
-msgstr ""
+msgstr "nalezen neznámý prvek '%1'"
 
 #: src/backend/core/plugin/PluginLoader.cpp:25
 #: src/backend/core/plugin/PluginLoader.cpp:89
 #, kde-format
 msgid "Not yet loaded."
-msgstr ""
+msgstr "Ještě není načteno."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
 #: src/backend/core/Project.cpp:177
@@ -716,12 +719,12 @@ msgstr "%1: zadat autora"
 #: src/backend/core/Project.cpp:302
 #, kde-format
 msgid "%1: save dock state changed"
-msgstr ""
+msgstr "%1: uložit změnu stavu doku"
 
 #: src/backend/core/Project.cpp:309
 #, kde-format
 msgid "%1: save calculation changed"
-msgstr ""
+msgstr "%1: uložit změnu výpočtu"
 
 #: src/backend/core/Project.cpp:558 src/backend/core/Project.cpp:588
 #, kde-format
@@ -1017,7 +1020,7 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElement.cpp:757
 #, kde-format
 msgid "%1: set position"
-msgstr "%1: nastavit pozici..."
+msgstr "%1: nastavit pozici"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:229
 #, kde-format
@@ -1357,7 +1360,7 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:190
 #, kde-format
 msgid "File size: %1 bytes"
-msgstr "Velikost souboru: %1 bajt;"
+msgstr "Velikost souboru: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:195
 #, kde-format
@@ -1583,7 +1586,7 @@ msgstr ""
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
-msgstr "soubor dat "
+msgstr "soubor dat"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1389
 #, kde-format
@@ -1967,37 +1970,37 @@ msgstr "Platný soubor MCAP"
 #: src/backend/datasources/filters/McapFilter.cpp:212
 #, kde-format
 msgid "Message count: "
-msgstr "Počet zpráv:"
+msgstr "Počet zpráv: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:214
 #, kde-format
 msgid "Schema count: "
-msgstr "Počet schémat:"
+msgstr "Počet schémat: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:216
 #, kde-format
 msgid "Channel count: "
-msgstr "Počet kanálů:"
+msgstr "Počet kanálů: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:218
 #, kde-format
 msgid "Attachment count: "
-msgstr "Počet příloh:"
+msgstr "Počet příloh: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:220
 #, kde-format
 msgid "Metadata count: "
-msgstr "Počet metadat:"
+msgstr "Počet metadat: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:222
 #, kde-format
 msgid "Message Start Time: "
-msgstr "Čas začátku zprávy:"
+msgstr "Čas začátku zprávy: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:224
 #, kde-format
 msgid "Message End Time: "
-msgstr "Čas konce zprávy:"
+msgstr "Čas konce zprávy: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:226
 #, kde-format
@@ -2065,7 +2068,7 @@ msgstr "%1 atribut"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:488
 #, kde-format
 msgid "length"
-msgstr "Délka"
+msgstr "délka"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:491
 #, kde-format
@@ -2529,7 +2532,7 @@ msgstr ""
 #: src/backend/datasources/filters/XLSXFilter.cpp:48
 #, kde-format
 msgid "Sheets: "
-msgstr "Listy:"
+msgstr "Listy: "
 
 #: src/backend/datasources/filters/XLSXFilter.cpp:634
 #, kde-format
@@ -6381,7 +6384,7 @@ msgstr[2] "%1: přidat %2 sloupců"
 #: src/backend/spreadsheet/Spreadsheet.cpp:711
 #, kde-format
 msgid "%1: clear"
-msgstr "%1: vyprázdnit"
+msgstr "%1: vymazat"
 
 #: src/backend/matrix/matrixcommands.cpp:21
 #, kde-format
@@ -10625,7 +10628,7 @@ msgstr "rovnostranný trojúhelník"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:302
 #, kde-format
 msgid "right triangle"
-msgstr "Pravý trojúhelník"
+msgstr "pravý trojúhelník"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:304
 #, kde-format
@@ -11246,7 +11249,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X data available!"
-msgstr "Nejsou dostupná žádná data X."
+msgstr "Nejsou dostupná žádná data X!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #, kde-format
@@ -11887,7 +11890,7 @@ msgstr "Qt"
 #: src/frontend/AboutDialog.cpp:391
 #, kde-format
 msgid "KDE Frameworks"
-msgstr "KDE Frameworks "
+msgstr "KDE Frameworks"
 
 #: src/frontend/AboutDialog.cpp:406
 #, kde-format
@@ -12286,7 +12289,7 @@ msgstr ""
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Cursor"
-msgstr "Kurzor:"
+msgstr "Kurzor"
 
 #: src/frontend/ActionsManager.cpp:664
 #: src/frontend/worksheet/WorksheetView.cpp:382
@@ -13069,13 +13072,13 @@ msgstr ""
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:409
 #, kde-format
 msgid "Do you really want to delete the connection '%1'?"
-msgstr "Opravdu si přejete smazat spojení '%1'?"
+msgstr "Opravdu si přejete smazat připojení '%1'?"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:350
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:410
 #, kde-format
 msgid "Delete Connection"
-msgstr "Smazat spojení"
+msgstr "Smazat připojení"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:491
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:528
@@ -13083,7 +13086,7 @@ msgstr "Smazat spojení"
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:671
 #, kde-format
 msgid "Connection Failed"
-msgstr "Spojení selhalo"
+msgstr "Připojení selhalo"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:491
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:526
@@ -13106,7 +13109,7 @@ msgstr ""
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:572
 #, kde-format
 msgid "New connection"
-msgstr "Nové spojení"
+msgstr "Nové připojení"
 
 #: src/frontend/datasources/DatasetMetadataManagerDialog.cpp:34
 #, kde-format
@@ -14202,7 +14205,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:39
 #, kde-format
 msgid "Manage connections"
-msgstr "Spravovat spojení"
+msgstr "Spravovat připojení"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:192
 #, kde-format
@@ -15699,7 +15702,7 @@ msgstr "Řádky a sloupce"
 #: src/frontend/matrix/MatrixView.cpp:164
 #, kde-format
 msgid "xy-Values"
-msgstr "Hodnoty xy"
+msgstr "xy-hodnoty"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:90
 #: src/frontend/matrix/MatrixView.cpp:166
@@ -16342,7 +16345,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No Y data available!"
-msgstr "Nejsou dostupná žádná data Y."
+msgstr "Nejsou dostupná žádná data Y!"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
@@ -16427,7 +16430,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:266
 #, kde-format
 msgid "Cutoff:"
-msgstr "Bod zkrácení"
+msgstr "Bod zkrácení:"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:280
 #, kde-format
@@ -17474,7 +17477,7 @@ msgstr "Opravdu si přejete vymazat historii kroků zpět?"
 #: src/frontend/HistoryDialog.cpp:92
 #, kde-format
 msgid "Clear History"
-msgstr "Vyprázdnit historii"
+msgstr "Vymazat historii"
 
 #: src/frontend/LabPlot.cpp:65
 #, kde-format
@@ -17828,7 +17831,7 @@ msgstr ""
 #: src/frontend/MainWin.cpp:795
 #, kde-format
 msgid "Loading %1..."
-msgstr "Načítám %1..."
+msgstr "Načítání %1..."
 
 #: src/frontend/MainWin.cpp:860
 #, kde-format
@@ -18186,7 +18189,7 @@ msgstr ""
 #: src/frontend/matrix/MatrixView.cpp:960
 #, kde-format
 msgid "%1: clear selected column(s)"
-msgstr "%1: vyprázdnit vybrané sloupce"
+msgstr "%1: vymazat vybrané sloupce"
 
 #: src/frontend/matrix/MatrixView.cpp:985
 #, kde-format
@@ -18328,7 +18331,7 @@ msgstr "Přerušení"
 #: src/frontend/notebook/NotebookView.cpp:396
 #, kde-format
 msgid "Calculating..."
-msgstr "Počítám..."
+msgstr "Počítání..."
 
 #: src/frontend/notebook/NotebookView.cpp:400
 #, kde-format
@@ -22056,7 +22059,7 @@ msgstr "Přenosová rychlost (baud rate):"
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:102
 #, kde-format
 msgid "Connection:"
-msgstr "Spojení:"
+msgstr "Připojení:"
 
 #. i18n: ectx: property (text), widget (QLabel, lField)
 #: src/frontend/ui/datasources/importfilewidget.ui:71
@@ -22448,7 +22451,7 @@ msgstr "Komplexní"
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:23
 #, kde-format
 msgid "Manage connections:"
-msgstr "Spravovat spojení:"
+msgstr "Spravovat připojení:"
 
 #. i18n: ectx: property (text), widget (QLabel, lID)
 #. i18n: ectx: property (text), widget (QLabel, lId)
@@ -24806,7 +24809,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:151
 #, kde-format
 msgid "Connection"
-msgstr "Spojení"
+msgstr "Připojení"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineIncreasingXOnly)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:158
@@ -25900,7 +25903,7 @@ msgstr "Soubory - "
 #: src/frontend/ui/settingsdatasetspage.ui:93
 #, kde-format
 msgid "Clear"
-msgstr "Vyprázdnit"
+msgstr "Vymazat"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -27141,7 +27144,7 @@ msgstr ""
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:394
 #, kde-format
 msgid "Removing Keyword"
-msgstr "Odstraňuji klíčové slovo"
+msgstr "Odstraňování klíčového slova"
 
 #: src/frontend/widgets/LabelWidget.cpp:526
 #, kde-format

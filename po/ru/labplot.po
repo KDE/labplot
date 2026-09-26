@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-24 00:40+0000\n"
-"PO-Revision-Date: 2026-04-03 20:35+0200\n"
+"PO-Revision-Date: 2026-09-25 07:46+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -2246,124 +2246,107 @@ msgid "Invalid sheet index."
 msgstr "Недопустимый индекс листа."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file."
-msgstr "Не удалось открыть %1"
+msgstr "Не удалось открыть файл."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
 msgid "Format: Apache Parquet"
-msgstr ""
+msgstr "Формат: Apache Parquet"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "Version: %1"
-msgstr "Версия:"
+msgstr "Версия: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created: %1"
+#, kde-format
 msgid "Created by: %1"
 msgstr "Создано: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of rows: %1"
-msgstr "Число групп: %1"
+msgstr "Число строк: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:80
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of row groups: %1"
-msgstr "Число групп: %1"
+msgstr "Число групп строк: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:87
 #, kde-format
 msgid "Format: Arrow IPC (Feather)"
-msgstr ""
+msgstr "Формат: Arrow IPC (Feather)"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of record batches: %1"
-msgstr "Число записей: %1"
+msgstr "Число пакетов записей: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Format: Apache ORC"
-msgstr "Формат:"
+msgstr "Формат: Apache ORC"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of stripes: %1"
-msgstr "Число строк: %1"
+msgstr "Число полос: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:214
-#, fuzzy, kde-format
-#| msgid "Could not open %1"
+#, kde-format
 msgid "Could not open file: %1"
-msgstr "Не удалось открыть %1"
+msgstr "Не удалось открыть файл: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:226
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Parquet file: %1"
-msgstr "Не удалось открыть файл «%1»."
+msgstr "Не удалось открыть файл Parquet: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:237
 #: src/backend/datasources/filters/ParquetFilter.cpp:246
-#, fuzzy, kde-format
-#| msgid "Failed to read image data"
+#, kde-format
 msgid "Failed to read Parquet table: %1"
-msgstr "Ошибка чтения данных изображения"
+msgstr "Не удалось прочитать таблицу Parquet: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:256
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Arrow IPC file: %1"
-msgstr "Не удалось открыть файл «%1»."
+msgstr "Не удалось открыть файл Arrow IPC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:267
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read record batch %1: %2"
-msgstr "Не удалось считать данные."
+msgstr "Не удалось считать пакет записей %1: %2"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:274
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to assemble table: %1"
-msgstr "Не удалось инициализировать %1."
+msgstr "Не удалось собрать таблицу: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open ORC file: %1"
-msgstr "Не удалось открыть файл «%1»."
+msgstr "Не удалось открыть файл ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:294
 #: src/backend/datasources/filters/ParquetFilter.cpp:302
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read ORC table: %1"
-msgstr "Не удалось считать данные."
+msgstr "Не удалось считать таблицу ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:311
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file format."
-msgstr "неподдерживаемый тип числа с плавающей точкой для ранга 1"
+msgstr "Неподдерживаемый формат файла."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:400
-#, fuzzy, kde-format
-#| msgid "No file provided for import."
+#, kde-format
 msgid "The file has no data to import."
-msgstr "Не указан файл для импорта."
+msgstr "В файле нет данных для импорта."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:62
@@ -3531,10 +3514,9 @@ msgstr "Логические функции"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/functions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Mathieu Functions"
+#, kde-format
 msgid "Datetime Functions"
-msgstr "Функции Матье"
+msgstr "Функции даты и времени"
 
 #: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -4293,7 +4275,7 @@ msgstr "вне границ, исключая границы"
 #: src/backend/gsl/functions.cpp:343
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "если(условие; еслиИстина; еслиЛожь)"
+msgstr "if(условие; еслиИстина; еслиЛожь)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -4329,80 +4311,77 @@ msgstr "не"
 #: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "today"
-msgstr ""
+msgstr "сегодня"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "now"
-msgstr "нет"
+msgstr "сейчас"
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid "date(year; month; day)"
-msgstr ""
+msgstr "date(год; месяц; день)"
 
 #: src/backend/gsl/functions.cpp:353
 #, kde-format
 msgid "datedif(start_date; end_date; unit)"
-msgstr ""
+msgstr "datedif(дата_начала; дата_окончания; единица)"
 
 #: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid "eomonth(start_date; months)"
-msgstr ""
+msgstr "eomonth(дата_начала; месяцы)"
 
 #: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid "weekday(date)"
-msgstr ""
+msgstr "weekday(дата)"
 
 #: src/backend/gsl/functions.cpp:356
 #, kde-format
 msgid "networkdays(start_date; end_date)"
-msgstr ""
+msgstr "networkdays(дата_начала; дата_окончания)"
 
 #: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "year(date)"
-msgstr ""
+msgstr "year(дата)"
 
 #: src/backend/gsl/functions.cpp:358
-#, fuzzy, kde-format
-#| msgid "month"
+#, kde-format
 msgid "month(date)"
-msgstr "месяц"
+msgstr "month(дата)"
 
 #: src/backend/gsl/functions.cpp:359
 #, kde-format
 msgid "day(date)"
-msgstr ""
+msgstr "day(дата)"
 
 #: src/backend/gsl/functions.cpp:360
 #, kde-format
 msgid "weeknum(date)"
-msgstr ""
+msgstr "weeknum(дата)"
 
 #: src/backend/gsl/functions.cpp:361
-#, fuzzy, kde-format
-#| msgid "DateTime"
+#, kde-format
 msgid "hour(dateTime)"
-msgstr "Дата и время"
+msgstr "hour(дата_время)"
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
 msgid "minute(dateTime)"
-msgstr ""
+msgstr "minute(дата_время)"
 
 #: src/backend/gsl/functions.cpp:363
 #, kde-format
 msgid "second(dateTime)"
-msgstr ""
+msgstr "second(дата_время)"
 
 #: src/backend/gsl/functions.cpp:364
 #, kde-format
 msgid "time(hour; minute; second)"
-msgstr ""
+msgstr "time(час; минута; секунда)"
 
 #: src/backend/gsl/functions.cpp:368
 #, kde-format
@@ -6702,10 +6681,9 @@ msgid "%1: set text font"
 msgstr "%1: выбор шрифта текста"
 
 #: src/backend/note/Note.cpp:168
-#, fuzzy, kde-format
-#| msgid "%1: set method"
+#, kde-format
 msgid "%1: set mode"
-msgstr "%1: выбор метода"
+msgstr "%1: установка режима"
 
 #: src/backend/note/Note.cpp:211
 #, kde-format
@@ -7473,7 +7451,7 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr "Распределение Гамбеля (тип 2) "
+msgstr "Распределение Гамбеля (тип 2)"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:835
@@ -7621,7 +7599,7 @@ msgstr "Фильтр Савицкого-Голея"
 #: src/backend/nsl/nsl_smooth.c:26
 #, kde-format
 msgid "LOWESS"
-msgstr ""
+msgstr "LOWESS"
 
 #: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
@@ -7885,10 +7863,9 @@ msgid "invalid cell (ignored in all operations)"
 msgstr "Недопустимая ячейка (игнорируется при любых операциях)"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:304
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "%1: change column type and set value"
-msgstr "%1: изменение типа столбца"
+msgstr "%1: изменение типа столбца и установка значения"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
@@ -10051,7 +10028,7 @@ msgstr "Диаграмма Парето"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, kde-format
 msgid "Piecewise Linear"
-msgstr ""
+msgstr "Кусочно-линейная"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #, kde-format
@@ -10152,10 +10129,9 @@ msgid "No curves inside the plot area."
 msgstr "Нет кривых в области графика."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:979
-#, fuzzy, kde-format
-#| msgid "%1: set scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "%1: задание масштаба"
+msgstr "%1: автоматическое масштабирование"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1224
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1258
@@ -10190,10 +10166,9 @@ msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: изменение автомасштабирования интервала по %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1495
-#, fuzzy, kde-format
-#| msgid "%1: change %2-range %3 format"
+#, kde-format
 msgid "%1: change %2-range %3"
-msgstr "%1: изменение формата интервала по %2 %3"
+msgstr "%1: изменение интервала по %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1672
 #, kde-format
@@ -10393,7 +10368,7 @@ msgstr "Текстовая подпись"
 #: src/frontend/worksheet/WorksheetView.cpp:1356
 #, kde-format
 msgid "text"
-msgstr ""
+msgstr "текст"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2505
 #, kde-format
@@ -10412,35 +10387,30 @@ msgid "Cumulative Percentage"
 msgstr "Суммарный процент"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3466
-#, fuzzy, kde-format
-#| msgid "%1: set bottom padding"
+#, kde-format
 msgid "%1: zoom in"
-msgstr "%1: задание нижнего отступа"
+msgstr "%1: увеличение масштаба"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3481
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "%1: задание разметки"
+msgstr "%1: уменьшение масштаба"
 
 # BUGME: plurals please --aspotashev
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
-#, fuzzy, kde-format
-#| msgid "min"
+#, kde-format
 msgid "in"
-msgstr "мин."
+msgstr "увеличение"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "out"
-msgstr "Частота попадания"
+msgstr "уменьшение"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
-#, fuzzy, kde-format
-#| msgid "%1: move %2 to %3."
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: перемещение %2 в %3."
+msgstr "%1: %2 масштаба по %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
 #, kde-format
@@ -10465,22 +10435,19 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: вставлено"
+msgstr "%1: панорамирование"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
-#, fuzzy, kde-format
-#| msgid "%1: normalize selection"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: нормирование выбранных ячеек"
+msgstr "%1: масштабирование выделенного фрагмента"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4759
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: wheel zoom"
-msgstr "%1: задание цвета подписи"
+msgstr "%1: масштабирование колесом мыши"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format
@@ -11265,10 +11232,9 @@ msgid "%1: set values color"
 msgstr "%1: задание цвета значений"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:212
-#, fuzzy, kde-format
-#| msgid "%1: save calculation changed"
+#, kde-format
 msgid "%1: auto recalculate changed"
-msgstr "%1: сохранить изменения вычислений"
+msgstr "%1: изменение автоматического пересчёта"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:219
 #, kde-format
@@ -11658,29 +11624,25 @@ msgid "%1: set options and perform the line simplification"
 msgstr "%1: задание параметров и выполнение упрощения линии"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
-#, fuzzy, kde-format
-#| msgid "%1: set gluepoint index"
+#, kde-format
 msgid "%1: toggle changepoint lines"
-msgstr "%1: задание индекса точки соединения"
+msgstr "%1: переключение линий точек изменения"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:295
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:755
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Fit Results"
+#, kde-format
 msgid "Fit Results"
 msgstr "Результаты подбора"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
 #, kde-format
 msgid "Piecewise Linear Fit Results"
-msgstr ""
+msgstr "Результаты кусочно-линейного подбора"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:510
-#, fuzzy, kde-format
-#| msgid "Test result is not available."
+#, kde-format
 msgid "No results available yet"
-msgstr "Результат теста недоступен."
+msgstr "Результаты пока недоступны"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:516
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
@@ -11690,37 +11652,34 @@ msgid "Status: %1"
 msgstr "Состояние: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
-#, fuzzy, kde-format
-#| msgid "Number of Objects: %1"
+#, kde-format
 msgid "Number of Segments: %1"
-msgstr "Количество объектов: %1"
+msgstr "Число сегментов: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
-#, fuzzy, kde-format
-#| msgid "number of points: %1"
+#, kde-format
 msgid "Number of Changepoints: %1"
-msgstr "число точек: %1"
+msgstr "Число точек изменения: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:525
 #, kde-format
 msgid "Overall R²: %1"
-msgstr ""
+msgstr "Общий R²: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
 #, kde-format
 msgid "Overall SSE: %1"
-msgstr ""
+msgstr "Общая сумма квадратов ошибок: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:530
 #, kde-format
 msgid "Changepoint Positions (X-values)"
-msgstr ""
+msgstr "Позиции точек изменения (значения X)"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "Сегменты"
+msgstr "Сегмент %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
@@ -11732,25 +11691,22 @@ msgstr "Параметры:"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:550
 #, kde-format
 msgid "Parameter Statistics (Slope):"
-msgstr ""
+msgstr "Статистика параметра (наклон):"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:556
-#, fuzzy, kde-format
-#| msgid "Goodness of fit"
+#, kde-format
 msgid "Goodness of Fit:"
-msgstr "Точность подбора"
+msgstr "Качество подбора:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:566
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Tests:"
-msgstr "Статистические графики"
+msgstr "Статистические тесты:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:573
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion"
+#, kde-format
 msgid "Information Criteria:"
-msgstr "Информационный критерий Акаике (AIC)"
+msgstr "Информационные критерии:"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -12168,7 +12124,7 @@ msgstr "Поддержка файлов Binary Log File (BLF)"
 #: src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "Apache Parquet, Arrow IPC (Feather) and Apache ORC file support"
-msgstr ""
+msgstr "Поддержка файлов Apache Parquet, Arrow IPC (Feather) и Apache ORC"
 
 #: src/frontend/AboutDialog.cpp:370 src/frontend/AboutDialog.cpp:395
 #, kde-format
@@ -12214,7 +12170,7 @@ msgstr "&Открыть пример"
 #: src/frontend/ActionsManager.cpp:202
 #, kde-format
 msgid "&Full Screen Mode"
-msgstr ""
+msgstr "&Полноэкранный режим"
 
 # BUGME: please add to Russian glossary --aspotashev
 # BUGME: please split --aspotashev
@@ -12267,10 +12223,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Создание нового листа для построения данных"
 
 #: src/frontend/ActionsManager.cpp:253
-#, fuzzy, kde-format
-#| msgid "Python scripting support"
+#, kde-format
 msgid "Python Script"
-msgstr "Поддержка сценариев на Python"
+msgstr "Сценарий Python"
 
 #: src/frontend/ActionsManager.cpp:254
 #, kde-format
@@ -12909,44 +12864,41 @@ msgstr "Приостановить чтение"
 
 # BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/CLIProcessor.cpp:106
-#, fuzzy, kde-format
-#| msgid "Import Data"
+#, kde-format
 msgid "Imported Data"
-msgstr "Импорт данных"
+msgstr "Импортированные данные"
 
 #: src/frontend/CLIProcessor.cpp:144
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Template file"
-msgstr "Пустой файл"
+msgstr "Файл шаблона"
 
 #: src/frontend/CLIProcessor.cpp:264
-#, fuzzy, kde-format
-#| msgid "Disable splash screen"
+#, kde-format
 msgid "Disable splash screen (GUI mode only)."
-msgstr "Не показывать заставку"
+msgstr "Не показывать заставку (только в режиме графического интерфейса)."
 
 #: src/frontend/CLIProcessor.cpp:265
-#, fuzzy, kde-format
-#| msgid "Start in the presenter mode"
+#, kde-format
 msgid "Start in presenter mode (GUI mode only)."
-msgstr "Включить режим презентации"
+msgstr ""
+"Запустить в режиме презентации (только в режиме графического интерфейса)."
 
 #: src/frontend/CLIProcessor.cpp:266
 #, kde-format
 msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
-msgstr ""
+msgstr "Входной файл данных (CSV, HDF5 и т. д.) или файл проекта (.lml)."
 
 #: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "file"
-msgstr ""
+msgstr "файл"
 
 #: src/frontend/CLIProcessor.cpp:267
 #, kde-format
 msgid "Output file for export (PDF, PNG, SVG, EPS)."
-msgstr ""
+msgstr "Выходной файл для экспорта (PDF, PNG, SVG, EPS)."
 
 #: src/frontend/CLIProcessor.cpp:268
 #, kde-format
@@ -12954,87 +12906,84 @@ msgid ""
 "Output format: pdf, png, svg, or eps (auto-detected from output extension if "
 "not specified)."
 msgstr ""
+"Формат вывода: pdf, png, svg или eps (если не указан, определяется "
+"автоматически по расширению файла вывода)."
 
 #: src/frontend/CLIProcessor.cpp:268
-#, fuzzy, kde-format
-#| msgid "data type"
+#, kde-format
 msgid "type"
-msgstr "тип данных"
+msgstr "тип"
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
 msgid "Output resolution in DPI for raster formats (default: 300)."
-msgstr ""
+msgstr "Разрешение вывода в DPI для растровых форматов (по умолчанию: 300)."
 
 #: src/frontend/CLIProcessor.cpp:269
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "value"
-msgstr "Значение"
+msgstr "значение"
 
 #: src/frontend/CLIProcessor.cpp:270
 #, kde-format
 msgid "Run in headless mode without GUI, exit after operations complete."
 msgstr ""
+"Запустить без графического интерфейса и завершить работу после выполнения "
+"операций."
 
 #: src/frontend/CLIProcessor.cpp:271
 #, kde-format
 msgid "Export a specific worksheet by name."
-msgstr ""
+msgstr "Экспортировать лист с указанным именем."
 
 #: src/frontend/CLIProcessor.cpp:272
 #, kde-format
 msgid "Export all worksheets and spreadsheets in the project."
-msgstr ""
+msgstr "Экспортировать все листы и таблицы проекта."
 
 #: src/frontend/CLIProcessor.cpp:273
 #, kde-format
 msgid "Output directory for multiple exported files (used with --export-all)."
 msgstr ""
+"Папка для вывода нескольких экспортируемых файлов (используется с --export-"
+"all)."
 
 # BUGME: please split --aspotashev
 #: src/frontend/CLIProcessor.cpp:273
-#, fuzzy, kde-format
-#| msgid "Direct"
+#, kde-format
 msgid "directory"
-msgstr "Прямая"
+msgstr "папка"
 
 #: src/frontend/CLIProcessor.cpp:274
 #, kde-format
 msgid "Apply a plot style template file (.labplot_template)."
-msgstr ""
+msgstr "Применить файл шаблона стиля графика (.labplot_template)."
 
 # BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/CLIProcessor.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the DBC file"
+#, kde-format
 msgid "Set the plot title."
-msgstr "Выбор файла DBC"
+msgstr "Задать заголовок графика."
 
 #: src/frontend/CLIProcessor.cpp:276
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the X-axis label."
-msgstr "Расстояние до подписей делений оси"
+msgstr "Задать подпись оси X."
 
 #: src/frontend/CLIProcessor.cpp:277
-#, fuzzy, kde-format
-#| msgid "Distance to the axis tick labels"
+#, kde-format
 msgid "Set the Y-axis label."
-msgstr "Расстояние до подписей делений оси"
+msgstr "Задать подпись оси Y."
 
 #: src/frontend/CLIProcessor.cpp:278
-#, fuzzy, kde-format
-#| msgid "The project file %1 is already opened."
+#, kde-format
 msgid "Input project file or data file to open."
-msgstr "Файл проекта %1 уже открыт."
+msgstr "Входной файл проекта или файл данных для открытия."
 
 #: src/frontend/CLIProcessor.cpp:299
-#, fuzzy, kde-format
-#| msgid "Empty file"
+#, kde-format
 msgid "Input file"
-msgstr "Пустой файл"
+msgstr "Файл ввода"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -13927,17 +13876,17 @@ msgstr "Данные MCAP"
 #: src/frontend/datasources/ImportFileWidget.cpp:148
 #, kde-format
 msgid "Apache Parquet"
-msgstr ""
+msgstr "Apache Parquet"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:149
 #, kde-format
 msgid "Arrow IPC (Feather)"
-msgstr ""
+msgstr "Arrow IPC (Feather)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:151
 #, kde-format
 msgid "Apache ORC"
-msgstr ""
+msgstr "Apache ORC"
 
 # BUGME: please add ctxt --aspotashev
 #: src/frontend/datasources/ImportFileWidget.cpp:161
@@ -14330,7 +14279,7 @@ msgstr "Не готово к чтению после 2 с:"
 #: src/frontend/datasources/ImportFileWidget.cpp:2021
 #, kde-format
 msgid "Unable to bind: "
-msgstr "Не удалось выполнить привязку:"
+msgstr "Не удалось выполнить привязку: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2038
 #, kde-format
@@ -15963,36 +15912,31 @@ msgstr ""
 "таблицы определяется связанной таблицей."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Указанное имя переменной уже зарезервировано в качестве имени константы. "
+"Указанное имя переменной «%1» уже зарезервировано для константы «%1» (%2). "
 "Используйте другое имя."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a function. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
-"Указанное имя переменной уже зарезервировано в качестве имени функции. "
+"Указанное имя переменной «%1» уже зарезервировано для функции «%1» (%2). "
 "Используйте другое имя."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
-#, fuzzy, kde-format
-#| msgid "The variable name 'i' is reserved for the index of the column row."
+#, kde-format
 msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
-msgstr "Имя переменной «i» зарезервировано для индекса строки столбца."
+msgstr ""
+"Имя переменной «i» зарезервировано для индекса строки столбца. Выберите "
+"другое имя."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
@@ -16013,10 +15957,9 @@ msgstr ""
 "должно начинаться с буквы."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
-#, fuzzy, kde-format
-#| msgid "No variable columns provided."
+#, kde-format
 msgid "Invalid variable name provided"
-msgstr "Столбцы переменных не указаны."
+msgstr "Указано недопустимое имя переменной."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -16346,7 +16289,7 @@ msgstr "Обозреватель файлов"
 #: src/frontend/dockwidgets/NoteDock.cpp:27
 #, kde-format
 msgid "Plain Text"
-msgstr ""
+msgstr "Простой текст"
 
 #: src/frontend/dockwidgets/NoteDock.cpp:28
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -16874,7 +16817,7 @@ msgid ""
 "less negative values."
 msgstr ""
 "Коэффициент завершения взвешивания — принимает значения между 0 и 1. Чем "
-"меньше это число, тем меньше будет получено отрицательных значений. "
+"меньше это число, тем меньше будет получено отрицательных значений."
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:205
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:170
@@ -17394,16 +17337,15 @@ msgid "area error: %1"
 msgstr "площадь погрешности: %1"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:388
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgid "Continuous"
-msgstr "Продолжить"
+msgstr "Непрерывный"
 
 # BUGME: please add context --aspotashev
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:389
-#, fuzzy, kde-format
+#, kde-format
 msgid "Discontinuous"
-msgstr "количество выбросов"
+msgstr "Разрывный"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:392
 #, kde-format
@@ -17413,6 +17355,10 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"Метод обнаружения точек изменения:<ul><li>Бинарная сегментация — рекурсивное "
+"разбиение данных на сегменты для обнаружения точек изменения;</li><li>PELT "
+"(Pruned Exact Linear Time) — обнаружение точек изменения с линейной "
+"вычислительной сложностью.</li></ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:401
 #, kde-format
@@ -17420,6 +17366,8 @@ msgid ""
 "Minimum number of data points in a segment. Segments with fewer data points "
 "are merged with neighboring segments."
 msgstr ""
+"Минимальное количество точек данных в сегменте. Сегменты с меньшим "
+"количеством точек данных объединяются с соседними сегментами."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:405
 #, kde-format
@@ -17430,6 +17378,11 @@ msgid ""
 "Scale with your data: ~1 for Y-values near 1, ~10-100 for large values, "
 "~0.01-0.1 for small values."
 msgstr ""
+"Стоимость добавления точки изменения. Улучшение подбора (уменьшение SSE) "
+"должно превысить её, чтобы разделение было оправданным.\n"
+"Меньшие значения обнаруживают больше точек изменения, большие — меньше.\n"
+"Масштабируйте в соответствии с данными: ~1 для значений Y около 1, ~10-100 "
+"для больших значений, ~0.01-0.1 для малых значений."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:409
 #, kde-format
@@ -17437,6 +17390,8 @@ msgid ""
 "Determine if the fit should be continuous or discontinuous at the "
 "changepoints."
 msgstr ""
+"Определяет, должен ли подбор быть непрерывным или разрывным в точках "
+"изменения."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:414
 #, kde-format
@@ -17444,6 +17399,8 @@ msgid ""
 "X-range of the data used for the fit. Only data points within this range are "
 "considered."
 msgstr ""
+"Диапазон по оси X для данных, используемых при подборе. Учитываются только "
+"точки данных в этом диапазоне."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:417
 #, kde-format
@@ -17451,16 +17408,19 @@ msgid ""
 "If checked, the data range used for the fit is automatically determined from "
 "the data. A custom range can be specified otherwise."
 msgstr ""
+"Если флажок установлен, диапазон данных, используемый для подбора, "
+"определяется автоматически по данным. В противном случае можно указать "
+"другой диапазон."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:420
 #, kde-format
 msgid "Minimum X-value of the data used for the fit."
-msgstr ""
+msgstr "Минимальное значение X данных, используемых для подбора."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:422
 #, kde-format
 msgid "Maximum X-value of the data used for the fit."
-msgstr ""
+msgstr "Максимальное значение X данных, используемых для подбора."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
 #, kde-format
@@ -17474,34 +17434,43 @@ msgid ""
 "squares fitting of polynomials to segments of the data.</li><li>LOWESS - "
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
+"Метод сглаживания данных:<ul><li>Скользящее среднее (центрированное) — "
+"сглаживание по среднему значению фиксированного числа точек, при этом "
+"среднее центрируется относительно текущей точки;</li><li>Скользящее среднее "
+"(с запаздыванием) — сглаживание по среднему значению фиксированного числа "
+"точек, при этом среднее отстаёт от текущей точки;</li><li>Процентиль — "
+"сглаживание по процентилю фиксированного числа точек;</li><li>Savitzky-Golay "
+"— сглаживание методом наименьших квадратов с подгонкой полиномов к сегментам "
+"данных;</li><li>LOWESS — локально взвешенное сглаживание диаграммы рассеяния."
+"</li></ul>"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:206
-#, fuzzy, kde-format
-#| msgid "Target number of points in the simplified line"
+#, kde-format
 msgid "Number of points in the moving window"
-msgstr "Целевое число точек в упрощённой линии"
+msgstr "Число точек в скользящем окне"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:210
 #, kde-format
 msgid ""
 "Weighting type to define different weights for the points in the moving "
 "window"
-msgstr ""
+msgstr "Тип взвешивания для задания различных весов точек в скользящем окне"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:214
 #, kde-format
 msgid "Percentile of the points in the moving window"
-msgstr ""
+msgstr "Процентиль точек в скользящем окне"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:218
 #, kde-format
 msgid "The order of the polynomial used to fit the points in the moving window"
 msgstr ""
+"Порядок полинома, используемого для приближения точек в скользящем окне"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:222
 #, kde-format
 msgid "The fraction of the data used to perform the local fit."
-msgstr ""
+msgstr "Доля данных, используемая для локального подбора."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:226
 #, kde-format
@@ -17509,27 +17478,28 @@ msgid ""
 "If delta > 0, values of y-data within delta of each other will use "
 "interpolation instead of full regression."
 msgstr ""
+"Если delta > 0, для значений данных по оси Y, отличающихся друг от друга не "
+"более чем на delta, применяется интерполяция вместо полной регрессии."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Exceeded max number of iterations"
+#, kde-format
 msgid "The number of robustifying iterations"
-msgstr "Превышено максимальное количество итераций"
+msgstr "Количество робастных итераций"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:234
 #, kde-format
 msgid "Padding mode to handle the edges of the data set"
-msgstr ""
+msgstr "Режим отступа для обработки краёв набора данных"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:238
 #, kde-format
 msgid "The value for constant padding at the left edge"
-msgstr ""
+msgstr "Значение постоянного отступа у левого края"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:242
 #, kde-format
 msgid "The value for constant padding at the right edge"
-msgstr ""
+msgstr "Значение постоянного отступа у правого края"
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:518
 #, kde-format
@@ -17669,12 +17639,10 @@ msgid "Properties: Fit"
 msgstr "Свойства: приближение"
 
 #: src/frontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Piecewise Linear Fit"
-msgstr "Свойства: опорная линия"
+msgstr "Свойства: кусочно-линейное приближение"
 
 #: src/frontend/GuiObserver.cpp:335
 #, kde-format
@@ -18547,8 +18515,7 @@ msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Блокноты Jupyter (*.ipynb)"
 
 #: src/frontend/MainWin.cpp:743
-#, fuzzy, kde-format
-#| msgid "Python file (*.py)"
+#, kde-format
 msgid "Python Scripts (*.py)"
 msgstr "Файлы Python (*.py)"
 
@@ -18979,20 +18946,19 @@ msgid "%1: clear selected rows(s)"
 msgstr "%1: очистка содержимого выбранной строки (строк)"
 
 #: src/frontend/note/NoteView.cpp:96
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "&Правка"
+msgstr "Правка"
 
 #: src/frontend/note/NoteView.cpp:100
 #, kde-format
 msgid "Edit markdown source"
-msgstr ""
+msgstr "Редактировать исходный текст Markdown"
 
 #: src/frontend/note/NoteView.cpp:106
 #, kde-format
 msgid "Preview rendered output"
-msgstr ""
+msgstr "Предварительный просмотр результата"
 
 #: src/frontend/notebook/NotebookView.cpp:48
 #, kde-format
@@ -19171,10 +19137,9 @@ msgid "Select template search path"
 msgstr "Выберите путь поиска шаблонов"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "No valid data provided."
+#, kde-format
 msgid "No template path provided."
-msgstr "Нет действительных данных."
+msgstr "Не указан путь к шаблону."
 
 #: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
@@ -19192,10 +19157,9 @@ msgstr "Не удалось прочитать файл"
 #: src/frontend/PlotTemplateDialog.cpp:193
 #: src/frontend/PlotTemplateDialog.cpp:205
 #: src/frontend/PlotTemplateDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "Failed to load the selected plot template"
+#, kde-format
 msgid "Failed to load the plot template"
-msgstr "Не удалось загрузить выбранный шаблон графика"
+msgstr "Не удалось загрузить шаблон графика"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
@@ -19401,15 +19365,14 @@ msgid "User Feedback"
 msgstr "Обратная связь"
 
 #: src/frontend/SettingsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgid "Script"
+#, kde-format
 msgid "Scripting"
-msgstr "&Сценарий"
+msgstr "Сценарии"
 
 #: src/frontend/SettingsDialog.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Editor"
-msgstr "&Правка"
+msgstr "Редактор"
 
 #: src/frontend/SettingsDialog.cpp:170
 #, kde-format
@@ -19425,13 +19388,12 @@ msgstr "Настройка    [Изменено]"
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
-msgstr ""
+msgstr "Автоматически показывать вывод, создаваемый сценарием"
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "Сохранение данных в файле проекта:"
+msgstr "Сохранять вывод сценария в файлах проекта"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -19471,8 +19433,7 @@ msgid "With Notebook"
 msgstr "С блокнотом"
 
 #: src/frontend/SettingsGeneralPage.cpp:228
-#, fuzzy, kde-format
-#| msgid "Python scripting support"
+#, kde-format
 msgid "With Python Script"
 msgstr "Поддержка сценариев на Python"
 
@@ -19667,34 +19628,31 @@ msgstr "Запрашивать подтверждение при перезап�
 
 # BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgid "Select the path to a python virtual environment."
-msgstr " Выберите файл изображения"
+msgstr "Выберите путь к виртуальной среде Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
-#, fuzzy, kde-format
-#| msgid "Save Default"
+#, kde-format
 msgid "System Default"
-msgstr "Сохранить по умолчанию"
+msgstr "Системное значение по умолчанию"
 
 # BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/SettingsScriptingPage.cpp:60
-#, fuzzy, kde-format
-#| msgid " Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment"
-msgstr " Выберите файл изображения"
+msgstr "Выбор виртуальной среды"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
 #, kde-format
 msgid "The selected virtual environment does not contain a python executable."
-msgstr ""
+msgstr "В выбранной виртуальной среде отсутствует исполняемый файл Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:236
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
-msgstr ""
+msgstr "Выбранная виртуальная среда не содержит файл pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
@@ -19703,6 +19661,8 @@ msgid ""
 "The selected virtual environment python version does not match the "
 "application python version."
 msgstr ""
+"Версия Python выбранной виртуальной среды не совпадает с версией Python "
+"приложения."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -20418,11 +20378,10 @@ msgstr "Область построения %1"
 
 # BUGME: please add colon --aspotashev
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:841
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
-msgstr "Приближение распределения к «%1»"
+msgstr "Кусочно-линейная подгонка к «%1»"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
@@ -20872,10 +20831,9 @@ msgstr "Сортировать"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:129
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:134
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Zoom level"
-msgstr "Масштабирование"
+msgstr "Уровень масштабирования"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:358
 #, kde-format
@@ -21215,15 +21173,14 @@ msgstr "Освободить столбец"
 
 # BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1957
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import Headers"
-msgstr "Импортировать как:"
+msgstr "Импорт заголовков"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1958
 #, kde-format
 msgid "Do you want to use the first row as column headers?"
-msgstr ""
+msgstr "Использовать первую строку в качестве заголовков столбцов?"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2121
 #, kde-format
@@ -23450,17 +23407,15 @@ msgstr "QoS 2"
 # BUGME: this message should be changed for _export_ dialogs --aspotashev
 #. i18n: ectx: property (toolTip), widget (QListWidget, lwColumns)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:93
-#, fuzzy, kde-format
-#| msgid " Select the file to import"
+#, kde-format
 msgid "Select which columns to import"
-msgstr " Выбрать файл для импорта"
+msgstr "Выбрать столбцы для импорта"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDeselectAll)
 #: src/frontend/ui/datasources/parquetoptionswidget.ui:109
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Deselect All"
-msgstr "Выбрать всё"
+msgstr "Снять выделение"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
@@ -23881,7 +23836,7 @@ msgstr "Формат:"
 #: src/frontend/ui/symbolwidget.ui:136 src/frontend/worksheet/GridDialog.cpp:81
 #, no-c-format, kde-format
 msgid " %"
-msgstr "%"
+msgstr " %"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
@@ -25839,21 +25794,15 @@ msgstr "y=g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbCount)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:311
-#, fuzzy, kde-format
-#| msgid "Number of points:"
+#, kde-format
 msgid "Number of points to evaluate"
-msgstr "Число точек:"
+msgstr "Число точек для расчёта"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoPoints)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:327
-#, fuzzy, kde-format
-#| msgid ""
-#| "Automatically determine the optimal number of digits after the decimal "
-#| "point"
+#, kde-format
 msgid "Automatically calculate the number of points based on plot pixel width"
-msgstr ""
-"Автоматически определять подходящее число знаков\n"
-"после десятичной запятой."
+msgstr "Автоматически вычислять количество точек по ширине графика в пикселях"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lName)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:36
@@ -26271,14 +26220,13 @@ msgstr "Упрощение"
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:17
 #, kde-format
 msgid "Penalty:"
-msgstr ""
+msgstr "Штраф:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:24
-#, fuzzy, kde-format
-#| msgid "Make Changes"
+#, kde-format
 msgid "Max Changepoints:"
-msgstr "Внести изменения"
+msgstr "Максимум точек изменения:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXRangeDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lEvalRange)
@@ -26296,56 +26244,52 @@ msgstr ".."
 # BUGME: please split --aspotashev
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:191
-#, fuzzy, kde-format
-#| msgid "Quit Presentation"
+#, kde-format
 msgid "Binary Segmentation"
-msgstr "Завершить презентацию"
+msgstr "Бинарная сегментация"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbMethod)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:196
 #, kde-format
 msgid "PELT"
-msgstr ""
+msgstr "PELT"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentSize)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:234
-#, fuzzy, kde-format
-#| msgid "2 Point Segment"
+#, kde-format
 msgid "Min Segment Size:"
-msgstr "Сегмент из двух точек"
+msgstr "Минимальный размер сегмента:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFitRange)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:248
-#, fuzzy, kde-format
-#| msgid "Plot Range:"
+#, kde-format
 msgid "Fit Range:"
-msgstr "Диапазон графика:"
+msgstr "Диапазон подбора:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:367
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Changepoint Lines"
-msgstr "Пересекающиеся линии"
+msgstr "Линии точек изменения"
 
 #. i18n: ectx: property (toolTip), widget (NumberSpinBox, sbDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:27
-#, fuzzy, kde-format
-#| msgid "Minimum distance threshold from retained point"
+#, kde-format
 msgid "Distance threshold for optimization (0 = compute all points)"
-msgstr "Пороговое значение минимального расстояния от сохранённой точки"
+msgstr "Пороговое расстояние для оптимизации (0 — вычислять все точки)"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lSpan)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:98
 #, kde-format
 msgid "Fraction of data points used for local regression (0.0 < span ≤ 1.0)"
 msgstr ""
+"Доля точек данных, используемых для локальной регрессии (0.0 < span ≤ 1.0)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpan)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:101
 #, kde-format
 msgid "Span:"
-msgstr ""
+msgstr "Доля:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lIterations)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:115
@@ -26353,6 +26297,8 @@ msgstr ""
 msgid ""
 "Number of robustifying iterations (0-4, higher = more outlier resistant)"
 msgstr ""
+"Количество итераций повышения устойчивости (0–4, чем больше, тем выше "
+"устойчивость к выбросам)"
 
 #. i18n: ectx: property (text), widget (QLabel, lPercentile)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:135
@@ -26377,20 +26323,18 @@ msgstr "Значение справа:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Fraction of data points used for local regression"
-msgstr ""
+msgstr "Доля точек данных, используемых для локальной регрессии"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
-#, fuzzy, kde-format
-#| msgid "Padding"
+#, kde-format
 msgid "Padding:"
-msgstr "Отступ"
+msgstr "Отступ:"
 
-# BUGME: please split to allow translation "Порядок сортировки:" --aspotashev
+# BUGME: stray leading space in the label (polynomial order for smoothing) --ayavorsky 2026-09-25
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
-#, fuzzy, kde-format
-#| msgid "Order:"
+#, kde-format
 msgid " Order:"
 msgstr "Порядок:"
 
@@ -26405,18 +26349,19 @@ msgstr "Функция веса:"
 #, kde-format
 msgid "Distance threshold for interpolation optimization (0 = disabled)"
 msgstr ""
+"Пороговое значение расстояния для оптимизации интерполяции (0 — отключено)"
 
 #. i18n: ectx: property (text), widget (QLabel, lDelta)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:623
 #, kde-format
 msgid "Delta:"
-msgstr ""
+msgstr "Дельта:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbIterations)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:704
 #, kde-format
 msgid "Number of robustifying iterations for outlier resistance"
-msgstr ""
+msgstr "Количество итераций повышения робастности для устойчивости к выбросам"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/frontend/ui/exampleswidget.ui:73
@@ -26548,12 +26493,16 @@ msgid ""
 "σ).</p><p>Otherwise absolute σ is used (no uncertainties scaling).</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Если включено, погрешности параметров масштабируются "
+"по chi^2/dof, что делает их независимыми от заданных погрешностей "
+"(относительная σ).</p><p>В противном случае используется абсолютная σ "
+"(масштабирование погрешностей не выполняется).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbErrorScaling)
 #: src/frontend/ui/fitoptionswidget.ui:267
 #, kde-format
 msgid "Use relative uncertainties (enable scaling)"
-msgstr ""
+msgstr "Использовать относительные неопределённости (включить масштабирование)"
 
 # BUGME: please add ctxt --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
@@ -27194,24 +27143,21 @@ msgstr "TODO"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonEnvironment)
 #: src/frontend/ui/settingsscriptingpage.ui:56
-#, fuzzy, kde-format
-#| msgid "Copy Environment"
+#, kde-format
 msgid "Environment:"
-msgstr "Копировать переменные окружения"
+msgstr "Среда:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPythonPathTitle)
 #: src/frontend/ui/settingsscriptingpage.ui:63
-#, fuzzy, kde-format
-#| msgid "CLI Path:"
+#, kde-format
 msgid "Path:"
-msgstr "Путь к CLI:"
+msgstr "Путь:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsscriptingpage.ui:118
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "Python Settings"
-msgstr "Параметры"
+msgstr "Параметры Python"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
@@ -28044,15 +27990,15 @@ msgstr "Данные, +-:"
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Неопределённая переменная: %2. Определите её в списке переменных."
+msgstr[1] "Неопределённые переменные: %2. Определите их в списке переменных."
+msgstr[2] "Неопределённые переменные: %2. Определите их в списке переменных."
+msgstr[3] "Неопределённая переменная: %2. Определите её в списке переменных."
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid expression"
-msgstr "Недопустимый указатель"
+msgstr "Недопустимое выражение"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
