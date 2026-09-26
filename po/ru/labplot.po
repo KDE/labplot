@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-03-06 21:42+0200\n"
+"PO-Revision-Date: 2026-09-25 07:45+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -7106,7 +7106,7 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr "Распределение Гамбеля (тип 2) "
+msgstr "Распределение Гамбеля (тип 2)"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:566
@@ -11856,7 +11856,7 @@ msgstr "Не готово к чтению после 2 с:"
 #: src/frontend/datasources/ImportFileWidget.cpp:1899
 #, kde-format
 msgid "Unable to bind: "
-msgstr "Не удалось выполнить привязку:"
+msgstr "Не удалось выполнить привязку: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1916
 #, kde-format
@@ -16678,7 +16678,7 @@ msgid ""
 "less negative values."
 msgstr ""
 "Коэффициент завершения взвешивания — принимает значения между 0 и 1. Чем "
-"меньше это число, тем меньше будет получено отрицательных значений. "
+"меньше это число, тем меньше будет получено отрицательных значений."
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:171
 #, kde-format
@@ -20696,7 +20696,7 @@ msgstr "Формат:"
 #: src/frontend/ui/symbolwidget.ui:136 src/frontend/worksheet/GridDialog.cpp:81
 #, no-c-format, kde-format
 msgid " %"
-msgstr "%"
+msgstr " %"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
