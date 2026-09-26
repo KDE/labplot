@@ -1157,7 +1157,6 @@ void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 
 	if (updateParameterWidget)
 		fitParametersWidget->setFitData(&m_fitData);
-
 	enableRecalculate();
 	DEBUG(Q_FUNC_INFO << " DONE")
 }
@@ -1171,16 +1170,18 @@ void XYFitCurveDock::loadFunction() {
 	if (fileName.isEmpty())
 		return;
 
-	// special options if accepted
+	// m_fitData.model was set in updateModelEquation() after teEquation was modified in GuiTools::loadFunction(),
+	// load the remaining fit options and parameter settings
+
+	// fit options
 	KConfig config(fileName);
 	auto group = config.group(QLatin1String("FitCurve"));
-
 	m_fitData.maxIterations = group.readEntry("MaxIterations", 500);
 	m_fitData.eps =  group.readEntry("Tolerance", 1.e-4);
 	m_fitData.evaluatedPoints = static_cast<size_t>(group.readEntry("EvaluatedPoints", quint64(1000)));
 
-	// parameter and settings
-	group = config.group(QLatin1String("Parameter"));
+	// parameters
+	// initialize with the default values, values in the INI files might be malformed or not present
 	const double max = std::numeric_limits<double>::max();
 	for (int i = 0; i < m_fitData.paramNames.size(); ++i) {
 		m_fitData.paramStartValues[i] = 1.0;
@@ -1189,33 +1190,40 @@ void XYFitCurveDock::loadFunction() {
 		m_fitData.paramUpperLimits[i] = max;
 	}
 
+	group = config.group(QLatin1String("Parameter"));
 	auto keys = group.keyList();
 	for (const auto &name : keys) {
 		const int index = m_fitData.paramNames.indexOf(name);
 		if (index < 0)
 			continue;
 
-		const auto settings = group.readEntry(name, QStringList());
-		if (settings.size() < 2)
+		// each entry for every parameter name has start value, is fixed (0 or 1), upper limit, lower limit
+		const auto entry = group.readEntry(name, QStringList());
+		if (entry.size() < 1) // should at least have the start value
 			continue;
 
-		m_fitData.paramStartValues[index] = settings.at(0).toDouble();
-		m_fitData.paramFixed[index] = QVariant(settings.at(1)).toBool();
-		if (settings.size() > 2 && !settings.at(2).isEmpty() && settings.at(2) != QString::number(-max)) {
-			bool ok;
-			const double lowerLimit = settings.at(2).toDouble(&ok);
-			if (ok && lowerLimit != -max)
-				m_fitData.paramLowerLimits[index] = lowerLimit;
-		}
-		if (settings.size() > 3 && !settings.at(3).isEmpty() && settings.at(3) != QString::number(max)) {
-			bool ok;
-			const double upperLimit = settings.at(3).toDouble(&ok);
-			if (ok && upperLimit != max)
-				m_fitData.paramUpperLimits[index] = upperLimit;
+		// start value
+		m_fitData.paramStartValues[index] = entry.at(0).toDouble();
+
+		if (entry.size() > 1) {
+			// "is fixed"
+			m_fitData.paramFixed[index] = QVariant(entry.at(1)).toBool();
+
+			// lower and upper limits
+			if (entry.size() > 2 && !entry.at(2).isEmpty() && entry.at(2) != QString::number(-max)) {
+				bool ok;
+				const double lowerLimit = entry.at(2).toDouble(&ok);
+				if (ok && lowerLimit != -max)
+					m_fitData.paramLowerLimits[index] = lowerLimit;
+
+				if (entry.size() > 3 && !entry.at(3).isEmpty() && entry.at(3) != QString::number(max)) {
+					const double upperLimit = entry.at(3).toDouble(&ok);
+					if (ok && upperLimit != max)
+						m_fitData.paramUpperLimits[index] = upperLimit;
+				}
+			}
 		}
 	}
-	// update parameter widget
-	parametersChanged();
 }
 
 void XYFitCurveDock::saveFunction() {
