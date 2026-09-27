@@ -3921,21 +3921,33 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 
 		for (auto* axis : q->children<Axis>()) {
 			QDEBUG(Q_FUNC_INFO << ", auto-scale axis" << axis->name() << "of scale" << axis->scale())
-			// use ranges of axis
-			auto range = axis->range();
-			range.setScale(rangep.range.scale());
 
 			int axisIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dim);
-			if (axis->rangeType() != Axis::RangeType::Auto || axisIndex != i)
+			auto axisRangeType = axis->rangeType();
+			if ((axisRangeType != Axis::RangeType::Auto && axisRangeType != Axis::RangeType::AutoData) || axisIndex != i)
 				continue;
 			if ((dim == Dimension::Y && axis->orientation() != Axis::Orientation::Vertical)
 				|| (dim == Dimension::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
-			if (!qFuzzyIsNull(deltaMax))
-				range.setEnd(rangep.range.end());
-			if (!qFuzzyIsNull(deltaMin))
-				range.setStart(rangep.range.start());
+			// Determine which range to use: plot range for Auto, dataRange for AutoData
+			Range<double> sourceRange = (axisRangeType == Axis::RangeType::Auto) ? rangep.range : dataRange(dim, i);
+
+			// use ranges of axis
+			auto range = axis->range();
+			range.setScale(rangep.range.scale());
+
+			if (axisRangeType == Axis::RangeType::Auto) {
+				if (!qFuzzyIsNull(deltaMax))
+					range.setEnd(sourceRange.end());
+				if (!qFuzzyIsNull(deltaMin))
+					range.setStart(sourceRange.start());
+			} else {
+				if (!qFuzzyCompare(sourceRange.start(), range.start()))
+					range.setStart(sourceRange.start());
+				if (!qFuzzyCompare(sourceRange.end(), range.end()))
+					range.setEnd(sourceRange.end());
+			}
 
 			axis->setUndoAware(false);
 			axis->setSuppressRetransform(true);
