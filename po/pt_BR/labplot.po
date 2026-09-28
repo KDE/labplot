@@ -5,30 +5,33 @@
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2014, 2015, 2016.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2015, 2017, 2019, 2020, 2021, 2022.
 # SPDX-FileCopyrightText: 2025-2026 Marcus Gama <marcus.gama@gmail.com>
+# SPDX-FileCopyrightText: 2025, 2026 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
+# SPDX-FileCopyrightText: 2026 Geraldo Simiao <geraldosimiao@fedoraproject.org>
+# SPDX-FileCopyrightText: 2026 Elton Carvalho <elton.carvalho@ufrn.br>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-05-17 07:39-0300\n"
+"PO-Revision-Date: 2026-09-27 08:22-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.04.1\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "André Marcelo Alvarenga, Marcus Gama"
+msgstr "André Marcelo Alvarenga, Marcus Gama, Elton Carvalho"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "alvarenga@kde.org, marcus.gama@gmail.com"
+msgstr "alvarenga@kde.org, marcus.gama@gmail.com, elton.carvalho@ufrn.br"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -2269,7 +2272,7 @@ msgstr "Compressão: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
 #, kde-format
 msgid "Endianess: %1"
-msgstr "Endianess: %1"
+msgstr "Endianismo: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2400,7 +2403,7 @@ msgstr "Tamanho do arquivo descompactado: %1 bytes"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1."
-msgstr "Big Endian não suportado. ID CAN: %1."
+msgstr "Grande Endian não suportado. ID CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, kde-format
@@ -4755,12 +4758,12 @@ msgstr "Inversa da função Gama"
 #: src/backend/gsl/functions.cpp:495
 #, kde-format
 msgid "Factorial n!"
-msgstr "Fatorial de n!"
+msgstr "Fatorial n!"
 
 #: src/backend/gsl/functions.cpp:496
 #, kde-format
 msgid "Double factorial n!!"
-msgstr "Duplo fatorial de n!!"
+msgstr "Duplo fatorial n!!"
 
 #: src/backend/gsl/functions.cpp:497
 #, kde-format
@@ -6645,12 +6648,12 @@ msgstr "Sexto"
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
 msgid "Low Pass"
-msgstr "Passa baixo"
+msgstr "Passa-baixa"
 
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
 msgid "High Pass"
-msgstr "Passa alto"
+msgstr "Passa-alto"
 
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
@@ -6700,7 +6703,7 @@ msgstr "Fração"
 #: src/backend/nsl/nsl_fit.c:20
 #, kde-format
 msgid "Basic Functions"
-msgstr "Função básicas"
+msgstr "Funções básicas"
 
 #: src/backend/nsl/nsl_fit.c:21
 #, kde-format
@@ -8158,7 +8161,7 @@ msgstr "%1: definir o tamanho do extremo dos bigodes"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
 #, kde-format
 msgid "%1: jitterring changed"
-msgstr "%1: jitterring alterado"
+msgstr "%1: tremulação alterada"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:518
@@ -8800,7 +8803,7 @@ msgstr "%1: ajustar a '%2'"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
-msgstr "Ajustar a '%1'"
+msgstr "Ajuste a '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2081
 #, kde-format
@@ -9764,7 +9767,7 @@ msgstr "%1: definir as opções de ajuste e ajustar"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
-msgstr "Ajustar resultados"
+msgstr "Resultados do ajuste"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1846
 #, kde-format
@@ -9847,14 +9850,14 @@ msgstr "Desvio quadrático médio"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:990
 #, kde-format
 msgid "Coefficient of determination"
-msgstr "Coeficiente determinístico"
+msgstr "Coeficiente de determinação"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1958
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1000
 #, kde-format
 msgid "Adj. coefficient of determination"
-msgstr "Ajustar coeficiente determinístico"
+msgstr "Coeficiente de determinação ajustado"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
@@ -9874,7 +9877,7 @@ msgstr "Teste-F"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
 #, kde-format
 msgid "Mean absolute error"
-msgstr "Erro absoluto da média"
+msgstr "Erro absoluto médio"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1963
 #, kde-format
@@ -9920,7 +9923,7 @@ msgstr "Modelo de ajuste não especificado!"
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
-msgstr "Ajustar resultados"
+msgstr "Resultados do ajuste"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:76
 #, kde-format
@@ -10349,7 +10352,7 @@ msgstr "Erro complexo e funções relacionadas"
 #: src/frontend/AboutDialog.cpp:271
 #, kde-format
 msgid "importing Origin OPJ project files"
-msgstr "Importar arquivos de projeto do Origin OPJ"
+msgstr "Importar arquivos de projeto OPJ do Origin"
 
 #: src/frontend/AboutDialog.cpp:277
 #, kde-format
@@ -10702,7 +10705,7 @@ msgstr ""
 #: src/frontend/datapicker/DatapickerImageView.cpp:692
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
-msgstr "%1: alterar a posição dos DatapickerPoints selecionados."
+msgstr "%1: alterar a posição dos pontos selecionados."
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:745
 #, kde-format
@@ -10924,12 +10927,12 @@ msgstr "Tipo de dados não encontrado: %1"
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
 msgid "Little endian"
-msgstr "Little endian"
+msgstr "Pequeno endian"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:30
 #, kde-format
 msgid "Big endian"
-msgstr "Big endian"
+msgstr "Grande endian"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:32
 #, kde-format
@@ -16664,7 +16667,7 @@ msgstr "dados brutos"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:571
 #, kde-format
 msgid "baseline"
-msgstr "linha de base"
+msgstr "linha base"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:579
 #, kde-format
@@ -16701,7 +16704,7 @@ msgstr "%1: subtrair %2 dos valores da coluna"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1257
 #, kde-format
 msgid "%1: subtract baseline from column values"
-msgstr "%1: subtrair linha de base dos valores da coluna"
+msgstr "%1: subtrair linha base dos valores da coluna"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1260
 #, kde-format
@@ -20909,7 +20912,7 @@ msgstr "Final do bigode"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:586
 #, kde-format
 msgid "Jitter"
-msgstr "Desvio"
+msgstr "Tremulação"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabWhiskers)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:629
@@ -25116,198 +25119,2323 @@ msgstr "processo do convert falhou, código de saída ="
 msgid "Unable to open file:"
 msgstr "Não foi possível abrir o arquivo:"
 
-#, fuzzy
-#~| msgid "no matrix element found"
+#~ msgid "Used in Plots:"
+#~ msgstr "Usado em gráficos:"
+
+#~ msgid "Used in Axes:"
+#~ msgstr "Usado em eixos:"
+
+#~ msgid "Used in Spreadsheet Calculations:"
+#~ msgstr "Usado em cálculos em planilha:"
+
+#~ msgid "Timestamp (Unix)"
+#~ msgstr "Marca de tempo (Unix)"
+
+#~ msgid "Timestamp (Windows)"
+#~ msgstr "Marca de tempo (Windows)"
+
+#~ msgid ""
+#~ "Invalid number of data columns. First row column count: %1. %2th row "
+#~ "column count >= %3. Check if the correct separator is used and the data "
+#~ "contains same number of columns."
+#~ msgstr ""
+#~ "Número inválido de colunas de dados. Contagem de colunas da primeira "
+#~ "linha: %1. Contagem de colunas da %2ª linha >= %3. Verifique se o "
+#~ "separador correto foi usado e se os dados contêm o mesmo número de "
+#~ "colunas."
+
+#~ msgid "Could not open file."
+#~ msgstr "Não foi possível abrir o arquivo."
+
+#~ msgid "Format: Apache Parquet"
+#~ msgstr "Formato: Apache Parquet"
+
+#~ msgid "Version: %1"
+#~ msgstr "Versão: %1"
+
+#~ msgid "Created by: %1"
+#~ msgstr "Criado por: %1"
+
+#~ msgid "Number of rows: %1"
+#~ msgstr "Número de linhas: %1"
+
+#~ msgid "Number of row groups: %1"
+#~ msgstr "Número de grupos de linhas: %1"
+
+#~ msgid "Format: Arrow IPC (Feather)"
+#~ msgstr "Formato: Arrow IPC (Feather)"
+
+#~ msgid "Number of record batches: %1"
+#~ msgstr "Número de lotes de registros: %1"
+
+#~ msgid "Format: Apache ORC"
+#~ msgstr "Formato: Apache ORC"
+
+#~ msgid "Number of stripes: %1"
+#~ msgstr "Número de faixas: %1"
+
+#~ msgid "Could not open file: %1"
+#~ msgstr "Não foi possível abrir o arquivo: %1"
+
+#~ msgid "Failed to open Parquet file: %1"
+#~ msgstr "Falha ao abrir o arquivo Parquet: %1"
+
+#~ msgid "Failed to read Parquet table: %1"
+#~ msgstr "Falha ao ler a tabela Parquet: %1"
+
+#~ msgid "Failed to open Arrow IPC file: %1"
+#~ msgstr "Falha ao abrir o arquivo Arrow IPC: %1"
+
+#~ msgid "Failed to read record batch %1: %2"
+#~ msgstr "Falha ao ler o lote de registros %1: %2"
+
+#~ msgid "Failed to assemble table: %1"
+#~ msgstr "Falha ao montar a tabela: %1"
+
+#~ msgid "Failed to open ORC file: %1"
+#~ msgstr "Falha ao abrir o arquivo ORC: %1"
+
+#~ msgid "Failed to read ORC table: %1"
+#~ msgstr "Falha ao ler a tabela ORC: %1"
+
+#~ msgid "Unsupported file format."
+#~ msgstr "Formato de arquivo não suportado."
+
+#~ msgid "The file has no data to import."
+#~ msgstr "O arquivo não possui dados para importar."
+
+#~ msgid "Datetime Functions"
+#~ msgstr "Funções de Data/Hora"
+
+#~ msgid "today"
+#~ msgstr "hoje"
+
+#~ msgid "now"
+#~ msgstr "agora"
+
+#~ msgid "date(year; month; day)"
+#~ msgstr "data(ano;mês;dia)"
+
+#~ msgid "datedif(start_date; end_date; unit)"
+#~ msgstr "datadif(data_inicial;data_final;unidade)"
+
+#~ msgid "eomonth(start_date; months)"
+#~ msgstr "eomês(data_inicial; meses)"
+
+#~ msgid "weekday(date)"
+#~ msgstr "diasemana(data)"
+
+#~ msgid "networkdays(start_date; end_date)"
+#~ msgstr "diasrede(data_inicial;data_final)"
+
+#~ msgid "year(date)"
+#~ msgstr "ano(data)"
+
+#~ msgid "month(date)"
+#~ msgstr "mês(data)"
+
+#~ msgid "day(date)"
+#~ msgstr "dia(data)"
+
+#~ msgid "weeknum(date)"
+#~ msgstr "numsemana(data)"
+
+#~ msgid "hour(dateTime)"
+#~ msgstr "hora(dataHora)"
+
+#~ msgid "minute(dateTime)"
+#~ msgstr "minuto(dataHora)"
+
+#~ msgid "second(dateTime)"
+#~ msgstr "segundo(dataHora)"
+
+#~ msgid "time(hour; minute; second)"
+#~ msgstr "tempo(hora; minuto; segundo)"
+
+#~ msgid "%1: set mode"
+#~ msgstr "%1: definir modo"
+
+#~ msgid "End Points"
+#~ msgstr "Pontos finais"
+
+#~ msgid "Linear Regression"
+#~ msgstr "Regressão linear"
+
+#~ msgid "LOWESS"
+#~ msgstr "LOWESS"
+
+#~ msgid "Python file (*.py)"
+#~ msgstr "Arquivo python (*.py)"
+
 #~ msgid "no script element found"
-#~ msgstr "não foi encontrado nenhum elemento de matriz"
+#~ msgstr "nenhum elemento de script encontrado"
 
-#, fuzzy
-#~| msgid "&Script"
+#~ msgid "%1: run %2 script"
+#~ msgstr "%1: executar script %2"
+
 #~ msgid "Script"
-#~ msgstr "&Script"
+#~ msgstr "Script"
 
-#, fuzzy
-#~| msgid "Failed to open"
 #~ msgid "Failed to run the script."
-#~ msgstr "Falha ao abrir"
+#~ msgstr "Falha ao executar o script."
 
-#, fuzzy
-#~| msgid "Name"
+#~ msgid "A script is already running."
+#~ msgstr "Um script já está em execução."
+
 #~ msgctxt "@title:column"
 #~ msgid "Name"
 #~ msgstr "Nome"
 
-#, fuzzy
-#~| msgid "Value"
 #~ msgctxt "@title:column"
 #~ msgid "Value"
 #~ msgstr "Valor"
 
-#, fuzzy
-#~| msgid "Type"
 #~ msgctxt "@title:column"
 #~ msgid "Type"
 #~ msgstr "Tipo"
 
-#, fuzzy
-#~| msgid "Plot Area"
+#~ msgid "Columns: %1"
+#~ msgstr "Colunas: %1"
+
+#~ msgid "Rows: %1"
+#~ msgstr "Linhas: %1"
+
+#~ msgid "%1: change column type and set value"
+#~ msgstr "%1: alterar o tipo da coluna e definir valor"
+
+#~ msgid "One column is required."
+#~ msgid_plural "%1 columns are required."
+#~ msgstr[0] "Um coluna é necessária."
+#~ msgstr[1] "%1 colunas são necessárias."
+
+#~ msgid "At least %1 and at most %2 columns are required."
+#~ msgstr "Pelo menos %1 e no máximo %2 colunas são necessárias."
+
+#~ msgid "Column '%1' must be of numeric type."
+#~ msgstr "A coluna '%1' deve ser do tipo numérico."
+
+#~ msgctxt "@title:window"
+#~ msgid "Hypothesis Test"
+#~ msgstr "Teste da hipótese"
+
+#~ msgid "No monotonic trend exists"
+#~ msgstr "Não existe uma tendência monotônica"
+
+#~ msgid "A monotonic trend exists"
+#~ msgstr "Existe uma tendência monotônica"
+
+#~ msgid "A negative monotonic trend exists"
+#~ msgstr "Existe uma tendência monotônica negativa"
+
+#~ msgid "A positive monotonic trend exists"
+#~ msgstr "Existe uma tendência monotônica positiva"
+
+#~ msgid "The process is stable (random)"
+#~ msgstr "O processo está estável (aleatório)"
+
+#~ msgid "The data are not randomly distributed"
+#~ msgstr "Os dados não estão distribuídos aleatoriamente"
+
+#~ msgid "The process shows shifting or clustering"
+#~ msgstr "O processo mostra deslocamento ou agrupamento"
+
+#~ msgid "The process shows oscillations or over-control"
+#~ msgstr "O processo mostra oscilações ou sobre-controle"
+
+#~ msgid "The process is unstable (non-random)"
+#~ msgstr "O processo está instável (não aleatório)"
+
+#~ msgid "One-Sample t-Test"
+#~ msgstr "Teste-t com uma amostra"
+
+#~ msgid "Independent Two-Sample t-Test"
+#~ msgstr "Teste-t independente de duas amostras"
+
+#~ msgid "Paired Two-Sample t-Test"
+#~ msgstr "Teste-t de duas amostras pareadas"
+
+#~ msgid "Mann-Whitney U Test"
+#~ msgstr "Teste U de Mann-Whitney"
+
+#~ msgid "Welch t-Test"
+#~ msgstr "Teste-t de Welch"
+
+#~ msgid "Wilcoxon Signed Rank Test"
+#~ msgstr "Teste de classificação de sinais de Wilcoxon"
+
+#~ msgid "One-Way ANOVA Test"
+#~ msgstr "Teste ANOVA de uma via"
+
+#~ msgid "Kruskal-Wallis Test"
+#~ msgstr "Teste de Kruskal-Wallis"
+
+#~ msgid "Log-Rank Test"
+#~ msgstr "Teste de Log-Rank"
+
+#~ msgid "Friedman Test"
+#~ msgstr "Teste de Friedman"
+
+#~ msgid "Chi-Square Independence Test"
+#~ msgstr "Teste de independência do qui-quadrado"
+
+#~ msgid "Chi-Square Goodness of Fit Test"
+#~ msgstr "Teste de qualidade de ajuste do qui-quadrado"
+
+#~ msgid "One-Way ANOVA with Repeated Measures Test"
+#~ msgstr "Teste ANOVA de uma via com medidas repetidas"
+
+#~ msgid "Mann-Kendall Test"
+#~ msgstr "Teste de Mann-Kendall"
+
+#~ msgid "Wald-Wolfowitz Runs Test"
+#~ msgstr "Teste de execução Wald-Wolfowitz"
+
+#~ msgid "Ramirez-Runger Runs Test"
+#~ msgstr "Teste de corrida de Ramirez-Runger"
+
+#~ msgid "<b>Reject the null hypothesis.</b>"
+#~ msgstr "<b>Rejeitar a hipótese nula.</b>"
+
+#~ msgid "<b>Fail to reject the null hypothesis.</b>"
+#~ msgstr "<b>Falha ao rejeitar a hipótese nula.</b>"
+
+#~ msgid "N/A"
+#~ msgstr "N/D"
+
+#~ msgid "Test result is not available."
+#~ msgstr "O resultado do teste não está disponível."
+
+#~ msgid "Two columns are required for this test."
+#~ msgstr "Duas colunas são necessárias para este teste."
+
+#~ msgid "At least two columns are required."
+#~ msgstr "São necessárias pelo menos duas colunas."
+
+#~ msgid "Column '%1' requires at least %2 samples."
+#~ msgstr "A coluna '%1' requer pelo menos %2 amostras."
+
+#~ msgid "The size of each sample must be equal."
+#~ msgstr "O tamanho de cada amostra deve ser igual."
+
+#~ msgid "Standard Deviation"
+#~ msgstr "Desvio padrão"
+
+#~ msgid "Null Hypothesis"
+#~ msgstr "Hipótese nula"
+
+#~ msgid "Alternate Hypothesis"
+#~ msgstr "Hipótese alternativa"
+
+#~ msgid "Descriptive Statistics"
+#~ msgstr "Estatísticas descritivas"
+
+#~ msgid "Test Statistics"
+#~ msgstr "Estatísticas do Teste"
+
+#~ msgid "Significance Level"
+#~ msgstr "Nível de significância"
+
+#~ msgid "p-Value"
+#~ msgstr "Valor-p"
+
+#~ msgid "Degrees of Freedom Between Groups"
+#~ msgstr "Graus de liberdade entre grupos"
+
+#~ msgid "Degrees of Freedom Within Groups"
+#~ msgstr "Graus de liberdade dentro dos grupos"
+
+#~ msgid "Degrees of Freedom Treatment"
+#~ msgstr "Tratamento de graus de liberdade"
+
+#~ msgid "Degrees of Freedom Residuals"
+#~ msgstr "Graus de liberdade residuais"
+
+#~ msgid "Effective Degrees of Freedom"
+#~ msgstr "Graus de liberdade efetivos"
+
+#~ msgid "t-Value"
+#~ msgstr "Valor-t"
+
+#~ msgid "Test Mean"
+#~ msgstr "Testar média"
+
+#~ msgid "Mean Difference"
+#~ msgstr "Diferença média"
+
+#~ msgid "Pooled Variance"
+#~ msgstr "Variância combinada"
+
+#~ msgid "Mean Difference Standard Error"
+#~ msgstr "Erro padrão da diferença média"
+
+#~ msgid "F-Statistic"
+#~ msgstr "Estatísticas-F"
+
+#~ msgid "Sum of Squares Between Groups"
+#~ msgstr "Soma dos quadrados entre grupos"
+
+#~ msgid "Sum of Squares Within Groups"
+#~ msgstr "Soma dos quadrados dentro de grupos"
+
+#~ msgid "Mean Squares Between Groups"
+#~ msgstr "Quadrados médios entre grupos"
+
+#~ msgid "Mean Squares Within Groups"
+#~ msgstr "Quadrados médios dentro de grupos"
+
+#~ msgid "Sum of Squares Treatment"
+#~ msgstr "Tratamento da soma dos quadrados"
+
+#~ msgid "Sum of Squares Residuals"
+#~ msgstr "Soma dos quadrados residuais"
+
+#~ msgid "Sum of Squares Within Subjects"
+#~ msgstr "Soma dos quadrados dentro dos assuntos"
+
+#~ msgid "Mean Squares Treatment"
+#~ msgstr "Tratamento da média dos quadrados"
+
+#~ msgid "Mean Squares Residuals"
+#~ msgstr "Média dos quadrados residuais"
+
+#~ msgid "U"
+#~ msgstr "U"
+
+#~ msgid "z-Value"
+#~ msgstr "Valor-z"
+
+#~ msgid "Rank Sum 1"
+#~ msgstr "Soma Clas 1"
+
+#~ msgid "Mean Rank 1"
+#~ msgstr "Clas Média 1"
+
+#~ msgid "Rank Sum 2"
+#~ msgstr "Soma Clas 2"
+
+#~ msgid "Mean Rank 2"
+#~ msgstr "Clas Média 2"
+
+#~ msgid "W"
+#~ msgstr "W"
+
+#~ msgid "Positive Rank Sum"
+#~ msgstr "Soma de classificação positiva"
+
+#~ msgid "Positive Rank Mean"
+#~ msgstr "Média de classificação positiva"
+
+#~ msgid "Positive Rank Count"
+#~ msgstr "Contagem de classificação positiva"
+
+#~ msgid "Negative Rank Sum"
+#~ msgstr "Soma de classificação negativa"
+
+#~ msgid "Negative Rank Mean"
+#~ msgstr "Média de classificação negativa"
+
+#~ msgid "Negative Rank Count"
+#~ msgstr "Contagem de classificação negativa"
+
+#~ msgid "Tie Count"
+#~ msgstr "Contagem de nó"
+
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "Q"
+#~ msgstr "Q"
+
+#~ msgid "Chi2"
+#~ msgstr "Qui2"
+
+#~ msgid "Event Count 1"
+#~ msgstr "Contagem evento 1"
+
+#~ msgid "Censored Count 1"
+#~ msgstr "Contagem censurada 1"
+
+#~ msgid "Total Count 1"
+#~ msgstr "Contagem total 1"
+
+#~ msgid "Event Count 2"
+#~ msgstr "Contagem evento 2"
+
+#~ msgid "Censored Count 2"
+#~ msgstr "Contagem censurada 2"
+
+#~ msgid "Total Count 2"
+#~ msgstr "Contagem total 2"
+
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgid "Kendall's Tau"
+#~ msgstr "'Tau' de Kendall"
+
+#~ msgid "Sen's Slope"
+#~ msgstr "Inclinação de Sen"
+
+#~ msgid "Sample Size"
+#~ msgstr "Tamanho da amostra"
+
+#~ msgid "Number of Runs"
+#~ msgstr "Número de execuções"
+
+#~ msgid "Stability Ratio"
+#~ msgstr "Índice de estabilidade"
+
+#~ msgid "Average Successive Difference"
+#~ msgstr "Diferença média sucessiva"
+
+#~ msgid "Statistical Conclusion"
+#~ msgstr "Conclusão estatística"
+
+#~ msgid "No variable columns provided."
+#~ msgstr "Nenhuma coluna variável fornecida."
+
+#~ msgid ""
+#~ "At the significance level %1, the population mean is significantly "
+#~ "different from %2. %3"
+#~ msgstr ""
+#~ "No nível de significância %1, a média populacional é significativamente "
+#~ "diferente de %2. %3"
+
+#~ msgid ""
+#~ "At the significance level %1, the population mean is not significantly "
+#~ "different from %2. %3"
+#~ msgstr ""
+#~ "No nível de significância %1, a média populacional não é "
+#~ "significativamente diferente de %2. %3"
+
+#~ msgid ""
+#~ "At the significance level %1, the population means are significantly "
+#~ "different. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, as médias populacionais são "
+#~ "significativamente diferentes. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the population means are not significantly "
+#~ "different. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, as médias populacionais não são "
+#~ "significativamente diferentes. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, at least one group mean is significantly "
+#~ "different. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, pelo menos uma média de grupo é "
+#~ "significativamente diferente. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, no significant difference between group "
+#~ "means. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, não houve diferença significativa entre as "
+#~ "médias dos grupos. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, at least one group distribution is "
+#~ "significantly different. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, pelo menos uma distribuição de grupo é "
+#~ "significativamente diferente. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, no significant difference between group "
+#~ "distributions. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, não há diferença significativa entre as "
+#~ "distribuições dos grupos. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, at least one group is significantly "
+#~ "different. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, pelo menos um grupo é significativamente "
+#~ "diferente. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, no significant difference between groups. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, não há diferença significativa entre os "
+#~ "grupos. %2"
+
+#~ msgid "Column '%1' must be of integer type."
+#~ msgstr "A coluna '%1' deve ser do tipo inteiro."
+
+#~ msgid ""
+#~ "At the significance level %1, the observed frequencies do not follow the "
+#~ "expected frequency distribution. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, as frequências observadas não seguem a "
+#~ "distribuição de frequência esperada. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the observed frequencies follow the "
+#~ "expected frequency distribution. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, as frequências observadas não seguem a "
+#~ "distribuição de frequência esperada. %2"
+
+#~ msgid "The size of each column in the contingency table must be equal."
+#~ msgstr "O tamanho de cada coluna na tabela de contingência deve ser igual."
+
+#~ msgid ""
+#~ "At the significance level %1, both categorical variables are dependent. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, ambas as variáveis categóricas são "
+#~ "dependentes. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, both categorical variables are independent. "
+#~ "%2"
+#~ msgstr ""
+#~ "No nível de significância %1, ambas as variáveis categóricas são "
+#~ "independentes. %2"
+
+#~ msgid "Three columns are required."
+#~ msgstr "São necessárias três colunas."
+
+#~ msgid "Status column should be of integer type."
+#~ msgstr "A coluna de status deve ser do tipo inteiro."
+
+#~ msgid "Group column should be of integer type."
+#~ msgstr "A coluna do grupo deve ser do tipo inteiro."
+
+#~ msgid "Time, Status and Group columns should have equal size."
+#~ msgstr "As colunas Tempo, Status e Grupo devem ter o mesmo tamanho."
+
+#~ msgid "Status column values must be either 0 or 1."
+#~ msgstr "Os valores da coluna de status devem ser 0 ou 1."
+
+#~ msgid "Group column values must be either 0 or 1."
+#~ msgstr "Os valores da coluna de grupo devem ser 0 ou 1."
+
+#~ msgid "Time, Status and Group columns should have equal number of values."
+#~ msgstr ""
+#~ "As colunas Tempo, Status e Grupo devem ter o mesmo número de valores."
+
+#~ msgid "Group 1 requires at least %1 samples."
+#~ msgstr "O grupo 1 requer pelo menos %1 amostras."
+
+#~ msgid "Group 2 requires at least %1 samples."
+#~ msgstr "O grupo 2 requer pelo menos %1 amostras."
+
+#~ msgid ""
+#~ "At the significance level %1, the survival curves are significantly "
+#~ "different. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, as curvas de sobrevivência são "
+#~ "significativamente diferentes. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, no significant difference between survival "
+#~ "curves. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, não há diferença significativa entre as "
+#~ "curvas de sobrevivência. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, there is a significant monotonic trend in "
+#~ "the data. %2"
+#~ msgstr ""
+#~ "No nível de significância de %1, existe uma tendência monotônica "
+#~ "significativa nos dados. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, there is a significant positive monotonic "
+#~ "trend. %2"
+#~ msgstr ""
+#~ "No nível de significância de %1, existe uma tendência monotônica positiva "
+#~ "significativa nos dados. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, there is a significant negative monotonic "
+#~ "trend. %2"
+#~ msgstr ""
+#~ "No nível de significância de %1, existe uma tendência monotônica negativa "
+#~ "significativa nos dados. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, no significant monotonic trend detected. %2"
+#~ msgstr ""
+#~ "No nível de significância de %1, não foi detectada nenhuma tendência "
+#~ "monotônica significativa. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the data are not randomly distributed. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, os dados não estão distribuídos "
+#~ "aleatoriamente. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the data show clustering or trend (too few "
+#~ "runs). %2"
+#~ msgstr ""
+#~ "No nível de significância %1, os dados mostram agrupamento ou tendências "
+#~ "(poucas execuções). %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the data show oscillation or over-control "
+#~ "(too many runs). %2"
+#~ msgstr ""
+#~ "No nível de significância %1, o processo mostra oscilação ou sobre-"
+#~ "controle (muitas execuções). %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the data appear to be randomly distributed. "
+#~ "%2"
+#~ msgstr ""
+#~ "No nível de significância %1, os dados parecem estar distribuídos "
+#~ "aleatoriamente. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the process is unstable (non-homogeneous). "
+#~ "%2"
+#~ msgstr ""
+#~ "No nível de significância %1, o processo não está instável (não "
+#~ "homogêneo). %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the process shows oscillation or over-"
+#~ "control. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, o processo mostra oscilação ou sobre-"
+#~ "controle. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the process shows clustering, shifting, or "
+#~ "trends. %2"
+#~ msgstr ""
+#~ "No nível de significância %1, o processo mostra agrupamento, deslocamento "
+#~ "ou tendências. %2"
+
+#~ msgid ""
+#~ "At the significance level %1, the process appears to be stable "
+#~ "(homogeneous). %2"
+#~ msgstr ""
+#~ "Ao nível de significância %1, o processo parece estar estável "
+#~ "(homogêneo). %2"
+
+#~ msgid "Non-Parametric"
+#~ msgstr "Não paramétrico"
+
+#~ msgid "Result"
+#~ msgstr "Resultado"
+
+#~ msgid "Trend"
+#~ msgstr "Tendência"
+
+#~ msgid "Seasonal"
+#~ msgstr "Sazonal"
+
+#~ msgid "Residual"
+#~ msgstr "Residual"
+
+#~ msgid "Original"
+#~ msgstr "Original"
+
+#~ msgid "Original Data"
+#~ msgstr "Dados originais"
+
+#~ msgid "Trend Component"
+#~ msgstr "Componente de tendência"
+
+#~ msgid "Seasonal Component"
+#~ msgstr "Componente sazonal"
+
+#~ msgid "Residual Component"
+#~ msgstr "Componente residual"
+
+#~ msgid "%1: set method"
+#~ msgstr "%1: definir método"
+
+#~ msgid "%1: set period for STL"
+#~ msgstr "%1: definir período para STL"
+
+#~ msgid "%1: set robust parameter for STL"
+#~ msgstr "%1: definir parâmetro de robustez para STL"
+
+#~ msgid "%1: set seasonal length for STL"
+#~ msgstr "%1: definir comprimento sazonal para STL"
+
+#~ msgid "%1: set trend length for STL"
+#~ msgstr "%1: definir comprimento de tendência para STL"
+
+#~ msgid "%1: set trend auto-length for STL"
+#~ msgstr "%1: definir comprimento automático de tendência para STL"
+
+#~ msgid "%1: set low pass length for STL"
+#~ msgstr "%1: definir comprimento passa-baixa para STL"
+
+#~ msgid "%1: set low pass auto-length for STL"
+#~ msgstr "%1: definir comprimento automático de passa-baixa para STL"
+
+#~ msgid "%1: set seasonal degree for STL"
+#~ msgstr "%1: definir grau sazonal para STL"
+
+#~ msgid "%1: set trend degree for STL"
+#~ msgstr "%1: definir tendência sazonal para STL"
+
+#~ msgid "%1: set low pass degree for STL"
+#~ msgstr "%1: definir grau de passa-baixa para STL"
+
+#~ msgid "%1: set seasonal jump for STL"
+#~ msgstr "%1: definir salto sazonal para STL"
+
+#~ msgid "%1: set seasonal auto-jump for STL"
+#~ msgstr "%1: definir salto automático sazonal para STL"
+
+#~ msgid "%1: set trend jump for STL"
+#~ msgstr "%1: definir salto de tendência para STL"
+
+#~ msgid "%1: set trend auto-jump for STL"
+#~ msgstr "%1: definir salto automático de tendência para STL"
+
+#~ msgid "%1: set low pass jump for STL"
+#~ msgstr "%1: definir salto passa-baixa para STL"
+
+#~ msgid "%1: set low pass auto-jump for STL"
+#~ msgstr "%1: definir salto automático de passa-baixa para STL"
+
+#~ msgid "%1: set periods for MSTL"
+#~ msgstr "%1: definir períodos para MSTL"
+
+#~ msgid "%1: set Lambda for MSTL"
+#~ msgstr "%1: definir Lambda para MSTL"
+
+#~ msgid "%1: set iterations for MSTL"
+#~ msgstr "%1: definir iterações para MSTL"
+
+#~ msgid "No valid data provided."
+#~ msgstr "Não há dados fornecidos válidos."
+
+#~ msgid "Seasonal Length must be odd and at least 3."
+#~ msgstr "O comprimento sazonal deve ser ímpar e pelo menos 3."
+
+#~ msgid "Trend Length must be odd and at least 3."
+#~ msgstr "O comprimento de tendência deve ser ímpar e pelo menos 3."
+
+#~ msgid "Low-Pass Length must be odd and at least 3."
+#~ msgstr "O comprimento de passa-baixa deve ser ímpar e pelo menos 3."
+
+#~ msgid "STL decomposition failed: %1"
+#~ msgstr "Decomposição STL falhou: %1"
+
+#~ msgid "No periods specified for MSTL."
+#~ msgstr "Nenhum período especificado para MSTL."
+
+#~ msgid "Periods must be at least 2."
+#~ msgstr "Períodos devem ser pelo menos 2."
+
+#~ msgid "Time-series has less than two periods."
+#~ msgstr "Séries temporais possuem menos de dois períodos."
+
+#~ msgid "Iterations must be > 0."
+#~ msgstr "Iterações deve ser > 0."
+
+#~ msgid "Lambda must be between 0 and 1."
+#~ msgstr "Lambda deve estar entre 0 e 1."
+
+#~ msgid "Box-Cox transformation requires strictly positive data."
+#~ msgstr "A transformação de Box-Cox requer dados estritamente positivos."
+
+#~ msgid "MSTL decomposition failed: %1"
+#~ msgstr "Decomposição MSTL falhou: %1"
+
+#~ msgid "Seasonal Component (Period: %1)"
+#~ msgstr "Componente sazonal (Período: %1)"
+
+#~ msgid "Seasonal, Period: %1"
+#~ msgstr "Sazonal, Período: %1"
+
 #~ msgid "Inset Plot Area"
-#~ msgstr "Área do gráfico"
+#~ msgstr "Inserir área de gráfico"
 
-#, fuzzy
-#~| msgid "%1: set plot area border opacity"
 #~ msgid "Inset Plot Area with Data"
-#~ msgstr "%1: definir a opacidade do contorno da área do gráfico"
+#~ msgstr "Inserir área de gráfico com dados"
 
-#, fuzzy
-#~| msgid "%1: add new point"
+#~ msgid "Pareto Chart"
+#~ msgstr "Gráfico de Pareto"
+
+#~ msgid "Piecewise Linear"
+#~ msgstr "Linear por partes"
+
+#~ msgid "Correct Baseline"
+#~ msgstr "Corrigir linha base"
+
+#~ msgid "Line Simplification"
+#~ msgstr "Simplificação de linha"
+
+#~ msgid "%1: auto scale"
+#~ msgstr "%1: escala automática"
+
+#~ msgid "%1: change %2-range %3"
+#~ msgstr "%1: alterar intervalo %2 %3"
+
+#~ msgid "%1: set plot color mode"
+#~ msgstr "%1: definir modo de cor do gráfico"
+
+#~ msgid "%1: set plot color map"
+#~ msgstr "%1: definir mapa de cores do gráfico"
+
+#~ msgid "%1: set y-offset"
+#~ msgstr "%1: definir deslocamento y"
+
+#~ msgid "Simplification of '%1'"
+#~ msgstr "Simplificação de '%1'"
+
+#~ msgid "Baseline correction for '%1'"
+#~ msgstr "Correção de linha base para '%1'"
+
+#~ msgid "Baseline Correction"
+#~ msgstr "Correção de linha base"
+
+#~ msgid "text"
+#~ msgstr "texto"
+
 #~ msgid "%1: add inset plot"
-#~ msgstr "%1: adicionar novo ponto"
+#~ msgstr "%1: adicionar gráfico inserido"
 
-#, fuzzy
-#~| msgid "%1: add new point"
 #~ msgid "%1: add inset plot with data"
-#~ msgstr "%1: adicionar novo ponto"
+#~ msgstr "%1: adicionar gráfico inserido com dados"
 
-#, fuzzy
-#~| msgid "%1: set axis start"
+#~ msgid "%1: zoom in"
+#~ msgstr "%1: ampliar"
+
+#~ msgid "%1: zoom out"
+#~ msgstr "%1: reduzir"
+
+#~ msgid "in"
+#~ msgstr "dentro"
+
+#~ msgid "out"
+#~ msgstr "fora"
+
+#~ msgid "%1: zoom %2 %3"
+#~ msgstr "%1: zoom %2 %3"
+
+#~ msgid "%1: pan"
+#~ msgstr "%1: deslocar"
+
+#~ msgid "%1: zoom selection"
+#~ msgstr "%1: seleção de zoom"
+
+#~ msgid "%1: wheel zoom"
+#~ msgstr "%1: roda de zoom"
+
 #~ msgid "%1: set limits type"
-#~ msgstr "%1: definir o início do eixo"
+#~ msgstr "%1: definir o tipo dos limites"
 
-#, fuzzy
-#~| msgid "%1: set axis start"
 #~ msgid "%1: set center specification"
-#~ msgstr "%1: definir o início do eixo"
+#~ msgstr "%1: definir a especificação do centro"
 
-#, fuzzy
-#~| msgid "%1: set plot designation"
 #~ msgid "%1: set upper limit specification"
-#~ msgstr "%1: definir a designação do gráfico"
+#~ msgstr "%1: definir a especificação do limite superior"
 
-#, fuzzy
-#~| msgid "%1: set plot designation"
 #~ msgid "%1: set lower limit specification"
-#~ msgstr "%1: definir a designação do gráfico"
+#~ msgstr "%1: definir a especificação do limite inferior"
 
-#, fuzzy
-#~| msgid "Create new color map"
-#~ msgid "Creates a new %1 script"
-#~ msgstr "Criar um novo mapa de cores"
+#~ msgid "Move Reference Line"
+#~ msgstr "Mover linha de referência"
 
-#, fuzzy
-#~| msgid "Plot Area"
+#~ msgid "Move Reference Range"
+#~ msgstr "Mover intervalo de referência"
+
+#~ msgid "%1: auto recalculate changed"
+#~ msgstr "%1: recálculo automático foi alterado"
+
+#~ msgid "%1: set baseline options and perform correction"
+#~ msgstr "%1: definir as opções e efetuar correção"
+
+#~ msgid "%1: set options and perform the line simplification"
+#~ msgstr "%1: definir as opções e efetuar a simplificação de linha"
+
+#~ msgid "%1: toggle changepoint lines"
+#~ msgstr "%1: alternar linhas de ponto de mudança"
+
+#~ msgid "Fit Results"
+#~ msgstr "Resultados do ajuste"
+
+#~ msgid "Piecewise Linear Fit Results"
+#~ msgstr "Resultados do ajuste linear por partes"
+
+#~ msgid "No results available yet"
+#~ msgstr "Ainda não há resultados disponíveis"
+
+#~ msgid "Status: %1"
+#~ msgstr "Status: %1"
+
+#~ msgid "Number of Segments: %1"
+#~ msgstr "Número de segmentos: %1"
+
+#~ msgid "Number of Changepoints: %1"
+#~ msgstr "Número de pontos de mudança: %1"
+
+#~ msgid "Overall R²: %1"
+#~ msgstr "R² geral: %1"
+
+#~ msgid "Overall SSE: %1"
+#~ msgstr "SSE geral: %1"
+
+#~ msgid "Changepoint Positions (X-values)"
+#~ msgstr "Posições dos pontos de mudança (valores de X)"
+
+#~ msgid "Segment %1"
+#~ msgstr "Segmento %1"
+
+#~ msgid "Parameter Statistics (Slope):"
+#~ msgstr "Estatísticas do parâmetro (Inclinação):"
+
+#~ msgid "Goodness of Fit:"
+#~ msgstr "Bondade do ajuste:"
+
+#~ msgid "Statistical Tests:"
+#~ msgstr "Testes estatísticos:"
+
+#~ msgid "Information Criteria:"
+#~ msgstr "Critério de informação:"
+
+#~ msgid "Change &Visibility"
+#~ msgstr "Alterar &visibilidade"
+
+#~ msgid "%1: change visibility"
+#~ msgid_plural "%1: change visibility of %2 elements"
+#~ msgstr[0] "%1: alterar visibilidade"
+#~ msgstr[1] "%1: alterar visibilidade de %2 elementos"
+
+#~ msgid "Python scripting support"
+#~ msgstr "Suporte a scripts python"
+
+#~ msgid "Apache Parquet, Arrow IPC (Feather) and Apache ORC file support"
+#~ msgstr "Suporte a arquivos Apache Parquet, Arrow IPC (Feather) e Apache ORC"
+
+#~ msgid "&Full Screen Mode"
+#~ msgstr "Modo de tela &cheia"
+
+#~ msgid "Python Script"
+#~ msgstr "Script Python"
+
+#~ msgid "Creates a new Python script"
+#~ msgstr "Cria um novo script Python"
+
+#~ msgid "From Directory..."
+#~ msgstr "Da pasta..."
+
+#~ msgid "Import multiple files from a directory"
+#~ msgstr "Importar vários arquivos de uma pasta"
+
+#~ msgid "What's New"
+#~ msgstr "O que há de novo"
+
 #~ msgctxt "@action"
 #~ msgid "New Plot Area"
-#~ msgstr "Área do gráfico"
+#~ msgstr "Nova área de gráfico"
 
-#, fuzzy
-#~| msgid "Zoom"
 #~ msgctxt "@action"
 #~ msgid "Zoom"
 #~ msgstr "Zoom"
 
-#, fuzzy
-#~| msgid "Magnification"
 #~ msgctxt "@action"
 #~ msgid "Magnification"
 #~ msgstr "Ampliação"
 
-#, fuzzy
-#~| msgid "Add new"
 #~ msgctxt "@action"
 #~ msgid "Add New"
 #~ msgstr "Adicionar novo"
 
-#, fuzzy
-#~| msgid "Statistics"
+#~ msgid "Pause"
+#~ msgstr "Pausar"
+
+#~ msgid "Continue"
+#~ msgstr "Continuar"
+
+#~ msgid "Imported Data"
+#~ msgstr "Dados importados"
+
+#~ msgid "Template file"
+#~ msgstr "Arquivo de modelo"
+
+#~ msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
+#~ msgstr ""
+#~ "Arquivo de dados de entrada (CSV, HDF5, etc.) ou arquivo de projeto (."
+#~ "lml)."
+
+#~ msgid "file"
+#~ msgstr "arquivo"
+
+#~ msgid "Output file for export (PDF, PNG, SVG, EPS)."
+#~ msgstr "Arquivo de saída para exportação (PDF, PNG, SVG, EPS)."
+
+#~ msgid ""
+#~ "Output format: pdf, png, svg, or eps (auto-detected from output extension "
+#~ "if not specified)."
+#~ msgstr ""
+#~ "Formato de saída: pdf, png, svg ou eps (detectado automaticamente pela "
+#~ "extensão de saída, se não especificado)."
+
+#~ msgid "type"
+#~ msgstr "tipo"
+
+#~ msgid "Output resolution in DPI for raster formats (default: 300)."
+#~ msgstr "Resolução de saída em DPI para formatos raster (padrão: 300)."
+
+#~ msgid "value"
+#~ msgstr "valor"
+
+#~ msgid "Run in headless mode without GUI, exit after operations complete."
+#~ msgstr ""
+#~ "Executar em modo *headless* (sem interface gráfica) e encerrar após a "
+#~ "conclusão das operações."
+
+#~ msgid "Export a specific worksheet by name."
+#~ msgstr "Exportar uma planilha específica pelo nome."
+
+#~ msgid "Export all worksheets and spreadsheets in the project."
+#~ msgstr "Exportar todas as planilhas do projeto."
+
+#~ msgid ""
+#~ "Output directory for multiple exported files (used with --export-all)."
+#~ msgstr ""
+#~ "Diretório de saída para múltiplos arquivos exportados (usado com --export-"
+#~ "all)."
+
+#~ msgid "directory"
+#~ msgstr "pasta"
+
+#~ msgid "Apply a plot style template file (.labplot_template)."
+#~ msgstr ""
+#~ "Aplique um arquivo de modelo de estilo de gráfico (.labplot_template)."
+
+#~ msgid "Set the plot title."
+#~ msgstr "Definir o título do gráfico."
+
+#~ msgid "Set the X-axis label."
+#~ msgstr "Definir a legenda do eixo X."
+
+#~ msgid "Set the Y-axis label."
+#~ msgstr "Definir a legenda do eixo Y."
+
+#~ msgid "Input project file or data file to open."
+#~ msgstr "Arquivo de entrada do projeto ou arquivo de dados a ser aberto."
+
+#~ msgid "Input file"
+#~ msgstr "Arquivo de entrada"
+
+#~ msgid "Invalid data type '%1'"
+#~ msgstr "Tipo de dados inválido '%1'"
+
+#~ msgid "Add a new Folder"
+#~ msgstr "Adicionar uma nova pasta"
+
+#~ msgid "New Folder"
+#~ msgstr "Nova pasta"
+
+#~ msgid "The directory %1 doesn't exist."
+#~ msgstr "A pasta %1 não existe."
+
+#~ msgid "%1 files imported in %2 seconds."
+#~ msgstr "%1 arquivos importados em %2 segundos."
+
+#~ msgid "Apache Parquet"
+#~ msgstr "Apache Parquet"
+
+#~ msgid "Arrow IPC (Feather)"
+#~ msgstr "Arrow IPC (Feather)"
+
+#~ msgid "Apache ORC"
+#~ msgstr "Apache ORC"
+
+#~ msgctxt "@title:window"
+#~ msgid "Select the Directory Data Source"
+#~ msgstr "Selecionar a fonte de dados da pasta"
+
+#~ msgid "Number of sub-directories: %1"
+#~ msgstr "Número de subpastas: %1"
+
+#~ msgid "Couldn't read the directory %1."
+#~ msgstr "Não foi possível ler a pasta %1."
+
+#~ msgid ""
+#~ "If enabled: Use the major tick number as base to determine the new number "
+#~ "of ticks for nice looking values. The number of ticks might be different "
+#~ "than the number previously set."
+#~ msgstr ""
+#~ "Se habilitado: Usa o número de traços principal como base para determinar "
+#~ "o novo número de traços para obter valores com boa aparência. O número de "
+#~ "traços pode ser diferente do número definido anteriormente."
+
+#~ msgid "Custom Column Values"
+#~ msgstr "Valores da coluna personalizada"
+
+#~ msgid "Custom Column Labels"
+#~ msgstr "Legendas da coluna personalizada"
+
+#~ msgid "Angle (DMS)"
+#~ msgstr "Ângulo (GMS)"
+
+#~ msgid ""
+#~ "Defines how and where to position the major ticks on the axis:"
+#~ "<ul><li>Number - ticks are placed equidistantly, the spacing between them "
+#~ "is determined by the provided fixed number of ticks.</li><li>Spacing - "
+#~ "ticks are placed equidistantly with the provided spacing between them.</"
+#~ "li><li>Custom Column Values - positions are determined by the values in "
+#~ "the custom column provided below.</li><li>Custom Column Labels - "
+#~ "positions are determined by the value labels in the custom column "
+#~ "provided below.</li></ul></ul>"
+#~ msgstr ""
+#~ "Define como e onde posicionar as marcas principais no eixo:<ul><li>Número "
+#~ "- as marcas são posicionadas equidistantes, o espaçamento entre elas é "
+#~ "determinado pelo número fixo de marcas fornecido.</li><li>Espaçamento - "
+#~ "as marcas são posicionadas equidistantes com o espaçamento fornecido "
+#~ "entre elas.</li><li>Valores da coluna personalizada - as posições são "
+#~ "determinadas pelos valores na coluna personalizada fornecida abaixo.</"
+#~ "li><li>Legendas da coluna personalizada - as posições são determinadas "
+#~ "pelas legendas de valor na coluna personalizada fornecida abaixo.</li></"
+#~ "ul></ul>"
+
+#~ msgid ""
+#~ "Defines where to position the first major tick:<ul><li>Absolute Value - "
+#~ "the first tick is positioned at the absolute value provided below.</"
+#~ "li><li>Offset - the first tick is positioned at the offset relatively to "
+#~ "the beginning of the axis range.</li></ul></ul>"
+#~ msgstr ""
+#~ "Define onde posicionar a primeira marca principal:<ul><li>Valor absoluto "
+#~ "- a primeira marca é posicionada no valor absoluto fornecido abaixo.</"
+#~ "li><li>Deslocamento - a primeira marca é posicionada no deslocamento em "
+#~ "relação ao início do intervalo do eixo.</li></ul></ul>"
+
+#~ msgid ""
+#~ "Column with the values that should be used as the positions of the major "
+#~ "ticks."
+#~ msgstr ""
+#~ "Coluna com os valores que devem ser usados como posições das marcas de "
+#~ "escala principais."
+
+#~ msgid ""
+#~ "Defines which text labels to show for the major ticks:<ul><li>Position "
+#~ "Values - the positions of the ticks are used as text labels.</"
+#~ "li><li>Custom Column Values - values in the custom column provided below "
+#~ "are used as text labels.</li></ul></ul>"
+#~ msgstr ""
+#~ "Define quais legendas de texto exibir para as marcas de escala principais:"
+#~ "<ul><li>Valores de posição - as posições das marcas de escala são usadas "
+#~ "como legendas de texto.</li><li>Valores da coluna personalizada - os "
+#~ "valores na coluna personalizada fornecida abaixo são usados como legendas "
+#~ "de texto.</li></ul></ul>"
+
+#~ msgid ""
+#~ "Column with the values that should be used as the text labels for the "
+#~ "major ticks."
+#~ msgstr ""
+#~ "Coluna com os valores que devem ser usados como legendas de texto para as "
+#~ "marcas de escala principais."
+
+#~ msgid ""
+#~ "Defines how and where to position the minor ticks on the axis:"
+#~ "<ul><li>Number - ticks are placed equidistantly, the spacing between them "
+#~ "is determined by the provided fixed number of ticks.</li><li>Spacing - "
+#~ "ticks are placed equidistantly with the provided spacing between them.</"
+#~ "li><li>Custom Column Values - positions are determined by the values in "
+#~ "the custom column provided below.</li></ul></ul>"
+#~ msgstr ""
+#~ "Define como e onde posicionar as marcas menores no eixo:<ul><li>Número - "
+#~ "as marcas são posicionadas equidistantes, o espaçamento entre elas é "
+#~ "determinado pelo número fixo de marcas fornecido.</li><li>Espaçamento - "
+#~ "as marcas são posicionadas equidistantes com o espaçamento fornecido "
+#~ "entre elas.</li><li>Valores da coluna personalizada - as posições são "
+#~ "determinadas pelos valores na coluna personalizada fornecida abaixo.</"
+#~ "li></ul></ul>"
+
+#~ msgid ""
+#~ "Column with the values that should be used as the positions of the minor "
+#~ "ticks."
+#~ msgstr ""
+#~ "Coluna com os valores que devem ser usados como posições das marcas de "
+#~ "escala menores."
+
+#~ msgid "%v cm"
+#~ msgstr "%v cm"
+
+#~ msgid "%v in"
+#~ msgstr "%v pol"
+
+#~ msgid "Color Map"
+#~ msgstr "Mapa de cores"
+
+#~ msgid ""
+#~ "Defines which colors to use for plots:<ul><li>Theme - colors are taken "
+#~ "from the current theme apply to plot area</li><li>Color Map - colors are "
+#~ "taken from the specified color map</li></ul>"
+#~ msgstr ""
+#~ "Define quais cores usar para os gráficos:<ul><li>Tema - as cores são "
+#~ "retiradas do tema atual aplicado à área do gráfico</li><li>Mapa de cores "
+#~ "- as cores são retiradas do mapa de cores especificado</li></ul>"
+
+#~ msgctxt "@label:spinbox Suffix for the X position in %"
+#~ msgid "%v%"
+#~ msgstr "%v%"
+
+#~ msgctxt "@label:spinbox Suffix for the Y position in %"
+#~ msgid "%v%"
+#~ msgstr "%v%"
+
+#~ msgid "Invalid variable name provided"
+#~ msgstr "Nome de variável inválido fornecido"
+
+#~ msgid "Apply Formula"
+#~ msgstr "Aplicar fórmula"
+
+#~ msgid "%1: apply column formula"
+#~ msgid_plural "%1: apply column formula"
+#~ msgstr[0] "%1: aplicar fórmula da coluna"
+#~ msgstr[1] "%1: aplicar fórmula da coluna"
+
+#~ msgid ""
+#~ "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
+#~ "known population mean</li><li><b>%2</b> - tests if two independent "
+#~ "samples have the same mean</li><li><b>%3</b> - tests if the mean "
+#~ "difference between two related samples is zero</li><li><b>%4</b> - tests "
+#~ "if two independent samples with unequal variances have the same mean</"
+#~ "li><li><b>%5</b> - tests if three or more independent samples have the "
+#~ "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
+#~ "measurements have the same mean</li><li><b>%7</b> - tests differences in "
+#~ "medians between two independent groups</li>"
+#~ msgstr ""
+#~ "<ul><li><b>%1</b> - testa se a média de uma amostra difere "
+#~ "significativamente de uma média populacional conhecida</li><li><b>%2</b> "
+#~ "- testa se duas amostras independentes têm a mesma média</li><li><b>%3</"
+#~ "b> - testa se a diferença média entre duas amostras relacionadas é zero</"
+#~ "li><li><b>%4</b> - testa se duas amostras independentes com variâncias "
+#~ "desiguais têm a mesma média</li><li><b>%5</b> - testa se três ou mais "
+#~ "amostras independentes têm a mesma média</li><li><b>%6</b> - testa se "
+#~ "três ou mais medições relacionadas/repetidas têm a mesma média</li><li><b>"
+#~ "%7</b> - testa diferenças nas medianas entre dois grupos independentes</"
+#~ "li>"
+
+#~ msgid ""
+#~ "<li><b>%1</b> - tests if the median difference between two related "
+#~ "samples is zero</li><li><b>%2</b> - tests differences in medians among "
+#~ "three or more independent groups</li><li><b>%3</b> - tests differences in "
+#~ "medians among three or more related/repeated measurements</li><li><b>%4</"
+#~ "b> - tests differences in survival distributions between two or more "
+#~ "groups</li><li><b>%5</b> - tests for a trend in data over time</li><li><b>"
+#~ "%6</b> - tests for randomness in a sequence of observations</li><li><b>"
+#~ "%7</b> - tests for non-random patterns in process control data using runs "
+#~ "above/below median</li><li><b>%8</b> - tests if two categorical variables "
+#~ "are independent of each other</li><li><b>%9</b> - tests if observed data "
+#~ "follows a specified theoretical distribution</li></ul>"
+#~ msgstr ""
+#~ "<li><b>%1</b> - testa se a diferença mediana entre duas amostras "
+#~ "relacionadas é zero</li><li><b>%2</b> - testa diferenças nas medianas "
+#~ "entre três ou mais grupos independentes</li><li><b>%3</b> - testa "
+#~ "diferenças nas medianas entre três ou mais medições relacionadas/"
+#~ "repetidas</li><li><b>%4</b> - testa diferenças nas distribuições de "
+#~ "sobrevivência entre dois ou mais grupos</li><li><b>%5</b> - testa uma "
+#~ "tendência nos dados no tempo</li><li><b>%6</b> - testes de aleatoriedade "
+#~ "em uma sequência de observações</li><li><b>%7</b> - testes para padrões "
+#~ "não aleatórios em dados de controle de processo usando execuções acima/"
+#~ "abaixo da mediana</li><li><b>%8</b> - testa se duas variáveis categóricas "
+#~ "são independentes uma da outra</li><li><b>%9</b> - testa se os dados "
+#~ "observados seguem uma distribuição teórica especificada</li></ul>"
+
+#~ msgid ""
+#~ "Selected test requires at least %1 and at most %2 non-empty variables."
+#~ msgstr ""
+#~ "O teste selecionado requer pelo menos %1 e no máximo %2 variáveis não "
+#~ "vazias."
+
+#~ msgid "Plain Text"
+#~ msgstr "Texto simples"
+
 #~ msgid "Statistical"
-#~ msgstr "Estatísticas"
+#~ msgstr "Estatístico"
 
-#, fuzzy
-#~| msgid "Scientific notation"
 #~ msgid "Specification"
-#~ msgstr "Notação científica"
+#~ msgstr "Especificação"
 
-#, fuzzy
-#~| msgid "Day Names"
+#~ msgid ""
+#~ "Determine which values to use for the center and limit lines:"
+#~ "<ul><li>Statistical - values are calculated based on the statistical "
+#~ "properties of the sample.</li><li>Specification - custom user-defined "
+#~ "values are used.</li></ul>"
+#~ msgstr ""
+#~ "Determine quais valores usar para as linhas central e limite:"
+#~ "<ul><li>Estatístico - os valores são calculados com base nas propriedades "
+#~ "estatísticas da amostra.</li><li>Especificação - valores personalizados "
+#~ "definidos pelo usuário são usados.</li></ul>"
+
+#~ msgid "%1 reference lines: orientation changed"
+#~ msgstr "%1 linhas de referência: orientação alterada"
+
+#~ msgid "%1: orientation changed"
+#~ msgstr "%1: a orientação foi alterada"
+
 #~ msgid "Copy Name"
-#~ msgstr "Nome dos dias"
+#~ msgstr "Copiar nome"
 
-#, fuzzy
-#~| msgid "Drop Values"
 #~ msgid "Copy Value"
-#~ msgstr "Soltar os valores"
+#~ msgstr "Copiar valor"
 
-#, fuzzy
-#~| msgid "Drop Values"
 #~ msgid "Copy Name and Value"
-#~ msgstr "Soltar os valores"
+#~ msgstr "Copiar nome e valor"
 
-#, fuzzy
-#~| msgid "Direction"
+#~ msgid ""
+#~ "Method used to perform the seasonal-trend decomposition:<ul><li>STL - "
+#~ "Seasonal-trend decomposition based on LOESS (\"Locally Estimated "
+#~ "Scatterplot Smoothing\")</li><li>MSTL - STL for multiple seasonalities</"
+#~ "li></ul>"
+#~ msgstr ""
+#~ "Método utilizado para realizar a decomposição da tendência sazonal:"
+#~ "<ul><li>STL -Decomposição da tendência sazonal baseada em LOESS "
+#~ "(\"Suavização de Diagrama de Dispersão Estimada Localmente\")</"
+#~ "li><li>MSTL - STL para múltiplas sazonalidades</li></ul>"
+
+#~ msgid ""
+#~ "If enabled, uses a data-dependent weighting function to get more robust "
+#~ "result if the data has outliers."
+#~ msgstr ""
+#~ "Se ativada, utiliza uma função de ponderação dependente dos dados para "
+#~ "obter um resultado mais robusto caso os dados apresentem valores "
+#~ "discrepantes."
+
+#~ msgid ""
+#~ "Period of the seasonal component. Examples:<ul><li>24 - for hourly data "
+#~ "with daily seasonality (24h)</li><li>168 - for hourly data with weekly "
+#~ "seasonality (7 * 24h = 168h)</li><li>7 - for daily data with weekly "
+#~ "seasonality (7 days)</li><li>365 - for daily data yearly (365 days) "
+#~ "seasonality</li><li>12 - for monthly data with yearly seasonality (12 "
+#~ "months)</li></ul>"
+#~ msgstr ""
+#~ "Período do componente sazonal. Exemplos:<ul><li>24 - para dados horários "
+#~ "com sazonalidade diária (24h)</li><li>168 - para dados horários com "
+#~ "sazonalidade semanal (7 * 24h = 168h)</li><li>7 - para dados diários com "
+#~ "sazonalidade semanal (7 dias)</li><li>365 - para dados diários com "
+#~ "sazonalidade anual (365 dias)</li><li>12 - para dados mensais com "
+#~ "sazonalidade anual (12 meses)</li></ul>"
+
+#~ msgid "Length of the seasonal smoother, must be odd and at least 3."
+#~ msgstr "O comprimento do suavizador sazonal deve ser ímpar e pelo menos 3."
+
+#~ msgid "Length of the trend smoother, must be odd and at least 3."
+#~ msgstr ""
+#~ "O comprimento do suavizador de tendência deve ser ímpar e pelo menos 3."
+
+#~ msgid ""
+#~ "If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / "
+#~ "(1 - 1.5 / \"Seasonal Length\")."
+#~ msgstr ""
+#~ "Se ativado, utiliza o menor número inteiro ímpar maior que 1,5 * \"Período"
+#~ "\" / (1 - 1,5 / \"Comprimento Sazonal\")."
+
+#~ msgid "Length of the low-pass filter, must be odd and at least 3."
+#~ msgstr "O comprimento do filtro passa-baixa deve ser ímpar e pelo menos 3."
+
+#~ msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
+#~ msgstr ""
+#~ "Se ativado, utiliza o menor número inteiro ímpar maior que \"Período\"."
+
+#~ msgid "0 - Constant"
+#~ msgstr "0 - Constante"
+
+#~ msgid "1 - Constant and Trend"
+#~ msgstr "1 - Constante e Tendência"
+
+#~ msgid "The degree of locally-fitted polynomial for the seasonal component."
+#~ msgstr "O grau do polinômio ajustado localmente para o componente sazonal."
+
+#~ msgid "The degree of locally-fitted polynomial for the trend component."
+#~ msgstr ""
+#~ "O grau do polinômio ajustado localmente para o componente de tendência."
+
+#~ msgid "The degree of locally-fitted polynomial for the low-pass component."
+#~ msgstr ""
+#~ "O grau do polinômio ajustado localmente para o componente passa-baixa."
+
+#~ msgid "The number of jumps to include in the seasonal component."
+#~ msgstr "O número de saltos a incluir no componente sazonal."
+
+#~ msgid "If enabled, uses \"Seasonal Length\" / 10."
+#~ msgstr "Se ativado, usa \"Duração sazonal\" / 10."
+
+#~ msgid "The number of jumps to include in the trend component."
+#~ msgstr "O número de saltos a incluir no componente de tendência."
+
+#~ msgid "If enabled, uses \"Trend Length\" / 10."
+#~ msgstr "Se ativado, usa \"Comprimento da Tendência\" / 10."
+
+#~ msgid "The number of jumps to include in the low-pass component."
+#~ msgstr "O número de saltos a incluir no componente de filtro passa-baixa."
+
+#~ msgid "If enabled, uses \"Low-Pass Length\" / 10."
+#~ msgstr "Se ativado, usa \"Comprimento do filtro passa-baixa\" / 10."
+
+#~ msgid ""
+#~ "Periods of the seasonal components, coma-separated values. Examples:"
+#~ "<ul><li>24, 168 - for hourly data with daily (24h) and weekly (7 * 24h = "
+#~ "168h) seasonality</li><li>7, 365 - for daily data with weekly (7 days) "
+#~ "and yearly (365 days) seasonality</li></ul>"
+#~ msgstr ""
+#~ "Períodos dos componentes sazonais, valores separados por vírgula. "
+#~ "Exemplos: <ul><li>24, 168 - para dados horários com sazonalidade diária "
+#~ "(24h) e semanal (7 * 24h = 168h)</li><li>7, 365 - para dados diários com "
+#~ "sazonalidade semanal (7 dias) e anual (365 dias)</li></ul>"
+
+#~ msgid ""
+#~ "The lambda parameter for the Box-Cox transformation applied prior to "
+#~ "decomposition."
+#~ msgstr ""
+#~ "O parâmetro lambda para a transformação de Box-Cox aplicada antes da "
+#~ "decomposição."
+
+#~ msgid "Number of iterations used to refine the seasonal component."
+#~ msgstr "Número de iterações utilizadas para refinar o componente sazonal."
+
+#~ msgid "%1 seasonal decompositions: template \"%2\" loaded"
+#~ msgstr "%1 decomposições sazonais: modelo \"%2\" carregado"
+
+#~ msgid "Show Columns Statistics Spreadsheet"
+#~ msgstr "Mostrar colunas de estatísticas da planilha"
+
+#~ msgid ""
+#~ "Method used to calculate the baseline correction:<ul><li>arPLS - "
+#~ "asymmetrically reweighted penalized least square method.</li><li>Minimum "
+#~ "- subtract the minimum of the data.</li><li>Maximum - subtract the "
+#~ "maximum of the data.</li><li>Mean - subtract the mean of the data.</"
+#~ "li><li>Median - subtract the median of the data.</li><li>End Points - do "
+#~ "a linear interpolation using first and last point and subtract it.</"
+#~ "li><li>Linear Regression - do a linear regression to the data and "
+#~ "subtract it.</li></ul>"
+#~ msgstr ""
+#~ "Método usado para calcular a correção da linha base:<ul><li>arPLS - "
+#~ "método de mínimos quadrados penalizados reponderados assimetricamente.</"
+#~ "li><li>Mínimo - subtrai o mínimo dos dados.</li><li>Máximo - subtrai o "
+#~ "máximo dos dados.</li><li>Média - subtrai a média dos dados.</"
+#~ "li><li>Mediana - subtrai a mediana dos dados.</li><li>Pontos finais - faz "
+#~ "um cálculo linear de interpolação usando o primeiro e o último ponto e "
+#~ "subtrai-o.</li><li>Regressão linear - faz uma regressão linear aos dados "
+#~ "e subtrai-os.</li></ul>"
+
+#~ msgid "Baseline correction status: %1"
+#~ msgstr "Status da correção de linha base: %1"
+
 #~ msgid "Description:"
-#~ msgstr "Direção"
+#~ msgstr "Descrição:"
 
-#, fuzzy
-#~| msgid "Properties"
+#~ msgid "User defined model"
+#~ msgstr "Modelo definido pelo usuário"
+
+#~ msgctxt "@label:spinbox Suffix for the frequency"
+#~ msgid "%v Hz"
+#~ msgstr "%v Hz"
+
+#~ msgid ""
+#~ "Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
+#~ "the line and retains only those points that deviate more than a specified "
+#~ "threshold from the line segment between the start and end points.</"
+#~ "li><li>Visvalingam-Whyatt - iteratively removes the point that "
+#~ "contributes the least effective area to the polygon's shape until a "
+#~ "desired number of points or area threshold is reached.</"
+#~ "li><li>Perpendicular Distance - measures the perpendicular distance of "
+#~ "each point from a reference line and retains only those exceeding a "
+#~ "threshold.</li><li>n-th Point - keeps every n-th point only.</"
+#~ "li><li>Radial Distance - measures the distance of each point from the "
+#~ "previous retained point and retains only those exceeding a threshold.</"
+#~ "li><li>Interpolation.</li><li>Opheim - uses both distance and angular "
+#~ "tolerance to simplify lines. It retains points only if they fall outside "
+#~ "a specified distance and angular threshold from the previous retained "
+#~ "point.</li><li>Lang - retaines points that are at least a specified "
+#~ "distance apart and ensuring no point deviates more than a set tolerance "
+#~ "from the simplified line.</li></ul>"
+#~ msgstr ""
+#~ "Método para simplificar a linha:<ul><li>Douglas-Peucker - divide "
+#~ "recursivamente a linha e retém apenas os pontos que se desviam mais do "
+#~ "que um limite especificado do segmento de linha entre os pontos inicial e "
+#~ "final.</li><li>Visvalingam-Whyatt - remove iterativamente o ponto que "
+#~ "contribui com a área menos efetiva para a forma do polígono até que um "
+#~ "número desejado de pontos ou um limite de área seja atingido.</"
+#~ "li><li>Distância Perpendicular - mede a distância perpendicular de cada "
+#~ "ponto a uma linha de referência e retém apenas aqueles que excedem um "
+#~ "limite.</li><li>Ponto n - mantém apenas cada ponto n.</li><li>Distância "
+#~ "Radial - mede a distância de cada ponto do ponto retido anteriormente e "
+#~ "retém apenas aqueles que excedem um limite.</li><li>Interpolação.</"
+#~ "li><li>Opheim - usa tanto a distância quanto a tolerância angular para "
+#~ "simplificar linhas. Ele retém pontos somente se eles estiverem fora de "
+#~ "uma distância e limite angular especificados em relação ao ponto retido "
+#~ "anteriormente.</li><li>Lang - retém pontos que estejam a pelo menos uma "
+#~ "distância especificada e garantindo que nenhum ponto se desvie mais do "
+#~ "que uma tolerância definida da linha simplificada.</li></ul>"
+
+#~ msgid "Maximum perpendicular distance from the connecting line segment"
+#~ msgstr ""
+#~ "Distância perpendicular máxima do segmento de reta que conecta os "
+#~ "segmentos de reta"
+
+#~ msgid "Maximum radial distance from the previous retained point"
+#~ msgstr "Distância radial máxima a partir do ponto retido anteriormente"
+
+#~ msgid "Maximum perpendicular distance from the line segment"
+#~ msgstr "Distância perpendicular máxima do segmento de reta"
+
+#~ msgid "Target number of points in the simplified line"
+#~ msgstr "Número alvo de pontos na linha simplificada"
+
+#~ msgid "Keep every n-th point (n is the step size)"
+#~ msgstr "Mantenha cada n-ésimo ponto (onde n é o tamanho do passo)"
+
+#~ msgid "Maximum perpendicular distance from the reference line"
+#~ msgstr "Distância perpendicular máxima da linha de referência"
+
+#~ msgid "Number of iterations to apply the simplification"
+#~ msgstr "Número de iterações para aplicar a simplificação"
+
+#~ msgid "Minimum area contribution threshold for retaining points"
+#~ msgstr "Limiar mínimo de contribuição de área para pontos de retenção"
+
+#~ msgid "Minimum distance threshold from retained point"
+#~ msgstr "Distância mínima limite a partir do ponto retido"
+
+#~ msgid "Maximum distance threshold from retained point"
+#~ msgstr "Limite máximo de distância a partir do ponto retido"
+
+#~ msgid "Minimum point spacing distance"
+#~ msgstr "Distância mínima de espaçamento entre pontos"
+
+#~ msgid "Search region size in units of points"
+#~ msgstr "Tamanho da região de pesquisa em unidades de pontos"
+
+#~ msgid "Continuous"
+#~ msgstr "Contínuo"
+
+#~ msgid "Discontinuous"
+#~ msgstr "Descontínuo"
+
+#~ msgid ""
+#~ "Method for detecting changepoints:<ul><li>Binary Segmentation: "
+#~ "recursively split the data into segments to detect changepoints.</"
+#~ "li><li>PELT (Pruned Exact Linear Time): detection of changepoints with "
+#~ "linear computational cost.</li></ul>"
+#~ msgstr ""
+#~ "Método para detecção de pontos de mudança:<ul><li>Segmentação binária: "
+#~ "divide recursivamente os dados em segmentos para detectar pontos de "
+#~ "mudança.</li><li>PELT (Pruned Exact Linear Time): detecção de pontos de "
+#~ "mudança com custo computacional linear.</li></ul>"
+
+#~ msgid ""
+#~ "Minimum number of data points in a segment. Segments with fewer data "
+#~ "points are merged with neighboring segments."
+#~ msgstr ""
+#~ "Número mínimo de pontos de dados em um segmento. Segmentos com menos "
+#~ "pontos de dados são mesclados com segmentos vizinhos."
+
+#~ msgid ""
+#~ "Cost for adding a changepoint. Must be exceeded by the fit improvement "
+#~ "(SSE reduction) to justify splitting.\n"
+#~ "Lower values detect more changepoints, higher values detect fewer.\n"
+#~ "Scale with your data: ~1 for Y-values near 1, ~10-100 for large values, "
+#~ "~0.01-0.1 for small values."
+#~ msgstr ""
+#~ "Custo para adicionar um ponto de mudança. A melhoria no ajuste (redução "
+#~ "da SSE) deve superar esse valor para justificar a divisão.\n"
+#~ "Valores mais baixos detectam mais pontos de mudança; valores mais altos "
+#~ "detectam menos.\n"
+#~ "Ajuste conforme a escala dos seus dados: ~1 para valores de Y próximos de "
+#~ "1, ~10 a 100 para valores grandes, ~0,01 a 0,1 para valores pequenos."
+
+#~ msgid ""
+#~ "Determine if the fit should be continuous or discontinuous at the "
+#~ "changepoints."
+#~ msgstr ""
+#~ "Determina se o ajuste deve ser contínuo ou descontínuo nos pontos de "
+#~ "mudança."
+
+#~ msgid ""
+#~ "X-range of the data used for the fit. Only data points within this range "
+#~ "are considered."
+#~ msgstr ""
+#~ "Intervalo de valores de X dos dados utilizados para o ajuste. Apenas os "
+#~ "pontos de dados dentro desse intervalo são considerados."
+
+#~ msgid ""
+#~ "If checked, the data range used for the fit is automatically determined "
+#~ "from the data. A custom range can be specified otherwise."
+#~ msgstr ""
+#~ "Se marcado, o intervalo de dados utilizado para o ajuste é determinado "
+#~ "automaticamente a partir dos dados. Caso contrário, é possível "
+#~ "especificar um intervalo personalizado."
+
+#~ msgid "Minimum X-value of the data used for the fit."
+#~ msgstr "Valor mínimo de X dos dados utilizados para o ajuste."
+
+#~ msgid "Maximum X-value of the data used for the fit."
+#~ msgstr "Valor máximo de X dos dados utilizados para o ajuste."
+
+#~ msgid ""
+#~ "Method used to smooth the data:<ul><li>Moving Average (Central) - "
+#~ "smoothing using the average of a fixed number of points, the average is "
+#~ "centered on the current point.</li><li>Moving Average (Lagged) - "
+#~ "smoothing using the average of a fixed number of points, the average is "
+#~ "lagged behind the current point.</li><li>Percentile - smoothing using the "
+#~ "percentile of a fixed number of points.</li><li>Savitzky-Golay - "
+#~ "smoothing using least-squares fitting of polynomials to segments of the "
+#~ "data.</li><li>LOWESS - locally weighted scatterplot smoothing.</li></ul>"
+#~ msgstr ""
+#~ "Método usado para suavizar os dados:<ul><li>Média móvel (Central) - "
+#~ "suavização usando a média de um número fixo de pontos, a média é centrada "
+#~ "no ponto atual.</li><li>Média móvel (Atrasada) - suavização usando a "
+#~ "média de um número fixo de pontos, a média é defasada em relação ao ponto "
+#~ "atual.</li><li>Percentil - suavização usando o percentil de um número "
+#~ "fixo de pontos.</li><li>Savitzky-Golay - suavização usando o ajuste de "
+#~ "mínimos quadrados de polinômios a segmentos dos dados.</li><li>LOWESS - "
+#~ "sigla em inglês para suavização de dispersão ponderada localmente.</li></"
+#~ "ul>"
+
+#~ msgid "Number of points in the moving window"
+#~ msgstr "Número de pontos na janela móvel"
+
+#~ msgid ""
+#~ "Weighting type to define different weights for the points in the moving "
+#~ "window"
+#~ msgstr ""
+#~ "Tipo de ponderação para definir pesos diferentes para os pontos na janela "
+#~ "móvel"
+
+#~ msgid "Percentile of the points in the moving window"
+#~ msgstr "Percentil dos pontos na janela móvel"
+
+#~ msgid ""
+#~ "The order of the polynomial used to fit the points in the moving window"
+#~ msgstr "A ordem do polinômio usado para ajustar os pontos na janela móvel"
+
+#~ msgid "The fraction of the data used to perform the local fit."
+#~ msgstr "A fração dos dados utilizada para realizar o ajuste local."
+
+#~ msgid ""
+#~ "If delta > 0, values of y-data within delta of each other will use "
+#~ "interpolation instead of full regression."
+#~ msgstr ""
+#~ "Se delta > 0, os valores dos dados y que estiverem a uma distância delta "
+#~ "uns dos outros usarão interpolação em vez de regressão completa."
+
+#~ msgid "The number of robustifying iterations"
+#~ msgstr "O número de iterações de robustez"
+
+#~ msgid "Padding mode to handle the edges of the data set"
+#~ msgstr "Modo de preenchimento para lidar com as bordas do conjunto de dados"
+
+#~ msgid "The value for constant padding at the left edge"
+#~ msgstr "O valor para o espaçamento constante na borda esquerda"
+
+#~ msgid "The value for constant padding at the right edge"
+#~ msgstr "O valor para o espaçamento constante na borda direita"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Line Simplification"
+#~ msgstr "Propriedades: Simplificação de linha"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Piecewise Linear Fit"
+#~ msgstr "Propriedades: Ajuste linear por partes"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Baseline Correction"
+#~ msgstr "Propriedades: Correção de linha base"
+
+#~ msgctxt "@title:window"
+#~ msgid "Pareto Chart"
+#~ msgstr "Gráfico de Pareto"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Hypothesis Test"
+#~ msgstr "Propriedades: Teste da hipótese"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Seasonal Decomposition"
+#~ msgstr "Propriedades: Decomposição sazonal"
+
 #~ msgctxt "@title:window"
 #~ msgid "Properties: Script"
-#~ msgstr "Propriedades"
+#~ msgstr "Propriedades: Script"
 
-#, fuzzy
-#~| msgid "function"
 #~ msgid "Select file to load function definition"
-#~ msgstr "função"
+#~ msgstr "Selecione o arquivo para carregar a definição da função"
 
-#, fuzzy
-#~| msgid "Project Explorer"
+#~ msgid "LabPlot Function Definition"
+#~ msgstr "Definição de função do LabPlot"
+
+#~ msgid "Select file to save function definition"
+#~ msgstr "Selecione o arquivo para salvar a definição da função"
+
+#~ msgid "Live Data Source Toolbar"
+#~ msgstr "Barra de ferramentas de fonte de dados ao vivo"
+
 #~ msgid "Script Toolbar"
-#~ msgstr "Explorador de projetos"
+#~ msgstr "Barra de ferramentas de script"
 
-#, fuzzy
-#~| msgid "Tab position"
-#~ msgid "Text Editor"
-#~ msgstr "Posição das abas"
+#~ msgid "Python Scripts (*.py)"
+#~ msgstr "Scripts Python (*.py)"
 
-#, fuzzy
-#~| msgid "Upper Cutoff"
-#~ msgid "Upper Limit:"
-#~ msgstr "Corte superior"
+#~ msgid "Saving %1..."
+#~ msgstr "Salvando %1..."
 
-#, fuzzy
-#~| msgid "Lower Cutoff"
-#~ msgid "Lower Limit:"
-#~ msgstr "Corte inferior"
+#~ msgid "Project successfully saved (in %1 seconds)."
+#~ msgstr "Projeto salvo com sucesso (em %1 segundos)."
 
-#, fuzzy
-#~| msgid "crossing lines"
-#~ msgid "Center/Limits:"
-#~ msgstr "linhas cruzadas"
+#~ msgid "Edit"
+#~ msgstr "Editar"
 
-#, fuzzy
-#~| msgid "Show Options"
-#~ msgid "Compress File:"
-#~ msgstr "Mostrar opções"
+#~ msgid "Edit markdown source"
+#~ msgstr "Editar código do markdown"
 
-#, fuzzy
-#~| msgid "Clausen function"
+#~ msgid "Preview rendered output"
+#~ msgstr "Pré-visualização da saída renderizada"
+
+#~ msgid "Statistical Analysis"
+#~ msgstr "Análises estatísticas"
+
+#~ msgid "Hypothesis Test"
+#~ msgstr "Teste da hipótese"
+
+#~ msgid "Hypothesis Test for %1"
+#~ msgstr "Teste da hipótese para %1"
+
+#~ msgid "No template path provided."
+#~ msgstr "Nenhum caminho de modelo foi fornecido."
+
+#~ msgid "Scripting"
+#~ msgstr "Scripting"
+
+#~ msgid "Editor"
+#~ msgstr "Editor"
+
+#~ msgid "Automatically show output when a script produces output"
+#~ msgstr "Mostrar automaticamente a saída quando um script gerar saída"
+
+#~ msgid "Save script output in project files"
+#~ msgstr "Salvar a saída do script nos arquivos do projeto"
+
+#~ msgctxt "@label:spinbox Suffix for the auto save interval"
+#~ msgid "%v min"
+#~ msgstr "%v min"
+
+#~ msgid "With Python Script"
+#~ msgstr "Com Script Python"
+
+#~ msgid "If enabled spreadsheet and matrix data is saved in the project file"
+#~ msgstr ""
+#~ "Se habilitado, os dados da planilha e da matriz serão salvos no arquivo "
+#~ "do projeto"
+
+#~ msgid "Select the path to a python virtual environment."
+#~ msgstr "Selecione o caminho para um ambiente virtual Python."
+
+#~ msgid "System Default"
+#~ msgstr "Padrão do sistema"
+
+#~ msgctxt "@title:window"
+#~ msgid "Select the Virtual Environment"
+#~ msgstr "Selecionar o ambiente virtual"
+
+#~ msgid ""
+#~ "The selected virtual environment does not contain a python executable."
+#~ msgstr "O ambiente virtual selecionado não contém um executável do Python."
+
+#~ msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+#~ msgstr "O ambiente virtual selecionado não contém um arquivo pyvenv.cfg."
+
+#~ msgid ""
+#~ "The selected virtual environment python version does not match the "
+#~ "application python version."
+#~ msgstr ""
+#~ "A versão do Python selecionada para o ambiente virtual não corresponde à "
+#~ "versão do Python da aplicação."
+
+#~ msgid "Delete entire rows in the spreadsheet if the condition is met."
+#~ msgstr "Exclua linhas inteiras na planilha se a condição for atendida."
+
+#~ msgctxt "Curve fitting"
+#~ msgid "Piecewise Linear Fit to '%1'"
+#~ msgstr "Ajuste linear por partes para '%1'"
+
+#~ msgid "Fourier Transform of '%1'"
+#~ msgstr "Transformação de Fourier de '%1'"
+
+#~ msgid "Hilbert Transform of '%1'"
+#~ msgstr "Transformação de Hilbert de '%1'"
+
+#~ msgid "Convolution of '%1'"
+#~ msgstr "Convolução de '%1'"
+
+#~ msgid "Correlation of '%1'"
+#~ msgstr "Correlação de '%1'"
+
+#~ msgid "Baseline Correction of '%1'"
+#~ msgstr "Correção de linha base de '%1'"
+
+#~ msgid "New Plot Area in an Existing Worksheet"
+#~ msgstr "Nova área de plotagem em uma folha de trabalho existente"
+
+#~ msgid "New Plot Areas in an Existing Worksheet"
+#~ msgstr "Novas áreas de plotagem em uma folha de trabalho existente"
+
+#~ msgid "New Plot Areas in a New Worksheet"
+#~ msgstr "Novas áreas de plotagem em uma nova folha de trabalho"
+
+#~ msgid "Zoom level"
+#~ msgstr "Nível de zoom"
+
+#~ msgid "Equidistant Date&Time Values"
+#~ msgstr "Valores de data e hora equidistantes"
+
+#~ msgid "Transpose"
+#~ msgstr "Transpor"
+
+#~ msgid "Seasonal Decomposition"
+#~ msgstr "Decomposição sazonal"
+
+#~ msgid "Time Series Analysis"
+#~ msgstr "Análise de séries temporais"
+
+#~ msgid "Import Headers"
+#~ msgstr "Importar cabeçalhos"
+
+#~ msgid "Do you want to use the first row as column headers?"
+#~ msgstr "Deseja utilizar a primeira linha como cabeçalho da coluna?"
+
+#~ msgid "Seasonal Decomposition for %1"
+#~ msgstr "Decomposição sazonal para %1"
+
+#~ msgid "The spreadsheet has %1 rows. Do you really want to transpose it?"
+#~ msgstr "A planilha tem %1 linhas. Você realmente deseja transpor os dados?"
+
+#~ msgid "Transpose Spreadsheet"
+#~ msgstr "Transpor planilha"
+
+#~ msgid "Arithmetic Mean"
+#~ msgstr "Média aritmética"
+
+#~ msgid "Geometric Mean"
+#~ msgstr "Média geométrica"
+
+#~ msgid "Harmonic Mean"
+#~ msgstr "Média harmônica"
+
+#~ msgid "Contraharmonic Mean"
+#~ msgstr "Média contra-harmônica"
+
+#~ msgid "Mean Absolute Deviation Around Mean"
+#~ msgstr "Desvio médio absoluto em torno da média"
+
+#~ msgid "Mean Absolute Deviation Around Median"
+#~ msgstr "Desvio médio absoluto em torno da mediana"
+
+#~ msgid "Median Absolute Deviation"
+#~ msgstr "Desvio absoluto da média"
+
+#~ msgid "Average 2-Period Moving Range"
+#~ msgstr "Média da amplitude móvel de 2 períodos"
+
+#~ msgid "Select which columns to import"
+#~ msgstr "Selecione quais colunas importar"
+
+#~ msgid "Deselect All"
+#~ msgstr "Desmarcar tudo"
+
+#~ msgid "Position Column:"
+#~ msgstr "Coluna de posição:"
+
+#~ msgid "Plot Colors:"
+#~ msgstr "Cores do gráfico:"
+
+#~ msgid "Stack"
+#~ msgstr "Pilha"
+
+#~ msgid "Auto-Update"
+#~ msgstr "Atualização automática"
+
 #~ msgid "Load a custom function"
-#~ msgstr "Função de Clausen"
+#~ msgstr "Carregar uma função personalizada"
 
-#, fuzzy
-#~| msgid "Clausen function"
 #~ msgid "Save a custom function"
-#~ msgstr "Função de Clausen"
+#~ msgstr "Salvar uma função personalizada"
 
-#, fuzzy
-#~| msgid "Show Options"
+#~ msgid "Auto-Resize"
+#~ msgstr "Redimensionamento automático"
+
+#~ msgid "Formula"
+#~ msgstr "Fórmula"
+
+#~ msgid "Test Mean μ₀:"
+#~ msgstr "Média do teste μ₀:"
+
+#~ msgid "Significance Level α:"
+#~ msgstr "Nível de significância α:"
+
+#~ msgid "Null:"
+#~ msgstr "Nula:"
+
+#~ msgid "Alternative:"
+#~ msgstr "Alternativa:"
+
+#~ msgid "Hypotheses"
+#~ msgstr "Hipótese"
+
+#~ msgid "Test:"
+#~ msgstr "Teste:"
+
+#~ msgid "Upper Limit:"
+#~ msgstr "Limite superior:"
+
+#~ msgid "Lower Limit:"
+#~ msgstr "Limite inferior:"
+
+#~ msgid "Center/Limits:"
+#~ msgstr "Centro/limites:"
+
+#~ msgid "Compress File:"
+#~ msgstr "Compactar arquivo:"
+
+#~ msgid "Save Data in File:"
+#~ msgstr "Salvar dados em arquivo:"
+
+#~ msgid "Periods:"
+#~ msgstr "Períodos:"
+
+#~ msgid "Lambda:"
+#~ msgstr "Lambda:"
+
+#~ msgid "Robust:"
+#~ msgstr "Robusto:"
+
+#~ msgid "Seasonal Length:"
+#~ msgstr "Comprimento sazonal:"
+
+#~ msgid "Trend Length:"
+#~ msgstr "Comprimento da tendência:"
+
+#~ msgid "Low-Pass Length:"
+#~ msgstr "Comprimento do passa-baixa:"
+
+#~ msgid "Seasonal Degree:"
+#~ msgstr "Grau sazonal:"
+
+#~ msgid "Trend Degree:"
+#~ msgstr "Grau da tendência:"
+
+#~ msgid "Low-Pass Degree:"
+#~ msgstr "Grau do passa-baixa:"
+
+#~ msgid "Seasonal Jump:"
+#~ msgstr "Salto sazonal:"
+
+#~ msgid "Trend Jump:"
+#~ msgstr "Salto da tendência:"
+
+#~ msgid "Low-Pass Jump:"
+#~ msgstr "Salto do passa-baixa:"
+
+#~ msgid "Sync Rows With:"
+#~ msgstr "Sincronizar linhas com:"
+
+#~ msgid "Statistics:"
+#~ msgstr "Estatísticas:"
+
+#~ msgid "Subtraction"
+#~ msgstr "Subtração"
+
+#~ msgid "Number of points to evaluate"
+#~ msgstr "Número de pontos a avaliar"
+
+#~ msgid ""
+#~ "Automatically calculate the number of points based on plot pixel width"
+#~ msgstr ""
+#~ "Calcule automaticamente o número de pontos com base na largura do gráfico "
+#~ "em pixels"
+
+#~ msgid "Penalty:"
+#~ msgstr "Penalidade:"
+
+#~ msgid "Max Changepoints:"
+#~ msgstr "Máximo de de pontos de mudança:"
+
+#~ msgid "Binary Segmentation"
+#~ msgstr "Segmentação binária"
+
+#~ msgid "PELT"
+#~ msgstr "PELT"
+
+#~ msgid "Min Segment Size:"
+#~ msgstr "Tamanho mínimo de segmento:"
+
+#~ msgid "Fit Range:"
+#~ msgstr "Intervalo de ajuste:"
+
+#~ msgid "Changepoint Lines"
+#~ msgstr "Linhas de ponto de mudança"
+
+#~ msgid "Distance threshold for optimization (0 = compute all points)"
+#~ msgstr "Limiar de distância para otimização (0 = calcular todos os pontos)"
+
+#~ msgid "Fraction of data points used for local regression (0.0 < span ≤ 1.0)"
+#~ msgstr ""
+#~ "Fração de pontos de dados usados para regressão local (0,0 < intervalo ≤ "
+#~ "1,0)"
+
+#~ msgid "Span:"
+#~ msgstr "Abrangência:"
+
+#~ msgid ""
+#~ "Number of robustifying iterations (0-4, higher = more outlier resistant)"
+#~ msgstr ""
+#~ "Número de iterações de robustez (0-4, quanto maior, maior a resistência a "
+#~ "valores discrepantes)"
+
+#~ msgid "Fraction of data points used for local regression"
+#~ msgstr "Fração de pontos de dados usados para regressão local"
+
+#~ msgid "Padding:"
+#~ msgstr "Preenchimento:"
+
+#~ msgid " Order:"
+#~ msgstr " Ordenação:"
+
+#~ msgid "Distance threshold for interpolation optimization (0 = disabled)"
+#~ msgstr ""
+#~ "Limiar de distância para otimização de interpolação (0 = desativado)"
+
+#~ msgid "Delta:"
+#~ msgstr "Delta:"
+
+#~ msgid "Number of robustifying iterations for outlier resistance"
+#~ msgstr "Número de iterações de robustez para resistência a discrepâncias"
+
+#~ msgid ""
+#~ "<html><head/><body><p>When enabled, parameter uncertainties are scaled "
+#~ "with chi^2/dof which makes them independent of the given uncertainties "
+#~ "(relative σ).</p><p>Otherwise absolute σ is used (no uncertainties "
+#~ "scaling).</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>Quando ativada, as incertezas dos parâmetros são "
+#~ "escalonadas com qui-quadrado/graus de liberdade, o que as torna "
+#~ "independentes das incertezas fornecidas (σ relativo).</p><p>Caso "
+#~ "contrário, o σ absoluto é usado (sem escalonamento de incertezas).</p></"
+#~ "body></html>"
+
+#~ msgid "Use relative uncertainties (enable scaling)"
+#~ msgstr "Usar incertezas relativas (ativar escalonamento)"
+
 #~ msgid "Compression:"
-#~ msgstr "Mostrar opções"
+#~ msgstr "Compressão:"
 
-#, fuzzy
-#~| msgid "open a project file"
 #~ msgid "Save Data in Project file:"
-#~ msgstr "abrir um arquivo de projeto"
+#~ msgstr "Salvar os dados no arquivo de projeto:"
+
+#~ msgid "Environment:"
+#~ msgstr "Ambiente:"
+
+#~ msgid "Path:"
+#~ msgstr "Caminho:"
+
+#~ msgid "Python Settings"
+#~ msgstr "Configurações do Python"
+
+#~ msgid "Delete Rows"
+#~ msgstr "Excluir linhas"
+
+#~ msgid "New Plot Areas in Multiple New Worksheets"
+#~ msgstr "Nova áreas de plotagem em múltiplas folhas de trabalho"
+
+#~ msgid "What's New in LabPlot %1"
+#~ msgstr "O que há de novo no LabPlot %1"
+
+#~ msgid ""
+#~ "See the full changelog for LabPlot %1 on our <a href=\"%2\">website</a>."
+#~ msgstr ""
+#~ "Veja o registro de alterações completo do LabPlot %1 em nosso <a href="
+#~ "\"%2\">site</a>."
+
+#~ msgid "Undefined variable: %2. Define it in the list of variables."
+#~ msgid_plural ""
+#~ "Undefined variables: %2. Define them in the list of variables."
+#~ msgstr[0] "Variável indefinida: %2. Defina-a na lista de variáveis."
+#~ msgstr[1] "Variáveis indefinidas: %2. Defina-as na lista de variáveis."
+
+#~ msgid "Invalid expression"
+#~ msgstr "Expressão inválida"
+
+#~ msgid "Method for detecting changepoints."
+#~ msgstr "Método para detectar pontos de mudança."
+
+#~ msgid "Script Editor"
+#~ msgstr "Editor de script"
+
+#~ msgid "%1: simplify '%2'"
+#~ msgstr "%1: simplifica '%2'"
+
+#~ msgid "%1: add line simplification curve"
+#~ msgstr "%1: adicionar curva de simplificação de linha"
+
+#~ msgid "%1: baseline correction for '%2'"
+#~ msgstr "%1: correção de linha base para '%2'"
+
+#~ msgid "%1: add baseline correction curve"
+#~ msgstr "%1: adicionar curva de correção de linha base"
+
+#~ msgid "The data are randomly distributed"
+#~ msgstr "Os dados estão distribuídos aleatoriamente"
+
+#~ msgid "The data show clustering (too few runs)"
+#~ msgstr "Os dados mostram agrupamento (poucas execuções)"
+
+#~ msgid "The data show excessive alternation (too many runs)"
+#~ msgstr "Os dados mostram alternância excessiva (muitas execuções)"
+
+#~ msgid "Expected Runs"
+#~ msgstr "Execuções esperadas"
+
+#~ msgid "Effective Sample Size"
+#~ msgstr "Tamanho efetivo da amostra"
+
+#~ msgid ""
+#~ "At the significance level %1, the population mean is not significantly "
+#~ "different from %2. Fail to reject the null hypothesis."
+#~ msgstr ""
+#~ "No nível de significância %1, a média populacional não é "
+#~ "significativamente diferente de %2. Não é possível rejeitar a hipótese "
+#~ "nula."
+
+#~ msgid ""
+#~ "At the significance level %1, the population means are not significantly "
+#~ "different. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "No nível de significância %1, as médias populacionais não são "
+#~ "significativamente diferentes. Não é possível rejeitar a hipótese nula."
+
+#~ msgid ""
+#~ "At the significance level %1, the observed frequencies follow the "
+#~ "expected frequency distribution. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "No nível de significância %1, as frequências observadas seguem a "
+#~ "distribuição de frequências esperada. Não é possível rejeitar a hipótese "
+#~ "nula."
+
+#~ msgid ""
+#~ "At the significance level %1, both categorical variables are independent. "
+#~ "Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "No nível de significância %1, ambas as variáveis categóricas são "
+#~ "independentes. Falha ao rejeitar a hipótese nula."
+
+#~ msgid ""
+#~ "At the significance level %1, the data show excessive alternation (too "
+#~ "many runs). Reject the null hypothesis."
+#~ msgstr ""
+#~ "Ao nível de significância %1, os dados mostram alternância excessiva "
+#~ "(muitas execuções). Rejeita-se a hipótese nula."
+
+#~ msgid "No negative monotonic trend exists"
+#~ msgstr "Não existe uma tendência monotônica negativa"
+
+#~ msgid "No positive monotonic trend exists"
+#~ msgstr "Não existe uma tendência monotônica positiva"
+
+#~ msgid "Simplify Line"
+#~ msgstr "Simplificar linha"
+
+#~ msgid "One-Way ANOVA Test Statistics"
+#~ msgstr "Estatísticas do teste ANOVA de uma via"
+
+#~ msgid "One-Way ANOVA with Repeated Measures Test Statistics"
+#~ msgstr "Estatísticas do teste ANOVA de uma via com medidas repetidas"
+
+#~ msgid "Mann-Whitney U Test Statistics"
+#~ msgstr "Estatísticas do teste U de Mann-Whitney"
+
+#~ msgid "Kruskal-Wallis Test Statistics"
+#~ msgstr "Estatísticas do teste de Kruskal-Wallis"
+
+#~ msgid "Wilcoxon Signed Rank Test Statistics"
+#~ msgstr "Estatísticas do teste de classificação de sinais de Wilcoxon"
+
+#~ msgid "Friedman Test Statistics"
+#~ msgstr "Estatísticas do teste de Friedman"
+
+#~ msgid "Chi-Square Goodness of Fit Test Statistics"
+#~ msgstr "Estatísticas do teste de qualidade de ajuste do qui-quadrado"
+
+#~ msgid "Chi-Square Independence Test Statistics"
+#~ msgstr "Estatísticas do teste de independência do qui-quadrado"
+
+#~ msgid "Log-Rank Test Statistics"
+#~ msgstr "Estatísticas do teste de Log-Rank"
+
+#~ msgid "One-Way ANOVA"
+#~ msgstr "ANOVA de uma via"
+
+#~ msgid "One-Way ANOVA with Repeated Measures"
+#~ msgstr "ANOVA de uma via com medidas repetidas"
+
+#~ msgid "Logrank Test"
+#~ msgstr "Teste de Logrank"
+
+#~ msgid "Chi-square Independence Test"
+#~ msgstr "Teste de independência do qui-quadrado"
+
+#~ msgid "Chi-square Goodness of Fit Test"
+#~ msgstr "Teste de qualidade de ajuste do qui-quadrado"
+
+#~ msgid ""
+#~ "<ul><li><b>One-Sample t-Test</b> - tests if a sample mean differs "
+#~ "significantly from a known population mean</li><li><b>Independent Two-"
+#~ "Sample t-Test</b> - tests if two independent samples have the same mean</"
+#~ "li><li><b>Paired Two-Sample t-Test</b> - tests if the mean difference "
+#~ "between two related samples is zero</li><li><b>Welch t-Test</b> - tests "
+#~ "if two independent samples with unequal variances have the same mean</"
+#~ "li><li><b>One-Way ANOVA Test</b> - tests if three or more independent "
+#~ "samples have the same mean</li><li><b>One-Way ANOVA with Repeated "
+#~ "Measures Test</b> - tests if three or more related/repeated measurements "
+#~ "have the same mean</li><li><b>Mann-Whitney U Test</b> - tests differences "
+#~ "in medians between two independent groups</li><li><b>Wilcoxon Signed Rank "
+#~ "Test</b> - tests if the median difference between two related samples is "
+#~ "zero</li><li><b>Kruskal-Wallis Test</b> - tests differences in medians "
+#~ "among three or more independent groups</li><li><b>Friedman Test</b> - "
+#~ "tests differences in medians among three or more related/repeated "
+#~ "measurements</li><li><b>Logrank Test</b> - tests differences in survival "
+#~ "distributions between two or more groups</li><li><b>Chi-Square "
+#~ "Independence Test</b> - tests if two categorical variables are "
+#~ "independent of each other</li><li><b>Chi-Square Goodness of Fit Test</b> "
+#~ "- tests if observed data follows a specified theoretical distribution</"
+#~ "li></ul>"
+#~ msgstr ""
+#~ "<ul><li><b>Teste-t de uma amostra</b> - testa se a média de uma amostra "
+#~ "difere significativamente de uma média populacional conhecida</"
+#~ "li><li><b>Teste-t independente de duas amostras</b> - testa se duas "
+#~ "amostras independentes têm a mesma média</li><li><b>Teste-t de duas "
+#~ "amostras pareadas</b> - testa se a diferença média entre duas amostras "
+#~ "relacionadas é zero</li><li><b>Teste-t de Welch</b> - testa se duas "
+#~ "amostras independentes com variâncias desiguais têm a mesma média</"
+#~ "li><li><b>Teste ANOVA de uma via</b> - testa se três ou mais amostras "
+#~ "independentes têm a mesma média</li><li><b>Teste ANOVA de uma via com "
+#~ "medidas repetidas</b> - testa se três ou mais medidas relacionadas/"
+#~ "repetidas têm a mesma média</li><li><b>Teste U de Mann-Whitney</b> - "
+#~ "testa diferenças em medianas entre dois grupos independentes</"
+#~ "li><li><b>Teste dos Postos Sinalizados de Wilcoxon</b> - testa se a "
+#~ "diferença mediana entre duas amostras relacionadas é zero</"
+#~ "li><li><b>Teste de Kruskal-Wallis</b> - testa as diferenças nas medianas "
+#~ "entre três ou mais grupos independentes</li><li><b>Teste de Friedman</b> "
+#~ "- testa as diferenças nas medianas entre três ou mais medições "
+#~ "relacionadas/repetidas</li><li><b>Teste de Logrank</b> - testa as "
+#~ "diferenças nas distribuições de sobrevivência entre dois ou mais grupos</"
+#~ "li><li><b>Teste de independência do qui-quadrado</b> - testa se duas "
+#~ "variáveis categóricas são independentes uma da outra</li><li><b>Teste de "
+#~ "qualidade de ajuste do qui-quadrado</b> - testa se os dados observados "
+#~ "seguem uma distribuição teórica especificada</li></ul>"
+
+#~ msgid "Column '%1' must be of type integer."
+#~ msgstr "A coluna '%1' deve ser do tipo inteiro."
 
 #, fuzzy
 #~| msgid "Apply"
@@ -25461,11 +27589,6 @@ msgstr "Não foi possível abrir o arquivo:"
 #~| msgid "Executable: %1"
 #~ msgid "Executable Path:"
 #~ msgstr "Execução: %1"
-
-#, fuzzy
-#~| msgid "Euler's constant"
-#~ msgid "Discount"
-#~ msgstr "Constante de Euler"
 
 #, fuzzy
 #~| msgid "Height"
@@ -25754,9 +27877,6 @@ msgstr "Não foi possível abrir o arquivo:"
 
 #~ msgid "Save Filter Settings as"
 #~ msgstr "Salvar a configuração do filtro como"
-
-#~ msgid "Filter name:"
-#~ msgstr "Nome do filtro:"
 
 #~ msgid "new filter"
 #~ msgstr "novo filtro"
@@ -26139,9 +28259,6 @@ msgstr "Não foi possível abrir o arquivo:"
 
 #~ msgid "Column Statisti&cs"
 #~ msgstr "Estatísti&cas das colunas"
-
-#~ msgid "Created: %1"
-#~ msgstr "Criado em: %1"
 
 #, fuzzy
 #~| msgid "x-data"
@@ -26659,9 +28776,6 @@ msgstr "Não foi possível abrir o arquivo:"
 #~ msgid "Vector names:"
 #~ msgstr "Nomes dos vetores:"
 
-#~ msgid "%1: set text for row %2"
-#~ msgstr "%1: definir o texto da linha %2"
-
 #~ msgid "%1: replace the texts for rows %2 to %3"
 #~ msgstr "%1: substituir os textos das linhas %2 a %3"
 
@@ -26918,11 +29032,6 @@ msgstr "Não foi possível abrir o arquivo:"
 #~ msgstr "valor da linha inválido"
 
 #, fuzzy
-#~| msgid "&Edit"
-#~ msgid "Edit"
-#~ msgstr "&Editar"
-
-#, fuzzy
 #~| msgid "Clea&r Selection"
 #~ msgid "Clea&r Selected Rows"
 #~ msgstr "Limpa&r seleção"
@@ -27041,11 +29150,6 @@ msgstr "Não foi possível abrir o arquivo:"
 #~ msgstr "%1: definir a cor da fonte"
 
 #, fuzzy
-#~| msgid "Points"
-#~ msgid "Points"
-#~ msgstr "Pontos"
-
-#, fuzzy
 #~| msgid "%1: set vertical alignment"
 #~ msgid "Enable vertical line"
 #~ msgstr "%1: definir o alinhamento vertical"
@@ -27097,11 +29201,6 @@ msgstr "Não foi possível abrir o arquivo:"
 #~ msgstr "Versão do LabPlot"
 
 #, fuzzy
-#~| msgid "mean squared error"
-#~ msgid "Mean square error"
-#~ msgstr "erro da média ao quadrado"
-
-#, fuzzy
 #~| msgid "Fi&ll Selection with"
 #~ msgid "Fi&ll Selection With"
 #~ msgstr "Preencher a se&leção com"
@@ -27120,9 +29219,6 @@ msgstr "Não foi possível abrir o arquivo:"
 
 #~ msgid "&Normalize Selection"
 #~ msgstr "&Normalizar a seleção"
-
-#~ msgid "%1: normalize selection"
-#~ msgstr "%1: normalizar a seleção"
 
 #, fuzzy
 #~| msgid "Statistics"
@@ -27215,11 +29311,6 @@ msgstr "Não foi possível abrir o arquivo:"
 #~ msgstr "Nome do dia completo"
 
 #, fuzzy
-#~| msgid "Format Type"
-#~ msgid "Format type:"
-#~ msgstr "Tipo de formato"
-
-#, fuzzy
 #~| msgid "orange"
 #~ msgid "Free ranges"
 #~ msgstr "laranja"
@@ -27282,11 +29373,6 @@ msgstr "Não foi possível abrir o arquivo:"
 
 #~ msgid " Select the image file to import"
 #~ msgstr " Selecione o arquivo de imagem a importar"
-
-#, fuzzy
-#~| msgid "Original size"
-#~ msgid "Original"
-#~ msgstr "Tamanho original"
 
 #~ msgid "%1: change hidden status"
 #~ msgstr "%1: alterar o estado oculto"
@@ -27708,12 +29794,6 @@ msgstr "Não foi possível abrir o arquivo:"
 
 #~ msgid "Fourier filter"
 #~ msgstr "Filtro de Fourier"
-
-#~ msgid "zoom in"
-#~ msgstr "ampliar"
-
-#~ msgid "zoom out"
-#~ msgstr "reduzir"
 
 #~ msgid "shift left X"
 #~ msgstr "desvio à esquerda em X"
