@@ -7,20 +7,21 @@
 # SPDX-FileCopyrightText: 2025-2026 Marcus Gama <marcus.gama@gmail.com>
 # SPDX-FileCopyrightText: 2025, 2026 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
 # SPDX-FileCopyrightText: 2026 Geraldo Simiao <geraldosimiao@fedoraproject.org>
+# SPDX-FileCopyrightText: 2026 Elton Carvalho <elton.carvalho@ufrn.br>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-24 00:40+0000\n"
-"PO-Revision-Date: 2026-09-20 06:42-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"PO-Revision-Date: 2026-09-26 17:30-0300\n"
+"Last-Translator: Elton Carvalho <elton.carvalho@ufrn.br>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Lokalize 26.04.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -4974,12 +4975,12 @@ msgstr "Inversa da função Gama"
 #: src/backend/gsl/functions.cpp:519
 #, kde-format
 msgid "Factorial n!"
-msgstr "Fatorial de n!"
+msgstr "Fatorial n!"
 
 #: src/backend/gsl/functions.cpp:520
 #, kde-format
 msgid "Double factorial n!!"
-msgstr "Duplo fatorial de n!!"
+msgstr "Duplo fatorial n!!"
 
 #: src/backend/gsl/functions.cpp:521
 #, kde-format
@@ -6971,7 +6972,7 @@ msgstr "Fração"
 #: src/backend/nsl/nsl_fit.c:20
 #, kde-format
 msgid "Basic Functions"
-msgstr "Função básicas"
+msgstr "Funções básicas"
 
 #: src/backend/nsl/nsl_fit.c:21
 #, kde-format
@@ -8509,7 +8510,7 @@ msgstr "O tamanho de cada coluna na tabela de contingência deve ser igual."
 msgid ""
 "At the significance level %1, both categorical variables are dependent. %2"
 msgstr ""
-"No nível de significância %1, ambas as variáveis ​​categóricas são "
+"No nível de significância %1, ambas as variáveis categóricas são "
 "dependentes. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1657
@@ -8517,7 +8518,7 @@ msgstr ""
 msgid ""
 "At the significance level %1, both categorical variables are independent. %2"
 msgstr ""
-"No nível de significância %1, ambas as variáveis ​​categóricas são "
+"No nível de significância %1, ambas as variáveis categóricas são "
 "independentes. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1675
@@ -10202,7 +10203,7 @@ msgstr "Correção de linha base"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
-msgstr "Ajustar a '%1'"
+msgstr "Ajuste a '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
 #, kde-format
@@ -11214,7 +11215,7 @@ msgstr "%1: definir as opções de ajuste e ajustar"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
-msgstr "Ajustar resultados"
+msgstr "Resultados do ajuste"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
 #, kde-format
@@ -11297,14 +11298,14 @@ msgstr "Desvio quadrático médio"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:937
 #, kde-format
 msgid "Coefficient of determination"
-msgstr "Coeficiente determinístico"
+msgstr "Coeficiente de determinação"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1968
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:947
 #, kde-format
 msgid "Adj. coefficient of determination"
-msgstr "Ajustar coeficiente determinístico"
+msgstr "Coeficiente de determinação ajustado"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
@@ -11324,7 +11325,7 @@ msgstr "Teste-F"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1972
 #, kde-format
 msgid "Mean absolute error"
-msgstr "Erro absoluto da média"
+msgstr "Erro absoluto médio"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1973
 #, kde-format
@@ -11370,7 +11371,7 @@ msgstr "Modelo de ajuste não especificado!"
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
-msgstr "Ajustar resultados"
+msgstr "Resultados do ajuste"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:77
 #, kde-format
@@ -11478,7 +11479,7 @@ msgstr "%1: alternar linhas de ponto de mudança"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:755
 #, kde-format
 msgid "Fit Results"
-msgstr "Ajustar resultados"
+msgstr "Resultados do ajuste"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
 #, kde-format
@@ -11894,7 +11895,7 @@ msgstr "Erro complexo e funções relacionadas"
 #: src/frontend/AboutDialog.cpp:288
 #, kde-format
 msgid "importing Origin OPJ project files"
-msgstr "Importar arquivos de projeto do Origin OPJ"
+msgstr "Importar arquivos de projeto OPJ do Origin"
 
 #: src/frontend/AboutDialog.cpp:294
 #, kde-format
@@ -14939,7 +14940,7 @@ msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
 msgstr ""
-"Coluna com os valores que devem ser usados ​​como posições das marcas de "
+"Coluna com os valores que devem ser usados como posições das marcas de "
 "escala principais."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
@@ -14953,7 +14954,7 @@ msgstr ""
 "Define quais legendas de texto exibir para as marcas de escala principais:"
 "<ul><li>Valores de posição - as posições das marcas de escala são usadas "
 "como legendas de texto.</li><li>Valores da coluna personalizada - os valores "
-"na coluna personalizada fornecida abaixo são usados ​​como legendas de texto.</"
+"na coluna personalizada fornecida abaixo são usados como legendas de texto.</"
 "li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:369
@@ -14962,7 +14963,7 @@ msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
 msgstr ""
-"Coluna com os valores que devem ser usados ​​como legendas de texto para as "
+"Coluna com os valores que devem ser usados como legendas de texto para as "
 "marcas de escala principais."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:375
@@ -14988,7 +14989,7 @@ msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
 msgstr ""
-"Coluna com os valores que devem ser usados ​​como posições das marcas de "
+"Coluna com os valores que devem ser usados como posições das marcas de "
 "escala menores."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:635
@@ -15941,7 +15942,7 @@ msgstr ""
 "%6</b> - testes de aleatoriedade em uma sequência de observações</li><li><b>"
 "%7</b> - testes para padrões não aleatórios em dados de controle de processo "
 "usando execuções acima/abaixo da mediana</li><li><b>%8</b> - testa se duas "
-"variáveis ​​categóricas são independentes uma da outra</li><li><b>%9</b> - "
+"variáveis categóricas são independentes uma da outra</li><li><b>%9</b> - "
 "testa se os dados observados seguem uma distribuição teórica especificada</"
 "li></ul>"
 
@@ -15949,7 +15950,7 @@ msgstr ""
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
-"O teste selecionado requer pelo menos %1 e no máximo %2 variáveis ​​não vazias."
+"O teste selecionado requer pelo menos %1 e no máximo %2 variáveis não vazias."
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:230
 #, kde-format
@@ -25825,7 +25826,7 @@ msgstr "Limiar de distância para otimização (0 = calcular todos os pontos)"
 #, kde-format
 msgid "Fraction of data points used for local regression (0.0 < span ≤ 1.0)"
 msgstr ""
-"Fração de pontos de dados usados ​​para regressão local (0,0 < intervalo ≤ 1,0)"
+"Fração de pontos de dados usados para regressão local (0,0 < intervalo ≤ 1,0)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpan)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:101
@@ -25864,7 +25865,7 @@ msgstr "Valor à direita:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Fraction of data points used for local regression"
-msgstr "Fração de pontos de dados usados ​​para regressão local"
+msgstr "Fração de pontos de dados usados para regressão local"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:493
@@ -28392,7 +28393,7 @@ msgstr "Não foi possível abrir o arquivo:"
 #~ "At the significance level %1, both categorical variables are independent. "
 #~ "Fail to reject the null Hypothesis"
 #~ msgstr ""
-#~ "No nível de significância %1, ambas as variáveis ​​categóricas são "
+#~ "No nível de significância %1, ambas as variáveis categóricas são "
 #~ "independentes. Falha ao rejeitar a hipótese nula."
 
 #~ msgid ""
@@ -28652,7 +28653,7 @@ msgstr "Não foi possível abrir o arquivo:"
 #~ "relacionadas/repetidas</li><li><b>Teste de Logrank</b> - testa as "
 #~ "diferenças nas distribuições de sobrevivência entre dois ou mais grupos</"
 #~ "li><li><b>Teste de independência do qui-quadrado</b> - testa se duas "
-#~ "variáveis ​​categóricas são independentes uma da outra</li><li><b>Teste de "
+#~ "variáveis categóricas são independentes uma da outra</li><li><b>Teste de "
 #~ "qualidade de ajuste do qui-quadrado</b> - testa se os dados observados "
 #~ "seguem uma distribuição teórica especificada</li></ul>"
 

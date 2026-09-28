@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-24 00:40+0000\n"
-"PO-Revision-Date: 2026-09-25 23:33+0200\n"
+"PO-Revision-Date: 2026-09-27 23:19+0200\n"
 "Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -253,7 +253,7 @@ msgstr "Y-Chyba -"
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
 msgid "Double"
-msgstr "Dvojnásobek"
+msgstr "Dvojité"
 
 #: src/backend/core/AbstractColumn.cpp:226
 #, kde-format
@@ -734,22 +734,22 @@ msgstr "Bohužel, soubor nelze otevřít pro čtení."
 #: src/backend/core/Project.cpp:569 src/backend/core/Project.cpp:595
 #, kde-format
 msgid "The project file is empty."
-msgstr ""
+msgstr "Soubor projektu je prázdný."
 
 #: src/backend/core/Project.cpp:569 src/backend/core/Project.cpp:595
 #, kde-format
 msgid "Error opening project"
-msgstr ""
+msgstr "Chyba při otevírání projektu"
 
 #: src/backend/core/Project.cpp:614
 #, kde-format
 msgid "Unknown error when opening the project %1."
-msgstr ""
+msgstr "Při otevírání projektu %1 došlo k neznámé chybě."
 
 #: src/backend/core/Project.cpp:615
 #, kde-format
 msgid "Error when opening the project"
-msgstr ""
+msgstr "Chyba při otevírání projektu"
 
 #: src/backend/core/Project.cpp:635
 #, kde-format
@@ -762,26 +762,33 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
+"Projekt obsahuje obsah vytvořený pomocí %1. Vaše instalace programu LabPlot "
+"tento formát nepodporuje.\n"
+"\n"
+" Tuto část projektu nebudete moci zobrazit. Pokud projekt upravíte a "
+"uložíte, obsah CAS se ztratí.\n"
+"\n"
+"Chcete pokračovat?"
 
 #: src/backend/core/Project.cpp:641
 #, kde-format
 msgid "Missing Support for CAS"
-msgstr ""
+msgstr "Chybějící podpora pro CAS"
 
 #: src/backend/core/Project.cpp:671
 #, kde-format
 msgid "Attribute 'version' is missing."
-msgstr ""
+msgstr "Chybí atribut 'version'."
 
 #: src/backend/core/Project.cpp:721
 #, kde-format
 msgid "no project element found"
-msgstr ""
+msgstr "nebyl nalezen žádný prvek projektu"
 
 #: src/backend/core/Project.cpp:723
 #, kde-format
 msgid "no valid XML document found"
-msgstr ""
+msgstr "nebyl nalezen žádný platný dokument XML"
 
 #: src/backend/core/Project.cpp:773 src/backend/core/Project.cpp:779
 #: src/backend/core/Project.cpp:830
@@ -792,17 +799,17 @@ msgstr "Nepodařilo se otevřít soubor '%1'."
 #: src/backend/core/Project.cpp:836
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
-msgstr ""
+msgstr "Nepodařilo se zpracovat obsah souboru '%1'."
 
 #: src/backend/core/Project.cpp:839
 #, kde-format
 msgid "Failed to open project"
-msgstr ""
+msgstr "Nepodařilo se otevřít projekt"
 
 #: src/backend/core/Project.cpp:1350
 #, kde-format
 msgid "Invalid project modification time. Using current time."
-msgstr ""
+msgstr "Neplatný čas úpravy projektu. Použije se aktuální čas."
 
 #: src/backend/core/Workbook.cpp:219
 #, kde-format
@@ -812,7 +819,7 @@ msgstr "matice"
 #: src/backend/core/Workbook.cpp:226
 #, kde-format
 msgid "unknown workbook element '%1'"
-msgstr ""
+msgstr "neznámý prvek sešitu '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:48
@@ -831,12 +838,12 @@ msgstr ""
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
-msgstr "Vykreslit"
+msgstr "Graf"
 
 #: src/backend/datapicker/Datapicker.cpp:145
 #, kde-format
 msgid "%1, active curve \"%2\""
-msgstr ""
+msgstr "%1, aktivní křivka \"%2\""
 
 #: src/backend/datapicker/Datapicker.cpp:213
 #, kde-format
@@ -846,7 +853,7 @@ msgstr "Bod %1"
 #: src/backend/datapicker/Datapicker.cpp:385
 #, kde-format
 msgid "unknown datapicker element '%1'"
-msgstr ""
+msgstr "neznámý prvek pro výběr dat '%1'"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbData)
 #. i18n: ectx: property (text), widget (QLabel, lData)
@@ -883,57 +890,57 @@ msgstr "Data"
 #: src/backend/datapicker/DatapickerCurve.cpp:268
 #, kde-format
 msgid "%1: set xy-error type"
-msgstr ""
+msgstr "%1: nastavit typ chyby xy"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:322
 #, kde-format
 msgid "%1: set position X column"
-msgstr ""
+msgstr "%1: nastavit pozici ve sloupci X"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:329
 #, kde-format
 msgid "%1: set position Y column"
-msgstr ""
+msgstr "%1: nastavit pozici ve sloupci Y"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:336
 #, kde-format
 msgid "%1: set position Z column"
-msgstr ""
+msgstr "%1: nastavit pozici ve sloupci Z"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:343
 #, kde-format
 msgid "%1: set +delta_X column"
-msgstr ""
+msgstr "%1: nastavit sloupec +delta_X"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:350
 #, kde-format
 msgid "%1: set -delta_X column"
-msgstr ""
+msgstr "%1: nastavit sloupec -delta_X"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:357
 #, kde-format
 msgid "%1: set +delta_Y column"
-msgstr ""
+msgstr "%1: nastavit sloupec +delta_Y"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:364
 #, kde-format
 msgid "%1: set -delta_Y column"
-msgstr ""
+msgstr "%1: nastavit sloupec -delta_Y"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:371
 #, kde-format
 msgid "%1: set error bar size"
-msgstr ""
+msgstr "%1: nastavit velikost chybové lišty"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:378
 #, kde-format
 msgid "%1: set error bar filling"
-msgstr ""
+msgstr "%1: nastavit vyplnění chybové lišty"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:385
 #, kde-format
 msgid "%1: set error bar outline style"
-msgstr ""
+msgstr "%1: nastavit styl obrysu chybové lišty"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:407
@@ -948,7 +955,7 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #, kde-format
 msgid "%1: set visible"
-msgstr ""
+msgstr "%1: nastavit viditelnost"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:407
@@ -964,56 +971,56 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElementContainer.cpp:86
 #, kde-format
 msgid "%1: set invisible"
-msgstr "%1: změnit na neviditelný"
+msgstr "%1: nastavit neviditelnost"
 
 #: src/backend/datapicker/DatapickerImage.cpp:185
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
-msgstr ""
+msgstr "Vytisknout obrázek z nástroje pro výběr dat"
 
 #: src/backend/datapicker/DatapickerImage.cpp:304
 #: src/backend/datapicker/DatapickerImage.cpp:359
 #, kde-format
 msgid "%1: upload image"
-msgstr "%1: odeslat obrázek"
+msgstr "%1: nahrát obrázek"
 
 #: src/backend/datapicker/DatapickerImage.cpp:358
 #, kde-format
 msgid "%1: upload new image"
-msgstr ""
+msgstr "%1: nahrát nový obrázek"
 
 #: src/backend/datapicker/DatapickerImage.cpp:378
 #: src/backend/worksheet/WorksheetElement.cpp:846
 #, kde-format
 msgid "%1: set rotation angle"
-msgstr ""
+msgstr "%1: nastavit úhel natočení"
 
 #: src/backend/datapicker/DatapickerImage.cpp:385
 #, kde-format
 msgid "%1: set Axis points"
-msgstr ""
+msgstr "%1: nastavit body osy"
 
 #: src/backend/datapicker/DatapickerImage.cpp:392
 #, kde-format
 msgid "%1: set editor settings"
-msgstr ""
+msgstr "%1: nastavit parametry editoru"
 
 #: src/backend/datapicker/DatapickerImage.cpp:399
 #, kde-format
 msgid "%1: set minimum segment length"
-msgstr ""
+msgstr "%1: nastavit minimální délku úsečky"
 
 #: src/backend/datapicker/DatapickerImage.cpp:420
 #, kde-format
 msgid "%1: remove all axis points"
-msgstr ""
+msgstr "%1: odstranit všechny body osy"
 
 #: src/backend/datapicker/DatapickerImage.cpp:715
 #: src/backend/worksheet/Image.cpp:411
 #, kde-format
 msgid "Failed to read image data"
-msgstr ""
+msgstr "Nepodařilo se načíst data obrázku"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:218
 #: src/backend/worksheet/InfoElement.cpp:838
@@ -1025,49 +1032,49 @@ msgstr "%1: nastavit pozici"
 #: src/backend/datapicker/DatapickerPoint.cpp:229
 #, kde-format
 msgid "%1: set +delta_X position"
-msgstr ""
+msgstr "%1: nastavit pozici +delta_X"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:231
 #: src/backend/datapicker/DatapickerPoint.cpp:234
 #, kde-format
 msgid "%1: set +delta X position"
-msgstr ""
+msgstr "%1: nastavit pozici +delta X"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:247
 #: src/backend/datapicker/DatapickerPoint.cpp:249
 #: src/backend/datapicker/DatapickerPoint.cpp:252
 #, kde-format
 msgid "%1: set -delta_X position"
-msgstr ""
+msgstr "%1: nastavit pozici -delta_X"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:265
 #: src/backend/datapicker/DatapickerPoint.cpp:267
 #: src/backend/datapicker/DatapickerPoint.cpp:270
 #, kde-format
 msgid "%1: set +delta_Y position"
-msgstr ""
+msgstr "%1: nastavit pozici +delta_Y"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:283
 #: src/backend/datapicker/DatapickerPoint.cpp:285
 #: src/backend/datapicker/DatapickerPoint.cpp:288
 #, kde-format
 msgid "%1: set -delta_Y position"
-msgstr ""
+msgstr "%1: nastavit pozici -delta_Y"
 
 #: src/backend/datapicker/Segment.cpp:170
 #, kde-format
 msgid "%1: draw points over segment"
-msgstr ""
+msgstr "%1: nakreslit body na úsečce"
 
 #: src/backend/datasources/DatasetHandler.cpp:69
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
-msgstr ""
+msgstr "Soubor metadat pro vybraný datový soubor je neplatný."
 
 #: src/backend/datasources/DatasetHandler.cpp:167
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
-msgstr ""
+msgstr "V souboru s metadaty není uvedena žádná adresa URL ke stažení!"
 
 #: src/backend/datasources/DatasetHandler.cpp:200
 #, kde-format
@@ -1075,11 +1082,13 @@ msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
 msgstr ""
+"Stahování datového souboru z %1 se nezdařilo.\n"
+"%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:234
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr ""
+msgstr "Nepodařilo se vytvořit adresář %1 pro uložení datového souboru."
 
 #: src/backend/datasources/DatasetHandler.cpp:257
 #, kde-format
@@ -1087,6 +1096,8 @@ msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
 msgstr ""
+"Soubor %1 se nepodařilo otevřít pro zápis.\n"
+"%2"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:125
 #, kde-format
@@ -1094,6 +1105,8 @@ msgid ""
 "This option determines how the imported strings have to be converted to "
 "numbers."
 msgstr ""
+"Tato volba určuje, jakým způsobem se mají importované řetězce převést na "
+"čísla."
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:130
 #, kde-format
@@ -1103,6 +1116,10 @@ msgid ""
 "ul>For comma as the decimal separator, the valid number representations are:"
 "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
 msgstr ""
+"Pokud se jako desetinný oddělovač používá tečka, jsou platné způsoby zápisu "
+"čísel následující:<ul><li>1234.56</li><li>1,234.56</li><li>atd.</li></"
+"ul>Pokud se jako desetinný oddělovač používá čárka, jsou platné následující "
+"způsoby zápisu čísel:<ul><li>1234,56</li><li>1.234,56</li><li>atd.</li></ul>"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:146
 #, kde-format
@@ -1111,6 +1128,9 @@ msgid ""
 "calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
 "and to time."
 msgstr ""
+"Tato volba určuje, jakým způsobem se mají importované řetězce převést na "
+"kalendářní datum, tj. na čísla roku, měsíce a dne v gregoriánském kalendáři, "
+"a na čas."
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:152
 #, kde-format
@@ -1151,6 +1171,41 @@ msgid ""
 "Sunday</td></tr></table><br><br>In case the provided expression is empty, "
 "the format will be auto-detected."
 msgstr ""
+"Výrazy, které lze použít pro část formátovacího řetězce týkající se data:"
+"<table><tr><td>d</td><td>den jako číslo bez úvodní nuly (1 až 31).</td></"
+"tr><tr><td>dd</td><td>den jako číslo s úvodní nulou (01 až 31).</td></"
+"tr><tr><td>ddd</td><td>zkrácený lokalizovaný název dne (např. \"Mon\" až "
+"\"Sun\"). K lokalizaci názvu využívá systémové národní prostředí (locale).</"
+"td></tr><tr><td>dddd</td><td>plný lokalizovaný název dne (např. \"Monday\" "
+"až \"Sunday\"). K lokalizaci názvu využívá systémové národní prostředí "
+"(locale).</td></tr><tr><td>M</td><td>měsíc jako číslo bez úvodní nuly (1 až "
+"12).</td></tr><tr><td>MM</td><td>měsíc jako číslo s úvodní nulou (01 až 12)."
+"</td></tr><tr><td>MMM</td><td>zkrácený lokalizovaný název měsíce (např. \"Jan"
+"\" až \"Dec\"). K lokalizaci názvu využívá systémové národní prostředí "
+"(locale).</td></tr><tr><td>MMMM</td><td>plný lokalizovaný název měsíce "
+"(např. \"January\" až \"December\"). K lokalizaci názvu využívá systémové "
+"národní prostředí (locale).</td></tr><tr><td>yy</td><td>rok jako dvouciferné "
+"číslo (00 až 99).</td></tr><tr><td>yyyy</td><td>rok jako čtyřciferné číslo. "
+"</td></tr></table> Pokud je rok záporný, přidá se před něj navíc znaménko "
+"minus.</td></tr></table><br><br>Výrazy, které lze použít pro část "
+"formátovacího řetězce určující čas:<table><tr><td>h</td><td>hodina bez "
+"úvodní nuly (0 až 23, případně 1 až 12 při zobrazení AM/PM)</td></"
+"tr><tr><td>hh</td><td>hodina s úvodní nulou (00 až 23, případně 01 až 12 při "
+"zobrazení AM/PM)</td></tr><tr><td>H</td><td>hodina bez úvodní nuly (0 až 23, "
+"i při zobrazení AM/PM)</td></tr><tr><td>HH</td><td>hodina s úvodní nulou (00 "
+"až 23, i při zobrazení AM/PM)</td></tr><tr><td>m</td><td>minuta bez úvodní "
+"nuly (0 až 59)</td></tr><tr><td>mm</td><td>minuta s úvodní nulou (00 až 59)</"
+"td></tr><tr><td>s</td><td>sekunda bez úvodní nuly (0 až 59)</td></"
+"tr><tr><td>ss</td><td>sekunda s úvodní nulou (00 až 59)</td></tr><tr><td>z</"
+"td><td>milisekundy bez úvodních nul (0 až 999)</td></tr><tr><td>zzz</"
+"td><td>milisekundy s úvodními nulami (000 až 999)</td></tr><tr><td>AP nebo "
+"A</td><td>interpretovat jako čas ve formátu AM/PM. AP musí být buď \"AM\", "
+"nebo \"PM\".</td></tr><tr><td>ap nebo a</td><td>interpretovat jako čas ve "
+"formátu AM/PM. ap musí být buď \"am\", nebo \"pm\".</td></tr></"
+"table><br><br>Příklady:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></"
+"tr><tr><td>ddd MMMM d yy</td><td>Sun July 20 69</td></tr><tr><td>'The day "
+"is' dddd</td><td>The day is Sunday</td></tr></table><br><br>Pokud je zadaný "
+"výraz prázdný, formát se rozpozná automaticky."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:228
 #: src/backend/datasources/filters/ParquetFilter.cpp:76
@@ -1192,16 +1247,14 @@ msgid "DateTime"
 msgstr "Datum/čas"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:687
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Unix)"
-msgstr "Časové razítko"
+msgstr "Časové razítko (Unix)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:688
-#, fuzzy, kde-format
-#| msgid "Timestamp"
+#, kde-format
 msgid "Timestamp (Windows)"
-msgstr "Časové razítko"
+msgstr "Časové razítko (Windows)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:689
 #, kde-format
@@ -1221,18 +1274,18 @@ msgstr "Int64"
 #: src/backend/datasources/filters/SpiceFilter.cpp:185
 #, kde-format
 msgid "Failed to open the device/file."
-msgstr ""
+msgstr "Nepodařilo se otevřít zařízení/soubor."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:285
 #, kde-format
 msgid "Data selection empty."
-msgstr ""
+msgstr "Výběr dat je prázdný."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:406
 #: src/backend/datasources/filters/McapFilter.cpp:199
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr ""
+msgstr "Nepodařilo se otevřít zařízení/soubor nebo je prázdné."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:446
 #: src/backend/datasources/filters/CANFilter.cpp:303
@@ -1272,7 +1325,7 @@ msgstr "Neplatný soubor."
 #: src/backend/datasources/filters/CANFilter.cpp:228
 #, kde-format
 msgid "No messages read."
-msgstr ""
+msgstr "Žádné přečtené zprávy."
 
 #: src/backend/datasources/filters/FilterStatus.cpp:47
 #, kde-format
@@ -1281,6 +1334,9 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Neplatný počet sloupců dat. Počet sloupců v prvním řádku: %1. Počet sloupců "
+"v %2. řádku je >= %3. Zkontrolujte, zda je použit správný oddělovač a zda "
+"data obsahují stejný počet sloupců."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:246
 #, kde-format
@@ -1307,7 +1363,7 @@ msgstr "Soubor se nepodařilo přečíst."
 #: src/backend/datasources/filters/FITSFilter.cpp:317
 #, kde-format
 msgid "Zero dimensions."
-msgstr ""
+msgstr "Nulové rozměry."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1067
 #: src/backend/datasources/filters/FITSFilter.cpp:1587
@@ -1315,7 +1371,7 @@ msgstr ""
 #: src/frontend/datasources/FITSOptionsWidget.cpp:73
 #, kde-format
 msgid "Primary header"
-msgstr ""
+msgstr "Primární hlavička"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1069
 #, kde-format
@@ -1325,12 +1381,12 @@ msgstr "Obrázek #%1"
 #: src/backend/datasources/filters/FITSFilter.cpp:1072
 #, kde-format
 msgid "ASCII_TBL #%1"
-msgstr ""
+msgstr "ASCII_TBL #%1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1075
 #, kde-format
 msgid "BINARY_TBL #%1"
-msgstr ""
+msgstr "BINARY_TBL #%1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1580
 #, kde-format
@@ -1345,17 +1401,17 @@ msgstr "Tabulky"
 #: src/backend/datasources/filters/HDF5Filter.cpp:172
 #, kde-format
 msgid "Not a HDF5 file"
-msgstr ""
+msgstr "Není to soubor HDF5"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:176
 #, kde-format
 msgid "Failed checking file"
-msgstr ""
+msgstr "Kontrola souboru se nezdařila"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:184
 #, kde-format
 msgid "Failed opening HDF5 file"
-msgstr ""
+msgstr "Nepodařilo se otevřít soubor HDF5"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:190
 #, kde-format
@@ -1365,7 +1421,7 @@ msgstr "Velikost souboru: %1 bajtů"
 #: src/backend/datasources/filters/HDF5Filter.cpp:195
 #, kde-format
 msgid "Free space: %1 bytes"
-msgstr ""
+msgstr "Volné místo: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:201
 #: src/frontend/datasources/ImportFileWidget.cpp:1836
@@ -1376,7 +1432,7 @@ msgstr "Počet souborů: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:204
 #, kde-format
 msgid "Number of data sets: %1"
-msgstr ""
+msgstr "Počet datových souborů: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:207
 #, kde-format
@@ -1386,76 +1442,76 @@ msgstr "Počet skupin: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:210
 #, kde-format
 msgid "Number of named datatypes: %1"
-msgstr ""
+msgstr "Počet pojmenovaných datových typů: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:213
 #, kde-format
 msgid "Number of attributes: %1"
-msgstr ""
+msgstr "Počet atributů: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:216
 #, kde-format
 msgid "Number of all objects: %1"
-msgstr ""
+msgstr "Počet všech objektů: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:224
 #, kde-format
 msgid "Version of superblock: %1"
-msgstr ""
+msgstr "Verze superbloku: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:226
 #, kde-format
 msgid "Size of superblock: %1 bytes"
-msgstr ""
+msgstr "Velikost superbloku: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:228
 #: src/backend/datasources/filters/HDF5Filter.cpp:249
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
-msgstr ""
+msgstr "Velikost rozšíření superbloku: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:230
 #, kde-format
 msgid "Version of free-space manager: %1"
-msgstr ""
+msgstr "Verze správce volného místa: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:232
 #, kde-format
 msgid "Size of free-space manager metadata: %1 bytes"
-msgstr ""
+msgstr "Velikost metadat správce volného místa: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:234
 #, kde-format
 msgid "Total size of free space: %1 bytes"
-msgstr ""
+msgstr "Celková velikost volného místa: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:236
 #, kde-format
 msgid "Version of shared object header: %1"
-msgstr ""
+msgstr "Verze hlavičky sdíleného objektu: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:238
 #: src/backend/datasources/filters/HDF5Filter.cpp:251
 #, kde-format
 msgid "Size of shared object header: %1 bytes"
-msgstr ""
+msgstr "Velikost hlavičky sdíleného objektu: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:240
 #: src/backend/datasources/filters/HDF5Filter.cpp:253
 #, kde-format
 msgid "Size of all shared object header indexes: %1 bytes"
-msgstr ""
+msgstr "Velikost všech indexů záhlaví sdílených objektů: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:242
 #: src/backend/datasources/filters/HDF5Filter.cpp:255
 #, kde-format
 msgid "Size of the heap: %1 bytes"
-msgstr ""
+msgstr "Velikost haldy: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:267
 #, kde-format
 msgid "Cache config version: %1"
-msgstr ""
+msgstr "Verze konfigurace mezipaměti: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:269
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
@@ -1479,86 +1535,89 @@ msgstr "Ne"
 #, kde-format
 msgid "Adaptive cache resize report function enabled: %1"
 msgstr ""
+"Funkce generování zprávy o adaptivní změně velikosti mezipaměti zapnuta: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:271
 #, kde-format
 msgid "Cache initial maximum size: %1 bytes"
-msgstr ""
+msgstr "Počáteční maximální velikost mezipaměti: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:273
 #, kde-format
 msgid "Adaptive cache maximum size: %1 bytes"
-msgstr ""
+msgstr "Maximální velikost adaptivní mezipaměti: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:275
 #, kde-format
 msgid "Adaptive cache minimum size: %1 bytes"
-msgstr ""
+msgstr "Minimální velikost adaptivní mezipaměti: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:281
 #, kde-format
 msgid "Metadata cache hit rate: %1"
-msgstr ""
+msgstr "Míra úspěšnosti mezipaměti metadat: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:288
 #, kde-format
 msgid "Current cache maximum size: %1 bytes"
-msgstr ""
+msgstr "Aktuální maximální velikost mezipaměti: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:290
 #, kde-format
 msgid "Current cache minimum clean size: %1 bytes"
-msgstr ""
+msgstr "Aktuální minimální velikost vyčištění mezipaměti: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:292
 #, kde-format
 msgid "Current cache size: %1 bytes"
-msgstr ""
+msgstr "Aktuální velikost mezipaměti: %1 bajtů"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:294
 #, kde-format
 msgid "Current number of entries in the cache: %1"
-msgstr ""
+msgstr "Aktuální počet záznamů v mezipaměti: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
 msgid "Logging enabled: %1"
-msgstr ""
+msgstr "Záznam povolen: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:311
 #, kde-format
 msgid "Events are currently logged: %1"
-msgstr ""
+msgstr "Události jsou teď zaznamenávány: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:319
 #, kde-format
 msgid "Metadata/raw data page buffer accesses: %1 %2"
-msgstr ""
+msgstr "Přístupy k vyrovnávací paměti stránky metadat/surových dat: %1 %2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:321
 #, kde-format
 msgid "Metadata/raw data page buffer hits: %1 %2"
-msgstr ""
+msgstr "Zásahy do vyrovnávací paměti stránky s metadaty/surovými daty: %1 %2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:323
 #, kde-format
 msgid "Metadata/raw data page buffer misses: %1 %2"
 msgstr ""
+"Chyby při načítání stránek s metadaty/surovými daty z vyrovnávací paměti: %1 "
+"%2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:325
 #, kde-format
 msgid "Metadata/raw data page buffer evictions: %1 %2"
-msgstr ""
+msgstr "Vymazání stránek z vyrovnávací paměti metadat/surových dat: %1 %2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:327
 #, kde-format
 msgid "Metadata/raw data accesses bypassing page buffer: %1 %2"
-msgstr ""
+msgstr "Přístupy k metadatům/surovým datům obcházející stránkový buffer: %1 %2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:330
 #, kde-format
 msgid "Page buffer disabled"
-msgstr ""
+msgstr "Stránkový buffer je deaktivován"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:352
 #, kde-format
@@ -1570,7 +1629,7 @@ msgstr "h5dump nenalezen."
 #: src/frontend/datasources/ImportFileWidget.cpp:1715
 #, kde-format
 msgid "Reading from file %1 failed."
-msgstr ""
+msgstr "Čtení ze souboru %1 se nezdařilo."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1313
 #, kde-format
@@ -1580,7 +1639,7 @@ msgstr "datový typ"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1364
 #, kde-format
 msgid "rank %1 not supported yet"
-msgstr ""
+msgstr "řád %1 zatím není podporován"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1371
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
@@ -1601,7 +1660,7 @@ msgstr "odkaz na %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1402
 #, kde-format
 msgid "hard link"
-msgstr ""
+msgstr "pevný odkaz"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1466
 #, kde-format
@@ -1612,48 +1671,48 @@ msgstr "neznámý"
 #: src/backend/datasources/filters/HDF5Filter.cpp:2153
 #, kde-format
 msgid "No data set selected."
-msgstr ""
+msgstr "Není vybrán žádný datový soubor."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1595
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
-msgstr ""
+msgstr "řád 0 pro typ %1 zatím není implementován"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1734
 #: src/backend/datasources/filters/HDF5Filter.cpp:1883
 #, kde-format
 msgid "unsupported integer type for rank 1"
-msgstr ""
+msgstr "nepodporovaný typ celého čísla pro řád 1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1747
 #, kde-format
 msgid "unsupported float type for rank 1"
-msgstr ""
+msgstr "nepodporovaný plovoucí typ pro řád 1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1898
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
-msgstr ""
+msgstr "řád 1 pro typ %1 zatím není implementován"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2031
 #, kde-format
 msgid "unsupported integer type for rank 2"
-msgstr ""
+msgstr "nepodporovaný typ celého čísla pro řád 2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2044
 #, kde-format
 msgid "unsupported float type for rank 2"
-msgstr ""
+msgstr "nepodporovaný plovoucí typ pro řád 2"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2107
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
-msgstr ""
+msgstr "řád 2 pro typ %1 zatím není implementován"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:2116
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
-msgstr ""
+msgstr "řád %1 zatím není pro typ %2 implementován"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
@@ -1673,19 +1732,20 @@ msgstr "XYRGB"
 #: src/backend/datasources/filters/ImageFilter.cpp:120
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
-msgstr ""
+msgstr "Prázdný soubor nebo neplatný či nepodporovaný formát."
 
 #: src/backend/datasources/filters/ImageFilter.cpp:221
 #, kde-format
 msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "číselná data, %1 prvek"
+msgstr[1] "číselná data, %1 prvky"
+msgstr[2] "číselná data, %1 prvků"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:183
 #, kde-format
 msgid "Open device failed"
-msgstr ""
+msgstr "Otevření zařízení se nezdařilo"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:186
 #, kde-format
@@ -1695,12 +1755,12 @@ msgstr "Prázdný soubor"
 #: src/backend/datasources/filters/JsonFilter.cpp:192
 #, kde-format
 msgid "Parse error: %1 at offset %2"
-msgstr ""
+msgstr "Chyba zpracování: %1 na pozici %2"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:195
 #, kde-format
 msgid "Valid JSON document"
-msgstr ""
+msgstr "Platný dokument JSON"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:226
 #: src/backend/datasources/filters/McapFilter.cpp:298
@@ -1733,49 +1793,49 @@ msgstr "název"
 #: src/backend/datasources/filters/JsonFilter.cpp:350
 #, kde-format
 msgid "Device/file is empty."
-msgstr ""
+msgstr "Zařízení/soubor je prázdný."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:358
 #, kde-format
 msgid "JSON format error or document empty."
-msgstr ""
+msgstr "Chyba formátu JSON nebo dokument je prázdný."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:505
 #, kde-format
 msgid "Empty file or invalid JSON document."
-msgstr ""
+msgstr "Prázdný soubor nebo neplatný dokument JSON."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:310
 #: src/backend/datasources/filters/NetCDFFilter.cpp:239
 #: src/backend/datasources/filters/ReadStatFilter.cpp:178
 #, kde-format
 msgid "Error getting file info"
-msgstr ""
+msgstr "Chyba při načítání informací o souboru"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:319
 #, kde-format
 msgid "Matlab version 7.3"
-msgstr "Verze Matlabu 7.3"
+msgstr "Matlab verze 7.3"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:322
 #, kde-format
 msgid "Matlab version 5"
-msgstr "Verze Matlabu 5"
+msgstr "Matlab verze 5"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:325
 #, kde-format
 msgid "Matlab version 4"
-msgstr "Verze Matlabu 4"
+msgstr "Matlab verze 4"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:328
 #, kde-format
 msgid "Matlab version undefined"
-msgstr ""
+msgstr "Verze Matlabu není definována"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:334
 #, kde-format
 msgid "Number of variables: "
-msgstr ""
+msgstr "Počet proměnných: "
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
@@ -1821,7 +1881,7 @@ msgstr "Char"
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #, kde-format
 msgid "Sparse"
-msgstr ""
+msgstr "Sparse"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:386
 #: src/backend/datasources/filters/MatioFilter.cpp:428
@@ -1839,7 +1899,7 @@ msgstr "Int8"
 #: src/backend/datasources/filters/MatioFilter.cpp:418
 #, kde-format
 msgid "UInt8"
-msgstr ""
+msgstr "UInt8"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:392
 #: src/backend/datasources/filters/MatioFilter.cpp:420
@@ -1851,7 +1911,7 @@ msgstr "Int16"
 #: src/backend/datasources/filters/MatioFilter.cpp:422
 #, kde-format
 msgid "UInt16"
-msgstr ""
+msgstr "UInt16"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:396
 #: src/backend/datasources/filters/MatioFilter.cpp:424
@@ -1863,13 +1923,13 @@ msgstr "Int32"
 #: src/backend/datasources/filters/MatioFilter.cpp:426
 #, kde-format
 msgid "UInt32"
-msgstr ""
+msgstr "UInt32"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:402
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #, kde-format
 msgid "UInt64"
-msgstr ""
+msgstr "UInt64"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:404
 #: src/backend/datasources/filters/MatioFilter.cpp:454
@@ -1889,13 +1949,13 @@ msgstr "Neprůhledné"
 #: src/backend/datasources/filters/MatioFilter.cpp:457
 #, kde-format
 msgid "Undefined"
-msgstr "Nedefinovaný"
+msgstr "Nedefinováno"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:414
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:64
 #, kde-format
 msgid "Unknown"
-msgstr "Neznámý"
+msgstr "Neznámé"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:436
 #: src/frontend/ActionsManager.cpp:240 src/frontend/MainWin.cpp:1264
@@ -1908,7 +1968,7 @@ msgstr "Matice"
 #: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
 msgid "Compressed"
-msgstr "Komprimovaný"
+msgstr "Komprimované"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:440
 #, kde-format
@@ -1940,12 +2000,12 @@ msgstr "Pole"
 #: src/backend/datasources/filters/MatioFilter.cpp:665
 #, kde-format
 msgid "No valid variable selected."
-msgstr ""
+msgstr "Nebyla vybrána žádná platná proměnná."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:660
 #, kde-format
 msgid "Selected variable not found."
-msgstr ""
+msgstr "Zvolená proměnná nebyla nalezena."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:801
 #, kde-format
@@ -1955,12 +2015,12 @@ msgstr "Struktura neobsahuje žádné pole"
 #: src/backend/datasources/filters/MatioFilter.cpp:883
 #, kde-format
 msgid "Support for this variable type not implemented yet."
-msgstr ""
+msgstr "Podpora tohoto typu proměnné zatím není implementována."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:1230
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
-msgstr ""
+msgstr "Proměnné s řádem větším než 2 zatím nejsou podporovány."
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
 #, kde-format
@@ -2016,7 +2076,7 @@ msgstr "Soubor se nepodařilo otevřít. Důvod: %1"
 #: src/backend/datasources/filters/McapFilter.cpp:488
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "Nebyly nalezeny žádné témata v kódování JSON."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:215
 #, kde-format
@@ -2026,29 +2086,29 @@ msgstr "Chyba při otevírání souboru"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:224
 #, kde-format
 msgid "Number of global attributes: %1"
-msgstr ""
+msgstr "Počet globálních atributů: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:226
 #, kde-format
 msgid "Number of dimensions: %1"
-msgstr ""
+msgstr "Počet dimenzí: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:228
 #: src/backend/datasources/filters/ReadStatFilter.cpp:133
 #, kde-format
 msgid "Number of variables: %1"
-msgstr ""
+msgstr "Počet proměnných: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:234
 #: src/backend/datasources/filters/ReadStatFilter.cpp:139
 #, kde-format
 msgid "Format version: %1"
-msgstr ""
+msgstr "Verze formátu: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:237
 #, kde-format
 msgid "Using library version %1"
-msgstr ""
+msgstr "Používá se verze knihovny %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:262
 #, kde-format
@@ -2058,7 +2118,7 @@ msgstr "ncdump nenalezen."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:456
 #, kde-format
 msgid "global attribute"
-msgstr ""
+msgstr "globální atribut"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:460
 #, kde-format
@@ -2110,60 +2170,60 @@ msgstr "Proměnné"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1116
 #, kde-format
 msgid "No variable selected."
-msgstr ""
+msgstr "Není vybrána žádná proměnná."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:702
 #, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr ""
+msgstr "Nepodařilo se otevřít soubor nebo je prázdný."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:940
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1080
 #, kde-format
 msgid "Data type not supported yet."
-msgstr ""
+msgstr "Tento datový typ zatím není podporován."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1085
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
-msgstr ""
+msgstr "%1-rozměrná data typu %2 zatím nejsou podporována"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:46
 #, kde-format
 msgid "Sheet count: %1"
-msgstr ""
+msgstr "Počet listů: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:227
 #: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "No sheet selected."
-msgstr ""
+msgstr "Není vybrán žádný list."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:262
 #, kde-format
 msgid "Selected sheet not found."
-msgstr ""
+msgstr "Vybraný list nebyl nalezen."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:269
 #, kde-format
 msgid "Invalid sheet."
-msgstr ""
+msgstr "Neplatný list."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:331
 #, kde-format
 msgid "Formulas not supported yet."
-msgstr ""
+msgstr "Vzorce zatím nejsou podporovány."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:488
 #, kde-format
 msgid "Sheet not found."
-msgstr ""
+msgstr "List nebyl nalezen."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:495
 #, kde-format
 msgid "Invalid sheet index."
-msgstr ""
+msgstr "Neplatný index listu."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:61
 #, kde-format
@@ -2173,7 +2233,7 @@ msgstr "Nelze otevřít soubor."
 #: src/backend/datasources/filters/ParquetFilter.cpp:70
 #, kde-format
 msgid "Format: Apache Parquet"
-msgstr ""
+msgstr "Formát: Apache Parquet"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:72
 #, kde-format
@@ -2181,45 +2241,40 @@ msgid "Version: %1"
 msgstr "Verze: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:74
-#, fuzzy, kde-format
-#| msgid "Created:"
+#, kde-format
 msgid "Created by: %1"
-msgstr "Vytvořeno:"
+msgstr "Vytvořil: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:78
 #: src/backend/datasources/filters/ParquetFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of rows: %1"
-msgstr "Počet skupin: %1"
+msgstr "Počet řádků: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:80
-#, fuzzy, kde-format
-#| msgid "Number of groups: %1"
+#, kde-format
 msgid "Number of row groups: %1"
-msgstr "Počet skupin: %1"
+msgstr "Počet skupin řádků: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:87
 #, kde-format
 msgid "Format: Arrow IPC (Feather)"
-msgstr ""
+msgstr "Formát: Arrow IPC (Feather)"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:91
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of record batches: %1"
-msgstr "Počet záznamů: %1"
+msgstr "Počet dávek záznamů: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:99
 #, kde-format
 msgid "Format: Apache ORC"
-msgstr ""
+msgstr "Formát: Apache ORC"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Number of lines: %1"
+#, kde-format
 msgid "Number of stripes: %1"
-msgstr "Počet řádků: %1"
+msgstr "Počet pruhů: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:214
 #, kde-format
@@ -2227,59 +2282,51 @@ msgid "Could not open file: %1"
 msgstr "Nelze otevřít soubor: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:226
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Parquet file: %1"
-msgstr "Nepodařilo se otevřít soubor '%1'."
+msgstr "Nepodařilo se otevřít soubor Parquet: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:237
 #: src/backend/datasources/filters/ParquetFilter.cpp:246
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read Parquet table: %1"
-msgstr "Čtení dat selhalo."
+msgstr "Nepodařilo se načíst tabulku Parquet: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:256
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open Arrow IPC file: %1"
-msgstr "Nepodařilo se otevřít soubor '%1'."
+msgstr "Nepodařilo se otevřít soubor Arrow IPC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:267
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read record batch %1: %2"
-msgstr "Čtení dat selhalo."
+msgstr "Nepodařilo se načíst dávku záznamů %1: %2"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:274
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to assemble table: %1"
-msgstr "Selhala inicializace %1."
+msgstr "Nepodařilo se sestavit tabulku: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open ORC file: %1"
-msgstr "Nepodařilo se otevřít soubor '%1'."
+msgstr "Nepodařilo se otevřít soubor ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:294
 #: src/backend/datasources/filters/ParquetFilter.cpp:302
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read ORC table: %1"
-msgstr "Čtení dat selhalo."
+msgstr "Nepodařilo se načíst tabulku ORC: %1"
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:311
-#, fuzzy, kde-format
-#| msgid "All supported files (%1)"
+#, kde-format
 msgid "Unsupported file format."
-msgstr "Všechny podporované soubory (%1)"
+msgstr "Nepodporovaný formát souboru."
 
 #: src/backend/datasources/filters/ParquetFilter.cpp:400
 #, kde-format
 msgid "The file has no data to import."
-msgstr ""
+msgstr "Soubor neobsahuje žádná data k importu."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:62
@@ -2312,17 +2359,17 @@ msgstr "Velikost v bajtech"
 #: src/backend/datasources/filters/QJsonModel.cpp:200
 #, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr ""
+msgstr "Načtení souboru JSON se nezdařilo. Prázdný dokument JSON."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
 msgid "Failed to load JSON document. Error: %1."
-msgstr ""
+msgstr "Načtení dokumentu JSON se nezdařilo. Chyba: %1."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:126
 #, kde-format
 msgid "Unknown file extension"
-msgstr ""
+msgstr "Neznámá přípona souboru"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:131
 #, kde-format
@@ -2352,12 +2399,12 @@ msgstr "Endianita: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:169
 #, kde-format
 msgid "Table name: %1"
-msgstr ""
+msgstr "Název tabulky: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:171
 #, kde-format
 msgid "File label: %1"
-msgstr ""
+msgstr "Název souboru: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:173
 #, kde-format
@@ -2378,7 +2425,7 @@ msgstr "Chyba při čtení souboru."
 #: src/backend/datasources/filters/ReadStatFilter.cpp:537
 #, kde-format
 msgid "Failed to parse the file."
-msgstr ""
+msgstr "Nepodařilo se zpracovat soubor."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:115
 #: src/backend/datasources/MQTTClient.cpp:1188
@@ -2387,57 +2434,57 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:498
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
-msgstr ""
+msgstr "Chybí atribut '%1' nebo je prázdný, použije se výchozí hodnota"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:151
 #, kde-format
 msgid "No column available"
-msgstr ""
+msgstr "Žádný sloupec není k dispozici"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:165
 #, kde-format
 msgid "Unsupported file type, neither histogram no tree."
-msgstr ""
+msgstr "Nepodporovaný typ souboru – neobsahuje ani histogram, ani strom."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1507
 #, kde-format
 msgid "Not a ROOT file"
-msgstr ""
+msgstr "Toto není soubor ROOT"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1512
 #, kde-format
 msgid "File format version: %1"
-msgstr ""
+msgstr "Verze formátu souboru: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "FREE data record size: %1 bytes"
-msgstr ""
+msgstr "Velikost záznamu VOLNÝCH dat: %1 bajtů"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1522
 #, kde-format
 msgid "Number of free data records: %1"
-msgstr ""
+msgstr "Počet volných záznamů dat: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1524
 #, kde-format
 msgid "TNamed size: %1 bytes"
-msgstr ""
+msgstr "Velikost TNamed: %1 bajtů"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1526
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
-msgstr ""
+msgstr "Velikost ukazatelů souborů: %1 bajtů"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1531
 #, kde-format
 msgid "Compression level and algorithm: %1"
-msgstr ""
+msgstr "Úroveň komprese a algoritmus: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1536
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
-msgstr ""
+msgstr "Velikost záznamu TStreamerInfo: %1 bajtů"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
 #, kde-format
@@ -2452,7 +2499,7 @@ msgstr "Verze aplikace: %1.%2.%3"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:114
 #, kde-format
 msgid "Number of Objects: %1"
-msgstr ""
+msgstr "Počet objektů: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:122
 #, kde-format
@@ -2472,7 +2519,7 @@ msgstr "Úroveň komprese: %1"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:136
 #, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr ""
+msgstr "Velikost nekomprimovaného souboru: %1 bajtů"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:187
 #, kde-format
@@ -2497,12 +2544,12 @@ msgstr "Neplatný soubor BLF"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:199
 #, kde-format
 msgid "Unable to calculate conversion: %1."
-msgstr ""
+msgstr "Nelze vypočítat převod: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:202
 #, kde-format
 msgid "No DBC parser installed."
-msgstr ""
+msgstr "Není nainstalován žádný parser DBC."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:205
 #, kde-format
@@ -2517,17 +2564,17 @@ msgstr "Neznámá chyba,"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:452
 #, kde-format
 msgid "Time_s"
-msgstr ""
+msgstr "Time_s"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:454
 #, kde-format
 msgid "Time_ns"
-msgstr ""
+msgstr "Time_ns"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:456
 #, kde-format
 msgid "Time_10µs"
-msgstr ""
+msgstr "Time_10µs"
 
 #: src/backend/datasources/filters/XLSXFilter.cpp:48
 #, kde-format
@@ -2537,7 +2584,7 @@ msgstr "Listy: "
 #: src/backend/datasources/filters/XLSXFilter.cpp:634
 #, kde-format
 msgid "Invalid region specified."
-msgstr ""
+msgstr "Byla zadána neplatná oblast."
 
 #: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
@@ -2552,7 +2599,7 @@ msgstr "Uživatel nemá dostatečná oprávnění k otevření zařízení."
 #: src/backend/datasources/LiveDataSource.cpp:749
 #, kde-format
 msgid "Device already opened."
-msgstr ""
+msgstr "Zařízení je již otevřené."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
 #, kde-format
@@ -2577,12 +2624,12 @@ msgstr "Vypršel časový limit."
 #: src/backend/datasources/LiveDataSource.cpp:766
 #, kde-format
 msgid "The following error occurred: %1."
-msgstr ""
+msgstr "Došlo k následující chybě: %1."
 
 #: src/backend/datasources/LiveDataSource.cpp:777
 #, kde-format
 msgid "Serial Port Error"
-msgstr ""
+msgstr "Chyba sériového portu"
 
 #: src/backend/datasources/MQTTTopic.cpp:45
 #, kde-format
@@ -2597,7 +2644,7 @@ msgstr "Zobrazit graf"
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1332
 #, kde-format
 msgid "Plot%1"
-msgstr "Vykreslit%1"
+msgstr "Graf%1"
 
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1506
 #, kde-format
@@ -2618,12 +2665,12 @@ msgstr "Programovací konstanty"
 #: src/backend/gsl/constants.cpp:17
 #, kde-format
 msgid "Mathematical constants"
-msgstr ""
+msgstr "Matematické konstanty"
 
 #: src/backend/gsl/constants.cpp:19
 #, kde-format
 msgid "Fundamental constants"
-msgstr ""
+msgstr "Základní konstanty"
 
 #: src/backend/gsl/constants.cpp:21
 #, kde-format
@@ -2633,12 +2680,12 @@ msgstr "Astronomie a astrofyzika"
 #: src/backend/gsl/constants.cpp:23
 #, kde-format
 msgid "Atomic and Nuclear Physics"
-msgstr ""
+msgstr "Atomová a jaderná fyzika"
 
 #: src/backend/gsl/constants.cpp:25
 #, kde-format
 msgid "Measurement of Time"
-msgstr ""
+msgstr "Měření času"
 
 #: src/backend/gsl/constants.cpp:27
 #, kde-format
@@ -2648,27 +2695,27 @@ msgstr "Imperiální jednotky"
 #: src/backend/gsl/constants.cpp:29
 #, kde-format
 msgid "Speed and Nautical Units"
-msgstr ""
+msgstr "Rychlost a námořní jednotky"
 
 #: src/backend/gsl/constants.cpp:31
 #, kde-format
 msgid "Printers Units"
-msgstr ""
+msgstr "Jednotky tiskáren"
 
 #: src/backend/gsl/constants.cpp:33
 #, kde-format
 msgid "Volume, Area and Length"
-msgstr ""
+msgstr "Objem, plocha a délka"
 
 #: src/backend/gsl/constants.cpp:35
 #, kde-format
 msgid "Mass and Weight"
-msgstr ""
+msgstr "Hmotnost a váha"
 
 #: src/backend/gsl/constants.cpp:37
 #, kde-format
 msgid "Thermal Energy and Power"
-msgstr ""
+msgstr "Tepelná energie a elektřina"
 
 #: src/backend/gsl/constants.cpp:39
 #, kde-format
@@ -2678,22 +2725,22 @@ msgstr "Tlak"
 #: src/backend/gsl/constants.cpp:41
 #, kde-format
 msgid "Viscosity"
-msgstr ""
+msgstr "Viskozita"
 
 #: src/backend/gsl/constants.cpp:43
 #, kde-format
 msgid "Light and Illumination"
-msgstr ""
+msgstr "Světlo a osvětlení"
 
 #: src/backend/gsl/constants.cpp:45
 #, kde-format
 msgid "Radioactivity"
-msgstr ""
+msgstr "Radioaktivita"
 
 #: src/backend/gsl/constants.cpp:47
 #, kde-format
 msgid "Force and Energy"
-msgstr ""
+msgstr "Síla a energie"
 
 #: src/backend/gsl/constants.cpp:51
 #, kde-format
@@ -2703,13 +2750,13 @@ msgstr "Neznámá konstanta"
 #: src/backend/gsl/constants.cpp:63
 #, kde-format
 msgid "RAND_MAX"
-msgstr ""
+msgstr "RAND_MAX"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:66
 #, kde-format
 msgid "Base of exponentials"
-msgstr ""
+msgstr "Základ exponenciálních funkcí"
 
 #: src/backend/gsl/constants.cpp:67
 #, kde-format
@@ -2719,12 +2766,12 @@ msgstr "Pí"
 #: src/backend/gsl/constants.cpp:68
 #, kde-format
 msgid "Euler's constant"
-msgstr ""
+msgstr "Eulerova konstanta"
 
 #: src/backend/gsl/constants.cpp:69
 #, kde-format
 msgid "Not a number"
-msgstr ""
+msgstr "Toto není číslo"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:72
@@ -2735,32 +2782,32 @@ msgstr "Rychlost světla"
 #: src/backend/gsl/constants.cpp:73
 #, kde-format
 msgid "Vacuum permeability"
-msgstr ""
+msgstr "Propustnost vakua"
 
 #: src/backend/gsl/constants.cpp:74
 #, kde-format
 msgid "Vacuum permittivity"
-msgstr ""
+msgstr "Permitivita vakua"
 
 #: src/backend/gsl/constants.cpp:75
 #, kde-format
 msgid "Planck constant"
-msgstr ""
+msgstr "Planckova konstanta"
 
 #: src/backend/gsl/constants.cpp:76
 #, kde-format
 msgid "Reduced Planck constant"
-msgstr ""
+msgstr "Zmenšená Planckova konstanta"
 
 #: src/backend/gsl/constants.cpp:77
 #, kde-format
 msgid "Avogadro constant"
-msgstr ""
+msgstr "Avogadrova konstanta"
 
 #: src/backend/gsl/constants.cpp:78
 #, kde-format
 msgid "Faraday"
-msgstr ""
+msgstr "Faradayova konstanta"
 
 #: src/backend/gsl/constants.cpp:79
 #, kde-format
@@ -2770,12 +2817,12 @@ msgstr "Boltzmannova konstanta"
 #: src/backend/gsl/constants.cpp:80
 #, kde-format
 msgid "Molar gas"
-msgstr ""
+msgstr "Molární plynová konstanta"
 
 #: src/backend/gsl/constants.cpp:81
 #, kde-format
 msgid "Standard gas volume"
-msgstr ""
+msgstr "Standardní objem plynu"
 
 #: src/backend/gsl/constants.cpp:82
 #, kde-format
@@ -2787,7 +2834,7 @@ msgstr "Stefan-Boltzmannova konstanta"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:158
 #, kde-format
 msgid "Gauss"
-msgstr ""
+msgstr "Gaussova konstanta"
 
 #. i18n("Astronomy and Astrophysics"));
 #: src/backend/gsl/constants.cpp:86
@@ -2813,53 +2860,53 @@ msgstr "Parsek"
 #: src/backend/gsl/constants.cpp:90
 #, kde-format
 msgid "Gravitational acceleration"
-msgstr ""
+msgstr "Gravitační zrychlení"
 
 #: src/backend/gsl/constants.cpp:91
 #, kde-format
 msgid "Solar mass"
-msgstr ""
+msgstr "Sluneční hmotnost"
 
 #. i18n("Atomic and Nuclear Physics"));
 #: src/backend/gsl/constants.cpp:94
 #, kde-format
 msgid "Charge of the electron"
-msgstr ""
+msgstr "Náboj elektronu"
 
 #: src/backend/gsl/constants.cpp:95
 #, kde-format
 msgid "Energy of 1 electron volt"
-msgstr ""
+msgstr "Energie 1 elektronvoltu"
 
 #: src/backend/gsl/constants.cpp:96
 #, kde-format
 msgid "Unified atomic mass"
-msgstr ""
+msgstr "Jednotná atomová hmotnost"
 
 #: src/backend/gsl/constants.cpp:97
 #, kde-format
 msgid "Mass of the electron"
-msgstr ""
+msgstr "Hmotnost elektronu"
 
 #: src/backend/gsl/constants.cpp:98
 #, kde-format
 msgid "Mass of the muon"
-msgstr ""
+msgstr "Hmotnost mionu"
 
 #: src/backend/gsl/constants.cpp:99
 #, kde-format
 msgid "Mass of the proton"
-msgstr ""
+msgstr "Hmotnost protonu"
 
 #: src/backend/gsl/constants.cpp:100
 #, kde-format
 msgid "Mass of the neutron"
-msgstr ""
+msgstr "Hmotnost neutronu"
 
 #: src/backend/gsl/constants.cpp:101
 #, kde-format
 msgid "Electromagnetic fine structure constant"
-msgstr ""
+msgstr "Elektromagnetická konstanta jemné struktury"
 
 #: src/backend/gsl/constants.cpp:102
 #, kde-format
@@ -2874,17 +2921,17 @@ msgstr "Bohrův poloměr"
 #: src/backend/gsl/constants.cpp:104
 #, kde-format
 msgid "Length of 1 angstrom"
-msgstr ""
+msgstr "Délka 1 angströmu"
 
 #: src/backend/gsl/constants.cpp:105
 #, kde-format
 msgid "Area of 1 barn"
-msgstr ""
+msgstr "Plocha 1 barnu"
 
 #: src/backend/gsl/constants.cpp:106
 #, kde-format
 msgid "Bohr Magneton"
-msgstr ""
+msgstr "Bohrův magneton"
 
 #: src/backend/gsl/constants.cpp:107
 #, kde-format
@@ -2894,12 +2941,12 @@ msgstr "Jaderný magneton"
 #: src/backend/gsl/constants.cpp:108
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
-msgstr ""
+msgstr "Magnetický moment elektronu [absolutní hodnota]"
 
 #: src/backend/gsl/constants.cpp:109
 #, kde-format
 msgid "Magnetic moment of the proton"
-msgstr ""
+msgstr "Magnetický moment protonu"
 
 #: src/backend/gsl/constants.cpp:110
 #, kde-format
@@ -2909,334 +2956,334 @@ msgstr "Thomsonův účinný průřez"
 #: src/backend/gsl/constants.cpp:111
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
-msgstr ""
+msgstr "Elektrický dipólový moment 1 Debye"
 
 #. i18n("Measurement of Time"));
 #: src/backend/gsl/constants.cpp:114
 #, kde-format
 msgid "Number of seconds in 1 minute"
-msgstr ""
+msgstr "Počet sekund v 1 minutě"
 
 #: src/backend/gsl/constants.cpp:115
 #, kde-format
 msgid "Number of seconds in 1 hour"
-msgstr ""
+msgstr "Počet sekund v 1 hodině"
 
 #: src/backend/gsl/constants.cpp:116
 #, kde-format
 msgid "Number of seconds in 1 day"
-msgstr ""
+msgstr "Počet sekund v 1 dni"
 
 #: src/backend/gsl/constants.cpp:117
 #, kde-format
 msgid "Number of seconds in 1 week"
-msgstr ""
+msgstr "Počet sekund v 1 týdnu"
 
 #. i18n("Imperial Units"));
 #: src/backend/gsl/constants.cpp:120
 #, kde-format
 msgid "Length of 1 inch"
-msgstr ""
+msgstr "Délka 1 palce"
 
 #: src/backend/gsl/constants.cpp:121
 #, kde-format
 msgid "Length of 1 foot"
-msgstr ""
+msgstr "Délka 1 stopy"
 
 #: src/backend/gsl/constants.cpp:122
 #, kde-format
 msgid "Length of 1 yard"
-msgstr ""
+msgstr "Délka 1 yardu"
 
 #: src/backend/gsl/constants.cpp:123
 #, kde-format
 msgid "Length of 1 mile"
-msgstr ""
+msgstr "Délka 1 míle"
 
 #: src/backend/gsl/constants.cpp:124
 #, kde-format
 msgid "Length of 1/1000th of an inch"
-msgstr ""
+msgstr "Délka 1/1000 palce"
 
 #. i18n("Speed and Nautical Units"));
 #: src/backend/gsl/constants.cpp:127
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
-msgstr ""
+msgstr "Rychlost 1 kilometr za hodinu"
 
 #: src/backend/gsl/constants.cpp:128
 #, kde-format
 msgid "Speed of 1 mile per hour"
-msgstr ""
+msgstr "Rychlost 1 míle za hodinu"
 
 #: src/backend/gsl/constants.cpp:129
 #, kde-format
 msgid "Length of 1 nautical mile"
-msgstr ""
+msgstr "Délka 1 námořní míle"
 
 #: src/backend/gsl/constants.cpp:130
 #, kde-format
 msgid "Length of 1 fathom"
-msgstr ""
+msgstr "Délka 1 sáhu"
 
 #: src/backend/gsl/constants.cpp:131
 #, kde-format
 msgid "Speed of 1 knot"
-msgstr ""
+msgstr "Rychlost 1 uzlu"
 
 #. i18n("Printers Units"));
 #: src/backend/gsl/constants.cpp:134
 #, kde-format
 msgid "length of 1 printer's point [1/72 inch]"
-msgstr ""
+msgstr "délka 1 tiskového bodu [1/72 palce]"
 
 #: src/backend/gsl/constants.cpp:135
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
-msgstr ""
+msgstr "délka 1 bodu TeX [1/72,27 palce]"
 
 #. i18n("Volume, Area and Length"));
 #: src/backend/gsl/constants.cpp:138
 #, kde-format
 msgid "Length of 1 micron"
-msgstr ""
+msgstr "Délka 1 mikronu"
 
 #: src/backend/gsl/constants.cpp:139
 #, kde-format
 msgid "Area of 1 hectare"
-msgstr ""
+msgstr "Plocha 1 hektaru"
 
 #: src/backend/gsl/constants.cpp:140
 #, kde-format
 msgid "Area of 1 acre"
-msgstr ""
+msgstr "Plocha 1 akru"
 
 #: src/backend/gsl/constants.cpp:141
 #, kde-format
 msgid "Volume of 1 liter"
-msgstr ""
+msgstr "Objem 1 litru"
 
 #: src/backend/gsl/constants.cpp:142
 #, kde-format
 msgid "Volume of 1 US gallon"
-msgstr ""
+msgstr "Objem 1 amerického galonu"
 
 #: src/backend/gsl/constants.cpp:143
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
-msgstr ""
+msgstr "Objem 1 kanadského galonu"
 
 #: src/backend/gsl/constants.cpp:144
 #, kde-format
 msgid "Volume of 1 UK gallon"
-msgstr ""
+msgstr "Objem 1 britského galonu"
 
 #: src/backend/gsl/constants.cpp:145
 #, kde-format
 msgid "Volume of 1 quart"
-msgstr ""
+msgstr "Objem 1 čtvrt galonu"
 
 #: src/backend/gsl/constants.cpp:146
 #, kde-format
 msgid "Volume of 1 pint"
-msgstr ""
+msgstr "Objem 1 pinty"
 
 #. i18n("Mass and Weight"));
 #: src/backend/gsl/constants.cpp:149
 #, kde-format
 msgid "Mass of 1 pound"
-msgstr ""
+msgstr "Hmotnost 1 libry"
 
 #: src/backend/gsl/constants.cpp:150
 #, kde-format
 msgid "Mass of 1 ounce"
-msgstr ""
+msgstr "Hmotnost 1 unce"
 
 #: src/backend/gsl/constants.cpp:151
 #, kde-format
 msgid "Mass of 1 ton"
-msgstr ""
+msgstr "Hmotnost 1 tuny"
 
 #: src/backend/gsl/constants.cpp:152
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
-msgstr ""
+msgstr "Hmotnost 1 metrické tuny [1 000 kg]"
 
 #: src/backend/gsl/constants.cpp:153
 #, kde-format
 msgid "Mass of 1 UK ton"
-msgstr ""
+msgstr "Hmotnost 1 britské tuny"
 
 #: src/backend/gsl/constants.cpp:154
 #, kde-format
 msgid "Mass of 1 troy ounce"
-msgstr ""
+msgstr "Hmotnost 1 trojské unce"
 
 #: src/backend/gsl/constants.cpp:155
 #, kde-format
 msgid "Mass of 1 carat"
-msgstr ""
+msgstr "Hmotnost 1 karátu"
 
 #: src/backend/gsl/constants.cpp:156
 #, kde-format
 msgid "Force of 1 gram weight"
-msgstr ""
+msgstr "Síla odpovídající závaží o hmotnosti 1 gramu"
 
 #: src/backend/gsl/constants.cpp:157
 #, kde-format
 msgid "Force of 1 pound weight"
-msgstr ""
+msgstr "Síla odpovídající závaží o hmotnosti 1 libry"
 
 #: src/backend/gsl/constants.cpp:158
 #, kde-format
 msgid "Force of 1 kilopound weight"
-msgstr ""
+msgstr "Síla odpovídající závaží o hmotnosti 1 kilolibry"
 
 #: src/backend/gsl/constants.cpp:159
 #, kde-format
 msgid "Force of 1 poundal"
-msgstr ""
+msgstr "Síla 1 poundalu"
 
 #. i18n("Thermal Energy and Power"));
 #: src/backend/gsl/constants.cpp:162
 #, kde-format
 msgid "Energy of 1 calorie"
-msgstr ""
+msgstr "Energie 1 kalorie"
 
 #: src/backend/gsl/constants.cpp:163
 #, kde-format
 msgid "Energy of 1 British Thermal Unit"
-msgstr ""
+msgstr "Energie 1 britské tepelné jednotky"
 
 #: src/backend/gsl/constants.cpp:164
 #, kde-format
 msgid "Energy of 1 Therm"
-msgstr ""
+msgstr "Energie 1 thermu"
 
 #: src/backend/gsl/constants.cpp:165
 #, kde-format
 msgid "Power of 1 horsepower"
-msgstr ""
+msgstr "Výkon 1 koňské síly"
 
 #. i18n("Pressure"));
 #: src/backend/gsl/constants.cpp:168
 #, kde-format
 msgid "Pressure of 1 bar"
-msgstr ""
+msgstr "Tlak 1 baru"
 
 #: src/backend/gsl/constants.cpp:169
 #, kde-format
 msgid "Pressure of 1 standard atmosphere"
-msgstr ""
+msgstr "Tlak 1 standardní atmosféry"
 
 #: src/backend/gsl/constants.cpp:170
 #, kde-format
 msgid "Pressure of 1 torr"
-msgstr ""
+msgstr "Tlak 1 torru"
 
 #: src/backend/gsl/constants.cpp:171
 #, kde-format
 msgid "Pressure of 1 meter of mercury"
-msgstr ""
+msgstr "Tlak odpovídající 1 metru rtuti"
 
 #: src/backend/gsl/constants.cpp:172
 #, kde-format
 msgid "Pressure of 1 inch of mercury"
-msgstr ""
+msgstr "Tlak odpovídající 1 palci rtuti"
 
 #: src/backend/gsl/constants.cpp:173
 #, kde-format
 msgid "Pressure of 1 inch of water"
-msgstr ""
+msgstr "Tlak odpovídající 1 palci vody"
 
 #: src/backend/gsl/constants.cpp:174
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
-msgstr ""
+msgstr "Tlak 1 libry na čtvereční palec"
 
 #. i18n("Viscosity"));
 #: src/backend/gsl/constants.cpp:177
 #, kde-format
 msgid "Dynamic viscosity of 1 poise"
-msgstr ""
+msgstr "Dynamická viskozita 1 poise"
 
 #: src/backend/gsl/constants.cpp:178
 #, kde-format
 msgid "Kinematic viscosity of 1 stokes"
-msgstr ""
+msgstr "Kinematická viskozita 1 stokese"
 
 #. i18n("Light and Illumination"));
 #: src/backend/gsl/constants.cpp:181
 #, kde-format
 msgid "Luminance of 1 stilb"
-msgstr ""
+msgstr "Jas 1 stilbu"
 
 #: src/backend/gsl/constants.cpp:182
 #, kde-format
 msgid "Luminous flux of 1 lumen"
-msgstr ""
+msgstr "Světelný tok 1 lumenu"
 
 #: src/backend/gsl/constants.cpp:183
 #, kde-format
 msgid "Illuminance of 1 lux"
-msgstr ""
+msgstr "Osvětlení 1 luxu"
 
 #: src/backend/gsl/constants.cpp:184
 #, kde-format
 msgid "Illuminance of 1 phot"
-msgstr ""
+msgstr "Osvětlení 1 fotu"
 
 #: src/backend/gsl/constants.cpp:185
 #, kde-format
 msgid "Illuminance of 1 footcandle"
-msgstr ""
+msgstr "Osvětlení 1 footcandle"
 
 #: src/backend/gsl/constants.cpp:186
 #, kde-format
 msgid "Luminance of 1 lambert"
-msgstr ""
+msgstr "Jas 1 lambertu"
 
 #: src/backend/gsl/constants.cpp:187
 #, kde-format
 msgid "Luminance of 1 footlambert"
-msgstr ""
+msgstr "Jas 1 footlambertu"
 
 #. i18n("Radioactivity"));
 #: src/backend/gsl/constants.cpp:190
 #, kde-format
 msgid "Activity of 1 curie"
-msgstr ""
+msgstr "Aktivita 1 curie"
 
 #: src/backend/gsl/constants.cpp:191
 #, kde-format
 msgid "Exposure of 1 roentgen"
-msgstr ""
+msgstr "Ozáření o intenzitě 1 rentgenu"
 
 #: src/backend/gsl/constants.cpp:192
 #, kde-format
 msgid "Absorbed dose of 1 rad"
-msgstr ""
+msgstr "Absorbovaná dávka 1 radu"
 
 #. i18n("Force and Energy"));
 #: src/backend/gsl/constants.cpp:195
 #, kde-format
 msgid "SI unit of force"
-msgstr ""
+msgstr "Jednotka síly v soustavě SI"
 
 #: src/backend/gsl/constants.cpp:196
 #, kde-format
 msgid "Force of 1 Dyne"
-msgstr ""
+msgstr "Síla 1 dynu"
 
 #: src/backend/gsl/constants.cpp:197
 #, kde-format
 msgid "SI unit of energy"
-msgstr ""
+msgstr "Jednotka energie v soustavě SI"
 
 #: src/backend/gsl/constants.cpp:198
 #, kde-format
 msgid "Energy 1 erg"
-msgstr ""
+msgstr "Energie 1 ergu"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2149
@@ -3253,37 +3300,37 @@ msgstr "Selhání"
 #: src/backend/gsl/errors.h:24
 #, kde-format
 msgid "Iteration has not converged"
-msgstr ""
+msgstr "Iterace nedosáhla konvergence"
 
 #: src/backend/gsl/errors.h:26
 #, kde-format
 msgid "Input domain error, e.g sqrt(-1)"
-msgstr ""
+msgstr "Chyba ve vstupní doméně, např. sqrt(-1)"
 
 #: src/backend/gsl/errors.h:28
 #, kde-format
 msgid "Output range error, e.g. exp(1e100)"
-msgstr ""
+msgstr "Chyba rozsahu výstupu, např. exp(1e100)"
 
 #: src/backend/gsl/errors.h:30
 #, kde-format
 msgid "Invalid pointer"
-msgstr ""
+msgstr "Neplatný ukazatel"
 
 #: src/backend/gsl/errors.h:32
 #, kde-format
 msgid "Invalid argument supplied"
-msgstr ""
+msgstr "Zadaný argument je neplatný"
 
 #: src/backend/gsl/errors.h:34
 #, kde-format
 msgid "Generic failure"
-msgstr ""
+msgstr "Obecná chyba"
 
 #: src/backend/gsl/errors.h:36
 #, kde-format
 msgid "Factorization failed"
-msgstr ""
+msgstr "Faktorizace se nezdařila"
 
 #: src/backend/gsl/errors.h:38
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:589
@@ -3293,22 +3340,22 @@ msgstr ""
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:454
 #, kde-format
 msgid "Failed to allocate memory"
-msgstr ""
+msgstr "Nepodařilo se přidělit paměť"
 
 #: src/backend/gsl/errors.h:40
 #, kde-format
 msgid "Problem with supplied function"
-msgstr ""
+msgstr "Problém s předanou funkcí"
 
 #: src/backend/gsl/errors.h:42
 #, kde-format
 msgid "Iterative process is out of control"
-msgstr ""
+msgstr "Iterační proces se vymkl kontrole"
 
 #: src/backend/gsl/errors.h:44
 #, kde-format
 msgid "Exceeded max number of iterations"
-msgstr ""
+msgstr "Překročen maximální počet iterací"
 
 #: src/backend/gsl/errors.h:46
 #, kde-format
@@ -3318,12 +3365,12 @@ msgstr "Pokus o dělení nulou"
 #: src/backend/gsl/errors.h:48
 #, kde-format
 msgid "Invalid tolerance specified"
-msgstr ""
+msgstr "Zadána neplatná tolerance"
 
 #: src/backend/gsl/errors.h:50
 #, kde-format
 msgid "Failed to reach the specified tolerance"
-msgstr ""
+msgstr "Nebylo dosaženo zadané tolerance"
 
 #: src/backend/gsl/errors.h:52
 #, kde-format
@@ -3338,82 +3385,82 @@ msgstr "Přetečení"
 #: src/backend/gsl/errors.h:56
 #, kde-format
 msgid "Loss of accuracy"
-msgstr ""
+msgstr "Ztráta přesnosti"
 
 #: src/backend/gsl/errors.h:58
 #, kde-format
 msgid "Failed because of roundoff error"
-msgstr ""
+msgstr "Došlo k selhání kvůli zaokrouhlovací chybě"
 
 #: src/backend/gsl/errors.h:60
 #, kde-format
 msgid "Matrix, vector lengths are not conformant"
-msgstr ""
+msgstr "Matice a délky vektorů nejsou v souladu"
 
 #: src/backend/gsl/errors.h:62
 #, kde-format
 msgid "Matrix not square"
-msgstr ""
+msgstr "Matice není čtvercová"
 
 #: src/backend/gsl/errors.h:64
 #, kde-format
 msgid "Apparent singularity detected"
-msgstr ""
+msgstr "Zaznamenána zdánlivá singularita"
 
 #: src/backend/gsl/errors.h:66
 #, kde-format
 msgid "Integral or series is divergent"
-msgstr ""
+msgstr "Integrál nebo řada je rozbíhavá"
 
 #: src/backend/gsl/errors.h:68
 #, kde-format
 msgid "Requested feature is not supported by the hardware"
-msgstr ""
+msgstr "Požadovaná funkce není hardwarem podporována"
 
 #: src/backend/gsl/errors.h:70
 #, kde-format
 msgid "Requested feature not (yet) implemented"
-msgstr ""
+msgstr "Požadovaná funkce (zatím) není implementována"
 
 #: src/backend/gsl/errors.h:72
 #, kde-format
 msgid "Cache limit exceeded"
-msgstr ""
+msgstr "Překročen limit mezipaměti"
 
 #: src/backend/gsl/errors.h:74
 #, kde-format
 msgid "Table limit exceeded"
-msgstr ""
+msgstr "Překročen limit tabulky"
 
 #: src/backend/gsl/errors.h:76
 #, kde-format
 msgid "Iteration is not making progress towards solution"
-msgstr ""
+msgstr "Iterace nevede k pokroku směrem k řešení"
 
 #: src/backend/gsl/errors.h:78
 #, kde-format
 msgid "Jacobian evaluations are not improving the solution"
-msgstr ""
+msgstr "Jacobianovy výpočty řešení nezlepšují"
 
 #: src/backend/gsl/errors.h:80
 #, kde-format
 msgid "Cannot reach the specified tolerance in F"
-msgstr ""
+msgstr "Nelze dosáhnout zadané tolerance v F"
 
 #: src/backend/gsl/errors.h:82
 #, kde-format
 msgid "Cannot reach the specified tolerance in X"
-msgstr ""
+msgstr "Nelze dosáhnout zadané tolerance v X"
 
 #: src/backend/gsl/errors.h:84
 #, kde-format
 msgid "Cannot reach the specified tolerance in gradient"
-msgstr ""
+msgstr "Nelze dosáhnout zadané tolerance v gradientu"
 
 #: src/backend/gsl/errors.h:86
 #, kde-format
 msgid "End of file"
-msgstr ""
+msgstr "Konec souboru"
 
 #: src/backend/gsl/functions.cpp:62
 #, kde-format
@@ -3428,124 +3475,123 @@ msgstr "Porovnávací funkce"
 #: src/backend/gsl/functions.cpp:66
 #, kde-format
 msgid "Logical Functions"
-msgstr ""
+msgstr "Logické funkce"
 
 #: src/backend/gsl/functions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Basic Functions"
+#, kde-format
 msgid "Datetime Functions"
-msgstr "Základní funkce"
+msgstr "Funkce data a času"
 
 #: src/backend/gsl/functions.cpp:70
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, kde-format
 msgid "Column Statistics"
-msgstr "Statistika sloupce"
+msgstr "Statistiky sloupce"
 
 #: src/backend/gsl/functions.cpp:72
 #, kde-format
 msgid "Moving Statistics"
-msgstr ""
+msgstr "Statistiky pohybu"
 
 #: src/backend/gsl/functions.cpp:74
 #, kde-format
 msgid "Airy Functions and Derivatives"
-msgstr ""
+msgstr "Airyho funkce a derivace"
 
 #: src/backend/gsl/functions.cpp:76
 #, kde-format
 msgid "Bessel Functions"
-msgstr ""
+msgstr "Besselovy funkce"
 
 #: src/backend/gsl/functions.cpp:78
 #, kde-format
 msgid "Clausen Functions"
-msgstr ""
+msgstr "Clausenovy funkce"
 
 #: src/backend/gsl/functions.cpp:80
 #, kde-format
 msgid "Coulomb Functions"
-msgstr ""
+msgstr "Coulombovy funkce"
 
 #: src/backend/gsl/functions.cpp:82
 #, kde-format
 msgid "Dawson Function"
-msgstr ""
+msgstr "Dawsonova funkce"
 
 #: src/backend/gsl/functions.cpp:84
 #, kde-format
 msgid "Debye Functions"
-msgstr ""
+msgstr "Debyeovy funkce"
 
 #: src/backend/gsl/functions.cpp:86
 #, kde-format
 msgid "Dilogarithm"
-msgstr ""
+msgstr "Dilogaritmus"
 
 #: src/backend/gsl/functions.cpp:88
 #, kde-format
 msgid "Elliptic Integrals"
-msgstr ""
+msgstr "Eliptické integrály"
 
 #: src/backend/gsl/functions.cpp:92
 #, kde-format
 msgid "Error Functions and Related Functions"
-msgstr ""
+msgstr "Chybové funkce a související funkce"
 
 #: src/backend/gsl/functions.cpp:95
 #, kde-format
 msgid "Error Functions"
-msgstr ""
+msgstr "Chybové funkce"
 
 #: src/backend/gsl/functions.cpp:98
 #, kde-format
 msgid "Exponential Functions"
-msgstr ""
+msgstr "Exponenciální funkce"
 
 #: src/backend/gsl/functions.cpp:100
 #, kde-format
 msgid "Exponential Integrals"
-msgstr ""
+msgstr "Exponenciální integrály"
 
 #: src/backend/gsl/functions.cpp:102
 #, kde-format
 msgid "Fermi-Dirac Function"
-msgstr ""
+msgstr "Fermiho-Diracova funkce"
 
 #: src/backend/gsl/functions.cpp:104
 #, kde-format
 msgid "Gamma and Beta Functions"
-msgstr ""
+msgstr "Gamma a beta funkce"
 
 #: src/backend/gsl/functions.cpp:106
 #, kde-format
 msgid "Gegenbauer Functions"
-msgstr ""
+msgstr "Gegenbauerovy funkce"
 
 #: src/backend/gsl/functions.cpp:109
 #, kde-format
 msgid "Hermite Polynomials and Functions"
-msgstr ""
+msgstr "Hermitovy polynomy a funkce"
 
 #: src/backend/gsl/functions.cpp:112
 #, kde-format
 msgid "Hypergeometric Functions"
-msgstr ""
+msgstr "Hypergeometrické funkce"
 
 #: src/backend/gsl/functions.cpp:114
 #, kde-format
 msgid "Laguerre Functions"
-msgstr ""
+msgstr "Laguerreovy funkce"
 
 #: src/backend/gsl/functions.cpp:116
 #, kde-format
 msgid "Lambert W Functions"
-msgstr ""
+msgstr "Lambertovy W-funkce"
 
 #: src/backend/gsl/functions.cpp:118
 #, kde-format
 msgid "Legendre Functions and Spherical Harmonics"
-msgstr ""
+msgstr "Legendrovy funkce a sférické harmonické funkce"
 
 #: src/backend/gsl/functions.cpp:120
 #, kde-format
@@ -6222,7 +6268,7 @@ msgstr "n"
 #: src/backend/gsl/functions.cpp:1208
 #, kde-format
 msgid "j"
-msgstr ""
+msgstr "j"
 
 #: src/backend/gsl/functions.cpp:1210
 #, kde-format
@@ -6426,7 +6472,7 @@ msgstr[2] "%1: odstranit %2 řádků"
 #: src/backend/matrix/matrixcommands.h:168
 #, kde-format
 msgid "%1: clear column %2"
-msgstr ""
+msgstr "%1: vymazat sloupec %2"
 
 #: src/backend/matrix/matrixcommands.h:198
 #, kde-format
@@ -6649,7 +6695,7 @@ msgstr "Přímé"
 #: src/backend/nsl/nsl_conv.c:21
 #, kde-format
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: src/backend/nsl/nsl_conv.c:22
 #, kde-format
@@ -8063,7 +8109,7 @@ msgstr "Stupňů volnosti"
 #: src/backend/statistics/HypothesisTest.cpp:662
 #, kde-format
 msgid "t-Value"
-msgstr ""
+msgstr "t-hodnota"
 
 #: src/backend/statistics/HypothesisTest.cpp:653
 #, kde-format
@@ -8228,7 +8274,7 @@ msgstr "Q"
 #: src/backend/statistics/HypothesisTest.cpp:692
 #, kde-format
 msgid "Chi2"
-msgstr ""
+msgstr "Chi2"
 
 #: src/backend/statistics/HypothesisTest.cpp:694
 #, kde-format
@@ -8592,7 +8638,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:713
 #, kde-format
 msgid "Seasonal"
-msgstr ""
+msgstr "Sezónní"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:123
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:160
@@ -8957,7 +9003,7 @@ msgstr ""
 #: src/backend/worksheet/Line.cpp:121
 #, kde-format
 msgid "%1: set line width"
-msgstr ""
+msgstr "%1: nastavit šířku čáry"
 
 #: src/backend/worksheet/Line.cpp:128
 #, kde-format
@@ -9099,7 +9145,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:577
 #, kde-format
 msgid "%1: set axis position"
-msgstr ""
+msgstr "%1: nastavit polohu os"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:585
 #, kde-format
@@ -9572,7 +9618,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:180
 #, kde-format
 msgid "Reference Line"
-msgstr ""
+msgstr "Reference Line"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2546
@@ -9624,7 +9670,7 @@ msgstr ""
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
-msgstr ""
+msgstr "Přizpůsobit"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:188
@@ -9675,7 +9721,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:218
 #, kde-format
 msgid "Y Error"
-msgstr ""
+msgstr "Y Chyba"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:619
 #, kde-format
@@ -9879,10 +9925,9 @@ msgid "No curves inside the plot area."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:979
-#, fuzzy, kde-format
-#| msgid "Auto Scale"
+#, kde-format
 msgid "%1: auto scale"
-msgstr "Automaticky měnit velikost"
+msgstr "%1: automaticky měnit velikost"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1224
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1258
@@ -10138,29 +10183,27 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3466
 #, kde-format
 msgid "%1: zoom in"
-msgstr ""
+msgstr "%1: přiblížit"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3481
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: zoom out"
-msgstr "%1: nastavit rozvržení"
+msgstr "%1: oddálit"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
 msgid "in"
-msgstr "uvnitř"
+msgstr "nahoru"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
 #, kde-format
 msgid "out"
-msgstr "výdech"
+msgstr "dolů"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3512
-#, fuzzy, kde-format
-#| msgid "%1: move %2 to %3."
+#, kde-format
 msgid "%1: zoom %2 %3"
-msgstr "%1: přesunout %2 do %3."
+msgstr "%1: zvětšení %2 %3"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
 #, kde-format
@@ -10185,10 +10228,9 @@ msgid "x=%1"
 msgstr "x=%1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
-#, fuzzy, kde-format
-#| msgid "%1: pasted"
+#, kde-format
 msgid "%1: pan"
-msgstr "%1: vloženo"
+msgstr "%1: pan"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
 #, fuzzy, kde-format
@@ -10888,7 +10930,7 @@ msgstr "domů"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:406
 #, kde-format
 msgid "pin"
-msgstr ""
+msgstr "připnout"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:408
 #, kde-format
@@ -11123,7 +11165,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
 #, kde-format
 msgid "MODEL"
-msgstr ""
+msgstr "MODEL"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
 #, kde-format
@@ -11138,7 +11180,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
 #, kde-format
 msgid "PARAMETERS"
-msgstr ""
+msgstr "PARAMETRY"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1895
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
@@ -11421,10 +11463,9 @@ msgid "Changepoint Positions (X-values)"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "Segment %1"
-msgstr "Segmenty"
+msgstr "Segment %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
@@ -11676,14 +11717,14 @@ msgstr "Systém:"
 #: src/frontend/AboutDialog.cpp:192
 #, kde-format
 msgid "Locale:"
-msgstr ""
+msgstr "Lokalizace:"
 
 #. i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/AboutDialog.cpp:194 src/frontend/ui/settingsgeneralpage.ui:183
 #, kde-format
 msgid "Number Format:"
-msgstr ""
+msgstr "Číselný formát:"
 
 #: src/frontend/AboutDialog.cpp:194
 #, kde-format
@@ -11703,7 +11744,7 @@ msgstr "Jádro: "
 #: src/frontend/AboutDialog.cpp:204
 #, kde-format
 msgid "Visit website:"
-msgstr ""
+msgstr "Navštívit webovou stránku:"
 
 #: src/frontend/AboutDialog.cpp:206
 #, kde-format
@@ -11718,12 +11759,12 @@ msgstr ""
 #: src/frontend/AboutDialog.cpp:208
 #, kde-format
 msgid "Development:"
-msgstr ""
+msgstr "Vývoj:"
 
 #: src/frontend/AboutDialog.cpp:209
 #, kde-format
 msgid "Please report bugs to:"
-msgstr ""
+msgstr "Prosím hlaste chyby na:"
 
 #: src/frontend/AboutDialog.cpp:210
 #, kde-format
@@ -11734,7 +11775,7 @@ msgstr ""
 #: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
 #, kde-format
 msgid "missing"
-msgstr ""
+msgstr "chybí"
 
 #: src/frontend/AboutDialog.cpp:227
 #, kde-format
@@ -11908,12 +11949,12 @@ msgstr "&Otevřít příklad"
 #: src/frontend/ActionsManager.cpp:202
 #, kde-format
 msgid "&Full Screen Mode"
-msgstr ""
+msgstr "&Celoobrazovkový režim"
 
 #: src/frontend/ActionsManager.cpp:224 src/frontend/MainWin.cpp:1220
 #, kde-format
 msgid "Workbook"
-msgstr ""
+msgstr "Sešit"
 
 #: src/frontend/ActionsManager.cpp:226
 #, kde-format
@@ -12251,13 +12292,13 @@ msgstr "Přiblížit"
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
-msgstr ""
+msgstr "Zvětšení"
 
 #: src/frontend/ActionsManager.cpp:624
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
-msgstr ""
+msgstr "Přidat nové"
 
 #: src/frontend/ActionsManager.cpp:636
 #: src/frontend/worksheet/WorksheetView.cpp:354
@@ -12429,7 +12470,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:532
 #, kde-format
 msgid "Sort &Ascending"
-msgstr ""
+msgstr "Seřadit &vzestupně"
 
 #: src/frontend/ActionsManager.cpp:751
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:533
@@ -12441,7 +12482,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #, kde-format
 msgid "Sort &Descending"
-msgstr ""
+msgstr "Seřadit &sestupně"
 
 #: src/frontend/ActionsManager.cpp:755
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:535
@@ -12491,7 +12532,7 @@ msgstr ""
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
-msgstr ""
+msgstr "Nastavit body osy"
 
 #: src/frontend/ActionsManager.cpp:811
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
@@ -12801,14 +12842,14 @@ msgstr "Původní velikost"
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
-msgstr ""
+msgstr "Přizpůsobit výšce"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:129
 #: src/frontend/worksheet/WorksheetView.cpp:176
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
-msgstr ""
+msgstr "Přizpůsobit šířce"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:173
 #: src/frontend/worksheet/WorksheetView.cpp:201
@@ -12866,7 +12907,7 @@ msgstr "Zvětšení"
 #: src/frontend/datapicker/DatapickerImageView.cpp:513
 #, kde-format
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
-msgstr ""
+msgstr "%1, aktivní křivka \"%2\": %3=%4, %5=%6"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:607
 #, kde-format
@@ -13098,7 +13139,7 @@ msgstr ""
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:643
 #, kde-format
 msgid "Connection Successful"
-msgstr ""
+msgstr "Připojení proběhlo úspěšně"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #, kde-format
@@ -13908,7 +13949,7 @@ msgstr ""
 #: src/frontend/datasources/ImportFileWidget.cpp:2038
 #, kde-format
 msgid "Parse Error: %1"
-msgstr ""
+msgstr "Chyba analýzy: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2040
 #, kde-format
@@ -13928,7 +13969,7 @@ msgstr ""
 #: src/frontend/datasources/ImportFileWidget.cpp:2349
 #, kde-format
 msgid "Not a HDF5 file: %1"
-msgstr ""
+msgstr "Není to soubor HDF5: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2407
 #, kde-format
@@ -13948,7 +13989,7 @@ msgstr ""
 #: src/frontend/datasources/ImportFileWidget.cpp:2849
 #, kde-format
 msgid "Disconnected from '%1'."
-msgstr ""
+msgstr "Odpojeno od '%1'."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2915
 #, kde-format
@@ -14434,7 +14475,7 @@ msgstr ""
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
 msgid "Array Size"
-msgstr ""
+msgstr "Velikost pole"
 
 #: src/frontend/datasources/XLSXOptionsWidget.cpp:24
 #, kde-format
@@ -15034,12 +15075,12 @@ msgstr ""
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:641
 #, kde-format
 msgid "%1-Ranges:"
-msgstr ""
+msgstr "%1-Rozsahy:"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:643
 #, kde-format
 msgid "%1-Range:"
-msgstr ""
+msgstr "%1-Rozsah:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:667
@@ -15269,7 +15310,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:407
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:630
@@ -15280,7 +15321,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
-msgstr ""
+msgstr "%v%"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:812
 #, kde-format
@@ -15510,7 +15551,7 @@ msgstr "Odmocnina"
 #: src/frontend/dockwidgets/HistogramDock.cpp:248
 #, kde-format
 msgid "Rice"
-msgstr ""
+msgstr "Rice"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:249
 #, kde-format
@@ -15520,7 +15561,7 @@ msgstr "Sturges"
 #: src/frontend/dockwidgets/HistogramDock.cpp:250
 #, kde-format
 msgid "Doane"
-msgstr ""
+msgstr "Doane"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:251
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:169
@@ -15935,7 +15976,7 @@ msgstr "Kopírovat hodnotu"
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
 #, kde-format
 msgid "Copy Name and Value"
-msgstr ""
+msgstr "Zkopírovat název a hodnotu"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:168
 #, kde-format
@@ -15991,10 +16032,9 @@ msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
 msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:211
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "0 - Constant"
-msgstr "Konstanta"
+msgstr "0 - Konstanta"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:212
 #, kde-format
@@ -17176,7 +17216,7 @@ msgstr "Tečko čárkovaná čára"
 #: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "Dash-dot-dot Line"
-msgstr ""
+msgstr "Čára s pomlčkami a dvěma tečkami"
 
 #: src/frontend/GuiTools.cpp:163
 #, kde-format
@@ -17485,6 +17525,8 @@ msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
 "Analysis software accessible to everyone."
 msgstr ""
+"LabPlot je BEZPLATNÝ, open-source a multiplatformní software pro vizualizaci "
+"a analýzu dat, který je dostupný pro každého."
 
 #: src/frontend/LabPlot.cpp:67
 #, kde-format
@@ -17745,7 +17787,7 @@ msgstr ""
 #: src/frontend/MainWin.cpp:488
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
-msgstr ""
+msgstr "Současný projekt \"%1\" byl změněn. Chcete jej uložit?"
 
 #: src/frontend/MainWin.cpp:489
 #, kde-format
@@ -17862,10 +17904,9 @@ msgid "Couldn't open the temporary file for writing."
 msgstr ""
 
 #: src/frontend/MainWin.cpp:1025
-#, fuzzy, kde-format
-#| msgid "Loading %1..."
+#, kde-format
 msgid "Saving %1..."
-msgstr "Načítám %1..."
+msgstr "Ukládá se %1..."
 
 #: src/frontend/MainWin.cpp:1103
 #, kde-format
@@ -18086,12 +18127,12 @@ msgstr "Statistika"
 #: src/frontend/matrix/MatrixView.cpp:185
 #, kde-format
 msgid "&Add Rows"
-msgstr ""
+msgstr "&Přidat řádky"
 
 #: src/frontend/matrix/MatrixView.cpp:186
 #, kde-format
 msgid "&Insert Empty Rows"
-msgstr "Vlož&it prázdné řady"
+msgstr "Vlož&it prázdné řádky"
 
 #: src/frontend/matrix/MatrixView.cpp:187
 #, kde-format
@@ -18101,7 +18142,7 @@ msgstr "Odstranit řádk&y"
 #: src/frontend/matrix/MatrixView.cpp:188
 #, kde-format
 msgid "Clea&r Rows"
-msgstr ""
+msgstr "Vymaza&t řádky"
 
 #: src/frontend/matrix/MatrixView.cpp:247
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:570
@@ -18316,7 +18357,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:633
 #, kde-format
 msgid "Hypothesis Test"
-msgstr ""
+msgstr "Test hypotézy"
 
 #: src/frontend/notebook/NotebookView.cpp:341
 #, kde-format
@@ -18370,7 +18411,7 @@ msgstr "Výchozí"
 #: src/frontend/PlotTemplateDialog.cpp:45
 #, kde-format
 msgid "Custom Folder"
-msgstr ""
+msgstr "Vlastní složka"
 
 #: src/frontend/PlotTemplateDialog.cpp:48
 #, kde-format
@@ -18744,7 +18785,7 @@ msgstr ""
 #: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid "%1 (System, %2)"
-msgstr ""
+msgstr "%1 (Systém, %2)"
 
 #: src/frontend/SettingsGeneralPage.cpp:264
 #, kde-format
@@ -18821,7 +18862,7 @@ msgstr "Povolit zvýrazňování syntaxe"
 #: src/frontend/SettingsNotebookPage.cpp:36
 #, kde-format
 msgid "Enable syntax completion"
-msgstr ""
+msgstr "Zapnout automatické dokončování syntaxe"
 
 #: src/frontend/SettingsNotebookPage.cpp:37
 #, kde-format
@@ -19004,7 +19045,7 @@ msgstr ""
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:564
 #, kde-format
 msgid "raw data"
-msgstr ""
+msgstr "nezpracovaná data"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:570
 #, kde-format
@@ -19211,7 +19252,7 @@ msgstr ""
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
 msgid "&Drop"
-msgstr ""
+msgstr "&Pustit"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
@@ -19936,7 +19977,7 @@ msgstr "Mezery (kromě zalomení řádků)"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1579
 #, kde-format
 msgid "Non-whitespace"
-msgstr ""
+msgstr "Znaky jiné než mezery"
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1580
 #, kde-format
@@ -19981,12 +20022,12 @@ msgstr "Zpětně předvídavý"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1596
 #, kde-format
 msgid "Fixed-length positive lookbehind"
-msgstr ""
+msgstr "Pozitivní zpětný pohled s pevnou délkou"
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1597
 #, kde-format
 msgid "Fixed-length negative lookbehind"
-msgstr ""
+msgstr "Negativní zpětný pohled s pevnou délkou"
 
 #: src/frontend/spreadsheet/SortDialog.cpp:33
 #, kde-format
@@ -20081,12 +20122,12 @@ msgstr "Zobrazit malé čárové grafy"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:382
 #, kde-format
 msgid "Clear Spreadsheet"
-msgstr ""
+msgstr "Vymazat sešit"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:383
 #, kde-format
 msgid "Clear Masks"
-msgstr ""
+msgstr "Vymazat maskování"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:384
 #, kde-format
@@ -20501,13 +20542,13 @@ msgstr "Rozsah = 0"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3200
 #, kde-format
 msgid "SD = 0"
-msgstr ""
+msgstr "SD = 0"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3177
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3212
 #, kde-format
 msgid "MAD = 0"
-msgstr ""
+msgstr "MAD = 0"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3224
@@ -20642,7 +20683,7 @@ msgstr ", "
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3925
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr ""
+msgstr "Vybráno: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3935
 #, kde-format
@@ -20678,8 +20719,7 @@ msgid "Location Measures"
 msgstr ""
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
-#, fuzzy, kde-format
-#| msgid "Arithmetic mean"
+#, kde-format
 msgid "Arithmetic Mean"
 msgstr "Aritmetický průměr"
 
@@ -20689,14 +20729,12 @@ msgid "Geometric Mean"
 msgstr "Geometrický průměr"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
-#, fuzzy, kde-format
-#| msgid "Harmonic mean"
+#, kde-format
 msgid "Harmonic Mean"
 msgstr "Harmonický průměr"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
-#, fuzzy, kde-format
-#| msgid "Contraharmonic mean"
+#, kde-format
 msgid "Contraharmonic Mean"
 msgstr "Kontraharmonický průměr"
 
@@ -21036,7 +21074,7 @@ msgstr "Symboly"
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:248
 #, kde-format
 msgid "Error Bars"
-msgstr ""
+msgstr "Chybové sloupce"
 
 #. i18n: ectx: property (text), widget (QLabel, lStyle)
 #. i18n: ectx: property (text), widget (QLabel, lFillingStyle)
@@ -21474,7 +21512,7 @@ msgstr "Obrázek:"
 #: src/frontend/ui/datapickerimagewidget.ui:701
 #, kde-format
 msgid "Embed"
-msgstr ""
+msgstr "Vložit"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/frontend/ui/datapickerimagewidget.ui:708
@@ -21595,7 +21633,7 @@ msgstr "Písmo:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:23
 #, kde-format
 msgid "Skip empty Parts"
-msgstr ""
+msgstr "Přeskočit prázdné části"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
@@ -22427,7 +22465,7 @@ msgstr "Proměnná"
 #: src/frontend/ui/datasources/matiooptionswidget.ui:32
 #, kde-format
 msgid "Rank"
-msgstr "Pořadí"
+msgstr "Řád"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/frontend/ui/datasources/matiooptionswidget.ui:37
@@ -23152,7 +23190,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:114
 #, kde-format
 msgid "k:"
-msgstr ""
+msgstr "k:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariableWidth)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:220
@@ -23218,7 +23256,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:646
 #, kde-format
 msgid "Cap"
-msgstr ""
+msgstr "Clona"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabMargins)
 #. i18n: ectx: attribute (title), widget (QWidget, tabMarginalPlots)
@@ -23277,13 +23315,13 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:84
 #, kde-format
 msgid "X Range"
-msgstr ""
+msgstr "Rozsah X"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:89
 #, kde-format
 msgid "Y Range"
-msgstr ""
+msgstr "Rozsah Y"
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:146
@@ -23596,7 +23634,7 @@ msgstr "Od:"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1201
 #, kde-format
 msgid "X-Range"
-msgstr ""
+msgstr "X-rozsah"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1282
@@ -23680,10 +23718,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoUpdate)
 #: src/frontend/ui/dockwidgets/columndock.ui:65
 #: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:407
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Auto-Update"
-msgstr "Aktualizovat"
+msgstr "Automaticky aktualizovat"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants1)
@@ -23735,10 +23772,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFormulaAutoResize)
 #: src/frontend/ui/dockwidgets/columndock.ui:261
-#, fuzzy, kde-format
-#| msgid "Auto-save:"
+#, kde-format
 msgid "Auto-Resize"
-msgstr "Automatické ukládání:"
+msgstr "Automaticky změnit velikost"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/columndock.ui:273
@@ -23752,7 +23788,7 @@ msgstr "f(x) = "
 #: src/frontend/ui/dockwidgets/columndock.ui:319
 #, kde-format
 msgid "Plot Designation:"
-msgstr ""
+msgstr "Označení grafu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormula)
 #: src/frontend/ui/dockwidgets/columndock.ui:370
@@ -23803,7 +23839,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:82
 #, kde-format
 msgid "X Error"
-msgstr ""
+msgstr "Chyba X"
 
 #. i18n: ectx: property (text), widget (QLabel, lXDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYDataPlus)
@@ -23974,7 +24010,7 @@ msgstr "Přepočítat"
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:104
 #, kde-format
 msgid "Null:"
-msgstr ""
+msgstr "Null:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
@@ -24250,13 +24286,13 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
 #, kde-format
 msgid "Upper Limit:"
-msgstr ""
+msgstr "Horní limit:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
 #, kde-format
 msgid "Lower Limit:"
-msgstr ""
+msgstr "Dolní limit:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
@@ -24409,7 +24445,7 @@ msgstr "p(x) ="
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:200
 #, kde-format
 msgid "Percentiles"
-msgstr ""
+msgstr "Percentily"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeEnd)
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
@@ -24437,7 +24473,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/scriptdock.ui:86
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Doba běhu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:88
@@ -24495,8 +24531,7 @@ msgstr "Možnosti"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLPeriods)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:163
-#, fuzzy, kde-format
-#| msgid "Period:"
+#, kde-format
 msgid "Periods:"
 msgstr "Období:"
 
@@ -24522,7 +24557,7 @@ msgstr "Opakování:"
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:218
 #, kde-format
 msgid "Robust:"
-msgstr ""
+msgstr "Robustnost:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:248
@@ -24613,10 +24648,9 @@ msgstr "Záhlaví"
 
 #. i18n: ectx: property (text), widget (QLabel, lStatisticsSpreadsheet)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:239
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistics:"
-msgstr "Statistika"
+msgstr "Statistika:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:190
@@ -24674,7 +24708,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:91
 #, kde-format
 msgid "X-Range:"
-msgstr ""
+msgstr "X-rozsah:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubtraction)
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:287
@@ -24872,7 +24906,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:318
 #, kde-format
 msgid "col ="
-msgstr ""
+msgstr "sloupec ="
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:98
@@ -25139,7 +25173,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1123
 #, kde-format
 msgid "X range"
-msgstr ""
+msgstr "Rozsah X"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1245
@@ -25157,7 +25191,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:54
 #, kde-format
 msgid "Cutoff2:"
-msgstr ""
+msgstr "Cutoff2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:285
@@ -25243,7 +25277,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:359
 #, kde-format
 msgid "Bias:"
-msgstr ""
+msgstr "Zkreslení:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariant)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:403
@@ -25269,7 +25303,7 @@ msgstr "Zjednodušení"
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:17
 #, kde-format
 msgid "Penalty:"
-msgstr ""
+msgstr "Omezení:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxChangepoints)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:24
@@ -25380,10 +25414,9 @@ msgstr "Odstup:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:507
-#, fuzzy, kde-format
-#| msgid "Order:"
+#, kde-format
 msgid " Order:"
-msgstr "Pořadí:"
+msgstr " Pořadí:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:556
@@ -25401,7 +25434,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:623
 #, kde-format
 msgid "Delta:"
-msgstr ""
+msgstr "Delta:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbIterations)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:704
@@ -25697,7 +25730,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:231
 #, kde-format
 msgid "Message type:"
-msgstr ""
+msgstr "Typ zprávy:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillUpdate)
 #: src/frontend/ui/mqttwillsettingswidget.ui:239
@@ -25745,7 +25778,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:301
 #, kde-format
 msgid "Retain:"
-msgstr ""
+msgstr "Zachovat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillStatistics)
 #: src/frontend/ui/mqttwillsettingswidget.ui:308
@@ -25933,7 +25966,7 @@ msgstr ""
 #: src/frontend/ui/settingsgeneralpage.ui:44
 #, kde-format
 msgid "Terms:"
-msgstr ""
+msgstr "Položka:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsgeneralpage.ui:58
@@ -26036,7 +26069,7 @@ msgstr "Jednotky:"
 #: src/frontend/ui/settingsgeneralpage.ui:336
 #, kde-format
 msgid "Number Options:"
-msgstr ""
+msgstr "Možnosti čísel:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
 #: src/frontend/ui/settingsgeneralpage.ui:367
@@ -26911,7 +26944,7 @@ msgstr ""
 #: src/frontend/widgets/ErrorBarWidget.cpp:184
 #, kde-format
 msgid "X Uncertainty"
-msgstr ""
+msgstr "Nepřesnost X"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:185
 #: src/frontend/widgets/ErrorBarWidget.cpp:193
@@ -26942,7 +26975,7 @@ msgstr ""
 #: src/frontend/widgets/ErrorBarWidget.cpp:192
 #, kde-format
 msgid "Y Uncertainty"
-msgstr ""
+msgstr "Nepřesnost Y"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:200
 #: src/frontend/widgets/ErrorBarWidget.cpp:207
@@ -26966,7 +26999,7 @@ msgstr ""
 #: src/frontend/widgets/ErrorBarWidget.cpp:319
 #, kde-format
 msgid "Data, +-:"
-msgstr ""
+msgstr "Data, +-:"
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:140
 #, kde-format
@@ -26977,15 +27010,14 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: src/frontend/widgets/ExpressionTextEdit.cpp:148
-#, fuzzy, kde-format
-#| msgid "Linear Regression"
+#, kde-format
 msgid "Invalid expression"
-msgstr "Lineární regrese"
+msgstr "Neplatný výraz"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Start Value"
-msgstr ""
+msgstr "Počáteční hodnota"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
@@ -27333,7 +27365,7 @@ msgstr ""
 #: src/frontend/widgets/ValueWidget.cpp:127
 #, kde-format
 msgid "No Values"
-msgstr ""
+msgstr "Žádné hodnoty"
 
 #: src/frontend/widgets/ValueWidget.cpp:125
 #: src/frontend/widgets/ValueWidget.cpp:132
@@ -27508,13 +27540,13 @@ msgstr ""
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
-msgstr ""
+msgstr "Doplnit do výběru"
 
 #: src/frontend/worksheet/WorksheetView.cpp:182
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit"
-msgstr ""
+msgstr "Přizpůsobit"
 
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
