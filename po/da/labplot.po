@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-24 00:40+0000\n"
+"POT-Creation-Date: 2026-09-29 00:40+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -10074,7 +10074,7 @@ msgstr "%1: Klip markerede celler"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5663
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5675
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -10619,7 +10619,7 @@ msgid "%1: load default theme"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6026
 #: src/backend/worksheet/Worksheet.cpp:896
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
@@ -10819,41 +10819,41 @@ msgstr "nej"
 msgid "%1: zoom %2 %3"
 msgstr "%1: Kopiér %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4375
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4487
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4508
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4520
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4495
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4521
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4507
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4533
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4552
 #, kde-format
 msgid "x=%1"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4570
 #, fuzzy, kde-format
 #| msgid "%1: copy %2"
 msgid "%1: pan"
 msgstr "%1: Kopiér %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4648
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: zoom selection"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4759
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4771
 #, kde-format
 msgid "%1: wheel zoom"
 msgstr ""

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-24 00:40+0000\n"
+"POT-Creation-Date: 2026-09-29 00:40+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -9924,7 +9924,7 @@ msgstr "Nenhuma informação disponível"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5663
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5675
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -10437,7 +10437,7 @@ msgid "%1: load default theme"
 msgstr "%1: carregar o tema predefinido"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6026
 #: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
@@ -10624,41 +10624,41 @@ msgstr "Quantidade"
 msgid "%1: zoom %2 %3"
 msgstr "%1: mover o %2 para %3."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4375
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Não dentro do rectângulo envolvente"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4487
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4508
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4520
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "de x=%1 até x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4495
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4521
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4507
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4533
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "de y=%1 até y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4552
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4570
 #, fuzzy, kde-format
 #| msgid "%1: pasted '%2'"
 msgid "%1: pan"
 msgstr "%1: '%2' colado"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4648
 #, fuzzy, kde-format
 #| msgid "%1: set equation"
 msgid "%1: zoom selection"
 msgstr "%1: mudar a equação"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4759
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4771
 #, fuzzy, kde-format
 #| msgid "%1: set label color"
 msgid "%1: wheel zoom"

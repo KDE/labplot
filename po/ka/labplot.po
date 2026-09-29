@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-24 00:40+0000\n"
+"POT-Creation-Date: 2026-09-29 00:40+0000\n"
 "PO-Revision-Date: 2026-09-20 03:49+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -9575,7 +9575,7 @@ msgstr "ინფორმაცია ხელმუწვდომელი�
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5663
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5675
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -10064,7 +10064,7 @@ msgid "%1: load default theme"
 msgstr "%1: ნაგულისხმევი თემის ჩატვირთვა"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6026
 #: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
@@ -10238,39 +10238,39 @@ msgstr "დაპატარავება"
 msgid "%1: zoom %2 %3"
 msgstr "%1: %2-ის გადიდება %3"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4375
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "არ არის შემომსაზღვრელი მართკუთხედის შიგნით"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4487
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4508
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4520
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1-დან x=%2 -მდე"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4495
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4521
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4507
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4533
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "y=%1 -დან y=%2 -მდე"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4552
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4570
 #, kde-format
 msgid "%1: pan"
 msgstr "%1: პანინგი"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4648
 #, kde-format
 msgid "%1: zoom selection"
 msgstr "%1: მონიშნულის გადიდება"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4759
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4771
 #, kde-format
 msgid "%1: wheel zoom"
 msgstr "%1: ბორბლით გადიდება"

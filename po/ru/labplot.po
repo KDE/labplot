@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-24 00:40+0000\n"
-"PO-Revision-Date: 2026-09-25 07:46+0200\n"
+"POT-Creation-Date: 2026-09-29 00:40+0000\n"
+"PO-Revision-Date: 2026-09-28 19:02+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -605,7 +605,6 @@ msgstr "Используется в графиках:"
 msgid "Used in Axes:"
 msgstr "Используется в осях:"
 
-# BUGME: please add context --aspotashev
 #: src/backend/core/column/Column.cpp:1138
 #: src/backend/spreadsheet/Spreadsheet.cpp:271
 #, kde-format
@@ -9733,7 +9732,7 @@ msgstr "информация недоступна"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5663
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5675
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:623
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -10229,7 +10228,7 @@ msgid "%1: load default theme"
 msgstr "%1: загрузка темы по умолчанию"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6026
 #: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
@@ -10412,39 +10411,39 @@ msgstr "уменьшение"
 msgid "%1: zoom %2 %3"
 msgstr "%1: %2 масштаба по %3"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4363
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4375
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "За пределами ограничивающего прямоугольника"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4487
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4508
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4520
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "от x=%1 до x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4495
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4521
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4507
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4533
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "от y=%1 до y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4552
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4570
 #, kde-format
 msgid "%1: pan"
 msgstr "%1: панорамирование"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4636
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4648
 #, kde-format
 msgid "%1: zoom selection"
 msgstr "%1: масштабирование выделенного фрагмента"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4759
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4771
 #, kde-format
 msgid "%1: wheel zoom"
 msgstr "%1: масштабирование колесом мыши"
@@ -12528,7 +12527,6 @@ msgctxt "@action"
 msgid "Magnification"
 msgstr "Увеличение"
 
-# BUGME: please add ctxt --aspotashev
 #: src/frontend/ActionsManager.cpp:624
 #, kde-format
 msgctxt "@action"
@@ -13325,7 +13323,6 @@ msgstr "Использовать нечисловое значение"
 msgid "Use previous value"
 msgstr "Использовать предыдущее значение"
 
-# BUGME: please add context --aspotashev
 #: src/frontend/datasources/DatabaseManagerDialog.cpp:31
 #, kde-format
 msgctxt "@title:window"
@@ -13372,7 +13369,6 @@ msgstr "База данных:"
 msgid "Data Source Name:"
 msgstr "Название источника данных:"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:211
 #, kde-format
 msgctxt "@title:window"
@@ -13466,7 +13462,6 @@ msgid "This option determines how the image is converted when importing."
 msgstr ""
 "Этот параметр определяет формат преобразования импортируемого изображения."
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/datasources/ImportDatasetDialog.cpp:55
 #, kde-format
 msgctxt "@title:window"
@@ -13639,7 +13634,6 @@ msgstr "Название матрицы:"
 msgid "Add a new Folder"
 msgstr "Добавление новой папки"
 
-# BUGME: please add colon (:) to the label in front of text edit --aspotashev
 #: src/frontend/datasources/ImportDialog.cpp:149
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
 #, kde-format
@@ -14044,7 +14038,6 @@ msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Выбор файла источника данных"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
 msgctxt "@title:window"
@@ -14373,7 +14366,6 @@ msgstr "Истекло время ожидания подключения к «%
 msgid "Toggle Options"
 msgstr "Переключить параметры"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
@@ -14477,7 +14469,6 @@ msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "Импорт проекта LabPlot"
 
-# BUGME: please add @title:window --aspotashev
 #: src/frontend/datasources/ImportProjectDialog.cpp:111
 #, kde-format
 msgctxt "@title:window"
@@ -14558,7 +14549,6 @@ msgstr "Закрыть диалоговое окно и импортироват
 msgid "Select object(s) to be imported."
 msgstr "Выбрать импортируемый объект (объекты)."
 
-# BUGME: please add @title:window --aspotashev
 #: src/frontend/datasources/ImportProjectDialog.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -14571,7 +14561,6 @@ msgstr "Открытие проекта LabPlot"
 msgid "LabPlot Projects (%1)"
 msgstr "Проекты LabPlot (%1)"
 
-# BUGME: please add @title:window --aspotashev
 #: src/frontend/datasources/ImportProjectDialog.cpp:442
 #, kde-format
 msgctxt "@title:window"
@@ -14652,14 +14641,12 @@ msgstr "Выполнение запроса и предпросмотр его �
 msgid "Failed to execute the query"
 msgstr "Не удалось выполнить запрос"
 
-# BUGME: please add context --aspotashev
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
 #, kde-format
 msgctxt "@title:window"
 msgid "MQTT Connections"
 msgstr "MQTT-соединения"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:82
 #, kde-format
 msgctxt "@title:window"
@@ -17588,7 +17575,6 @@ msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Свойства: кривая XY"
 
-# BUGME: please add context --aspotashev
 #: src/frontend/GuiObserver.cpp:290
 #, kde-format
 msgctxt "@title:window"
@@ -17662,7 +17648,6 @@ msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Свойства фильтра Фурье"
 
-# BUGME: please add context --aspotashev
 #: src/frontend/GuiObserver.cpp:350
 #, kde-format
 msgctxt "@title:window"
@@ -17675,7 +17660,6 @@ msgctxt "@title:window"
 msgid "Properties: Baseline Correction"
 msgstr "Свойства: коррекция базовой линии"
 
-# BUGME: please add context --aspotashev
 #: src/frontend/GuiObserver.cpp:360
 #, kde-format
 msgctxt "@title:window"
@@ -17784,7 +17768,6 @@ msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
 msgstr "Свойства: проверка гипотезы"
 
-# BUGME: please add context --aspotashev
 #: src/frontend/GuiObserver.cpp:462
 #, kde-format
 msgctxt "@title:window"
@@ -18524,7 +18507,6 @@ msgstr "Файлы Python (*.py)"
 msgid "All supported files (%1)"
 msgstr "Все поддерживаемые файлы (%1)"
 
-# BUGME: please add @title:window --aspotashev
 #: src/frontend/MainWin.cpp:754
 #, kde-format
 msgctxt "@title:window"
@@ -18662,14 +18644,12 @@ msgstr "Клиент MQTT на этом хосте уже существует!"
 msgid "Live data source%1"
 msgstr "Источник передачи данных %1"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:45
 #, kde-format
 msgctxt "@title:window"
 msgid "Function Values"
 msgstr "Значения функции"
 
-# BUGME: word puzzle; please use i18np() --aspotashev
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:60
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:63
 #, kde-format
@@ -19637,7 +19617,6 @@ msgstr "Выберите путь к виртуальной среде Python."
 msgid "System Default"
 msgstr "Системное значение по умолчанию"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/SettingsScriptingPage.cpp:60
 #, kde-format
 msgctxt "@title:window"
@@ -19720,7 +19699,6 @@ msgstr "Сложить значение"
 msgid "&Add"
 msgstr "&Сложение"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:104
 #, kde-format
 msgctxt "@title:window"
@@ -19740,7 +19718,6 @@ msgstr "Вычитание:"
 msgid "&Subtract"
 msgstr "&Вычесть"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:109
 #, kde-format
 msgctxt "@title:window"
@@ -19868,7 +19845,6 @@ msgstr "Значение:"
 msgid "Label:"
 msgstr "Подпись:"
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/spreadsheet/BatchEditValueLabelsDialog.cpp:36
 #, kde-format
 msgctxt "@title:window"
@@ -20287,7 +20263,6 @@ msgstr "Цвет шрифта"
 msgid "Icon"
 msgstr "Значок"
 
-# BUGME: please add context @title:window --aspotashev
 #: src/frontend/spreadsheet/GoToDialog.cpp:35
 #, kde-format
 msgctxt "@title:window"
@@ -20641,10 +20616,10 @@ msgstr[3] "Найдено одно совпадение"
 #, kde-format
 msgid "%1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "%1: замена значений"
+msgstr[0] "Выполнена %1 замена"
 msgstr[1] "Выполнено %1 замены"
 msgstr[2] "Выполнено %1 замен"
-msgstr[3] "%1: замена значений"
+msgstr[3] "Выполнена одна замена"
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1461
 #, kde-format
@@ -20810,7 +20785,6 @@ msgstr "Положительная проверка назад фиксиров�
 msgid "Fixed-length negative lookbehind"
 msgstr "Отрицающий просмотр фиксированной длины"
 
-# BUGME: please add @title:window --aspotashev
 #: src/frontend/spreadsheet/SortDialog.cpp:33
 #, kde-format
 msgctxt "@title:window"
@@ -21901,7 +21875,6 @@ msgstr "Планки погрешностей"
 msgid "Style:"
 msgstr "Стиль:"
 
-# BUGME: please split; please add colons to labels --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lFillingColor)
 #. i18n: ectx: property (text), widget (QLabel, lBorderColor)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarFillingColor)
@@ -22210,7 +22183,6 @@ msgstr "2."
 msgid "x+y+z="
 msgstr "x+y+z="
 
-# BUGME: please add colon; please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lRotation)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
 #: src/frontend/ui/datapickerimagewidget.ui:188
@@ -22369,7 +22341,6 @@ msgstr "Относительный путь"
 msgid "Type:"
 msgstr "Тип:"
 
-# BUGME: please add colon; please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/frontend/ui/datapickerimagewidget.ui:782
 #, kde-format
@@ -22425,7 +22396,6 @@ msgstr "Оттенок:"
 msgid "Current Image:"
 msgstr "Текущее изображение:"
 
-# BUGME: please add colon; please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lSaturation)
 #: src/frontend/ui/datapickerimagewidget.ui:950
 #, kde-format
@@ -22515,7 +22485,6 @@ msgstr "Удалять кавычки"
 msgid "Year Base:"
 msgstr "Базовый год:"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:137
 #, kde-format
@@ -22758,14 +22727,12 @@ msgstr "Добавить описание"
 msgid "Filter Options"
 msgstr "Параметры фильтра"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:79
 #, kde-format
 msgid "Comment character:"
 msgstr "Знак комментария:"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lSeparator)
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:86
@@ -23206,7 +23173,6 @@ msgstr "Диалоговое окно"
 msgid "Import As"
 msgstr "Импортировать как"
 
-# BUGME: please add colon (:) to the label in front of text edit --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:92
@@ -23429,7 +23395,6 @@ msgstr "Показывает содержимое выбранного файл�
 msgid "First row:"
 msgstr "Первая строка:"
 
-# BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, labelLast)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:89
 #, kde-format
@@ -23520,7 +23485,6 @@ msgstr "Установить нуль по центру смещения"
 msgid "Set offset to end at zero"
 msgstr "Установить нуль в конец смещения"
 
-# BUGME: please add colon at the end --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lScalingFactor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:376
 #, kde-format
@@ -23600,7 +23564,6 @@ msgstr "Количество:"
 msgid "1st Tick Value:"
 msgstr "Значение первого деления:"
 
-# BUGME: please add colon at the end --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
 #: src/frontend/ui/dockwidgets/axisdock.ui:736
@@ -23756,7 +23719,6 @@ msgstr ""
 msgid "Position"
 msgstr "Положение"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lFont)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFont)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -23780,7 +23742,6 @@ msgstr "Шрифт:"
 msgid "Suffix:"
 msgstr "Суффикс:"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lStackYOffset)
 #. i18n: ectx: property (text), widget (QLabel, lRugOffset)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
@@ -24509,7 +24470,6 @@ msgstr "Диапазон по оси X"
 msgid "Area"
 msgstr "Область построения"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1482
 #, kde-format
@@ -24577,7 +24537,6 @@ msgstr "Гор. выравнивание:"
 msgid "Plot's Color:"
 msgstr "Цвет графика:"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:555
 #, kde-format
@@ -24656,7 +24615,6 @@ msgstr "Автоматическое изменение размера"
 msgid "f(x) = "
 msgstr "f(x) = "
 
-# BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:319
 #, kde-format
@@ -24964,7 +24922,6 @@ msgstr "Верт. выравнивание:"
 msgid "Specify the name of the image file"
 msgstr "Укажите имя файла изображения"
 
-# BUGME: please add colon; please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lRatio)
 #: src/frontend/ui/dockwidgets/imagedock.ui:449
 #, kde-format
@@ -24985,7 +24942,6 @@ msgstr "Кривые:"
 msgid "Connect To:"
 msgstr "Соединить с:"
 
-# BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lConnectToAnchor)
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:69
 #, kde-format
@@ -25133,7 +25089,6 @@ msgstr "Вычислить"
 msgid "Background color:"
 msgstr "Цвет фона:"
 
-# BUGME: please split; please add colons to labels --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lTextColor)
 #: src/frontend/ui/dockwidgets/notedock.ui:115
 #, kde-format
@@ -25263,7 +25218,6 @@ msgstr "Цвет фона:"
 msgid "Settings:"
 msgstr "Параметры:"
 
-# BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/frontend/ui/dockwidgets/projectdock.ui:98
 #, kde-format
@@ -25290,14 +25244,12 @@ msgstr "Версия:"
 msgid "Compress File:"
 msgstr "Сжать файл:"
 
-# BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:237
 #, kde-format
 msgid "Author:"
 msgstr "Автор:"
 
-# BUGME: please add colon (:) to the label in front of text edit --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/dockwidgets/projectdock.ui:260
@@ -25326,7 +25278,6 @@ msgstr "Сохранять вычисления:"
 msgid "Save Data in File:"
 msgstr "Сохранить данные в файл:"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:97
@@ -26542,7 +26493,6 @@ msgstr "Верт. выравнивание:"
 msgid "Distance to the axis tick labels"
 msgstr "Расстояние до подписей делений оси"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lOffsetX)
 #: src/frontend/ui/labelwidget.ui:239
 #, kde-format
@@ -26606,7 +26556,6 @@ msgstr "Текст:"
 msgid "Hor. Alignment:"
 msgstr "Гор. выравнивание:"
 
-# BUGME: please add colon --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lOffsetY)
 #: src/frontend/ui/labelwidget.ui:715
 #, kde-format
@@ -26844,7 +26793,6 @@ msgstr "Установленные шаблоны:"
 msgid "Preview:"
 msgstr "Предпросмотр:"
 
-# BUGME: please add colon; please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lLocation)
 #: src/frontend/ui/PlotTemplateDialog.ui:102
 #, kde-format
@@ -26956,7 +26904,6 @@ msgstr "Не отображать разделитель разрядов"
 msgid "Include trailing zeroes after dot"
 msgstr "Вставлять нулевые младшие разряды после точки"
 
-# BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/frontend/ui/settingsgeneralpage.ui:173
 #, kde-format
@@ -27006,7 +26953,6 @@ msgstr ""
 msgid "Save in compressed format"
 msgstr "Сохранять в сжатом формате"
 
-# BUGME: please add colon at the end --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/frontend/ui/settingsgeneralpage.ui:283
 #, kde-format
@@ -28010,7 +27956,6 @@ msgstr "Начальное значение"
 msgid "Fixed"
 msgstr "Постоянное"
 
-# BUGME: please add ctxt --aspotashev
 #: src/frontend/widgets/FITSHeaderEditAddUnitDialog.cpp:30
 #, kde-format
 msgctxt "@title:window"
