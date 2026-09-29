@@ -63,6 +63,7 @@ if(NOT DEFINED PySide6_PATH)
             file(GLOB _pyside6_candidates
                 "${_base}/python*/site-packages/PySide6"
                 "${_base}/Python.framework/Versions/*/lib/python*/site-packages/PySide6"
+                "${_base}/site-packages/PySide6"
             )
             if(_pyside6_candidates)
                 list(GET _pyside6_candidates 0 _pyside6_candidate)

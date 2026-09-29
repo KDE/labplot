@@ -38,6 +38,7 @@ if(NOT Shiboken6_FOUND)
             file(GLOB _shiboken6_candidates
                 "${_base}/python*/site-packages/shiboken6"
                 "${_base}/Python.framework/Versions/*/lib/python*/site-packages/shiboken6"
+                "${_base}/site-packages/shiboken6"
             )
             if(_shiboken6_candidates)
                 list(GET _shiboken6_candidates 0 _shiboken6_candidate)
