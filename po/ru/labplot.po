@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-09-25 07:45+0200\n"
+"PO-Revision-Date: 2026-09-28 19:02+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -4075,7 +4075,7 @@ msgstr "вне границ, исключая границы"
 #: src/backend/gsl/functions.cpp:336
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "если(условие; еслиИстина; еслиЛожь)"
+msgstr "if(условие; еслиИстина; еслиЛожь)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -17547,7 +17547,7 @@ msgid_plural "%1 replacements made"
 msgstr[0] "Выполнена %1 замена"
 msgstr[1] "Выполнено %1 замены"
 msgstr[2] "Выполнено %1 замен"
-msgstr[3] "Выполнена %1 замена"
+msgstr[3] "Выполнена одна замена"
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1460
 #, kde-format
@@ -18328,18 +18328,18 @@ msgstr "Выделено: %1 ячеек"
 #, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "строки"
+msgstr[0] "строка"
 msgstr[1] "строки"
-msgstr[2] "строки"
+msgstr[2] "строк"
 msgstr[3] "строка"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3736
 #, kde-format
 msgid "column"
 msgid_plural "columns"
-msgstr[0] "столбцы"
-msgstr[1] "столбцы"
-msgstr[2] "столбцы"
+msgstr[0] "столбец"
+msgstr[1] "столбца"
+msgstr[2] "столбцов"
 msgstr[3] "столбец"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3737
