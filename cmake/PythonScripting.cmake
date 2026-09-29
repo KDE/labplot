@@ -169,6 +169,12 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitdata_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitresult_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitresult_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_fitdata_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_fitdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_fitresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xypiecewiselinearfitcurve_fitresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_filterdata_wrapper.cpp
@@ -239,9 +245,17 @@ set(python_scripting_backend_sources
     ${BACKEND_DIR}/script/python/PythonLogger.cpp
 )
 get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
+set(PySide6_MODULE_INCLUDE_DIRECTORIES "")
+foreach(_pyside_module QtCore QtGui QtWidgets)
+    set(_pyside_module_include_dir "${PySide6_INCLUDE_DIRS}/${_pyside_module}")
+    if(EXISTS "${_pyside_module_include_dir}")
+        list(APPEND PySide6_MODULE_INCLUDE_DIRECTORIES "${_pyside_module_include_dir}")
+    endif()
+endforeach()
 set(python_scripting_includes
     ${PYSIDE_PYTHONPATH}/include
     ${PySide6_INCLUDE_DIRECTORIES}
+    ${PySide6_MODULE_INCLUDE_DIRECTORIES}
     ${SHIBOKEN_PYTHON_INCLUDE_DIRS}
     ${Shiboken6_INCLUDE_DIRECTORIES}
     ${PySide6_PYTHONPATH}/include/QtWidgets

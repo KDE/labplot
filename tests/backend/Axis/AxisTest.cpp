@@ -4,7 +4,7 @@
 	Description          : Tests for Axis
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2026 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,6 +15,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "src/backend/core/Time.h"
 #include "src/backend/worksheet/Line.h"
 #include "src/backend/worksheet/TextLabel.h"
@@ -2523,6 +2524,82 @@ void AxisTest::autoScaleLog102Vertical() {
 		QStringLiteral("1.00"),
 	};
 	COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+}
+
+/*!
+ * \brief Test the update of axes with different range types on data changes.
+ * Tests Auto (should update), AutoData (should update), and Custom (should NOT update).
+ */
+void AxisTest::autoDataRangeUpdate() {
+	// Create spreadsheet with data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* xCol = spreadsheet->column(0);
+	auto* yCol = spreadsheet->column(1);
+	xCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	yCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	xCol->setValueAt(0, 1.);
+	xCol->setValueAt(1, 2.);
+	xCol->setValueAt(2, 3.);
+
+	yCol->setValueAt(0, 1.);
+	yCol->setValueAt(1, 2.);
+	yCol->setValueAt(2, 3.);
+
+	// Create plot with curve
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	plot->setType(CartesianPlot::Type::TwoAxes);
+	QVERIFY(plot != nullptr);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+
+	// Enable autoscale on plot
+	plot->enableAutoScale(Dimension::X, 0, true);
+	plot->enableAutoScale(Dimension::Y, 0, true);
+	plot->scaleAuto();
+
+	// Get axes
+	auto axes = plot->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	auto* yAxis = axes.at(1);
+
+	// Test 1: AutoData range type should update when data changes
+	yAxis->setRangeType(Axis::RangeType::AutoData);
+	QCOMPARE(yAxis->rangeType(), Axis::RangeType::AutoData);
+	VALUES_EQUAL(yAxis->range().start(), 1.0);
+	VALUES_EQUAL(yAxis->range().end(), 3.0);
+
+	yCol->setValueAt(2, 4.);
+	VALUES_EQUAL(yAxis->range().start(), 1.0);
+	VALUES_EQUAL(yAxis->range().end(), 4.0);
+
+	// Test 2: Auto range type should also update when data changes
+	yAxis->setRangeType(Axis::RangeType::Auto);
+	QCOMPARE(yAxis->rangeType(), Axis::RangeType::Auto);
+	// Auto applies nice extend, so range may differ slightly from raw data range
+	// Just verify it includes the new max value
+	QVERIFY(yAxis->range().end() >= 4.0);
+
+	yCol->setValueAt(2, 5.);
+	QVERIFY(yAxis->range().end() >= 5.0);
+
+	// Test 3: Custom range type should NOT update when data changes
+	yAxis->setRangeType(Axis::RangeType::Custom);
+	yAxis->setRange(0.0, 10.0);
+	QCOMPARE(yAxis->rangeType(), Axis::RangeType::Custom);
+	VALUES_EQUAL(yAxis->range().start(), 0.0);
+	VALUES_EQUAL(yAxis->range().end(), 10.0);
+
+	yCol->setValueAt(2, 20.);
+	// Custom range should remain unchanged
+	VALUES_EQUAL(yAxis->range().start(), 0.0);
+	VALUES_EQUAL(yAxis->range().end(), 10.0);
 }
 
 QTEST_MAIN(AxisTest)

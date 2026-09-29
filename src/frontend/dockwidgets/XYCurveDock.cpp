@@ -325,6 +325,8 @@ void XYCurveDock::setModel() {
 	bool visible = (m_curve->type() == AspectType::XYCurve);
 	ui.lLineType->setVisible(visible);
 	ui.cbLineType->setVisible(visible);
+	ui.lLineInterpolationPointsCount->setVisible(visible);
+	ui.sbLineInterpolationPointsCount->setVisible(visible);
 	ui.lLineSkipGaps->setVisible(visible);
 	ui.chkLineSkipGaps->setVisible(visible);
 	ui.lLineIncreasingXOnly->setVisible(visible);
@@ -500,28 +502,19 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index) {
 void XYCurveDock::lineTypeChanged(int index) {
 	const auto lineType = XYCurve::LineType(index);
 
-	if (lineType == XYCurve::LineType::NoLine) {
-		ui.chkLineSkipGaps->setEnabled(false);
-		lineWidget->setEnabled(false);
-		ui.lLineInterpolationPointsCount->hide();
-		ui.sbLineInterpolationPointsCount->hide();
-	} else {
-		ui.chkLineSkipGaps->setEnabled(true);
-		lineWidget->setEnabled(true);
+	const bool spline = (lineType == XYCurve::LineType::SplineCubicNatural || lineType == XYCurve::LineType::SplineCubicPeriodic
+		|| lineType == XYCurve::LineType::SplineAkimaNatural || lineType == XYCurve::LineType::SplineAkimaPeriodic);
+	ui.lLineInterpolationPointsCount->setVisible(spline);
+	ui.sbLineInterpolationPointsCount->setVisible(spline);
+	ui.lLineSkipGaps->setVisible(!spline);
+	ui.chkLineSkipGaps->setVisible(!spline);
+	ui.lLineIncreasingXOnly->setVisible(!spline);
+	ui.chkLineIncreasingXOnly->setVisible(!spline);
 
-		if (lineType == XYCurve::LineType::SplineCubicNatural || lineType == XYCurve::LineType::SplineCubicPeriodic
-			|| lineType == XYCurve::LineType::SplineAkimaNatural || lineType == XYCurve::LineType::SplineAkimaPeriodic) {
-			ui.lLineInterpolationPointsCount->show();
-			ui.sbLineInterpolationPointsCount->show();
-			ui.lLineSkipGaps->hide();
-			ui.chkLineSkipGaps->hide();
-		} else {
-			ui.lLineInterpolationPointsCount->hide();
-			ui.sbLineInterpolationPointsCount->hide();
-			ui.lLineSkipGaps->show();
-			ui.chkLineSkipGaps->show();
-		}
-	}
+	const bool enabled = (lineType != XYCurve::LineType::NoLine);
+	ui.chkLineSkipGaps->setEnabled(enabled);
+	ui.chkLineIncreasingXOnly->setEnabled(enabled);
+	lineWidget->setEnabled(enabled);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -669,6 +662,7 @@ void XYCurveDock::load() {
 	bool xyCurve = (m_curve->type() == AspectType::XYCurve);
 	if (xyCurve) { // options available for XYCurve only and not for analysis curves
 		ui.cbLineType->setCurrentIndex((int)m_curve->lineType());
+		lineTypeChanged(ui.cbLineType->currentIndex());
 		ui.chkLineSkipGaps->setChecked(m_curve->lineSkipGaps());
 		ui.sbLineInterpolationPointsCount->setValue(m_curve->lineInterpolationPointsCount());
 	}

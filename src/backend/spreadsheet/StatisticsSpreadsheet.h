@@ -70,10 +70,16 @@ private:
 	void update();
 	void updateColumnNames();
 
+private Q_SLOTS:
+	void handleColumnAdded(const AbstractAspect*);
+	void handleColumnRemoved(const AbstractAspect*);
+
+private:
 	Spreadsheet* m_spreadsheet{nullptr};
 	Metrics m_metrics;
 	QVector<Metric> m_metricValues;
 	QVector<QString> m_metricNames;
+	bool m_updateInProgress{false};
 
 	friend class SpreadsheetTest;
 };

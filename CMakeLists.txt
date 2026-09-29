@@ -80,31 +80,32 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     TextWidgets
     WidgetsAddons
     XmlGui
-    NewStuffCore
-    NewStuff
+    # NewStuffCore
+    # NewStuff
     TextEditor
     SyntaxHighlighting
 OPTIONAL_COMPONENTS
     DocTools
-    Service
-    Parts
+    # Service
+    # Parts
     Purpose
 )
 
 # TODO: make NewStuff optional?
-if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
-    add_definitions(-DHAVE_KF_NEW_STUFF)
-else()
-    message(STATUS "KF NewStuff not found")
-endif()
+# if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
+#    add_definitions(-DHAVE_KF_NEW_STUFF)
+#else()
+#    message(STATUS "KF NewStuff not found")
+#endif()
+
 # TODO: service not used?
-if(NOT KF${KF_MAJOR_VERSION}Service_FOUND)
-    message(STATUS "KF Service not found")
-endif()
+# if(NOT KF${KF_MAJOR_VERSION}Service_FOUND)
+#    message(STATUS "KF Service not found")
+# endif()
 # TODO: parts not used?
-if(NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
-    message(STATUS "KF Parts not found")
-endif()
+# if(NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
+#    message(STATUS "KF Parts not found")
+# endif()
 
 if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
     add_definitions(-DHAVE_PURPOSE)
@@ -336,17 +337,9 @@ option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
 option(ENABLE_SDK_EXAMPLES "Build SDK examples" OFF)
 if(ENABLE_SDK)
-if(WIN32)
-option(ENABLE_PYTHON_SDK "Build with Python SDK support" OFF)
-else()
 option(ENABLE_PYTHON_SDK "Build with Python SDK support" ON)
 endif()
-endif()
-if(WIN32)
-option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" OFF)
-else()
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" ON)
-endif()
 
 #################################################
 if(ENABLE_REPRODUCIBLE)
@@ -771,26 +764,37 @@ else()
     message(STATUS "Eigen3 support DISABLED")
 endif()
 
-### Python3 (optional) #############################
+### Python3 SDK and scripting (optional) #############################
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
+    # minimum stable ABI: 3.9
     set(PYTHON_ABI_MAJOR_VERSION "3")
     set(PYTHON_ABI_MINOR_VERSION "9")
     set(PYTHON_ABI_VERSION "${PYTHON_ABI_MAJOR_VERSION}.${PYTHON_ABI_MINOR_VERSION}")
     find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development REQUIRED)
     message(STATUS "Building with Python ${Python3_VERSION} (stable ABI minimum: ${PYTHON_ABI_VERSION})")
-    find_package(PySide6 QUIET REQUIRED)
+    find_package(PySide6 QUIET)
     if(PySide6_FOUND)
         message(STATUS "Found PySide6: ${PySide6_PATH}, ${PySide6_INCLUDE_DIRS}, ${PySide6_TYPESYSTEMS}, ${PySide6_ABI3_LIBRARY}")
+        find_package(Shiboken6 QUIET)
+        if(Shiboken6_FOUND)
+            get_target_property(Shiboken6_LIBRARY Shiboken6::libshiboken IMPORTED_LOCATION)
+	    message(STATUS "Found Shiboken6: ${Shiboken6_PATH}, ${Shiboken6_INCLUDE_DIRS}, ${Shiboken6_EXECUTABLE}, ${Shiboken6_LIBRARY}")
+        else()
+		message(STATUS "Shiboken6 NOT FOUND")
+        endif()
+    else()
+	    message(STATUS "PySide6 NOT FOUND")
     endif()
-    find_package(Shiboken6 QUIET REQUIRED)
-    if(Shiboken6_FOUND)
-        get_target_property(Shiboken6_LIBRARY Shiboken6::libshiboken IMPORTED_LOCATION)
-	message(STATUS "Found Shiboken6: ${Shiboken6_PATH}, ${Shiboken6_INCLUDE_DIRS}, ${Shiboken6_EXECUTABLE}, ${Shiboken6_LIBRARY}")
+    if (NOT PySide6_FOUND OR NOT Shiboken6_FOUND)
+	    set(ENABLE_PYTHON_SDK OFF CACHE BOOL "Build the Python SDK" FORCE)
+	    set(ENABLE_PYTHON_SCRIPTING OFF CACHE BOOL "Support Python Scripting" FORCE)
     endif()
 endif()
+
 if(ENABLE_PYTHON_SDK)
     find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Interpreter REQUIRED)
 endif()
+
 if(ENABLE_PYTHON_SCRIPTING)
     find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development.Embed REQUIRED)
     add_definitions(-DHAVE_PYTHON_SCRIPTING)
@@ -805,7 +809,7 @@ if(ENABLE_PYTHON_SCRIPTING)
     add_definitions(-DPYTHON3_VERSION_STRING="${PYTHON_ABI_VERSION}")
 endif()
 
-# Qt Advanced Docking System (required) #####################
+### Qt Advanced Docking System (required) #####################
 #find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG QUIET NAMES qt${QT_VERSION_MAJOR}advanceddocking qtadvanceddocking-qt${QT_VERSION_MAJOR})
 #if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND AND NOT TARGET ads::qt${QT_VERSION_MAJOR}advanceddocking)
 #    add_library(ads::qt${QT_VERSION_MAJOR}advanceddocking ALIAS ads::qtadvanceddocking-qt${QT_VERSION_MAJOR})
@@ -829,9 +833,12 @@ endif()
 if(ENABLE_PYTHON_SCRIPTING #[[OR ENABLE_JULIA_SCRIPTING OR ENABLE_LUA_SCRIPTING ...]])
     find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS TextEditor) # KTextEditor is required for the script editor
     set(ENABLE_SCRIPTING ON) # at least one scripting runtime is enabled
-    add_definitions(-DHAVE_SCRIPTING)
 else()
     set(ENABLE_SCRIPTING OFF) # no scripting runtime is enabled
+endif()
+
+if(ENABLE_SCRIPTING)
+    list(APPEND LABPLOT_COMPILE_DEFINITIONS -DHAVE_SCRIPTING)
 endif()
 
 message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")

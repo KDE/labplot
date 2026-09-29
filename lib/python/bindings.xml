@@ -2,6 +2,10 @@
     <load-typesystem name="typesystem_core_common.xml" generate="no"/>
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
 
+    <!-- Types parsed through dependencies but owned by their respective modules. -->
+    <suppress-warning text="Enum 'CBLAS_*' does not have a type entry*"/>
+    <suppress-warning text="template baseclass 'QCborStreamReader::StringResult*' of '*' is not known"/>
+
     <!-- Global -->
     <enum-type name="AspectType">
         <reject-enum-value name="DatapickerCurve"/>
@@ -250,6 +254,11 @@
         <?if !scripting ?>
         <declare-function signature="Project()" return-type="void"/>
         <?endif?>
+        <declare-function signature="path()const" return-type="QString"/>
+        <declare-function signature="fileName()const" return-type="QString"/>
+        <declare-function signature="setFileName(const QString&amp;)" return-type="void"/>
+        <declare-function signature="author()const" return-type="QString"/>
+        <declare-function signature="setAuthor(const QString&amp;)" return-type="void"/>
     </object-type>
 
     <!-- Column -->
@@ -361,10 +370,14 @@
     <rejection class="^.*Filter$" function-name="save"/>
     <rejection class="^.*Filter$" function-name="load"/>
     <rejection class="^.*Filter$" function-name="^.*preview.*$"/>
-    <rejection class="^.*Filter$" function-name="parse"/>
+    <rejection class="^.*Filter$" function-name="^parse.*$"/>
     <rejection class="^.*Filter$" function-name="^.*Device.*$"/>
     <rejection class="^.*Filter$" function-name="fileInfoString"/>
+    <rejection class="FITSFilter" function-name="readChdu"/>
+    <rejection class="SpiceFilter" function-name="isSpiceFile"/>
+    <rejection class="XLSXFilter" function-name="sheets"/>
     <object-type name="AsciiFilter" disable-wrapper="yes">
+        <enum-type name="DataType"/>
         <value-type name="Properties" disable-wrapper="yes"/>
     </object-type>
     <object-type name="BinaryFilter" disable-wrapper="yes">
@@ -506,8 +519,8 @@
     <object-type name="HypothesisTest" disable-wrapper="yes">
         <enum-type name="Test"/>
         <declare-function signature="HypothesisTest(const QString&amp;)" return-type="void"/>
-        <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
-        <declare-function signature="setDataColumns(const QVector&lt;const AbstractColumn*&gt;&amp;)" return-type="void"/>
+        <declare-function signature="dataColumns()const" return-type="QList&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(const QList&lt;const AbstractColumn*&gt;&amp;)" return-type="void"/>
         <declare-function signature="resultHtml()const" return-type="QString"/>
         <declare-function signature="resultText()const" return-type="QString"/>
         <declare-function signature="setTestMean(double)" return-type="void"/>
@@ -1013,6 +1026,7 @@
     <rejection class="ProcessBehaviorChart" function-name="*"/>
     <object-type name="ProcessBehaviorChart" disable-wrapper="yes">
         <enum-type name="Type"/>
+        <enum-type name="LimitsType"/>
         <enum-type name="LimitsMetric"/>
         <declare-function signature="ProcessBehaviorChart(const QString&amp;,bool)" return-type="void">
             <modify-argument index="2">
@@ -1244,6 +1258,20 @@
             </modify-argument>
         </declare-function>
     </object-type>
+    <rejection class="XYPiecewiseLinearFitCurve" field-name="*"/>
+    <rejection class="XYPiecewiseLinearFitCurve" function-name="*"/>
+    <object-type name="XYPiecewiseLinearFitCurve" disable-wrapper="yes">
+        <value-type name="FitData" disable-wrapper="yes"/>
+        <value-type name="FitResult" disable-wrapper="yes"/>
+        <enum-type name="ConnectionType"/>
+        <declare-function signature="XYPiecewiseLinearFitCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="fitData()const" return-type="XYPiecewiseLinearFitCurve::FitData"/>
+        <declare-function signature="setFitData(const XYPiecewiseLinearFitCurve::FitData&amp;)" return-type="void"/>
+        <declare-function signature="fitResult()const" return-type="const XYPiecewiseLinearFitCurve::FitResult&amp;"/>
+        <declare-function signature="changepointLinesEnabled()const" return-type="bool"/>
+        <declare-function signature="setChangepointLinesEnabled(bool)" return-type="void"/>
+        <declare-function signature="changepointLines()const" return-type="QList&lt;ReferenceLine*&gt;"/>
+    </object-type>
     <rejection class="XYFourierFilterCurve" field-name="*"/>
     <rejection class="XYFourierFilterCurve" function-name="*"/>
     <object-type name="XYFourierFilterCurve" disable-wrapper="yes">
@@ -1429,6 +1457,8 @@
         <enum-type name="NavigationOperation"/>
         <enum-type name="RangeType"/>
         <enum-type name="RangeBreakStyle"/>
+        <enum-type name="PlotColorMode"/>
+        <enum-type name="BorderTypeFlags" flags="yes"/>
         <value-type name="RangeBreak" disable-wrapper="yes"/>
         <value-type name="RangeBreaks" disable-wrapper="yes"/>
         <declare-function signature="CartesianPlot(const QString&amp;,bool)" return-type="void">
@@ -1450,6 +1480,9 @@
         <declare-function signature="setRangeType(CartesianPlot::RangeType)" return-type="void"/>
         <declare-function signature="niceExtend()const" return-type="bool"/>
         <declare-function signature="setNiceExtend(bool)" return-type="void"/>
+        <declare-function signature="borderType()const" return-type="CartesianPlot::BorderType"/>
+        <declare-function signature="setBorderType(CartesianPlot::BorderType)" return-type="void"/>
+        <declare-function signature="borderLine()const" return-type="Line*"/>
         <declare-function signature="rangeFirstValues()const" return-type="int"/>
         <declare-function signature="setRangeFirstValues(int)" return-type="void"/>
         <declare-function signature="rangeLastValues()const" return-type="int"/>
@@ -1671,6 +1704,7 @@
     <enum-type name="round_method"/>
     <enum-type name="nsl_kernel_type"/>
     <enum-type name="nsl_kde_bandwidth_type"/>
+    <enum-type name="nsl_changepoint_method"/>
     <enum-type name="nsl_conv_direction_type"/>
     <enum-type name="nsl_conv_type_type"/>
     <enum-type name="nsl_conv_method_type"/>

@@ -314,7 +314,6 @@ void RunChart::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 RunChartPrivate::RunChartPrivate(RunChart* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
-	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
 }
 

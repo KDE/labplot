@@ -1712,7 +1712,7 @@
 >Diagrama</guilabel
 > en el giny acoblat corresponent. </para>
   <para
->Després de pujar la imatge es poden utilitzar diferents opcions de zoom des de la barra d'eines menú contextual/selector de dades per a canviar l'amplada i l'alçada de la imatge. La imatge també es pot girar a un angle utilitzant <guilabel
+>Després de pujar la imatge es poden utilitzar diferents opcions de zoom des de la barra d'eines menú contextual/selector de dades per a canviar l'amplada i l'altura de la imatge. La imatge també es pot girar a un angle utilitzant <guilabel
 >Gir</guilabel
 > a la secció «edició» del giny acoblat. Després d'això, cal que l'usuari <link linkend="axispoint"
 >estableixi els punts de l'eix</link

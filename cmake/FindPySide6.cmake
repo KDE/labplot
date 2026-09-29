@@ -63,6 +63,7 @@ if(NOT DEFINED PySide6_PATH)
             file(GLOB _pyside6_candidates
                 "${_base}/python*/site-packages/PySide6"
                 "${_base}/Python.framework/Versions/*/lib/python*/site-packages/PySide6"
+                "${_base}/site-packages/PySide6"
             )
             if(_pyside6_candidates)
                 list(GET _pyside6_candidates 0 _pyside6_candidate)
@@ -94,7 +95,7 @@ find_path(PySide6_TYPESYSTEMS
 )
 
 find_library(PySide6_ABI3_LIBRARY
-    NAMES pyside6.abi3 libpyside6.abi3 libpyside6.abi3.so.6.11 libpyside6.abi3.6.11 libpyside6.abi3.6.11.dylib libpyside6.abi3.so.6.10 libpyside6.abi3.6.10 libpyside6.abi3.6.10.dylib libpyside6.abi3.so.6.9 libpyside6.abi3.6.9 libpyside6.abi3.6.9.dylib
+    NAMES pyside6.abi3 libpyside6.abi3 libpyside6.abi3.so.6.12 libpyside6.abi3.6.12 libpyside6.abi3.6.12.dylib libpyside6.abi3.so.6.11 libpyside6.abi3.6.11 libpyside6.abi3.6.11.dylib libpyside6.abi3.so.6.10 libpyside6.abi3.6.10 libpyside6.abi3.6.10.dylib libpyside6.abi3.so.6.9 libpyside6.abi3.6.9 libpyside6.abi3.6.9.dylib
     PATHS ${PySide6_PATH} /usr/lib64 /usr/lib /app/lib
 )
 

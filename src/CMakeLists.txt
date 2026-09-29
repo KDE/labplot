@@ -109,6 +109,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYFourierFilterCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYHilbertTransformCurveDock.cpp
@@ -287,6 +288,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui
@@ -471,6 +473,7 @@ set(LABPLOT_WORKSHEET_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
@@ -547,6 +550,7 @@ endif()
 
 set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_baseline.cpp
+    ${BACKEND_DIR}/nsl/nsl_changepoint.c
     ${BACKEND_DIR}/nsl/nsl_conv.c
     ${BACKEND_DIR}/nsl/nsl_corr.c
     ${BACKEND_DIR}/nsl/nsl_dft.c
@@ -976,16 +980,16 @@ target_compile_definitions(labplot PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 # so the binary follows in-place Python upgrades (e.g., python.org installer updating
 # Python.framework/Versions/Current from 3.11 to 3.13). Without this, the binary
 # would be pinned to the specific minor version used at build time.
-if(APPLE AND ENABLE_PYTHON_SCRIPTING)
-    add_custom_command(TARGET labplot POST_BUILD
-        COMMAND install_name_tool -change
-            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
-            "@rpath/Python.framework/Versions/Current/Python"
-            "$<TARGET_FILE:labplot>"
-        COMMENT "labplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
-        VERBATIM
-    )
-endif()
+# if(APPLE AND ENABLE_PYTHON_SCRIPTING)
+#    add_custom_command(TARGET labplot POST_BUILD
+#        COMMAND install_name_tool -change
+#            "@rpath/Python.framework/Versions/${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/Python"
+#            "@rpath/Python.framework/Versions/Current/Python"
+#            "$<TARGET_FILE:labplot>"
+#        COMMENT "labplot: rewriting Python framework path ${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR} -> Current for stable ABI"
+#        VERBATIM
+#    )
+#endif()
 
 # see more: https://github.com/python/cpython/issues/104612#issuecomment-1755544510
 #if (ENABLE_PYTHON_SCRIPTING AND UNIX AND NOT APPLE)

@@ -92,6 +92,7 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
 )
 
@@ -119,6 +120,7 @@ set(SDK_SOURCES
 
 set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_baseline.cpp
+    ${BACKEND_DIR}/nsl/nsl_changepoint.c
     ${BACKEND_DIR}/nsl/nsl_conv.c
     ${BACKEND_DIR}/nsl/nsl_corr.c
     ${BACKEND_DIR}/nsl/nsl_dft.c

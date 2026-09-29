@@ -36,10 +36,13 @@ public:
 
 	void writeOutput(bool, const QString&);
 	QString outputText();
+	QString outputHtml() const;
+	void setOutputHtml(const QString&);
 
 private Q_SLOTS:
 	void handleAnchorClicked(const QUrl&);
-	void showOutputContextMenu(const QPoint&);
+	void setOutputVisible(bool);
+	void setOutputMaximized(bool);
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
@@ -52,10 +55,12 @@ private:
 	KTextEditor::View* m_kTextEditorView{nullptr};
 	QAction* m_runScriptAction{nullptr};
 	QAction* m_clearOutputAction{nullptr};
-	QAction* m_copySelectedAction{nullptr};
-	QAction* m_copyAllOutputAction{nullptr};
+	QAction* m_toggleOutputAction{nullptr};
+	QAction* m_maximizeOutputAction{nullptr};
 	QAction* m_codeCompletionAction{nullptr};
 	ScriptCompletionModel* m_completionModel{nullptr};
+	QList<int> m_outputSplitterSizes;
+	QList<int> m_maximizedOutputSplitterSizes;
 
 	void initActions();
 	void initMenus();

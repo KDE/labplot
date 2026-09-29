@@ -312,7 +312,6 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 KDEPlotPrivate::KDEPlotPrivate(KDEPlot* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
-	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
 }
 

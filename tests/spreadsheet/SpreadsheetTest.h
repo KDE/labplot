@@ -123,6 +123,10 @@ private Q_SLOTS:
 	void testStatisticsSpreadsheetChangeMetrics();
 	void testStatisticsSpreadsheetChildIndex();
 	void testStatisticsSpreadsheetChildIndexAfterUndoRedo();
+	void testStatisticsSpreadsheetUpdateOnDataChange();
+	void testStatisticsSpreadsheetUpdateOnMaskChange();
+	void testStatisticsSpreadsheetUpdateOnColumnAddRemove();
+	void testStatisticsSpreadsheetSaveLoad();
 
 	// clearing and data input
 	void testClearColumns();

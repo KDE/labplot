@@ -50,6 +50,7 @@ class XYIntegrationCurveDock;
 class XYInterpolationCurveDock;
 class XYSmoothCurveDock;
 class XYFitCurveDock;
+class XYPiecewiseLinearFitCurveDock;
 class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
 class XYHilbertTransformCurveDock;
@@ -131,6 +132,7 @@ private:
 	XYInterpolationCurveDock* m_xyInterpolationCurveDock{nullptr};
 	XYSmoothCurveDock* m_xySmoothCurveDock{nullptr};
 	XYFitCurveDock* m_xyFitCurveDock{nullptr};
+	XYPiecewiseLinearFitCurveDock* m_xyPiecewiseLinearFitCurveDock{nullptr};
 	XYFourierFilterCurveDock* m_xyFourierFilterCurveDock{nullptr};
 	XYFourierTransformCurveDock* m_xyFourierTransformCurveDock{nullptr};
 	XYHilbertTransformCurveDock* m_xyHilbertTransformCurveDock{nullptr};

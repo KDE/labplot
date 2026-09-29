@@ -80,10 +80,9 @@ plotArea1.setVerticalPadding(Worksheet.convertToSceneUnits(1.1, Worksheet.Unit.C
 plotArea1.setRightPadding(Worksheet.convertToSceneUnits(0.5, Worksheet.Unit.Centimeter))
 plotArea1.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-border1 = plotArea1.borderType()
 border1 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea1.setBorderType(border1)
-plotArea1.borderLine().setWidth(0)
+line = plotArea1.borderLine(); line.setWidth(0)
 
 te.clear()
 te.setFontPointSize(10)
@@ -126,7 +125,7 @@ config11.setYColumn(spreadsheet1.column(1))
 config11.setLineType(XYCurve.LineType.NoLine)
 config11.symbol().setStyle(Symbol.Style.Circle)
 config11.symbol().setSize(Worksheet.convertToSceneUnits(5, Worksheet.Unit.Point))
-config11.setValuesType(XYCurve.ValuesType.NoValues)
+config11.value().setType(Value.Type.NoValues)
 config11.background().setPosition(Background.Position.No)
 
 ###################################################################################################################################################################
@@ -143,10 +142,9 @@ plotArea2.setVerticalPadding(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.C
 plotArea2.setRightPadding(Worksheet.convertToSceneUnits(0.5, Worksheet.Unit.Centimeter))
 plotArea2.setBottomPadding(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.Centimeter))
 
-border2 = plotArea2.borderType()
 border2 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea2.setBorderType(border2)
-plotArea2.borderLine().setWidth(0)
+line = plotArea2.borderLine(); line.setWidth(0)
 
 te.clear()
 te.setFontPointSize(10)
@@ -188,7 +186,7 @@ config21.setPlotType(Plot.PlotType.Line)
 config21.setXColumn(spreadsheet2.column(0))
 config21.setYColumn(spreadsheet2.column(1))
 config21.symbol().setStyle(Symbol.Style.NoSymbols)
-config21.setValuesType(XYCurve.ValuesType.NoValues)
+config21.value().setType(Value.Type.NoValues)
 config21.background().setType(Background.Type.Color)
 config21.background().setColorStyle(Background.ColorStyle.VerticalLinearGradient)
 config21.background().setPosition(Background.Position.Below)
@@ -226,10 +224,9 @@ plotArea3.setVerticalPadding(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.C
 plotArea3.setRightPadding(Worksheet.convertToSceneUnits(0.5, Worksheet.Unit.Centimeter))
 plotArea3.setBottomPadding(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.Centimeter))
 
-border3 = plotArea3.borderType()
 border3 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea3.setBorderType(border3)
-plotArea3.borderLine().setWidth(0)
+line = plotArea3.borderLine(); line.setWidth(0)
 
 te.clear()
 te.setFontPointSize(10)
@@ -273,7 +270,7 @@ config31.setPlotType(Plot.PlotType.Line)
 config31.setXColumn(spreadsheet3.column(0))
 config31.setYColumn(spreadsheet3.column(1))
 config31.symbol().setStyle(Symbol.Style.NoSymbols)
-config31.setValuesType(XYCurve.ValuesType.NoValues)
+config31.value().setType(Value.Type.NoValues)
 config31.background().setType(Background.Type.Color)
 config31.background().setColorStyle(Background.ColorStyle.VerticalLinearGradient)
 config31.background().setPosition(Background.Position.Below)
@@ -290,7 +287,7 @@ te.clear()
 te.setFontPointSize(5)
 te.append("Sources:\n[1] https://orbitaldebris.jsc.nasa.gov/library/20180008451.pdf - History of On-Orbit Satellite Fragmentations\n[2] https://orbitaldebris.jsc.nasa.gov/photo-gallery/")
 textLabel1.setText(te.toHtml())
-textLabel1.setPosition(QPointF(Worksheet.convertToSceneUnits(-5.9, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-10.8, Worksheet.Unit.Centimeter)))
+textLabel1.setPositionScene(QPointF(Worksheet.convertToSceneUnits(-5.9, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-10.8, Worksheet.Unit.Centimeter)))
 
 image1 = Image("LEO")
 worksheet.addChild(image1)
@@ -300,7 +297,7 @@ image1.setOpacity(1)
 image1.setWidth(Worksheet.convertToSceneUnits(7, Worksheet.Unit.Centimeter))
 image1.setHeight(Worksheet.convertToSceneUnits(7, Worksheet.Unit.Centimeter))
 image1.setKeepRatio(True)
-image1.setPosition(QPointF(Worksheet.convertToSceneUnits(8.5, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0.5, Worksheet.Unit.Centimeter)))
+image1.setPositionScene(QPointF(Worksheet.convertToSceneUnits(8.5, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(0.5, Worksheet.Unit.Centimeter)))
 
 image2 = Image("GEO")
 worksheet.addChild(image2)
@@ -310,7 +307,7 @@ image2.setOpacity(1)
 image2.setWidth(Worksheet.convertToSceneUnits(7, Worksheet.Unit.Centimeter))
 image2.setHeight(Worksheet.convertToSceneUnits(5.6, Worksheet.Unit.Centimeter))
 image2.setKeepRatio(True)
-image2.setPosition(QPointF(Worksheet.convertToSceneUnits(8.5, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-6.5, Worksheet.Unit.Centimeter)))
+image2.setPositionScene(QPointF(Worksheet.convertToSceneUnits(8.5, Worksheet.Unit.Centimeter), Worksheet.convertToSceneUnits(-6.5, Worksheet.Unit.Centimeter)))
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################
