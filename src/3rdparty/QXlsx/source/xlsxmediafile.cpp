@@ -1,31 +1,34 @@
 // xlsxmediafile.cpp
 
-#include <QtGlobal>
-#include <QCryptographicHash>
-
 #include "xlsxmediafile_p.h"
+
+#include <QCryptographicHash>
 
 QT_BEGIN_NAMESPACE_XLSX
 
 MediaFile::MediaFile(const QByteArray &bytes, const QString &suffix, const QString &mimeType)
-    : m_contents(bytes), m_suffix(suffix), m_mimeType(mimeType)
-      , m_index(0), m_indexValid(false)
+    : m_contents(bytes)
+    , m_suffix(suffix)
+    , m_mimeType(mimeType)
+    , m_index(0)
+    , m_indexValid(false)
 {
     m_hashKey = QCryptographicHash::hash(m_contents, QCryptographicHash::Md5);
 }
 
 MediaFile::MediaFile(const QString &fileName)
-    :m_fileName(fileName), m_index(0), m_indexValid(false)
+    : m_fileName(fileName)
+    , m_index(0)
+    , m_indexValid(false)
 {
-
 }
 
 void MediaFile::set(const QByteArray &bytes, const QString &suffix, const QString &mimeType)
 {
-    m_contents = bytes;
-    m_suffix = suffix;
-    m_mimeType = mimeType;
-    m_hashKey = QCryptographicHash::hash(m_contents, QCryptographicHash::Md5);
+    m_contents   = bytes;
+    m_suffix     = suffix;
+    m_mimeType   = mimeType;
+    m_hashKey    = QCryptographicHash::hash(m_contents, QCryptographicHash::Md5);
     m_indexValid = false;
 }
 
@@ -66,7 +69,7 @@ bool MediaFile::isIndexValid() const
 
 void MediaFile::setIndex(int idx)
 {
-    m_index = idx;
+    m_index      = idx;
     m_indexValid = true;
 }
 

@@ -3,13 +3,14 @@
 #ifndef XLSXDOCUMENT_P_H
 #define XLSXDOCUMENT_P_H
 
-#include <QtGlobal>
+#include "xlsxcontenttypes_p.h"
+#include "xlsxdocument.h"
+#include "xlsxglobal.h"
+#include "xlsxworkbook.h"
+
 #include <QMap>
 
-#include "xlsxglobal.h"
-#include "xlsxdocument.h"
-#include "xlsxworkbook.h"
-#include "xlsxcontenttypes_p.h"
+#include <memory>
 
 QT_BEGIN_NAMESPACE_XLSX
 
@@ -23,17 +24,22 @@ public:
     bool loadPackage(QIODevice *device);
     bool savePackage(QIODevice *device) const;
 
-	// copy style from one xlsx file to other
-	static bool copyStyle(const QString &from, const QString &to);
+    bool saveCsv(const QString mainCSVFileName) const;
+
+    // copy style from one xlsx file to other
+    static bool copyStyle(const QString &from, const QString &to);
 
     Document *q_ptr;
-    const QString defaultPackageName; //default name when package name not specified
-    QString packageName; //name of the .xlsx file
+    const QString defaultPackageName; // default name when package name not specified
+    QString packageName;              // name of the .xlsx file
 
-    QMap<QString, QString> documentProperties; //core, app and custom properties
-    QSharedPointer<Workbook> workbook;
+    QMap<QString, QString> documentProperties; // core, app and custom properties
+    std::shared_ptr<Workbook> workbook;
     std::shared_ptr<ContentTypes> contentTypes;
-	bool isLoad; 
+    bool isLoad;
+
+    // Store the entire xlsx (zip) bytes so that even when opened with QIODevice, the zip can be reopened in SAX
+    std::shared_ptr<QByteArray> package_bytes;
 };
 
 QT_END_NAMESPACE_XLSX

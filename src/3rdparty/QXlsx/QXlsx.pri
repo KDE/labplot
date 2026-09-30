@@ -5,8 +5,17 @@
 QT += core
 QT += gui-private
 
-# TODO: Define your C++ version. c++14, c++17, etc.
-CONFIG += c++11
+# Define your C++ version.
+# Safe method using built-in variables without brackets
+lessThan(QT_MAJOR_VERSION, 6) {
+    # Set C++11 for Qt 5 (5.7 or higher version)
+    CONFIG += c++11
+    message("Qt 5 detected: Setting C++ standard to C++11")
+} else {
+    # Set C++17 for Qt 6
+    CONFIG += c++17
+    message("Qt 6 detected: Setting C++ standard to C++17")
+}
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -100,7 +109,8 @@ $${QXLSX_HEADERPATH}xlsxworkbook_p.h \
 $${QXLSX_HEADERPATH}xlsxworksheet.h \
 $${QXLSX_HEADERPATH}xlsxworksheet_p.h \
 $${QXLSX_HEADERPATH}xlsxzipreader_p.h \
-$${QXLSX_HEADERPATH}xlsxzipwriter_p.h
+$${QXLSX_HEADERPATH}xlsxzipwriter_p.h \
+$${QXLSX_HEADERPATH}xlsxreadsax.h
 
 SOURCES += \
 $${QXLSX_SOURCEPATH}xlsxabstractooxmlfile.cpp \
@@ -135,8 +145,8 @@ $${QXLSX_SOURCEPATH}xlsxutility.cpp \
 $${QXLSX_SOURCEPATH}xlsxworkbook.cpp \
 $${QXLSX_SOURCEPATH}xlsxworksheet.cpp \
 $${QXLSX_SOURCEPATH}xlsxzipreader.cpp \
-$${QXLSX_SOURCEPATH}xlsxzipwriter.cpp
-
+$${QXLSX_SOURCEPATH}xlsxzipwriter.cpp \
+$${QXLSX_SOURCEPATH}xlsxreadsax.cpp
 
 ########################################
 # custom setting for compiler & system

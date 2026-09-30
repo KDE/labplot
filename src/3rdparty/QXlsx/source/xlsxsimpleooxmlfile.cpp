@@ -2,13 +2,12 @@
 
 #include "xlsxsimpleooxmlfile_p.h"
 
-#include <QtGlobal>
 #include <QIODevice>
 
 QT_BEGIN_NAMESPACE_XLSX
 
 SimpleOOXmlFile::SimpleOOXmlFile(CreateFlag flag)
-    :AbstractOOXmlFile(flag)
+    : AbstractOOXmlFile(flag)
 {
 }
 

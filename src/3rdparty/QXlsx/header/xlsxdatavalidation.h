@@ -3,14 +3,13 @@
 #ifndef QXLSX_XLSXDATAVALIDATION_H
 #define QXLSX_XLSXDATAVALIDATION_H
 
-#include <QtGlobal>
+#include "xlsxglobal.h"
+
+#include <QList>
 #include <QSharedDataPointer>
 #include <QString>
-#include <QList>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-
-#include "xlsxglobal.h"
 
 class QXmlStreamReader;
 class QXmlStreamWriter;
@@ -25,20 +24,9 @@ class DataValidationPrivate;
 class QXLSX_EXPORT DataValidation
 {
 public:
-    enum ValidationType
-    {
-        None,
-        Whole,
-        Decimal,
-        List,
-        Date,
-        Time,
-        TextLength,
-        Custom
-    };
+    enum ValidationType { None, Whole, Decimal, List, Date, Time, TextLength, Custom };
 
-    enum ValidationOperator
-    {
+    enum ValidationOperator {
         Between,
         NotBetween,
         Equal,
@@ -49,16 +37,14 @@ public:
         GreaterThanOrEqual
     };
 
-    enum ErrorStyle
-    {
-        Stop,
-        Warning,
-        Information
-    };
+    enum ErrorStyle { Stop, Warning, Information };
 
     DataValidation();
-    DataValidation(ValidationType type, ValidationOperator op=Between, const QString &formula1=QString()
-            , const QString &formula2=QString(), bool allowBlank=false);
+    DataValidation(ValidationType type,
+                   ValidationOperator op   = Between,
+                   const QString &formula1 = QString(),
+                   const QString &formula2 = QString(),
+                   bool allowBlank         = false);
     DataValidation(const DataValidation &other);
     ~DataValidation();
 
@@ -81,8 +67,8 @@ public:
     void setErrorStyle(ErrorStyle es);
     void setFormula1(const QString &formula);
     void setFormula2(const QString &formula);
-    void setErrorMessage(const QString &error, const QString &title=QString());
-    void setPromptMessage(const QString &prompt, const QString &title=QString());
+    void setErrorMessage(const QString &error, const QString &title = QString());
+    void setPromptMessage(const QString &prompt, const QString &title = QString());
     void setAllowBlank(bool enable);
     void setPromptMessageVisible(bool visible);
     void setErrorMessageVisible(bool visible);
@@ -96,6 +82,7 @@ public:
 
     bool saveToXml(QXmlStreamWriter &writer) const;
     static DataValidation loadFromXml(QXmlStreamReader &reader);
+
 private:
     QSharedDataPointer<DataValidationPrivate> d;
 };

@@ -480,7 +480,8 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 			int datetimeidx = 0;
 			int stringidx = 0;
 			for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
-				const auto val = read(row, col);
+				const bool rawNumeric = columnNumericTypes.at(j) == QXlsx::Cell::CellType::NumberType;
+				const auto val = read(row, col, rawNumeric);
 				if (columnNumericTypes.at(j) == QXlsx::Cell::CellType::NumberType) {
 					if (numericidx < numericDataPointers.size())
 						static_cast<QVector<double>*>(numericDataPointers[numericidx++])->push_back(val.toDouble());
@@ -795,6 +796,22 @@ QXlsx::Cell::CellType XLSXFilterPrivate::columnTypeInRange(const int column, con
 				continue;
 
 			// QDEBUG(" cell type =" << cell->cellType())
+			bool isNumeric = false;
+			cell->value().toDouble(&isNumeric);
+
+			// Formulas keep their cached Excel serial value, even when formatted as dates.
+			if (cell->hasFormula() && isNumeric) {
+				numeric = true;
+				continue;
+			}
+
+			// QXlsx 1.5.1.1 may classify General-formatted numeric cells as dates
+			// when General is stored as a custom number format.
+			if (isNumeric && cell->format().numberFormat() == QLatin1String("General")) {
+				numeric = true;
+				continue;
+			}
+
 			if (cell->cellType() == QXlsx::Cell::CellType::StringType)
 				return QXlsx::Cell::CellType::StringType;
 			if (cell->cellType() == QXlsx::Cell::CellType::NumberType)
@@ -816,18 +833,22 @@ QXlsx::Cell::CellType XLSXFilterPrivate::columnTypeInRange(const int column, con
 	if (datetime && !numeric)
 		return QXlsx::Cell::CellType::DateType;
 
-	// numeric and datetime
+	// Date-formatted Excel cells are still stored as numbers. If the column mixes
+	// date-formatted and regular numeric cells, keep the Excel serial values.
+	if (numeric && datetime)
+		return QXlsx::Cell::CellType::NumberType;
+
 	return QXlsx::Cell::CellType::StringType;
 }
 #endif
 
 #ifdef HAVE_QXLSX
-QVariant XLSXFilterPrivate::read(int row, int column) const {
+QVariant XLSXFilterPrivate::read(int row, int column, bool rawNumeric) const {
 	auto cell = m_document->cellAt(row, column);
 	if (!cell)
 		return QVariant();
 
-	if (cell->isDateTime())
+	if (!rawNumeric && cell->isDateTime())
 		return cell->dateTime();
 
 	return cell->value();

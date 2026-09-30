@@ -33,7 +33,7 @@ public:
 	QXlsx::CellRange cellContainedInRegions(const QXlsx::CellReference& cell, const QVector<QXlsx::CellRange>& regions) const;
 	bool dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& range) const;
 	QXlsx::Cell::CellType columnTypeInRange(const int column, const QXlsx::CellRange& range) const;
-	QVariant read(int row, int column) const;
+	QVariant read(int row, int column, bool rawNumeric = false) const;
 	QXlsx::CellRange dimension() const;
 #endif
 	bool exportDataSourceAsNewSheet{true};

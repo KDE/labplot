@@ -1,8 +1,7 @@
 // xlsxabstractsheet.cpp
 
-#include <QtGlobal>
-
 #include "xlsxabstractsheet.h"
+
 #include "xlsxabstractsheet_p.h"
 #include "xlsxworkbook.h"
 
@@ -11,7 +10,7 @@ QT_BEGIN_NAMESPACE_XLSX
 AbstractSheetPrivate::AbstractSheetPrivate(AbstractSheet *p, AbstractSheet::CreateFlag flag)
     : AbstractOOXmlFilePrivate(p, flag)
 {
-    type = AbstractSheet::ST_WorkSheet;
+    type       = AbstractSheet::ST_WorkSheet;
     sheetState = AbstractSheet::SS_Visible;
 }
 
@@ -39,7 +38,7 @@ AbstractSheetPrivate::~AbstractSheetPrivate()
 
   \value SS_Visible
   \value SS_Hidden
-  \value SS_VeryHidden User cann't make a veryHidden sheet visible in normal way.
+  \value SS_VeryHidden User can't make a veryHidden sheet visible in normal way.
 */
 
 /*!
@@ -52,14 +51,16 @@ AbstractSheetPrivate::~AbstractSheetPrivate()
 /*!
  * \internal
  */
-AbstractSheet::AbstractSheet(const QString &name, int id, Workbook *workbook, AbstractSheetPrivate *d) :
-    AbstractOOXmlFile(d)
+AbstractSheet::AbstractSheet(const QString &name,
+                             int id,
+                             Workbook *workbook,
+                             AbstractSheetPrivate *d)
+    : AbstractOOXmlFile(d)
 {
-    d_func()->name = name;
-    d_func()->id = id;
+    d_func()->name     = name;
+    d_func()->id       = id;
     d_func()->workbook = workbook;
 }
-
 
 /*!
  * Returns the name of the sheet.
@@ -137,7 +138,7 @@ bool AbstractSheet::isVisible() const
 }
 
 /*!
- * Make the sheet hiden or visible based on \a hidden.
+ * Make the sheet hidden or visible based on \a hidden.
  */
 void AbstractSheet::setHidden(bool hidden)
 {
