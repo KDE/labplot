@@ -7,4 +7,12 @@ if(ENABLE_TEST_BACKEND_CORE)
     target_compile_definitions(AbstractAspectTest PRIVATE LABPLOT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
 
     add_test(NAME AbstractAspectTest COMMAND AbstractAspectTest)
+
+    add_executable (IntervalTest IntervalTest.cpp)
+    target_link_libraries(IntervalTest labplotbackendlib labplotlib labplottest)
+    add_test(NAME IntervalTest COMMAND IntervalTest)
+
+    add_executable (AbstractFilterTest AbstractFilterTest.cpp)
+    target_link_libraries(AbstractFilterTest labplotbackendlib labplotlib labplottest)
+    add_test(NAME AbstractFilterTest COMMAND AbstractFilterTest)
 endif()

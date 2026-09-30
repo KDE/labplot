@@ -354,6 +354,7 @@ set(LABPLOT_CORE_SOURCES
     ${BACKEND_DIR}/core/abstractcolumncommands.cpp
     ${BACKEND_DIR}/core/AbstractFilter.cpp
     ${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
+    ${BACKEND_DIR}/core/CopyThroughFilter.cpp
     ${BACKEND_DIR}/core/column/Column.cpp
     ${BACKEND_DIR}/core/column/ColumnPrivate.cpp
     ${BACKEND_DIR}/core/column/ColumnStringIO.cpp

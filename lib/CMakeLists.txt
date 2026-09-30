@@ -221,6 +221,7 @@ set(SDK_INTERNAL_SOURCES
     ${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
     ${BACKEND_DIR}/core/AbstractFilter.cpp
     ${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
+    ${BACKEND_DIR}/core/CopyThroughFilter.cpp
     ${BACKEND_DIR}/core/column/ColumnPrivate.cpp
     ${BACKEND_DIR}/core/AbstractColumnPrivate.cpp
     ${BACKEND_DIR}/lib/SignallingUndoCommand.cpp

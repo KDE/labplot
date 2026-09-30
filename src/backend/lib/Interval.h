@@ -56,7 +56,7 @@ public:
 		return (rc1 && rc2);
 	}
 	bool intersects(const Interval<T>& other) const {
-		return (contains(other.start()) || contains(other.end()));
+		return (m_start <= other.end() && other.start() <= m_end);
 	}
 	//! Return the intersection of two intervals
 	/**
@@ -183,7 +183,7 @@ public:
 
 	//! Return a string in the format '[start,end]'
 	QString toString() const {
-		return "[" + QString::number(m_start) + "," + QString::number(m_end) + "]";
+		return QStringLiteral("[%1,%2]").arg(QString::number(m_start), QString::number(m_end));
 	}
 
 protected:

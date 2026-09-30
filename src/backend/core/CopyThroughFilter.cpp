@@ -9,6 +9,8 @@
 */
 
 #include "CopyThroughFilter.h"
+#include "AbstractColumn.h"
+#include "backend/lib/XmlStreamReader.h"
 
 /**
  * \class CopyThroughFilter
@@ -33,10 +35,40 @@ int CopyThroughFilter::outputCount() const {
 	return m_inputs.size();
 }
 
+void CopyThroughFilter::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement(QStringLiteral("copy_through_filter"));
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+	writer->writeEndElement();
+}
+
+bool CopyThroughFilter::load(XmlStreamReader* reader, bool /*preview*/) {
+	if (!readBasicAttributes(reader))
+		return false;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement())
+			break;
+		if (reader->isStartElement()) {
+			if (reader->name() == QLatin1String("comment")) {
+				if (!readCommentElement(reader))
+					return false;
+			} else if (!reader->skipToEndElement())
+				return false;
+		}
+	}
+
+	return !reader->hasError();
+}
+
 /**
  * \brief When asked for an output port, just return the corresponding input port.
  */
+AbstractColumn* CopyThroughFilter::output(int port) {
+	return const_cast<AbstractColumn*>(m_inputs.value(port));
+}
+
 AbstractColumn* CopyThroughFilter::output(int port) const {
-	return 0;
-	// TODO: return m_inputs.value(port);
+	return const_cast<AbstractColumn*>(m_inputs.value(port));
 }
