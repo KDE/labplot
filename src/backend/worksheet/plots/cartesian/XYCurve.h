@@ -14,8 +14,6 @@
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-#include <QFont>
-
 class Background;
 class Line;
 class Symbol;

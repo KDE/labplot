@@ -9,6 +9,9 @@
 #include "backend/lib/trace.h"
 
 #include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QPainter>
 #include <QPalette>
 

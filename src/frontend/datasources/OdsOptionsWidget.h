@@ -12,9 +12,6 @@
 
 #include "ui_odsoptionswidget.h"
 
-#include <QMap>
-#include <QPair>
-
 class OdsFilter;
 class ImportFileWidget;
 

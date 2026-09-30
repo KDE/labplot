@@ -9,13 +9,11 @@
 
 #include <QAbstractItemModel>
 #include <QIcon>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QJsonValue>
 
 class QJsonModel;
 class QJsonItem;
+class QJsonDocument;
 
 class QJsonTreeItem {
 public:

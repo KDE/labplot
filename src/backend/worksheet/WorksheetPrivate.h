@@ -12,8 +12,6 @@
 
 #include <backend/worksheet/Worksheet.h>
 
-#include <QColor>
-
 class Background;
 class TreeModel;
 class Worksheet;

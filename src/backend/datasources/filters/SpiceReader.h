@@ -12,7 +12,6 @@
 #include <QDateTime>
 #include <QFile>
 #include <QObject>
-#include <QTextStream>
 #include <QVector>
 
 class SpiceFileReader : public QObject {

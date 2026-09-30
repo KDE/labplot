@@ -12,7 +12,6 @@
 
 #include <KActionMenu>
 #include <QPointer>
-#include <QSet>
 #include <QToolButton>
 
 /**

@@ -12,7 +12,6 @@
 #define BACKGROUNDPRIVATE_H
 
 #include <QBrush>
-#include <QPen>
 
 class BackgroundPrivate {
 public:

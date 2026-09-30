@@ -20,7 +20,6 @@
 
 #include <KLocalizedString>
 
-#include <QDateTime>
 #include <QUndoCommand>
 
 class AbstractSimpleFilter;
