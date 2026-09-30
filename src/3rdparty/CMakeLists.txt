@@ -21,23 +21,12 @@ if(BUILD_READSTAT)
     # execute_process(COMMAND "curl -s https://api.github.com/repos/WizardMac/ReadStat/releases/latest |   jq --raw-output '.assets[0] | .browser_download_url'" OUTPUT_VARIABLE ext_url)
     set(ext_version "1.1.9")
     set(ext_url https://github.com/WizardMac/ReadStat/releases/download/v${ext_version}/readstat-${ext_version}.tar.gz)
-#if(WIN32)    # not used (own version on Windows)
-#        set(ext_url http://sourceforge.net/projects/kst/files/3rdparty/zlib-develop-mingw-fixed.zip)
-#        set(ext_configure cmake ${ext_src} ${generator} -DBUILD_SHARED_LIBS=0 ${rc_compiler} ${install_prefix} ${build_type})
-#        set(ext_install ${install_target})
-#        set(ext_insource OFF )
-#                set(zlib_library libzlibstatic.a)
-#        set(ext_make ${kst_make_program})
-#else()
-
     # --prefix=${install_dir} does not work with spaces
     set(ext_configure ${ext_src}/configure CFLAGS=-fPIC --enable-static --disable-shared)
     set(ext_insource ON)
-    #set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
 
     set(patch_command git apply ${CMAKE_CURRENT_SOURCE_DIR}/patches/readstat-1.1.9.patch)
     set(readstat_library libreadstat.a)
-#endif()
     ExternalProject_Add(3rdparty_readstat
         PREFIX ${build_dir}/readstat
         URL ${ext_url}
@@ -45,7 +34,6 @@ if(BUILD_READSTAT)
         CONFIGURE_COMMAND ${ext_configure}
         BUILD_IN_SOURCE ${ext_insource}
         PATCH_COMMAND ${patch_command}
-        #BUILD_COMMAND ${ext_make}
         # libtool install does not work with spaces
         #INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
         INSTALL_COMMAND cp -av .libs/${readstat_library} ${install_dir}/lib/ && cp -av src/readstat.h ${install_dir}/include/
@@ -228,7 +216,6 @@ if(LOCAL_MCAP_DOWNLOAD)
         OVERRIDE_FIND_PACKAGE
     )
     FetchContent_MakeAvailable(mcap)
-    #set(_mcap_include_dir ${mcap_SOURCE_DIR}/cpp/mcap/include)
     target_include_directories(labplot_datasources_obj PRIVATE ${mcap_SOURCE_DIR}/cpp/mcap/include)
     target_include_directories(labplotbackendlib PUBLIC ${mcap_SOURCE_DIR}/cpp/mcap/include)
 else ()

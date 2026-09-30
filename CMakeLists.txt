@@ -146,7 +146,7 @@ if(NOT APPLE)
 endif()
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
-set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++17")
+set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions")
 
 if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
     message(STATUS "GNU C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
@@ -810,11 +810,6 @@ if(ENABLE_PYTHON_SCRIPTING)
 endif()
 
 ### Qt Advanced Docking System (required) #####################
-#find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG QUIET NAMES qt${QT_VERSION_MAJOR}advanceddocking qtadvanceddocking-qt${QT_VERSION_MAJOR})
-#if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND AND NOT TARGET ads::qt${QT_VERSION_MAJOR}advanceddocking)
-#    add_library(ads::qt${QT_VERSION_MAJOR}advanceddocking ALIAS ads::qtadvanceddocking-qt${QT_VERSION_MAJOR})
-#endif()
-#if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
     if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
@@ -822,7 +817,6 @@ endif()
     else ()
         message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
     endif()
-#endif()
 
 ### Touch bar on macOS (optional) #############################
 if(APPLE AND ENABLE_TOUCHBAR)

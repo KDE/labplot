@@ -194,10 +194,12 @@ if(ENABLE_SCRIPTING)
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
-    list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
-    list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
-    list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
-    list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp)
+    list(APPEND GUI_SOURCES
+        ${FRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp
+        ${FRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp
+        ${FRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
+        ${FRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
+    )
 endif()
 
 if(APPLE)
@@ -331,10 +333,12 @@ if(ENABLE_SCRIPTING)
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
-    list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
-    list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui)
-    list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui)
-    list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/mqttwillsettingswidget.ui)
+    list(APPEND UI_SOURCES
+        ${FRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui
+        ${FRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui
+        ${FRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
+        ${FRONTEND_DIR}/ui/mqttwillsettingswidget.ui
+    )
 endif()
 
 # Split backend sources into logical groups. Each group gets its own OBJECT library,
@@ -519,8 +523,10 @@ if(ENABLE_SCRIPTING)
 endif()
 
 if(ENABLE_PYTHON_SCRIPTING)
-    list(APPEND LABPLOT_CORE_SOURCES ${shiboken_scripting_generated_sources})
-    list(APPEND LABPLOT_CORE_SOURCES ${python_scripting_backend_sources})
+    list(APPEND LABPLOT_CORE_SOURCES
+        ${shiboken_scripting_generated_sources}
+        ${python_scripting_backend_sources}
+    )
     # Shiboken-generated files and Python backend sources are compiled with different
     # optimization flags (set by the shiboken CMake module), causing Clang to reject
     # the PCH built for labplot_core_obj.  Skip PCH for those files only.
@@ -535,14 +541,12 @@ endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
     list(APPEND GUI_SOURCES ${FRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
-    list(APPEND LABPLOT_DATASOURCES_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
-    list(APPEND LABPLOT_DATASOURCES_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
-    list(APPEND LABPLOT_DATASOURCES_SOURCES ${BACKEND_DIR}/datasources/MQTTTopic.cpp)
+    list(APPEND LABPLOT_DATASOURCES_SOURCES
+        ${BACKEND_DIR}/datasources/MQTTClient.cpp
+        ${BACKEND_DIR}/datasources/MQTTSubscription.cpp
+        ${BACKEND_DIR}/datasources/MQTTTopic.cpp
+    )
 endif()
-
-# add the qml.qrc file
-# qt5_add_resources(qml_QRC ${FRONTEND_DIR}/welcomescreen/qml.qrc)
-# better: enable AUTORCC
 
 if(ENABLE_LIBORIGIN)
     list(APPEND LABPLOT_DATASOURCES_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)

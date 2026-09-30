@@ -255,8 +255,10 @@ set(SDK_INTERNAL_SOURCES
 )
 
 if(ENABLE_LIBORIGIN)
-    list(APPEND SDK_INTERNAL_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
-    list(APPEND SDK_INTERNAL_SOURCES ${BACKEND_DIR}/core/Workbook.cpp)
+    list(APPEND SDK_INTERNAL_SOURCES
+        ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp
+        ${BACKEND_DIR}/core/Workbook.cpp
+    )
 endif()
 
 if(NOT MSVC_FOUND)
