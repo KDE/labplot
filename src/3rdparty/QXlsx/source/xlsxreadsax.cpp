@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 #include "xlsxdocument.h"
 #include "xlsxworkbook.h"
 #include "xlsxzipreader_p.h"    // QXlsx internal zip reader (adjust include as per project structure)

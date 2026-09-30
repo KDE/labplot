@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 #ifndef XLSXREADSAX_H
 #define XLSXREADSAX_H
 
