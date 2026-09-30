@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2026-09-28 22:57+0200\n"
+"PO-Revision-Date: 2026-09-29 16:21+0200\n"
 "Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -4858,102 +4858,102 @@ msgstr "Logaritmus o základu 2"
 #: src/backend/gsl/functions.cpp:566
 #, kde-format
 msgid "Logarithm of the magnitude"
-msgstr ""
+msgstr "Logaritmus magnitudy"
 
 #: src/backend/gsl/functions.cpp:572
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr ""
+msgstr "Charakteristické hodnoty a_n(q) Mathieuových funkcí ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:573
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr ""
+msgstr "Charakteristické hodnoty b_n(q) Mathieuových funkcí se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:574
 #, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr ""
+msgstr "Angulární Mathieuovy funkce ce_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:575
 #, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr ""
+msgstr "Angulární Mathieuovy funkce se_n(q, x)"
 
 #: src/backend/gsl/functions.cpp:576
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Radiální Mathieuovy funkce j-tého druhu Mc_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:577
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Radiální Mathieuovy funkce j-tého druhu Ms_n^{(j)}(q, x)"
 
 #: src/backend/gsl/functions.cpp:581
 #, kde-format
 msgid "x^n for integer n with an error estimate"
-msgstr ""
+msgstr "x^n pro celé číslo n s odhadem chyby"
 
 #: src/backend/gsl/functions.cpp:584
 #, kde-format
 msgid "Digamma function for positive integer n"
-msgstr ""
+msgstr "Digamma funkce pro kladné celé číslo n"
 
 #: src/backend/gsl/functions.cpp:585
 #, kde-format
 msgid "Digamma function"
-msgstr ""
+msgstr "Digamma funkce"
 
 #: src/backend/gsl/functions.cpp:586
 #, kde-format
 msgid "Real part of the digamma function on the line 1+i y"
-msgstr ""
+msgstr "Reálná část digamma funkce na přímce 1+i y"
 
 #: src/backend/gsl/functions.cpp:587
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
-msgstr ""
+msgstr "Trigamma funkce psi' pro kladné celé číslo n"
 
 #: src/backend/gsl/functions.cpp:588
 #, kde-format
 msgid "Trigamma function psi'"
-msgstr ""
+msgstr "Trigamma funkce psi'"
 
 #: src/backend/gsl/functions.cpp:589
 #, kde-format
 msgid "Polygamma function psi^(n)"
-msgstr ""
+msgstr "Polygamma funkce psi^(n)"
 
 #: src/backend/gsl/functions.cpp:592
 #, kde-format
 msgid "First synchrotron function"
-msgstr ""
+msgstr "První synchrontronová funkce"
 
 #: src/backend/gsl/functions.cpp:593
 #, kde-format
 msgid "Second synchrotron function"
-msgstr ""
+msgstr "Druhá synchrotronová funkce"
 
 #: src/backend/gsl/functions.cpp:596
 #, kde-format
 msgid "Transport function J2"
-msgstr ""
+msgstr "Transportní funkce J2"
 
 #: src/backend/gsl/functions.cpp:597
 #, kde-format
 msgid "Transport function J3"
-msgstr ""
+msgstr "Transportní funkce J3"
 
 #: src/backend/gsl/functions.cpp:598
 #, kde-format
 msgid "Transport function J4"
-msgstr ""
+msgstr "Transportní funkce J4"
 
 #: src/backend/gsl/functions.cpp:599
 #, kde-format
 msgid "Transport function J5"
-msgstr ""
+msgstr "Transportní funkce J5"
 
 #: src/backend/gsl/functions.cpp:602
 #, kde-format
@@ -4975,22 +4975,22 @@ msgstr "Tečna"
 #: src/backend/gsl/functions.cpp:605
 #, kde-format
 msgid "Inverse sine"
-msgstr ""
+msgstr "Inverzní sinus"
 
 #: src/backend/gsl/functions.cpp:606
 #, kde-format
 msgid "Inverse cosine"
-msgstr ""
+msgstr "Inverzní kosinus"
 
 #: src/backend/gsl/functions.cpp:607
 #, kde-format
 msgid "Inverse tangent"
-msgstr ""
+msgstr "Inverzní tangens"
 
 #: src/backend/gsl/functions.cpp:608
 #, kde-format
 msgid "Inverse tangent using sign"
-msgstr ""
+msgstr "Inverzní tangenta s využitím znaménka"
 
 #: src/backend/gsl/functions.cpp:609
 #, kde-format
@@ -5040,17 +5040,17 @@ msgstr "Kotangenta"
 #: src/backend/gsl/functions.cpp:618
 #, kde-format
 msgid "Inverse secant"
-msgstr ""
+msgstr "Inverzní sekanta"
 
 #: src/backend/gsl/functions.cpp:619
 #, kde-format
 msgid "Inverse cosecant"
-msgstr ""
+msgstr "Inverzní kosekanta"
 
 #: src/backend/gsl/functions.cpp:620
 #, kde-format
 msgid "Inverse cotangent"
-msgstr ""
+msgstr "Inverzní kotangenta"
 
 #: src/backend/gsl/functions.cpp:621
 #, kde-format
@@ -5070,367 +5070,367 @@ msgstr "Hyperbolická kotangenta"
 #: src/backend/gsl/functions.cpp:624
 #, kde-format
 msgid "Inverse hyperbolic secant"
-msgstr ""
+msgstr "Inverzní hyperbolická sekanta"
 
 #: src/backend/gsl/functions.cpp:625
 #, kde-format
 msgid "Inverse hyperbolic cosecant"
-msgstr ""
+msgstr "Inverzní hyperbolická kosekanta"
 
 #: src/backend/gsl/functions.cpp:626
 #, kde-format
 msgid "Inverse hyperbolic cotangent"
-msgstr ""
+msgstr "Inverzní hyperbolická kotangenta"
 
 #: src/backend/gsl/functions.cpp:627
 #, kde-format
 msgid "Sinc function sin(x)/x"
-msgstr ""
+msgstr "Funkce sin(x)/x"
 
 #: src/backend/gsl/functions.cpp:630
 #, kde-format
 msgid "Hypotenuse function"
-msgstr ""
+msgstr "Funkce hypotenuzy"
 
 #: src/backend/gsl/functions.cpp:631
 #, kde-format
 msgid "Three component hypotenuse function"
-msgstr ""
+msgstr "Tříkomponentní funkce hypotenuzy"
 
 #: src/backend/gsl/functions.cpp:632
 #, kde-format
 msgid "restrict to [-pi, pi]"
-msgstr ""
+msgstr "omezit na [-pi, pi]"
 
 #: src/backend/gsl/functions.cpp:633
 #, kde-format
 msgid "restrict to [0, 2 pi]"
-msgstr ""
+msgstr "omezit na [0, 2 pi]"
 
 #: src/backend/gsl/functions.cpp:636
 #, kde-format
 msgid "Riemann zeta function for integer n"
-msgstr ""
+msgstr "Riemannova zeta funkce pro celé číslo n"
 
 #: src/backend/gsl/functions.cpp:637
 #, kde-format
 msgid "Riemann zeta function"
-msgstr ""
+msgstr "Riemannova zeta funkce"
 
 #: src/backend/gsl/functions.cpp:638
 #, kde-format
 msgid "zeta(n)-1 for integer n"
-msgstr ""
+msgstr "zeta(n)-1 pro celé číslo n"
 
 #: src/backend/gsl/functions.cpp:639
 #, kde-format
 msgid "zeta(x)-1"
-msgstr ""
+msgstr "zeta(x)-1"
 
 #: src/backend/gsl/functions.cpp:640
 #, kde-format
 msgid "Hurwitz zeta function"
-msgstr ""
+msgstr "Hurwitzova zeta funkce"
 
 #: src/backend/gsl/functions.cpp:641
 #, kde-format
 msgid "Eta function for integer n"
-msgstr ""
+msgstr "Eta funkce pro celé číslo n"
 
 #: src/backend/gsl/functions.cpp:642
 #, kde-format
 msgid "Eta function"
-msgstr ""
+msgstr "Eta funkce"
 
 #: src/backend/gsl/functions.cpp:646
 #, kde-format
 msgid "Gaussian random numbers"
-msgstr "Náhodná Gaussova čísla"
+msgstr "Gaussova náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:647
 #, kde-format
 msgid "Exponential random numbers"
-msgstr "Náhodná exponenciální čísla"
+msgstr "Exponenciální náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:648
 #, kde-format
 msgid "Laplacian random numbers"
-msgstr "Náhodná Laplaceova čísla"
+msgstr "Laplaceova náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:649
 #, kde-format
 msgid "Cauchy/Lorentz random numbers"
-msgstr "Náhodná Cauchy/Lorentzova čísla"
+msgstr "Cauchy/Lorentzova náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:650
 #, kde-format
 msgid "Rayleigh random numbers"
-msgstr ""
+msgstr "Rayleighova náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:651
 #, kde-format
 msgid "Landau random numbers"
-msgstr ""
+msgstr "Landauova náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:652
 #, kde-format
 msgid "Levy alpha-stable random numbers"
-msgstr ""
+msgstr "Levyho alfa-stabilní náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:653
 #, kde-format
 msgid "Gamma random numbers"
-msgstr ""
+msgstr "Gamma náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:654
 #, kde-format
 msgid "Flat random numbers"
-msgstr ""
+msgstr "Plochá náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:655
 #, kde-format
 msgid "Lognormal random numbers"
-msgstr ""
+msgstr "Lognormální náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:657
 #, kde-format
 msgid "Chi-squared random numbers"
-msgstr ""
+msgstr "Chi-kvadrát náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:658
 #, kde-format
 msgid "t-distributed random numbers"
-msgstr ""
+msgstr "t-rozdělená náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:659
 #, kde-format
 msgid "Logistic random numbers"
-msgstr ""
+msgstr "Logistická náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:660
 #, kde-format
 msgid "Poisson random numbers"
-msgstr ""
+msgstr "Poissonova náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:661
 #, kde-format
 msgid "Bernoulli random numbers"
-msgstr ""
+msgstr "Bernoulliho náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:662
 #, kde-format
 msgid "Binomial random numbers"
-msgstr ""
+msgstr "Binomická náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:665
 #, kde-format
 msgid "Triangular random numbers"
-msgstr ""
+msgstr "Trojúhelníková náhodná čísla"
 
 #: src/backend/gsl/functions.cpp:669
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro Gaussovo rozdělení"
 
 #: src/backend/gsl/functions.cpp:670
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro jednotkové Gaussovo rozdělení"
 
 #: src/backend/gsl/functions.cpp:671
 #, kde-format
 msgid "Cumulative distribution function P"
-msgstr ""
+msgstr "Kumulativní distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:672
 #, kde-format
 msgid "Cumulative distribution function Q"
-msgstr ""
+msgstr "Kumulativní distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Inverse cumulative distribution function P"
-msgstr ""
+msgstr "Inverzní kumulativní distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:674
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
-msgstr ""
+msgstr "Inverzní kumulativní distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "Cumulative unit distribution function P"
-msgstr ""
+msgstr "Kumulativní jednotková distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:676
 #, kde-format
 msgid "Cumulative unit distribution function Q"
-msgstr ""
+msgstr "Kumulativní jednotková distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:677
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
-msgstr ""
+msgstr "Inverzní kumulativní jednotková distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:678
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
-msgstr ""
+msgstr "Inverzní kumulativní jednotková distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:680
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro Gaussovo okrajové rozdělení"
 
 #: src/backend/gsl/functions.cpp:681
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro jednotkové Gaussovo okrajové rozdělení"
 
 #: src/backend/gsl/functions.cpp:682
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro dvourozměrné Gaussovo rozdělení"
 
 #: src/backend/gsl/functions.cpp:685
 #, kde-format
 msgid "Probability density for an exponential distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro exponenciální rozdělení"
 
 #: src/backend/gsl/functions.cpp:686
 #, kde-format
 msgid "Cumulative exponential distribution function P"
-msgstr ""
+msgstr "Funkce kumulativního exponenciálního rozdělení P"
 
 #: src/backend/gsl/functions.cpp:687
 #, kde-format
 msgid "Cumulative exponential distribution function Q"
-msgstr ""
+msgstr "Funkce kumulativního exponenciálního rozdělení Q"
 
 #: src/backend/gsl/functions.cpp:688
 #, kde-format
 msgid "Inverse cumulative exponential distribution function P"
-msgstr ""
+msgstr "Funkce inverzního kumulativního exponenciálního rozdělení P"
 
 #: src/backend/gsl/functions.cpp:689
 #, kde-format
 msgid "Inverse cumulative exponential distribution function Q"
-msgstr ""
+msgstr "Funkce inverzního kumulativního exponenciálního rozdělení Q"
 
 #: src/backend/gsl/functions.cpp:692
 #, kde-format
 msgid "Probability density for a Laplace distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro Laplaceovo rozdělení"
 
 #: src/backend/gsl/functions.cpp:693
 #, kde-format
 msgid "Cumulative Laplace distribution function P"
-msgstr ""
+msgstr "Kumulativní Laplaceova distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Cumulative Laplace distribution function Q"
-msgstr ""
+msgstr "Kumulativní Laplaceova distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "Inverse cumulative Laplace distribution function P"
-msgstr ""
+msgstr "Inverzní kumulativní Laplaceova distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:696
 #, kde-format
 msgid "Inverse cumulative Laplace distribution function Q"
-msgstr ""
+msgstr "Inverzní kumulativní Laplaceova distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Probability density for an exponential power distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro exponenciální mocninné rozdělení"
 
 #: src/backend/gsl/functions.cpp:700
 #, kde-format
 msgid "cumulative exponential power distribution function P"
-msgstr ""
+msgstr "Kumulativní exponenciální mocninná distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:701
 #, kde-format
 msgid "Cumulative exponential power distribution function Q"
-msgstr ""
+msgstr "Kumulativní exponenciální mocninná distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:704
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro Cauchyho rozdělení"
 
 #: src/backend/gsl/functions.cpp:705
 #, kde-format
 msgid "Cumulative Cauchy distribution function P"
-msgstr ""
+msgstr "Kumulativní Cauchyho distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:706
 #, kde-format
 msgid "Cumulative Cauchy distribution function Q"
-msgstr ""
+msgstr "Kumulativní Cauchyho distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:707
 #, kde-format
 msgid "Inverse cumulative Cauchy distribution function P"
-msgstr ""
+msgstr "Inverzní kumulativní Cauchyho distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:708
 #, kde-format
 msgid "Inverse cumulative Cauchy distribution function Q"
-msgstr ""
+msgstr "Inverzní kumulativní Cauchyho distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:711
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro Rayleighovo rozdělení"
 
 #: src/backend/gsl/functions.cpp:712
 #, kde-format
 msgid "Cumulative Rayleigh distribution function P"
-msgstr ""
+msgstr "Kumulativní Rayleighova distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:713
 #, kde-format
 msgid "Cumulative Rayleigh distribution function Q"
-msgstr ""
+msgstr "Kumulativní Rayleighova distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:714
 #, kde-format
 msgid "Inverse cumulative Rayleigh distribution function P"
-msgstr ""
+msgstr "Inverzní kumulativní Rayleighova distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:715
 #, kde-format
 msgid "Inverse cumulative Rayleigh distribution function Q"
-msgstr ""
+msgstr "Inverzní kumulativní Rayleighova distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:716
 #, kde-format
 msgid "Probability density for a Rayleigh tail distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro Rayleighovo okrajové rozdělení"
 
 #: src/backend/gsl/functions.cpp:719
 #, kde-format
 msgid "Probability density for a Landau distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro Landauovo rozdělení"
 
 #: src/backend/gsl/functions.cpp:722
 #, kde-format
 msgid "Probability density for a gamma distribution"
-msgstr ""
+msgstr "Hustota pravděpodobnosti pro gama rozdělení"
 
 #: src/backend/gsl/functions.cpp:723
 #, kde-format
 msgid "Cumulative gamma distribution function P"
-msgstr ""
+msgstr "Kumulativní gama distribuční funkce P"
 
 #: src/backend/gsl/functions.cpp:724
 #, kde-format
 msgid "Cumulative gamma distribution function Q"
-msgstr ""
+msgstr "Kumulativní gama distribuční funkce Q"
 
 #: src/backend/gsl/functions.cpp:725
 #, kde-format
