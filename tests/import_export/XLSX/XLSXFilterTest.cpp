@@ -231,8 +231,13 @@ void XLSXFilterTest::importFileEmptyCells() {
 	QCOMPARE(spreadsheet.column(5)->valueAt(0), 40000);
 
 	for (int col = 1; col < 6; col++)
-		for (int row = 1; row < 5; row++)
-			QCOMPARE(spreadsheet.column(col)->valueAt(row), 0);
+		for (int row = 1; row < 5; row++) {
+			const auto* column = spreadsheet.column(col);
+			if (column->columnMode() == AbstractColumn::ColumnMode::DateTime)
+				QVERIFY(!column->dateTimeAt(row).isValid());
+			else
+				QCOMPARE(column->valueAt(row), 0);
+		}
 }
 
 void XLSXFilterTest::importFileDatetime() {
