@@ -9,6 +9,7 @@
 
 #include "nsl_peak.h"
 #include "backend/lib/macros.h"
+#include <cmath>
 
 // simple peak detection
 template<typename T>
@@ -16,6 +17,19 @@ size_t* nsl_peak_detect(T* data, size_t n, size_t& np, T height, size_t distance
 	DEBUG(Q_FUNC_INFO << ", h = " << height << ", d = " << distance)
 	if (n <= 1) // nothing to do
 		return nullptr;
+
+	// For double type, validate finite input
+	if constexpr (std::is_same_v<T, double>) {
+		if (data == nullptr)
+			return nullptr;
+		for (size_t i = 0; i < n; ++i) {
+			if (!std::isfinite(data[i]))
+				return nullptr; // reject non-finite data
+		}
+		// Only reject height if it is NaN (but not infinity, since -infinity is a valid sentinel)
+		if (std::isnan(height))
+			return nullptr; // reject NaN height threshold
+	}
 
 	size_t* peaks = (size_t*)malloc(n * sizeof(size_t));
 	if (!peaks) {

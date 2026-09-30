@@ -456,4 +456,22 @@ void NSLSmoothTest::testLOWESS_basic() {
 	QVERIFY(fabs(ydata[10] - xdata[10] * xdata[10]) < 0.1);
 }
 
+void NSLSmoothTest::testNaNInfHandling() {
+	double ma_data[] = {1.0, NAN, 3.0, 4.0, 5.0};
+	QCOMPARE(nsl_smooth_moving_average(ma_data, 5, 3, nsl_smooth_weight_uniform, nsl_smooth_pad_none), -1);
+
+	double mal_data[] = {1.0, 2.0, INFINITY, 4.0, 5.0};
+	QCOMPARE(nsl_smooth_moving_average_lagged(mal_data, 5, 3, nsl_smooth_weight_uniform, nsl_smooth_pad_none), -1);
+
+	double pct_data[] = {1.0, 2.0, 3.0, NAN, 5.0};
+	QCOMPARE(nsl_smooth_percentile(pct_data, 5, 3, 0.5, nsl_smooth_pad_none), -1);
+
+	double sg_data[] = {1.0, 2.0, NAN, 4.0, 5.0};
+	QCOMPARE(nsl_smooth_savgol(sg_data, 5, 3, 1, nsl_smooth_pad_none), -1);
+
+	double xdata[] = {1.0, 2.0, 3.0, 4.0, 5.0};
+	double ydata[] = {1.0, 2.0, INFINITY, 4.0, 5.0};
+	QCOMPARE(nsl_smooth_lowess(xdata, ydata, 5, 0.6, 0.0, 1), -1);
+}
+
 QTEST_MAIN(NSLSmoothTest)

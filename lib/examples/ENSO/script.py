@@ -42,16 +42,12 @@ worksheet.setLayoutVerticalSpacing(ms)
 plotArea = CartesianPlot("xy-plot")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 plotArea.title().setText("El Niño-Southern Oscillation")
-border = plotArea.borderType()
 border = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea.setBorderType(border)
 worksheet.addChild(plotArea)
 
-for axis in plotArea.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        axis.title().setText("Month")
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        axis.title().setText("Atmospheric Pressure")
+plotArea.horizontalAxis().title().setText("Month")
+plotArea.verticalAxis().title().setText("Atmospheric Pressure")
 
 data = XYCurve("data")
 data.setPlotType(Plot.PlotType.Scatter)
@@ -80,10 +76,7 @@ fit.setXDataColumn(spreadsheet.column(1))
 
 fitData = fit.initStartValues(fitData)
 fit.setFitData(fitData)
-fit.recalculate()
 
 plotArea.addChild(fit)
-
-fit.recalculate()
 
 plotArea.addLegend()

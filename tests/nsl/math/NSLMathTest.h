@@ -17,6 +17,8 @@ class NSLMathTest : public NSLTest {
 
 private Q_SLOTS:
 	void mathMultiple();
+	void approximatelyEqual();
+	void testNaNInfHandling();
 	// performance
 	// void testPerformance();
 };

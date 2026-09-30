@@ -155,6 +155,39 @@ private Q_SLOTS:
 	void testFormulaDateTimeToDateTime();
 	void testFormulaDateTimeDatedif();
 	void testFormulaDateTimeEmptyCells();
+
+	// setColumnMode conversion tests
+	void columnModeDoubleToBigInt();
+	void columnModeDoubleToDateTime();
+	void columnModeDoubleToMonth();
+	void columnModeDoubleToDay();
+	void columnModeIntegerToBigInt();
+	void columnModeIntegerToDateTime();
+	void columnModeBigIntToDouble();
+	void columnModeBigIntToInteger();
+	void columnModeBigIntToText();
+	void columnModeBigIntToDateTime();
+	void columnModeDateTimeToDouble();
+	void columnModeDateTimeToInteger();
+	void columnModeDateTimeToBigInt();
+	void columnModeDateTimeToText();
+	void columnModeTextToDateTime();
+
+	// value label tests
+	void valueLabelsIntegerColumnBasic();
+	void valueLabelsBigIntColumn();
+	void valueLabelsTextColumn();
+	void valueLabelsMigrateDoubleToInteger();
+	void valueLabelsMigrateDoubleToBigInt();
+	void valueLabelsMigrateDoubleToText();
+	void valueLabelsMigrateIntegerToDouble();
+	void valueLabelsMigrateIntegerToBigInt();
+	void valueLabelsMigrateBigIntToDouble();
+	void valueLabelsMigrateBigIntToInteger();
+	void valueLabelsMigrateTextToDouble();
+	void valueLabelsMigrateDateTimeToDouble();
+	void valueLabelsRemoveAll();
+	void valueLabelsRemoveSingle();
 };
 
 #endif // COLUMNTEST_H

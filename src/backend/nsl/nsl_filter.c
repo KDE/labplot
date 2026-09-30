@@ -13,6 +13,7 @@
 #include <gsl/gsl_fft_halfcomplex.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_sf_pow_int.h>
+#include <math.h>
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
@@ -24,6 +25,8 @@ const char* nsl_filter_cutoff_unit_name[] = {i18n("Frequency"), i18n("Fraction")
 
 /* n - order, x = w/w0 */
 double nsl_filter_gain_bessel(int n, double x) {
+	if (!isfinite(x))
+		return NAN;
 	gsl_complex z0 = gsl_complex_rect(0.0, 0.0);
 	gsl_complex z = gsl_complex_rect(0.0, x);
 	double norm = gsl_complex_abs(nsl_sf_poly_reversed_bessel_theta(n, z));
@@ -33,6 +36,14 @@ double nsl_filter_gain_bessel(int n, double x) {
 
 /* size of data should be n+2 */
 int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, double cutindex, double bandwidth) {
+	if (data == NULL || n == 0)
+		return -1;
+	if (!isfinite(cutindex) || !isfinite(bandwidth) || !isfinite((double)order))
+		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(data[i]))
+			return -1;
+	}
 	if (cutindex < 0) {
 		printf("index for cutoff must be >= 0\n");
 		return -1;
@@ -253,6 +264,14 @@ void print_fdata(double const data[], size_t n) {
 }
 
 int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, int cutindex, int bandwidth) {
+	if (data == NULL || n == 0)
+		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(data[i]))
+			return -1;
+	}
+	if (!isfinite((double)cutindex) || !isfinite((double)bandwidth))
+		return -1;
 	/* 1. transform */
 	double* fdata = (double*)malloc(2 * n * sizeof(double)); /* contains re0,im0,re1,im1,re2,im2,... */
 #ifdef HAVE_FFTW3

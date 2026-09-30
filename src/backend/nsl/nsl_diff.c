@@ -15,16 +15,23 @@
 #include "nsl_diff.h"
 #include "nsl_common.h"
 #include "nsl_sf_poly.h"
+#include <math.h>
 
 const char* nsl_diff_deriv_order_name[] = {i18n("First"), i18n("Second"), i18n("Third"), i18n("Fourth"), i18n("Fifth"), i18n("Sixth")};
 
 double nsl_diff_first_central(double xm, double fm, double xp, double fp) {
+	if (!isfinite(xm) || !isfinite(fm) || !isfinite(xp) || !isfinite(fp))
+		return NAN;
 	return (fp - fm) / (xp - xm);
 }
 
 int nsl_diff_deriv_first_equal(const double* x, double* y, const size_t n) {
-	if (n < 3)
+	if (x == NULL || y == NULL || n < 3)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	double dy = 0, oldy = 0, oldy2 = 0;
 	size_t i;
@@ -49,6 +56,12 @@ int nsl_diff_deriv_first_equal(const double* x, double* y, const size_t n) {
 }
 
 int nsl_diff_first_deriv(const double* x, double* y, const size_t n, int order) {
+	if (x == NULL || y == NULL || n < 1)
+		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 	switch (order) {
 	case 2:
 		return nsl_diff_first_deriv_second_order(x, y, n);
@@ -62,8 +75,12 @@ int nsl_diff_first_deriv(const double* x, double* y, const size_t n, int order) 
 }
 
 int nsl_diff_first_deriv_second_order(const double* x, double* y, const size_t n) {
-	if (n < 3)
+	if (x == NULL || y == NULL || n < 3)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	double dy = 0, oldy = 0, oldy2 = 0, xdata[3], ydata[3];
 	size_t i, j;
@@ -96,8 +113,12 @@ int nsl_diff_first_deriv_second_order(const double* x, double* y, const size_t n
 }
 
 int nsl_diff_first_deriv_fourth_order(const double* x, double* y, const size_t n) {
-	if (n < 5)
+	if (x == NULL || y == NULL || n < 5)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	double dy[5] = {0}, xdata[5], ydata[5];
 	size_t i, j;
@@ -127,8 +148,12 @@ int nsl_diff_first_deriv_fourth_order(const double* x, double* y, const size_t n
 }
 
 int nsl_diff_first_deriv_avg(const double* x, double* y, const size_t n) {
-	if (n < 1)
+	if (x == NULL || y == NULL || n < 1)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	size_t i;
 	double dy = 0, oldy = 0;
@@ -150,6 +175,12 @@ int nsl_diff_first_deriv_avg(const double* x, double* y, const size_t n) {
 }
 
 int nsl_diff_second_deriv(const double* x, double* y, const size_t n, int order) {
+	if (x == NULL || y == NULL || n < 1)
+		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 	switch (order) {
 	case 1:
 		return nsl_diff_second_deriv_first_order(x, y, n);
@@ -165,8 +196,12 @@ int nsl_diff_second_deriv(const double* x, double* y, const size_t n, int order)
 }
 
 int nsl_diff_second_deriv_first_order(const double* x, double* y, const size_t n) {
-	if (n < 3)
+	if (x == NULL || y == NULL || n < 3)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	double dy[3] = {0}, xdata[3], ydata[3];
 	size_t i, j;
@@ -198,8 +233,12 @@ int nsl_diff_second_deriv_first_order(const double* x, double* y, const size_t n
 }
 
 int nsl_diff_second_deriv_second_order(const double* x, double* y, const size_t n) {
-	if (n < 4)
+	if (x == NULL || y == NULL || n < 4)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	double dy[4] = {0}, xdata[4], ydata[4];
 	size_t i, j;
@@ -234,8 +273,12 @@ int nsl_diff_second_deriv_second_order(const double* x, double* y, const size_t 
 }
 
 int nsl_diff_second_deriv_third_order(const double* x, double* y, const size_t n) {
-	if (n < 5)
+	if (x == NULL || y == NULL || n < 5)
 		return -1;
+	for (size_t i = 0; i < n; ++i) {
+		if (!isfinite(x[i]) || !isfinite(y[i]))
+			return -1;
+	}
 
 	double dy[5] = {0}, xdata[5], ydata[5];
 	size_t i, j;

@@ -1077,7 +1077,38 @@ void FitTest::testLinearWampler5_custom() {
 	QCOMPARE(fitResult.fdist_F, 0.675524458240122E-02);
 }
 
-/////////////////////////////////////////
+void FitTest::testFitDataNaNInfIgnored() {
+	QVector<double> xData = {0., 1., 2., NAN, 4., INFINITY, 6.};
+	QVector<double> yData = {0., 1., 2., 3., 4., 5., 6.};
+
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+	xDataColumn.replaceValues(0, xData);
+
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
+	yDataColumn.replaceValues(0, yData);
+
+	XYFitCurve fitCurve(QStringLiteral("fit"));
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_basic;
+	fitData.modelType = nsl_fit_model_polynomial;
+	fitData.degree = 1;
+	XYFitCurve::initFitData(fitData);
+	fitCurve.setFitData(fitData);
+
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+	QCOMPARE(fitResult.paramValues.size(), 2);
+	FuzzyCompare(fitResult.paramValues.at(0), 0.0, 1.e-12);
+	FuzzyCompare(fitResult.paramValues.at(1), 1.0, 1.e-12);
+	QVERIFY(std::isfinite(fitResult.rms));
+	QVERIFY(std::isfinite(fitResult.sse));
+}
 
 // taken from https://en.wikipedia.org/wiki/Ordinary_least_squares
 void FitTest::testLinearWP_OLS() {

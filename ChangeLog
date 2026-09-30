@@ -7,6 +7,7 @@ New features:
 		* Improve spinbox localization
 		* New column "Changed" in the project explorer to inform about which objects were changed since the last save
 		* Markdown support in Notes
+		* CLI parameters to create and export plots in a batch mode
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 		* Add option to enable/disable parameter error scaling (relative vs. absolute sigma)
@@ -14,6 +15,7 @@ New features:
 		* LOWESS (Locally Weighted Scatterplot Smoothing) smooth method
 		* Auto-recalculate option for analysis curves - automatically re-run the analysis on algorithm parameter changes
 		* Use logarithmic spacing to evaluate the result fit curves on log axes (BUG 475408)
+		* Piecewise linear fit
 	* [time series analysis]
 		* seasonal decomposition with STL and MSTL methods
 	* [spreadsheet]
@@ -36,7 +38,7 @@ New features:
 		* Allow to do analysis (fit, smoothe, etc.) on multiple curves simultaneously
 		* Pareto Chart
 		* Made all plot navigations (zoom, shift, pan) undo-/redoable (BUG 470792)
-		* Atomatically calculate the number of points to plot for equation curves (BUG 431534), optional, default ON
+		* Automatically calculate the number of points to plot for equation curves, optional, default ON (BUG 431534)
 	* [import]
 		* Import directories - import multiple files in a directory in one single step
 		* Support Unix timestamps (number of seconds since January 1, 1970 (UTC)) and Windows timestamps (number of 100-nanosecond intervals since January 1, 1601 (UTC)) in ASCII files, ms precision only
@@ -66,7 +68,8 @@ Bug fixes:
 	* Fix appending data to spreadsheets from XLSX files
 	* Fix the bar chart with log-scales
 	* Undo background color of text label (#1171)
-	* On Linux, run on Wayland natively without enforcing XCB/X11 (BuG 512058)
+	* On Linux, run on Wayland natively without enforcing XCB/X11 (BUG 512058)
+	* Fix StatisticsSpreadsheet updates on project load (BUG 525066)
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:

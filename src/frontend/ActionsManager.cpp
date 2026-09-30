@@ -871,10 +871,6 @@ void ActionsManager::initScriptToolbarActions() {
 	m_scriptRunAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
 	m_scriptRunAction->setToolTip(QStringLiteral("Run the script"));
 	collection->addAction(QStringLiteral("script_run"), m_scriptRunAction);
-
-	m_scriptClearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear"), this);
-	m_scriptClearAction->setToolTip(QStringLiteral("Clear the output of the script editor"));
-	collection->addAction(QStringLiteral("script_clear"), m_scriptClearAction);
 }
 #endif
 
@@ -1343,11 +1339,14 @@ void ActionsManager::updateGUI() {
 		// deactivate the shortcuts for the undo/redo action so those shortcuts can be used in the text editor
 		m_undoAction->setShortcut(QKeySequence());
 		m_redoAction->setShortcut(QKeySequence());
+		// script editor has its own search, unregister the shortcut for the global search here
+		m_searchAction->setShortcut(QKeySequence());
 	} else {
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(false);
 		m_undoAction->setShortcut(QKeySequence::Undo);
 		m_redoAction->setShortcut(QKeySequence::Redo);
+		m_searchAction->setShortcut(QKeySequence::Find);
 	}
 #endif
 
@@ -1662,11 +1661,7 @@ void ActionsManager::connectScriptToolbarActions(const ScriptEditor* view) {
 	disconnect(m_scriptRunAction, &QAction::triggered, nullptr, nullptr);
 	connect(m_scriptRunAction, &QAction::triggered, view, &ScriptEditor::run);
 
-	disconnect(m_scriptClearAction, &QAction::triggered, nullptr, nullptr);
-	connect(m_scriptClearAction, &QAction::triggered, view, &ScriptEditor::clearOutput);
-
 	const bool initialized = view->isInitialized();
-	m_scriptRunAction->setEnabled(initialized);
 	m_scriptRunAction->setEnabled(initialized);
 }
 #endif

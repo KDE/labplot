@@ -69,8 +69,16 @@ const char* nsl_fit_algorithm_name[] = {"Levenberg-Marquardt", "Maximum Likeliho
 	and https://lmfit.github.io/lmfit-py/bounds.html
 */
 double nsl_fit_map_bound(double x, double min, double max) {
+	if (isnan(min) || isnan(max) || isinf(min) || isinf(max)) {
+		printf("given bounds must be finite (min = %g, max = %g)! Giving up.\n", min, max);
+		return DBL_MAX;
+	}
 	if (max <= min) {
 		printf("given bounds must fulfill max > min (min = %g, max = %g)! Giving up.\n", min, max);
+		return DBL_MAX;
+	}
+	if (isnan(x) || isinf(x)) {
+		printf("given value must be finite! Giving up.\n");
 		return DBL_MAX;
 	}
 
@@ -96,12 +104,16 @@ double nsl_fit_map_bound(double x, double min, double max) {
 	and https://lmfit.github.io/lmfit-py/bounds.html
 */
 double nsl_fit_map_unbound(double x, double min, double max) {
+	if (isnan(min) || isnan(max) || isinf(min) || isinf(max)) {
+		printf("given bounds must be finite (min = %g, max = %g)! Giving up.\n", min, max);
+		return DBL_MAX;
+	}
 	if (max <= min) {
 		printf("given bounds must fulfill max > min (min = %g, max = %g)! Giving up.\n", min, max);
 		return DBL_MAX;
 	}
-	if (x < min || x > max) {
-		printf("given value must be within bounds! Giving up.\n");
+	if (isnan(x) || isinf(x) || x < min || x > max) {
+		printf("given value must be finite and within bounds! Giving up.\n");
 		return -DBL_MAX;
 	}
 

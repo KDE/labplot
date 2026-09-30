@@ -13,6 +13,9 @@
 #include "backend/worksheet/Line.h"
 #include "ui_linewidget.h"
 
+#include <QMetaObject>
+#include <QVector>
+
 class QShowEvent;
 class KConfigGroup;
 
@@ -37,6 +40,7 @@ private:
 	Ui::LineWidget ui;
 	Line* m_line{nullptr};
 	QList<Line*> m_lines;
+	QVector<QMetaObject::Connection> m_connections;
 	bool m_initializing{false};
 	QString m_prefix;
 

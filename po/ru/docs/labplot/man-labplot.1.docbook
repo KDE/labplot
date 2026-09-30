@@ -76,7 +76,7 @@
 ><title
 >Параметры LabPlot</title>
 <para
->Для получения более полной информации об общих параметрах, воспользуйтесь командой <userinput
+>Для получения более полной информации об общих параметрах воспользуйтесь командой <userinput
 ><command
 >labplot</command
 > <parameter
@@ -141,9 +141,11 @@
 >Смотрите также</title>
 <simplelist>
 <member
->Полная пользовательская документация доступна в Центре Справки KDE. Также возможно ввести адрес <ulink url="help:/labplot"
+>Полная пользовательская документация доступна в Центре справки KDE. Её также можно открыть по адресу <ulink url="help:/labplot"
 >help:/labplot</ulink
-> в &dolphin;, либо воспользоваться командой <userinput
+>: введите этот <acronym
+>URL</acronym
+> в &dolphin; или выполните команду <userinput
 ><command
 >khelpcenter</command
 > <parameter

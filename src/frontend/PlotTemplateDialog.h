@@ -35,6 +35,7 @@ public:
 	void showPreview();
 	static const QString format;
 	static QString defaultTemplateInstallPath();
+	static CartesianPlot* loadTemplate(const QString& templatePath, QString* errorMessage = nullptr);
 	CartesianPlot* generatePlot();
 
 private:

@@ -13,9 +13,12 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/spreadsheet/EquidistantValuesDialog.h"
 
+#include <cmath>
+
 void SpreadsheetGenerateDataTest::initTestCase() {
 	CommonTest::initTestCase();
 
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 	QLocale::setDefault(QLocale(QLocale::C));
 }
 
@@ -188,6 +191,39 @@ void SpreadsheetGenerateDataTest::testFixedNumberDoubleDateTime() {
 	QCOMPARE(column2->dateTimeAt(4), QDateTime::fromString(QStringLiteral("2023-05-01T00:00:04Z"), Qt::ISODate));
 }
 
+void SpreadsheetGenerateDataTest::testFixedIncrementDoubleDateTimePadding() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(1);
+	auto* numericColumn = sheet.column(0);
+	numericColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	auto* dateTimeColumn = sheet.column(1);
+	dateTimeColumn->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+
+	const auto start = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate);
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{numericColumn, dateTimeColumn});
+	dlg.setType(EquidistantValuesDialog::Type::FixedIncrement);
+	dlg.setIncrement(2);
+	dlg.setFromValue(0);
+	dlg.setToValue(4);
+	dlg.setIncrementDateTime(1);
+	dlg.setIncrementDateTimeUnit(EquidistantValuesDialog::DateTimeUnit::Second);
+	dlg.setFromDateTime(start.toMSecsSinceEpoch());
+	dlg.setToDateTime(start.addSecs(4).toMSecsSinceEpoch());
+	dlg.generate();
+
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(numericColumn->rowCount(), 5);
+	QCOMPARE(numericColumn->valueAt(0), 0.);
+	QCOMPARE(numericColumn->valueAt(1), 2.);
+	QCOMPARE(numericColumn->valueAt(2), 4.);
+	QVERIFY(std::isnan(numericColumn->valueAt(3)));
+	QVERIFY(std::isnan(numericColumn->valueAt(4)));
+	QCOMPARE(dateTimeColumn->rowCount(), 5);
+	QCOMPARE(dateTimeColumn->dateTimeAt(4), start.addSecs(4));
+}
+
 // **********************************************************
 // ******************** Fixed increment *********************
 // **********************************************************
@@ -219,6 +255,27 @@ void SpreadsheetGenerateDataTest::testFixedIncrementDouble() {
 	QCOMPARE(column->valueAt(2), 1.4);
 	QCOMPARE(column->valueAt(3), 1.6);
 	QCOMPARE(column->valueAt(4), 1.8);
+}
+
+void SpreadsheetGenerateDataTest::testFixedIncrementDoubleNonDivisible() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedIncrement);
+	dlg.setIncrement(2);
+	dlg.setFromValue(0);
+	dlg.setToValue(5);
+	dlg.generate();
+
+	QCOMPARE(sheet.rowCount(), 3);
+	QCOMPARE(column->valueAt(0), 0.);
+	QCOMPARE(column->valueAt(1), 2.);
+	QCOMPARE(column->valueAt(2), 4.);
 }
 
 /*!
@@ -307,6 +364,86 @@ void SpreadsheetGenerateDataTest::testFixedIncrementDateTime() {
 	QCOMPARE(column->dateTimeAt(2).date().year(), 2025);
 	QCOMPARE(column->dateTimeAt(3).date().year(), 2026);
 	QCOMPARE(column->dateTimeAt(4).date().year(), 2027);
+}
+
+void SpreadsheetGenerateDataTest::testFixedIncrementDateTimeUnits() {
+	const auto start = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00.000Z"), Qt::ISODate);
+	const QVector<EquidistantValuesDialog::DateTimeUnit> units{
+		EquidistantValuesDialog::DateTimeUnit::Year,
+		EquidistantValuesDialog::DateTimeUnit::Month,
+		EquidistantValuesDialog::DateTimeUnit::Day,
+		EquidistantValuesDialog::DateTimeUnit::Hour,
+		EquidistantValuesDialog::DateTimeUnit::Minute,
+		EquidistantValuesDialog::DateTimeUnit::Second,
+		EquidistantValuesDialog::DateTimeUnit::Millisecond,
+	};
+
+	for (const auto unit : units) {
+		Spreadsheet sheet(QStringLiteral("test"), false);
+		sheet.setColumnCount(1);
+		sheet.setRowCount(1);
+		auto* column = sheet.column(0);
+		column->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+
+		EquidistantValuesDialog dlg(&sheet);
+		dlg.setColumns(QVector<Column*>{column});
+		dlg.setType(EquidistantValuesDialog::Type::FixedIncrement);
+		dlg.setIncrementDateTime(2);
+		dlg.setIncrementDateTimeUnit(unit);
+		dlg.setFromDateTime(start.toMSecsSinceEpoch());
+		QDateTime end;
+		switch (unit) {
+		case EquidistantValuesDialog::DateTimeUnit::Year:
+			end = start.addYears(2);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Month:
+			end = start.addMonths(2);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Day:
+			end = start.addDays(2);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Hour:
+			end = start.addSecs(2 * 60 * 60);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Minute:
+			end = start.addSecs(2 * 60);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Second:
+			end = start.addSecs(2);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Millisecond:
+			end = start.addMSecs(2);
+			break;
+		}
+		dlg.setToDateTime(end.toMSecsSinceEpoch());
+		dlg.generate();
+
+		QCOMPARE(column->rowCount(), 2);
+		QCOMPARE(column->dateTimeAt(0), start);
+		QCOMPARE(column->dateTimeAt(1), end);
+	}
+}
+
+void SpreadsheetGenerateDataTest::testForcedDateTimeMode() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	const auto start = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate);
+	EquidistantValuesDialog dlg(&sheet, nullptr, true);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
+	dlg.setNumber(2);
+	dlg.setFromDateTime(start.toMSecsSinceEpoch());
+	dlg.setToDateTime(start.addDays(1).toMSecsSinceEpoch());
+	dlg.generate();
+
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(column->rowCount(), 2);
+	QCOMPARE(column->dateTimeAt(0), start);
+	QCOMPARE(column->dateTimeAt(1), start.addDays(1));
 }
 
 // **********************************************************
@@ -415,6 +552,7 @@ void SpreadsheetGenerateDataTest::testFixedNumberIncrementDateTime() {
 	dlg.setColumns(QVector<Column*>{column});
 	dlg.setType(EquidistantValuesDialog::Type::FixedNumberIncrement);
 	dlg.setNumber(5);
+	dlg.setIncrementDateTime(1);
 	dlg.setIncrementDateTimeUnit(EquidistantValuesDialog::DateTimeUnit::Year);
 	auto dateTime = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00Z"), Qt::ISODate);
 	dlg.setFromDateTime(dateTime.toMSecsSinceEpoch());
@@ -429,6 +567,74 @@ void SpreadsheetGenerateDataTest::testFixedNumberIncrementDateTime() {
 	QCOMPARE(column->dateTimeAt(2).date().year(), 2025);
 	QCOMPARE(column->dateTimeAt(3).date().year(), 2026);
 	QCOMPARE(column->dateTimeAt(4).date().year(), 2027);
+}
+
+void SpreadsheetGenerateDataTest::testFixedNumberIncrementDateTimeUnits() {
+	const auto start = QDateTime::fromString(QStringLiteral("2023-05-01T00:00:00.000Z"), Qt::ISODate);
+	const QVector<EquidistantValuesDialog::DateTimeUnit> units{
+		EquidistantValuesDialog::DateTimeUnit::Year,
+		EquidistantValuesDialog::DateTimeUnit::Month,
+		EquidistantValuesDialog::DateTimeUnit::Day,
+		EquidistantValuesDialog::DateTimeUnit::Hour,
+		EquidistantValuesDialog::DateTimeUnit::Minute,
+		EquidistantValuesDialog::DateTimeUnit::Second,
+		EquidistantValuesDialog::DateTimeUnit::Millisecond,
+	};
+
+	for (const auto unit : units) {
+		Spreadsheet sheet(QStringLiteral("test"), false);
+		sheet.setColumnCount(1);
+		sheet.setRowCount(1);
+		auto* column = sheet.column(0);
+		column->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+
+		EquidistantValuesDialog dlg(&sheet);
+		dlg.setColumns(QVector<Column*>{column});
+		dlg.setType(EquidistantValuesDialog::Type::FixedNumberIncrement);
+		dlg.setNumber(3);
+		dlg.setIncrementDateTime(2);
+		dlg.setIncrementDateTimeUnit(unit);
+		dlg.setFromDateTime(start.toMSecsSinceEpoch());
+		dlg.generate();
+
+		QDateTime expectedMiddle;
+		QDateTime expectedEnd;
+		switch (unit) {
+		case EquidistantValuesDialog::DateTimeUnit::Year:
+			expectedMiddle = start.addYears(2);
+			expectedEnd = start.addYears(4);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Month:
+			expectedMiddle = start.addMonths(2);
+			expectedEnd = start.addMonths(4);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Day:
+			expectedMiddle = start.addDays(2);
+			expectedEnd = start.addDays(4);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Hour:
+			expectedMiddle = start.addSecs(2 * 60 * 60);
+			expectedEnd = start.addSecs(4 * 60 * 60);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Minute:
+			expectedMiddle = start.addSecs(2 * 60);
+			expectedEnd = start.addSecs(4 * 60);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Second:
+			expectedMiddle = start.addSecs(2);
+			expectedEnd = start.addSecs(4);
+			break;
+		case EquidistantValuesDialog::DateTimeUnit::Millisecond:
+			expectedMiddle = start.addMSecs(2);
+			expectedEnd = start.addMSecs(4);
+			break;
+		}
+
+		QCOMPARE(column->rowCount(), 3);
+		QCOMPARE(column->dateTimeAt(0), start);
+		QCOMPARE(column->dateTimeAt(1), expectedMiddle);
+		QCOMPARE(column->dateTimeAt(2), expectedEnd);
+	}
 }
 
 // **********************************************************
@@ -520,6 +726,27 @@ void SpreadsheetGenerateDataTest::testFixedNumberBigIntToDouble() {
 	QCOMPARE(column->valueAt(2), 1.4);
 	QCOMPARE(column->valueAt(3), 1.6);
 	QCOMPARE(column->valueAt(4), 1.8);
+}
+
+void SpreadsheetGenerateDataTest::testFixedNumberNegativeFractional() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(1);
+	auto* column = sheet.column(0);
+	column->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	EquidistantValuesDialog dlg(&sheet);
+	dlg.setColumns(QVector<Column*>{column});
+	dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
+	dlg.setNumber(3);
+	dlg.setFromValue(-2.5);
+	dlg.setToValue(-1.5);
+	dlg.generate();
+
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(column->valueAt(0), -2.5);
+	QCOMPARE(column->valueAt(1), -2.0);
+	QCOMPARE(column->valueAt(2), -1.5);
 }
 
 QTEST_MAIN(SpreadsheetGenerateDataTest)

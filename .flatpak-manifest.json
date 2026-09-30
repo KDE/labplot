@@ -7,7 +7,9 @@
     "base-version": "6.11",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
-    "tags": ["nightly"],
+    "tags": [
+        "nightly"
+    ],
     "desktop-file-name-suffix": " (Nightly)",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.llvm21"
@@ -16,8 +18,8 @@
         "--share=network",
         "--share=ipc",
         "--socket=x11",
-	"--socket=cups",
-	"--socket=session-bus",
+        "--socket=cups",
+        "--socket=session-bus",
         "--device=dri",
         "--filesystem=host",
         "--filesystem=/tmp",
@@ -42,7 +44,7 @@
         "/app/cleanup-BaseApp.sh"
     ],
     "modules": [
-         {
+        {
             "name": "clang-headers",
             "buildsystem": "simple",
             "build-commands": [
@@ -79,8 +81,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-26.07.0.tar.xz",
-                    "sha256": "304832f48f8a47fdca90c6b6d1f684e68f37c10c9a0726f345f4ca9df4ca01e2"
+                    "url": "https://poppler.freedesktop.org/poppler-26.09.0.tar.xz",
+                    "sha256": "8059eadb6805340768f138c465b57f8164c92b4a0773c37ef031ea6c0d987b2e"
                 }
             ],
             "modules": [
@@ -100,36 +102,39 @@
                     ]
                 }
             ],
-            "cleanup": [ "/include", "/lib/pkgconfig" ]
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig"
+            ]
         },
         {
             "name": "analitza",
             "buildsystem": "cmake-ninja",
             "sources": [
-		    {
-			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/analitza-26.04.3.tar.xz",
-			    "sha256": "615b7c244a5baee0be5214c53b8ce37d0a54e69a6fd6b8438c30d7fda45b0746"
-		    }
-	    ]
+                {
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/release-service/26.08.1/src/analitza-26.08.1.tar.xz",
+                    "sha256": "4719c9c39d6f34862cafc6f5e4e3b0f88fb996167b46fea0415e0396ea545db8"
+                }
+            ]
         },
         {
             "name": "cantor",
             "buildsystem": "cmake-ninja",
             "sources": [
-		    {
-			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/26.04.3/src/cantor-26.04.3.tar.xz",
-			    "sha256": "f0e9734410070b6ecb54dfe042862405b4ef01d65533c0be0386d13b9fdf7250"
-		    }
-	    ]
+                {
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/release-service/26.08.1/src/cantor-26.08.1.tar.xz",
+                    "sha256": "5935a4cbd47d0dc84122d56e968c8bdd5416f8b9a69b8f97f42f791b526dc3b0"
+                }
+            ]
         },
         {
             "name": "gsl",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "http://ftpmirror.gnu.org/gnu/gsl/gsl-2.8.tar.gz",
+                    "url": "https://ftp.gnu.org/gnu/gsl/gsl-2.8.tar.gz",
                     "sha256": "6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190"
                 }
             ]
@@ -141,7 +146,7 @@
             "config-opts": [
                 "-DBUILD_TESTING=OFF",
                 "-DHDF5_BUILD_TOOLS=OFF"
-	    ],
+            ],
             "cleanup": [
                 "/cmake",
                 "/share/hdf5_examples"
@@ -151,7 +156,7 @@
                     "type": "archive",
                     "url": "https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz",
                     "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b",
-		    "strip-components": 2
+                    "strip-components": 2
                 }
             ]
         },
@@ -170,44 +175,47 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.4.tar.gz",
-                    "sha256": "227b637b91c9820ea96f39a65eb087f053de567d82f4338e2884f123f8183c55"
+                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.7.0.tar.gz",
+                    "sha256": "ce573bbea8e75b429f8c3d3e86498741ba3dc9628a1530d2f65268397ad059e8"
                 }
             ]
         },
         {
             "name": "libcerf",
-	    "buildsystem": "cmake-ninja",
-	    "builddir": true,
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/lib/cerf/-/archive/v3.3/libcerf-v3.3.tar.gz",
-                    "sha256": "7cbece26ad94bd375eb81fee2b540d0ef68bbeb0994358e57bd588173f96b8ec"
+                    "url": "https://jugit.fz-juelich.de/mlz/lib/cerf/-/archive/v3.8/libcerf-v3.8.tar.gz",
+                    "sha256": "451c07f9639055d340f473bdf4a4deef286e6eda52a395facce4280742430224"
                 }
             ]
         },
         {
             "name": "qtmqtt",
-	    "buildsystem": "cmake-ninja",
-	    "builddir": true,
-	    "sources": [
-		{
-                    "type": "archive",
-		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.10.3.tar.gz",
-		    "sha256": "a1759284b332f0b498b725be71addbc7f836b221b0c301d5013255606114c2a7"
-		}
-	    ]
-	},
-        {
-            "name": "kuserfeedback",
-	    "buildsystem": "cmake-ninja",
-	    "config-opts": [ "-DBUILD_TESTING=OFF", "-DENABLE_DOCS=OFF" ],
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
-                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a"
+                    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.11.2.tar.gz",
+                    "sha256": "40fd39b897356d78428df1132c10cc5f11e53102fb2f706f220c359a16f19b19"
+                }
+            ]
+        },
+        {
+            "name": "kuserfeedback",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DBUILD_TESTING=OFF",
+                "-DENABLE_DOCS=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/frameworks/6.30/kuserfeedback-6.30.0.tar.xz",
+                    "sha256": "c8a463c8e570f6d532cbe150732220575c6385df97c91399b6c84450691771ca"
                 }
             ]
         },
@@ -224,13 +232,13 @@
                     "url": "https://github.com/WizardMac/ReadStat/archive/v1.1.9.tar.gz",
                     "sha256": "89af7c785a7ae3d9a7af6e64a69028829a429f66a14b1b913be22816dc07ddca"
                 },
-		{
+                {
                     "type": "patch",
                     "path": "admin/patches/readstat-1.1.9.patch"
                 }
             ]
         },
-	{
+        {
             "name": "discount",
             "buildsystem": "simple",
             "build-commands": [
@@ -241,8 +249,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Orc/discount/archive/v3.0.0d.tar.gz",
-                    "sha256": "0ed8cc27ac5d46dc6a8beedd5e5673ac8b466a6474bdb7d35f37c815f670385f"
+                    "url": "https://github.com/Orc/discount/archive/v3.0.2.0.tar.gz",
+                    "sha256": "99f6db36d3fff6c99acd21d4c6096176d4ac8785eab319d0faf77ad995b8b7c5"
                 }
             ]
         },
@@ -251,8 +259,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/tbeu/matio/archive/v1.5.30.tar.gz",
-                    "sha256": "cd514c42e13bb39477e7d8fdeaa1502014c552a6a53f0678809cce6951db2bc1"
+                    "url": "https://github.com/tbeu/matio/archive/v1.6.0.tar.gz",
+                    "sha256": "82a3935fed47c19d3eb2976dd0526b133fc82f95ee835c77b7d236e353ca1bf6"
                 }
             ]
         },
@@ -263,8 +271,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Murmele/vector_blf.git",
-                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178",
-                    "commit": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
+                    "commit": "5fe16eb200a476a38fbe3f1d4281432ea5e6b976"
                 }
             ]
         },
@@ -324,32 +331,19 @@
             "name": "labplot",
             "buildsystem": "cmake-ninja",
             "config-opts": [
-		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
-		    "-DENABLE_TESTS=OFF",
-		    "-DENABLE_COMPILER_OPTIMIZATION=ON"
-	    ],
-	    "build-options": {
-		    "env": {
-			    "CLANG_INSTALL_DIR": "/app"
-		    }
-	    },
-	    "sources": [
+                "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
+                "-DENABLE_TESTS=OFF",
+                "-DENABLE_COMPILER_OPTIMIZATION=ON"
+            ],
+            "build-options": {
+                "env": {
+                    "CLANG_INSTALL_DIR": "/app"
+                }
+            },
+            "sources": [
                 {
                     "type": "dir",
                     "path": "."
-                }
-	    ],
-	    "modules": [
-                {
-                    "name": "patchelf",
-                    "buildsystem": "autotools",
-                    "sources": [
-                        {
-                            "type": "archive",
-                            "url": "https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0.tar.bz2",
-                            "sha256": "1952b2a782ba576279c211ee942e341748fdb44997f704dd53def46cd055470b"
-                        }
-                    ]
                 }
             ]
         }

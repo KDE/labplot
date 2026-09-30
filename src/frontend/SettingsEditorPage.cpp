@@ -9,13 +9,27 @@
 
 #include <KPageDialog>
 #include <KPageWidgetItem>
+#include <KLocalizedString>
 #include <KTextEditor/ConfigPage>
 #include <KTextEditor/Editor>
 
 #include "SettingsEditorPage.h"
+#include "backend/core/Settings.h"
+
+#include <QCheckBox>
+#include <QVBoxLayout>
 
 SettingsEditorPage::SettingsEditorPage(QWidget* parent) : SettingsPage(parent) {
-    
+	auto* layout = new QVBoxLayout(this);
+	m_autoShowOutputCheckBox = new QCheckBox(i18n("Automatically show output when a script produces output"), this);
+	m_autoShowOutputCheckBox->setChecked(Settings::group(QStringLiteral("ScriptEditor")).readEntry(QStringLiteral("AutoShowOutput"), true));
+	connect(m_autoShowOutputCheckBox, &QCheckBox::toggled, this, &SettingsEditorPage::changed);
+	layout->addWidget(m_autoShowOutputCheckBox);
+	m_saveOutputCheckBox = new QCheckBox(i18n("Save script output in project files"), this);
+	m_saveOutputCheckBox->setChecked(Settings::group(QStringLiteral("ScriptEditor")).readEntry(QStringLiteral("SaveOutput"), true));
+	connect(m_saveOutputCheckBox, &QCheckBox::toggled, this, &SettingsEditorPage::changed);
+	layout->addWidget(m_saveOutputCheckBox);
+	layout->addStretch();
 }
 
 void SettingsEditorPage::addSubPages(KPageWidgetItem* editorRootFrame, KPageDialog* settingsDialog) {
@@ -37,6 +51,9 @@ QList<Settings::Type> SettingsEditorPage::applySettings() {
 
 	for (auto* page : m_editorPages)
 		page->apply();
+	auto group = Settings::group(QStringLiteral("ScriptEditor"));
+	group.writeEntry(QStringLiteral("AutoShowOutput"), m_autoShowOutputCheckBox->isChecked());
+	group.writeEntry(QStringLiteral("SaveOutput"), m_saveOutputCheckBox->isChecked());
 
 	return {Settings::Type::ScriptEditor};
 }
@@ -44,6 +61,8 @@ QList<Settings::Type> SettingsEditorPage::applySettings() {
 void SettingsEditorPage::restoreDefaults() {
 	for (auto* page : m_editorPages)
 		page->defaults();
+	m_autoShowOutputCheckBox->setChecked(true);
+	m_saveOutputCheckBox->setChecked(true);
 }
 
 void SettingsEditorPage::changed() {

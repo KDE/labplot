@@ -23,6 +23,7 @@ private Q_SLOTS:
 	void testTrapezoid_area();
 	void test3Point_integral();
 	void test4Point_integral();
+	void testNaNInfHandling();
 	// performance
 	void testPerformanceRectangle();
 	void testPerformanceTrapezoid();

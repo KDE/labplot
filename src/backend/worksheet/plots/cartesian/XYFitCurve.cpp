@@ -1055,6 +1055,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	// DEBUG(Q_FUNC_INFO);
 	const size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
+	double* yVector = ((struct data*)params)->y;
 	double* weight = ((struct data*)params)->weight;
 	auto modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
@@ -1070,11 +1071,20 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	// Y_i = model and the x_j are the parameters
 	double x;
 
+	for (size_t i = 0; i < n; ++i) {
+		if (!std::isfinite(xVector[i]) || !std::isfinite(yVector[i]) || !std::isfinite(weight[i])) {
+			for (unsigned int j = 0; j < (unsigned int)paramNames->size(); ++j)
+				gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
+		}
+	}
+
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {
 		case nsl_fit_model_polynomial: // Y(x) = c0 + c1*x + ... + cn*x^n
 			for (size_t i = 0; i < n; i++) {
+				if (!std::isfinite(xVector[i]) || !std::isfinite(yVector[i]) || !std::isfinite(weight[i]))
+					continue;
 				x = xVector[i];
 				for (unsigned int j = 0; j < (unsigned int)paramNames->size(); ++j) {
 					if (fixed[j])

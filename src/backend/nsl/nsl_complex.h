@@ -21,7 +21,8 @@
 
 /* C++ including this header */
 #ifdef __cplusplus
-#define COMPLEX double _Complex
+#include <complex>
+#define COMPLEX std::complex<double>
 #else /* C */
 #include <complex.h>
 #define COMPLEX double complex

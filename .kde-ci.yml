@@ -42,7 +42,7 @@ Dependencies:
 Environment:
   KDECI_BUILD: "TRUE"
   CODESIGN_ALLOCATE_DEBUG: "1"
-  VERBOSE: "1"
+  VERBOSE: "0"
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/config/global.yml
 Options:
@@ -52,3 +52,6 @@ Options:
   require-passing-tests-on: ['@all']
   release-build: True
   cmake-options: '-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON'
+  core-usage-limit: 8
+  gcovr-arguments: '--exclude "src/3rdparty/.*" --exclude "tests/.*" --gcov-ignore-parse-errors=suspicious_hits.warn'
+

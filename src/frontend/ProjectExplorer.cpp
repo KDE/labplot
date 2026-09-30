@@ -20,6 +20,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/Worksheet.h"
 #include "frontend/core/ContentDockWidget.h"
+#include "frontend/spreadsheet/PlotDataDialog.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -35,6 +36,7 @@
 #include <QDrag>
 #include <QHeaderView>
 #include <QLineEdit>
+#include <QActionGroup>
 #include <QMenu>
 #include <QMimeData>
 #include <QPushButton>
@@ -152,10 +154,11 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 
 	// for the current selection determine the selected aspects
 	const auto& items = m_treeView->selectionModel()->selectedIndexes();
-	const int selectedAspectsCount = items.size() / 4; // 4 columns in the tree view, divide by 4 to get the number of rows/aspects
+	const auto columnCount = m_treeView->model()->columnCount();
+	const int selectedAspectsCount = items.size() / columnCount; // divide by the number of columns in the tree view to get the number of rows/aspects
 	QVector<AbstractAspect*> selectedAspects;
 	for (int i = 0; i < selectedAspectsCount; ++i) {
-		const auto& item = items.at(i * 4);
+		const auto& item = items.at(i * columnCount);
 		selectedAspects << static_cast<AbstractAspect*>(item.internalPointer());
 	}
 
@@ -175,6 +178,24 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 	} else if (selectedAspectsCount > 1) { // multiple aspects are selected
 		menu = new QMenu(this);
 
+		// lambda function to check if all selected aspects are of a specific type
+		auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
+			// for WorksheetElements, check the inheritance and not the exact type
+			if (type == AspectType::WorksheetElement) {
+				for (const auto* aspect : selectedAspects) {
+					if (!aspect->inherits<WorksheetElement>())
+						return false;
+				}
+				return true;
+			}
+
+			for (const auto* aspect : selectedAspects) {
+				if (aspect->type() != type)
+					return false;
+			}
+			return true;
+		};
+
 		// check if the selected objects have the same parent and 
 		// show parent's context menu for columns to allow plot data, etc.
 		bool sameParent = true;
@@ -191,26 +212,10 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 			}
 		}
 
+		const bool allColumns = checkAspectType(AspectType::Column);
+
 		if (sameParent && parentAspect) {
-			// lambda function to check if all selected aspects are of a specific type
-			auto checkAspectType = [&selectedAspects](AspectType type) -> bool {
-				// for WorksheetElements, check the inheritance and not the exact type
-				if (type == AspectType::WorksheetElement) {
-					for (const auto* aspect : selectedAspects) {
-						if (!aspect->inherits<WorksheetElement>())
-							return false;
-					}
-					return true;
-				}
-
-				for (const auto* aspect : selectedAspects) {
-					if (aspect->type() != type)
-						return false;
-				}
-				return true;
-			};
-
-			if (checkAspectType(AspectType::Column)) { // check columns
+			if (allColumns) { // check columns
 				if (parentAspect->type() == AspectType::Spreadsheet) {
 					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
 					spreadsheet->fillColumnsContextMenu(menu);
@@ -242,6 +247,33 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 					worksheet->fillElementsContextMenu(menu);
 					menu->addSeparator();
 				}
+			}
+		} else if (allColumns) {
+			// the selected columns belong to different parents (e.g. columns coming from different spreadsheets) ->
+			// other column-specific actions require all columns to belong to the same spreadsheet/notebook,
+			// so we only offer the "Plot Data" action here.
+			QVector<Column*> columns;
+			for (const auto* aspect : selectedAspects) {
+				const auto* column = static_cast<const Column*>(aspect);
+				if (!column->isPlottable()) {
+					columns.clear();
+					break;
+				}
+				columns << const_cast<Column*>(column);
+			}
+
+			if (!columns.isEmpty()) {
+				auto* plotDataMenu = new QMenu(i18n("Plot Data"), menu);
+				auto* plotDataActionGroup = new QActionGroup(menu);
+				CartesianPlot::fillAddNewPlotMenu(plotDataMenu, plotDataActionGroup);
+				connect(plotDataActionGroup, &QActionGroup::triggered, this, [this, columns](QAction* action) {
+					const auto type = static_cast<Plot::PlotType>(action->data().toInt());
+					auto* dlg = new PlotDataDialog(m_project, type);
+					dlg->setSelectedColumns(columns);
+					dlg->exec();
+				});
+				menu->addMenu(plotDataMenu);
+				menu->addSeparator();
 			}
 		}
 
@@ -899,19 +931,20 @@ void ProjectExplorer::selectionChanged(const QItemSelection& selected, const QIt
 	QModelIndex index;
 	AbstractAspect* aspect = nullptr;
 
-	// there are four model indices in each row
-	//-> divide by 4 to obtain the number of selected rows (=aspects)
+	// there are as many model indices in each row as there are columns in the tree view
+	//-> divide by the column count to obtain the number of selected rows (=aspects)
+	const auto columnCount = m_treeView->model()->columnCount();
 	const auto& sitems = selected.indexes();
-	for (int i = 0; i < sitems.size() / 4; ++i) {
-		index = sitems.at(i * 4);
+	for (int i = 0; i < sitems.size() / columnCount; ++i) {
+		index = sitems.at(i * columnCount);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		QDEBUG("sitems ASPECT =" << aspect)
 		aspect->setSelected(true);
 	}
 
 	const auto& ditems = deselected.indexes();
-	for (int i = 0; i < ditems.size() / 4; ++i) {
-		index = ditems.at(i * 4);
+	for (int i = 0; i < ditems.size() / columnCount; ++i) {
+		index = ditems.at(i * columnCount);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		QDEBUG("ditems ASPECT =" << aspect)
 		aspect->setSelected(false);
@@ -1018,7 +1051,8 @@ void ProjectExplorer::deleteSelected() {
 	if (status == KMessageBox::SecondaryAction)
 		return;
 
-	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size() / 4));
+	m_project->beginMacro(
+		i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size() / columnCount));
 
 	// determine aspects to be deleted:
 	// it's enough to delete parent items in the selection only,

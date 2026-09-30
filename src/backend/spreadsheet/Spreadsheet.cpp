@@ -323,6 +323,9 @@ void Spreadsheet::updateLocale() {
  * @param new_size The new number of rows in the spreadsheet.
  */
 void Spreadsheet::setRowCount(int new_size) {
+	if (columnCount() == 0)
+		return;
+
 	int current_size = rowCount();
 	if (new_size > current_size)
 		insertRows(current_size, new_size - current_size);
@@ -677,7 +680,14 @@ void Spreadsheet::insertColumns(int before, int count) {
 
 	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
 	const int cols = columnCount();
-	const int rows = rowCount();
+	int rows = rowCount();
+
+	if (cols == 0) {
+		KConfig config;
+		KConfigGroup group = config.group(QLatin1String("Spreadsheet"));
+		rows = group.readEntry(QLatin1String("RowCount"), 100);
+	}
+
 	const int last = before + count - 1;
 	Q_EMIT aspectsAboutToBeInserted(before, last);
 	for (int i = 0; i < count; i++) {

@@ -81,6 +81,7 @@ private Q_SLOTS:
 
 protected:
 	void updateVerticalHeader();
+	void updateRowCount();
 
 private:
 	Spreadsheet* m_spreadsheet;

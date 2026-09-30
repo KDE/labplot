@@ -100,6 +100,7 @@ private Q_SLOTS:
 	void testInsertColumns();
 	void testRemoveColumns();
 	void testRemoveColumns2();
+	void testRemoveAllColumnsRowCount();
 
 	void testInsertRowsBegin(); // insert row at the beginning
 	void testRemoveRowsBegin(); // remove first row
@@ -122,6 +123,10 @@ private Q_SLOTS:
 	void testStatisticsSpreadsheetChangeMetrics();
 	void testStatisticsSpreadsheetChildIndex();
 	void testStatisticsSpreadsheetChildIndexAfterUndoRedo();
+	void testStatisticsSpreadsheetUpdateOnDataChange();
+	void testStatisticsSpreadsheetUpdateOnMaskChange();
+	void testStatisticsSpreadsheetUpdateOnColumnAddRemove();
+	void testStatisticsSpreadsheetSaveLoad();
 
 	// clearing and data input
 	void testClearColumns();

@@ -29,8 +29,12 @@ const char* nsl_sf_window_type_name[] = {i18n("Rectangular (Uniform)"),
 										 i18n("Lanczos")};
 
 int nsl_sf_apply_window(double data[], size_t N, nsl_sf_window_type type) {
-	if (N == 0)
+	if (N == 0 || data == NULL)
 		return -1;
+	for (size_t i = 0; i < N; ++i) {
+		if (!isfinite(data[i]))
+			return -1;
+	}
 
 	size_t i;
 	switch (type) {

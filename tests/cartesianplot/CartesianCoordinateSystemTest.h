@@ -20,6 +20,9 @@ private Q_SLOTS:
 	void testMapLogicalToSceneLines();
 	void testMapLogicalToSceneLinesClipping();
 	void testMapLogicalToSceneLinesPerformance();
+	void testMapLogicalToScenePoints();
+	void testMapSceneToLogicalPoints();
+	void testScalePropertiesAndValidity();
 };
 
 #endif // CARTESIANCOORDINATESYSTEMTEST_H

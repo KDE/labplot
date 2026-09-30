@@ -696,6 +696,10 @@ void CartesianPlot::fillFitMenu(QMenu* menu, QActionGroup* actionGroup) {
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
 	menu->addAction(action);
 
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Piecewise Linear"), actionGroup);
+	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear));
+	menu->addAction(action);
+
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Power"), actionGroup);
 	action->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
 	menu->addAction(action);
@@ -2046,6 +2050,7 @@ void CartesianPlot::addAnalysisPlot(const QAction* action) {
 	const auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	switch (type) {
 	case XYAnalysisCurve::AnalysisAction::FitLinear:
+	case XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear:
 	case XYAnalysisCurve::AnalysisAction::FitPower:
 	case XYAnalysisCurve::AnalysisAction::FitExp1:
 	case XYAnalysisCurve::AnalysisAction::FitExp2:
@@ -2233,7 +2238,6 @@ void CartesianPlot::addLineSimplificationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYLineSimplificationCurve(i18n("Line Simplification")));
@@ -2247,7 +2251,6 @@ void CartesianPlot::addDifferentiationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYDifferentiationCurve(i18n("Differentiation")));
@@ -2261,7 +2264,6 @@ void CartesianPlot::addIntegrationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYIntegrationCurve(i18n("Integration")));
@@ -2275,7 +2277,6 @@ void CartesianPlot::addInterpolationCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYInterpolationCurve(i18n("Interpolation")));
@@ -2289,7 +2290,6 @@ void CartesianPlot::addSmoothCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYSmoothCurve(i18n("Smooth")));
@@ -2303,46 +2303,54 @@ void CartesianPlot::addBaselineCorrectionCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYBaselineCorrectionCurve(i18n("Baseline Correction")));
 }
 
 void CartesianPlot::addFitCurve(const QAction* action) {
+	auto type = XYAnalysisCurve::AnalysisAction::FitLinear;
+	if (action)
+		type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
+	else
+		DEBUG(Q_FUNC_INFO << "WARNING: no action provided, using default linear fit")
+
 	const auto& selectedCurves = this->selectedCurves();
 	if (!selectedCurves.isEmpty()) {
 		for (const auto* curCurve : selectedCurves) {
-			auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
-			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
-			curve->setDataSourceCurve(curCurve);
+			XYAnalysisCurve* analysisCurve = nullptr;
+			if (type != XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear) {
+				auto* fitCurve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
+				analysisCurve = fitCurve;
 
-			// set the fit model category and type
-			if (action) {
-				auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
-				curve->initFitData(type);
-			} else
-				DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
+				fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+				fitCurve->setDataSourceCurve(curCurve);
+				fitCurve->initFitData(type); // set the fit model category and type
 
-			// fit with weights for y if the curve has error bars for y
-			if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
-				auto fitData = curve->fitData();
-				fitData.yWeightsType = nsl_fit_weight_instrumental;
-				curve->setFitData(fitData);
-				curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
+				// fit with weights for y if the curve has error bars for y
+				if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
+					auto fitData = fitCurve->fitData();
+					fitData.yWeightsType = nsl_fit_weight_instrumental;
+					fitCurve->setFitData(fitData);
+					fitCurve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
+				}
+			} else {
+				auto* fitCurve = new XYPiecewiseLinearFitCurve(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
+				analysisCurve = fitCurve;
+				fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+				fitCurve->setDataSourceCurve(curCurve);
 			}
 
-			curve->recalculate();
-
-			// add the child after the fit was calculated so the dock widgets gets the fit results
-			// and call retransform() after this to calculate and to paint the data points of the fit-curve
-			this->addChild(curve);
-			curve->retransform();
+			this->addChild(analysisCurve);
 		}
 	} else {
-		auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
-		curve->initFitData(XYAnalysisCurve::AnalysisAction::FitLinear);
-		this->addChild(curve);
+		if (type == XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear)
+			this->addChild(new XYPiecewiseLinearFitCurve(i18nc("Curve fitting", "Fit")));
+		else {
+			auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
+			curve->initFitData(type);
+			this->addChild(curve);
+		}
 	}
 }
 
@@ -2354,7 +2362,6 @@ void CartesianPlot::addFourierFilterCurve() {
 			curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 			curve->setDataSourceCurve(curCurve);
 			this->addChild(curve);
-			curve->recalculate();
 		}
 	} else
 		this->addChild(new XYFourierFilterCurve(i18n("Fourier Filter")));
@@ -2728,6 +2735,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 	if (isLoading())
 		return;
+
+	// call recalculate for analysis curves
+	auto analysisCurve = dynamic_cast<const XYAnalysisCurve*>(child);
+	if (analysisCurve)
+		const_cast<XYAnalysisCurve*>(analysisCurve)->recalculate();
 
 	auto rangeChanged = false;
 	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
@@ -3909,21 +3921,33 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 
 		for (auto* axis : q->children<Axis>()) {
 			QDEBUG(Q_FUNC_INFO << ", auto-scale axis" << axis->name() << "of scale" << axis->scale())
-			// use ranges of axis
-			auto range = axis->range();
-			range.setScale(rangep.range.scale());
 
 			int axisIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dim);
-			if (axis->rangeType() != Axis::RangeType::Auto || axisIndex != i)
+			auto axisRangeType = axis->rangeType();
+			if ((axisRangeType != Axis::RangeType::Auto && axisRangeType != Axis::RangeType::AutoData) || axisIndex != i)
 				continue;
 			if ((dim == Dimension::Y && axis->orientation() != Axis::Orientation::Vertical)
 				|| (dim == Dimension::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
-			if (!qFuzzyIsNull(deltaMax))
-				range.setEnd(rangep.range.end());
-			if (!qFuzzyIsNull(deltaMin))
-				range.setStart(rangep.range.start());
+			// Determine which range to use: plot range for Auto, dataRange for AutoData
+			Range<double> sourceRange = (axisRangeType == Axis::RangeType::Auto) ? rangep.range : dataRange(dim, i);
+
+			// use ranges of axis
+			auto range = axis->range();
+			range.setScale(rangep.range.scale());
+
+			if (axisRangeType == Axis::RangeType::Auto) {
+				if (!qFuzzyIsNull(deltaMax))
+					range.setEnd(sourceRange.end());
+				if (!qFuzzyIsNull(deltaMin))
+					range.setStart(sourceRange.start());
+			} else {
+				if (!qFuzzyCompare(sourceRange.start(), range.start()))
+					range.setStart(sourceRange.start());
+				if (!qFuzzyCompare(sourceRange.end(), range.end()))
+					range.setEnd(sourceRange.end());
+			}
 
 			axis->setUndoAware(false);
 			axis->setSuppressRetransform(true);
@@ -5835,6 +5859,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyCorrelationCurve")) {
 			auto* curve = new XYCorrelationCurve(QString());
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				delete curve;
+				return false;
+			}
+		} else if (reader->name() == QLatin1String("xyPiecewiseLinearFitCurve")) {
+			auto* curve = new XYPiecewiseLinearFitCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {

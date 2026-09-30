@@ -318,7 +318,6 @@ void QQPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 QQPlotPrivate::QQPlotPrivate(QQPlot* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
-	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
 }
 

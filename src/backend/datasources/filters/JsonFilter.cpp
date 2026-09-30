@@ -48,6 +48,8 @@ void JsonFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataS
  * reads the content of the file \c fileName.
  */
 void JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 

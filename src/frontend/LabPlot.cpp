@@ -13,6 +13,7 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "frontend/AboutDialog.h"
+#include "frontend/CLIProcessor.h"
 
 #include <KAboutData>
 #include <KColorSchemeManager>
@@ -116,24 +117,19 @@ int main(int argc, char* argv[]) {
 
 	QCommandLineParser parser;
 
-	QCommandLineOption nosplashOption(QStringLiteral("no-splash"), i18n("Disable splash screen"));
-	parser.addOption(nosplashOption);
-
-	QCommandLineOption presenterOption(QStringLiteral("presenter"), i18n("Start in the presenter mode"));
-	parser.addOption(presenterOption);
-
-	parser.addPositionalArgument(QStringLiteral("+[file]"), i18n("Open a project file."));
-
+	// configure all CLI options
+	configureCLI(parser);
 
 	aboutData.setupCommandLine(&parser);
 	parser.process(app);
 	aboutData.processCommandLine(&parser);
 
+	// check if we should run in headless mode (CLI-only, no GUI)
+	if (isHeadlessMode(parser))
+		return processCLI(parser); // exit with its return code of the processor in the headless mode
 
-	const auto args = parser.positionalArguments();
-	QString fileName;
-	if (args.count() > 0)
-		fileName = args[0];
+	// GUI mode: get input file from CLI
+	QString fileName = getInputFile(parser);
 
 	if (!fileName.isEmpty()) {
 		// determine the absolute file path in order to properly save it in MainWin in "Recent Files"
@@ -154,7 +150,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	QSplashScreen* splash = nullptr;
-	if (!parser.isSet(nosplashOption)) {
+	if (!parser.isSet(CLI_NO_SPLASH)) {
 		const QString& file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("splash.png"));
 		splash = new QSplashScreen(QPixmap(file));
 		splash->show();
@@ -222,7 +218,7 @@ int main(int argc, char* argv[]) {
 		delete splash;
 	}
 
-	if (parser.isSet(presenterOption))
+	if (parser.isSet(CLI_PRESENTER))
 		window->showPresenter();
 
 	return app.exec();

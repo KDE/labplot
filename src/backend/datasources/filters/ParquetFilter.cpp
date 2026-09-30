@@ -113,6 +113,8 @@ QString ParquetFilter::fileInfoString(const QString& fileName) {
 }
 
 void ParquetFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 

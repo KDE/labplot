@@ -267,6 +267,65 @@ void NSLGeomTest::testLineSimMorse() {
 #endif
 
 // ##############################################################################
+// #################  NaN/Inf handling
+// ##############################################################################
+
+void NSLGeomTest::testNaNInfHandling() {
+	double nan = std::numeric_limits<double>::quiet_NaN();
+	double inf = std::numeric_limits<double>::infinity();
+
+	// Test point-point distance with NaN
+	double result = nsl_geom_point_point_dist(nan, 0, 1, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_point_dist(0, nan, 1, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_point_dist(0, 0, nan, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_point_dist(0, 0, 1, nan);
+	QVERIFY(std::isnan(result));
+
+	// Test point-point distance with Inf
+	result = nsl_geom_point_point_dist(inf, 0, 1, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_point_dist(0, inf, 1, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_point_dist(0, 0, inf, 1);
+	QVERIFY(std::isnan(result));
+
+	// Test point-point distance 3D with NaN
+	result = nsl_geom_point_point_dist3(nan, 0, 0, 1, 1, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_point_dist3(0, nan, 0, 1, 1, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_point_dist3(0, 0, nan, 1, 1, 1);
+	QVERIFY(std::isnan(result));
+
+	// Test point-line distance with NaN
+	result = nsl_geom_point_line_dist(nan, 0, 1, 0, 0.5, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_line_dist(0, nan, 1, 0, 0.5, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_line_dist(0, 0, nan, 0, 0.5, 1);
+	QVERIFY(std::isnan(result));
+
+	// Test point-line distance Y with NaN
+	result = nsl_geom_point_line_dist_y(inf, 0, 1, 0, 0.5, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_point_line_dist_y(0, inf, 1, 0, 0.5, 1);
+	QVERIFY(std::isnan(result));
+
+	// Test three-point area with Inf
+	result = nsl_geom_three_point_area(inf, 0, 1, 0, 2, 1);
+	QVERIFY(std::isnan(result));
+	result = nsl_geom_three_point_area(0, inf, 1, 0, 2, 1);
+	QVERIFY(std::isnan(result));
+
+	// Test valid input still works
+	result = nsl_geom_point_point_dist(0, 0, 3, 4);
+	QCOMPARE(result, 5.0);
+}
+
+// ##############################################################################
 // #################  performance
 // ##############################################################################
 

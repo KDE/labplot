@@ -27,23 +27,29 @@ private Q_SLOTS:
 	void testFixedNumberBigInt();
 	void testFixedNumberDateTime();
 	void testFixedNumberDoubleDateTime();
+	void testFixedIncrementDoubleDateTimePadding();
 
 	// fixed increment between the values
 	void testFixedIncrementDouble();
+	void testFixedIncrementDoubleNonDivisible();
 	void testFixedIncrementInt();
 	void testFixedIncrementBigInt();
 	void testFixedIncrementDateTime();
+	void testFixedIncrementDateTimeUnits();
+	void testForcedDateTimeMode();
 
 	// fixed number of values and increment
 	void testFixedNumberIncrementDouble();
 	void testFixedNumberIncrementInt();
 	void testFixedNumberIncrementBigInt();
 	void testFixedNumberIncrementDateTime();
+	void testFixedNumberIncrementDateTimeUnits();
 
 	// column mode conversion
 	void testFixedNumberIntToBigInt();
 	void testFixedNumberIntToDouble();
 	void testFixedNumberBigIntToDouble();
+	void testFixedNumberNegativeFractional();
 };
 
 #endif

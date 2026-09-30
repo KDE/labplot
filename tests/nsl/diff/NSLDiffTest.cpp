@@ -10,6 +10,8 @@
 
 #include "NSLDiffTest.h"
 #include <QScopedArrayPointer>
+#include <cmath>
+#include <limits>
 
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
@@ -21,6 +23,28 @@ extern "C" {
 
 const int N = 7;
 double dxdata[] = {1, 2, 4, 8, 16, 32, 64};
+
+void NSLDiffTest::testNaNInfHandling() {
+	double xdata[] = {1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0};
+	double ydata[] = {1.0, 4.0, 16.0, 64.0, 256.0, 1024.0, 4096.0};
+	double nan = std::numeric_limits<double>::quiet_NaN();
+	double inf = std::numeric_limits<double>::infinity();
+
+	xdata[2] = nan;
+	QCOMPARE(nsl_diff_first_deriv(xdata, ydata, N, 2), -1);
+	QCOMPARE(nsl_diff_second_deriv(xdata, ydata, N, 2), -1);
+
+	for (int i = 0; i < N; ++i)
+		xdata[i] = (double)(i + 1);
+	for (int i = 0; i < N; ++i)
+		ydata[i] = (double)(i + 1);
+	ydata[3] = inf;
+	QCOMPARE(nsl_diff_first_deriv(xdata, ydata, N, 2), -1);
+	QCOMPARE(nsl_diff_first_deriv_avg(xdata, ydata, N), -1);
+
+	QCOMPARE(nsl_diff_first_central(1.0, 1.0, 2.0, nan), std::numeric_limits<double>::quiet_NaN());
+	QCOMPARE(nsl_diff_first_central(1.0, 1.0, inf, 2.0), std::numeric_limits<double>::quiet_NaN());
+}
 
 void NSLDiffTest::testFirst_order2() {
 	double ydata[] = {1, 4, 16, 64, 256, 1024, 4096};

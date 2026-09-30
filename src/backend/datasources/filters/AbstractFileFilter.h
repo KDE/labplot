@@ -91,6 +91,8 @@ Q_SIGNALS:
 	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process
 
 protected:
+	bool validateFileName(const QString& fileName);
+
 	const FileType m_type;
 	QString m_lastError;
 	QStringList m_lastWarnings;

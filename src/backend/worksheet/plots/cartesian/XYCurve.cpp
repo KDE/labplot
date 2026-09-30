@@ -763,7 +763,6 @@ void XYCurve::navigateTo() {
 XYCurvePrivate::XYCurvePrivate(XYCurve* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
-	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setAcceptHoverEvents(false);
 }

@@ -56,7 +56,6 @@ plotArea1.setVerticalPadding(Worksheet.convertToSceneUnits(0.8, Worksheet.Unit.C
 plotArea1.setRightPadding(Worksheet.convertToSceneUnits(0.8, Worksheet.Unit.Centimeter))
 plotArea1.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-border1 = plotArea1.borderType()
 border1 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea1.setBorderType(border1)
 
@@ -67,19 +66,18 @@ rangeY1.setRange(300, 650)
 plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
 plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
-for axis in plotArea1.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        te10.setText("index")
-        axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
-        axis.setLabelsFont(fo7)
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        te10.setText("data")
-        axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
-        axis.setLabelsFont(fo7)
+x_axis = plotArea1.horizontalAxis()
+te10.setText("index")
+x_axis.title().setText(te10.toHtml())
+x_axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
+x_axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
+x_axis.setLabelsFont(fo7)
+y_axis = plotArea1.verticalAxis()
+te10.setText("data")
+y_axis.title().setText(te10.toHtml())
+y_axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
+y_axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
+y_axis.setLabelsFont(fo7)
 
 worksheet.addChild(plotArea1)
 
@@ -91,7 +89,7 @@ config11.setYColumn(spreadsheet.column(1))
 config11.setLineType(XYCurve.LineType.NoLine)
 config11.symbol().setStyle(Symbol.Style.Circle)
 config11.symbol().setSize(Worksheet.convertToSceneUnits(5, Worksheet.Unit.Point))
-config11.setValuesType(XYCurve.ValuesType.NoValues)
+config11.value().setType(Value.Type.NoValues)
 config11.background().setPosition(Background.Position.No)
 
 config12 = XYSmoothCurve("smooth 1st iteration")
@@ -107,7 +105,7 @@ sData11.autoRange = True
 config12.setSmoothData(sData11)
 config12.setLineInterpolationPointsCount(1)
 config12.symbol().setStyle(Symbol.Style.NoSymbols)
-config12.setValuesType(XYCurve.ValuesType.NoValues)
+config12.value().setType(Value.Type.NoValues)
 config12.background().setPosition(Background.Position.No)
 
 config13 = XYSmoothCurve("smooth 2nd iteration")
@@ -123,7 +121,7 @@ sData12.autoRange = True
 config13.setSmoothData(sData12)
 config13.setLineInterpolationPointsCount(1)
 config13.symbol().setStyle(Symbol.Style.NoSymbols)
-config13.setValuesType(XYCurve.ValuesType.NoValues)
+config13.value().setType(Value.Type.NoValues)
 config13.background().setPosition(Background.Position.No)
 
 legend1 = CartesianPlotLegend("Legend1")
@@ -142,7 +140,6 @@ plotArea2.setVerticalPadding(Worksheet.convertToSceneUnits(0.8, Worksheet.Unit.C
 plotArea2.setRightPadding(Worksheet.convertToSceneUnits(0.8, Worksheet.Unit.Centimeter))
 plotArea2.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-border2 = plotArea2.borderType()
 border2 = CartesianPlot.BorderTypeFlags.BorderLeft | CartesianPlot.BorderTypeFlags.BorderTop | CartesianPlot.BorderTypeFlags.BorderRight | CartesianPlot.BorderTypeFlags.BorderBottom
 plotArea2.setBorderType(border2)
 
@@ -153,19 +150,18 @@ rangeY2.setRange(-120, 100)
 plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
 plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
-for axis in plotArea2.children(AspectType.Axis):
-    if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
-        te10.setText("index")
-        axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
-        axis.setLabelsFont(fo7)
-    elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
-        te10.setText("rough")
-        axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
-        axis.setLabelsFont(fo7)
+x_axis = plotArea2.horizontalAxis()
+te10.setText("index")
+x_axis.title().setText(te10.toHtml())
+x_axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
+x_axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
+x_axis.setLabelsFont(fo7)
+y_axis = plotArea2.verticalAxis()
+te10.setText("rough")
+y_axis.title().setText(te10.toHtml())
+y_axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
+y_axis.minorGridLine().setStyle(Qt.PenStyle.DashLine)
+y_axis.setLabelsFont(fo7)
 
 worksheet.addChild(plotArea2)
 
@@ -176,7 +172,7 @@ config21.setXColumn(spreadsheet.column(0))
 config21.setYColumn(config12.roughsColumn())
 config21.setLineType(XYCurve.LineType.Line)
 config21.symbol().setStyle(Symbol.Style.NoSymbols)
-config21.setValuesType(XYCurve.ValuesType.NoValues)
+config21.value().setType(Value.Type.NoValues)
 config21.background().setPosition(Background.Position.No)
 
 config22 = XYCurve("rough 2nd iteration")
@@ -186,7 +182,7 @@ config22.setXColumn(spreadsheet.column(0))
 config22.setYColumn(config13.roughsColumn())
 config22.setLineType(XYCurve.LineType.Line)
 config22.symbol().setStyle(Symbol.Style.NoSymbols)
-config22.setValuesType(XYCurve.ValuesType.NoValues)
+config22.value().setType(Value.Type.NoValues)
 config22.background().setPosition(Background.Position.No)
 
 legend2 = CartesianPlotLegend("Legend2")

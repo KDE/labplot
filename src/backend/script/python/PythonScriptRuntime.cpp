@@ -10,6 +10,7 @@
 
 #include "PythonScriptRuntime.h"
 #include "PythonLogger.h"
+#include "PythonScriptingHelper.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/script/Script.h"
@@ -496,7 +497,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	if (!compiled) {
 		if (PyErr_Occurred()) {
 			m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
-			PyErr_Print(); // Print the error to our output in ScriptEditor
+			printPyError(); // Print the error to our output in ScriptEditor
 			PyGILState_Release(gil);
 			return true; // This is ok
 		}
@@ -509,11 +510,12 @@ bool PythonScriptRuntime::exec(const QString& code) {
 
 	// Evaluate the python bytecode
 	auto* result = PyEval_EvalCode(compiled, m_localDict, m_localDict);
+
 	if (!result) {
 		Py_DECREF(compiled);
 		if (PyErr_Occurred()) {
 			m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
-			PyErr_Print(); // Print the error to our output in ScriptEditor
+			printPyError(); // Print the error to our output in ScriptEditor
 			PyGILState_Release(gil);
 			return true; // this is ok
 		}
@@ -639,6 +641,48 @@ PyObject* PythonScriptRuntime::createLocalDict() {
 	Py_DECREF(mainDict);
 
 	return localDict;
+}
+
+/*!
+	Print the current python error to our output in the ScriptEditor, same as PyErr_Print(), except that
+	SystemExit (raised by sys.exit()) is handled without forwarding it to PyErr_Print(): CPython's default
+	handling of SystemExit calls Py_Exit()/exit(), which would terminate the whole host application instead
+	of just stopping the script. We need to handle SystemExit ourselves and print a message to the ScriptEditor's
+	output instead of terminating the whole application.
+*/
+void PythonScriptRuntime::printPyError() {
+	if (!PyErr_ExceptionMatches(PyExc_SystemExit)) {
+		PyErr_Print();
+		return;
+	}
+
+	PyObject *type, *value, *traceback;
+	PyErr_Fetch(&type, &value, &traceback);
+	PyErr_NormalizeException(&type, &value, &traceback);
+
+	QString message = QStringLiteral("SystemExit");
+	if (value) {
+		auto* codeObj = PyObject_GetAttrString(value, "code"); // new reference
+		if (codeObj && codeObj != Py_None) {
+			auto* codeRepr = PyObject_Str(codeObj); // new reference
+			if (codeRepr)
+				message += QStringLiteral(": ") + PythonScriptRuntime::pyUnicodeToQString(codeRepr);
+			Py_XDECREF(codeRepr);
+		}
+		Py_XDECREF(codeObj);
+	}
+	if (m_errorLine >= 0)
+		message += QStringLiteral("\n  File \"%1\", line %2")
+					   .arg(m_name)
+					   .arg(m_errorLine + 1); // m_errorLine is 0-based; format matches ScriptEditor's clickable line-link pattern
+
+	WARN(Q_FUNC_INFO << ", script called sys.exit(), " << message.toStdString())
+	Q_EMIT writeOutput(true, message + QStringLiteral("\n"));
+
+	Py_XDECREF(type);
+	Py_XDECREF(value);
+	Py_XDECREF(traceback);
+	PyErr_Clear();
 }
 
 // Get the line where the python error occurred
@@ -858,6 +902,261 @@ QString PythonScriptRuntime::pyUnicodeToQString(PyObject* obj) {
 		return {};
 	}
 
+	// convert before decref: charPtr points into bytes' internal buffer, freed once bytes is released,
+	// to avoid use-after-free issues
+	const QString result = QString::fromUtf8(charPtr);
 	Py_DECREF(bytes);
-	return QString::fromUtf8(charPtr);
+	return result;
+}
+
+// Global helper function for code completion (avoids Python.h in frontend)
+QStringList pylabplotSymbolsHelper() {
+	return PythonScriptRuntime::getPylabplotSymbols();
+}
+
+QStringList PythonScriptRuntime::getPylabplotSymbols() {
+	QStringList symbols;
+
+	// Check if Python is initialized
+	if (!Py_IsInitialized())
+		return symbols;
+
+	PyGILState_STATE gil = PyGILState_Ensure();
+
+	// Import pylabplot module
+	PyObject* module = PyImport_ImportModule("pylabplot");
+	if (!module) {
+		PyErr_Clear();
+		PyGILState_Release(gil);
+		return symbols;
+	}
+
+	// Get all symbols from module using dir()
+	PyObject* dirList = PyObject_Dir(module);
+	if (dirList && PyList_Check(dirList)) {
+		Py_ssize_t size = PyList_Size(dirList);
+		for (Py_ssize_t i = 0; i < size; ++i) {
+			PyObject* item = PyList_GetItem(dirList, i); // Borrowed reference
+			if (PyUnicode_Check(item)) {
+				QString name = PythonScriptRuntime::pyUnicodeToQString(item);
+				if (!name.isEmpty()) {
+					// Skip private symbols
+					if (!name.startsWith(QLatin1Char('_'))) {
+						symbols.append(name);
+					}
+				}
+			}
+		}
+		Py_DECREF(dirList);
+	}
+
+	Py_DECREF(module);
+	PyGILState_Release(gil);
+
+	return symbols;
+}
+
+// Global helper to get class members (avoids Python.h in frontend)
+QList<PylabplotMemberInfo> pylabplotClassMembersHelper(const QString& className) {
+	QList<PylabplotMemberInfo> members;
+
+	if (!Py_IsInitialized())
+		return members;
+
+	PyGILState_STATE gil = PyGILState_Ensure();
+
+	// Import pylabplot module
+	PyObject* module = PyImport_ImportModule("pylabplot");
+	if (!module) {
+		PyErr_Clear();
+		PyGILState_Release(gil);
+		return members;
+	}
+
+	// Get the class object
+	QByteArray classNameBytes = className.toUtf8();
+	PyObject* classObj = PyObject_GetAttrString(module, classNameBytes.constData());
+	Py_DECREF(module);
+
+	if (!classObj) {
+		PyErr_Clear();
+		PyGILState_Release(gil);
+		return members;
+	}
+
+	// Check if it's actually a class
+	if (!PyType_Check(classObj)) {
+		Py_DECREF(classObj);
+		PyGILState_Release(gil);
+		return members;
+	}
+
+	// Get all attributes using dir()
+	PyObject* dirList = PyObject_Dir(classObj);
+	if (dirList && PyList_Check(dirList)) {
+		Py_ssize_t size = PyList_Size(dirList);
+		for (Py_ssize_t i = 0; i < size; ++i) {
+			PyObject* nameObj = PyList_GetItem(dirList, i); // Borrowed reference
+			if (!PyUnicode_Check(nameObj))
+				continue;
+
+			QString name = PythonScriptRuntime::pyUnicodeToQString(nameObj);
+			if (name.isEmpty() || name.startsWith(QLatin1Char('_')))
+				continue; // Skip private/special methods
+
+			// Filter out Qt/QObject internal methods that shouldn't be part of the public API
+			// shown in the completion box. For now, the user still will be able to call them,
+			// but they won't be suggested in the completion box.
+			// TODO: decide if we want to remove them from the public API completely, if possible,
+			// by filtering them out in the shiboken binding generation.
+			static const QStringList qtInternalMethods = {
+				QStringLiteral("connect"),
+				QStringLiteral("connectNotify"),
+				QStringLiteral("customEvent"),
+				QStringLiteral("deleteLater"),
+				QStringLiteral("disconnect"),
+				QStringLiteral("disconnectNotify"),
+				QStringLiteral("dumpObjectInfo"),
+				QStringLiteral("dumpObjectTree"),
+				QStringLiteral("dynamicPropertyNames"),
+				QStringLiteral("emit"),
+				QStringLiteral("event"),
+				QStringLiteral("eventFilter"),
+				QStringLiteral("findChild"),
+				QStringLiteral("findChildren"),
+				QStringLiteral("inherits"),
+				QStringLiteral("installEventFilter"),
+				QStringLiteral("isSignalConnected"),
+				QStringLiteral("isWidgetType"),
+				QStringLiteral("isWindowType"),
+				QStringLiteral("killTimer"),
+				QStringLiteral("metaObject"),
+				QStringLiteral("moveToThread"),
+				QStringLiteral("objectName"),
+				QStringLiteral("objectNameChanged"),
+				QStringLiteral("parent"),
+				QStringLiteral("property"),
+				QStringLiteral("receivers"),
+				QStringLiteral("removeEventFilter"),
+				QStringLiteral("sender"),
+				QStringLiteral("senderSignalIndex"),
+				QStringLiteral("setObjectName"),
+				QStringLiteral("setParent"),
+				QStringLiteral("setProperty"),
+				QStringLiteral("signalsBlocked"),
+				QStringLiteral("startTimer"),
+				QStringLiteral("thread"),
+				QStringLiteral("timerEvent"),
+				QStringLiteral("tr"),
+				QStringLiteral("destroyed"),
+			};
+
+			if (qtInternalMethods.contains(name))
+				continue; // Skip Qt internal methods
+
+			// Get the attribute object
+			QByteArray nameBytes = name.toUtf8();
+			PyObject* attr = PyObject_GetAttrString(classObj, nameBytes.constData());
+			if (!attr) {
+				PyErr_Clear();
+				continue;
+			}
+
+			PylabplotMemberInfo info;
+			info.name = name;
+
+			// Check if it's an enum type - enums are classes that inherit from enum.Enum
+			PyObject* typeObj = PyObject_Type(attr);
+			if (typeObj) {
+				PyObject* typeNameObj = PyObject_GetAttrString(typeObj, "__name__");
+				if (typeNameObj && PyUnicode_Check(typeNameObj)) {
+					QString typeName = PythonScriptRuntime::pyUnicodeToQString(typeNameObj);
+					// Check if it's an enum class (EnumType or EnumMeta)
+					if (typeName.contains(QLatin1String("Enum")) && !name.contains(QLatin1String("Enum"))) {
+						info.isProperty = true;
+						info.isMethod = false;
+						Py_DECREF(typeNameObj);
+						Py_DECREF(typeObj);
+						Py_DECREF(attr);
+						members.append(info);
+						continue;
+					}
+					Py_DECREF(typeNameObj);
+				}
+				Py_DECREF(typeObj);
+			}
+
+			// Check if it's a callable (method)
+			info.isMethod = PyCallable_Check(attr);
+			info.isProperty = !info.isMethod;
+
+			// Try to extract signature and docstring
+			if (info.isMethod) {
+				// Get __doc__ if available
+				PyObject* docObj = PyObject_GetAttrString(attr, "__doc__");
+				if (docObj && PyUnicode_Check(docObj)) {
+					QString doc = PythonScriptRuntime::pyUnicodeToQString(docObj);
+
+					// Clean up the signature: remove 'self', 'arg__N', type hints, '/'
+					// Example: "setColumnCount(self, arg__1: int, /) setColumn..."
+					// Should become: "setColumnCount(count)"
+
+					// Extract first line as signature
+					int newlinePos = doc.indexOf(QLatin1Char('\n'));
+					QString firstLine = (newlinePos > 0) ? doc.left(newlinePos).trimmed() : doc.trimmed();
+
+					// Try to extract just the method signature part
+					static QRegularExpression sigPattern(QStringLiteral(R"(^(\w+)\s*\([^)]*\))"));
+					QRegularExpressionMatch match = sigPattern.match(firstLine);
+
+					if (match.hasMatch()) {
+						QString rawSig = match.captured(0);
+
+						// Clean up: remove self, type hints, arg__N placeholders
+						rawSig.remove(QStringLiteral("self, "));
+						rawSig.remove(QStringLiteral("self"));
+						rawSig.remove(QRegularExpression(QStringLiteral(R"(arg__\d+)"))); // Remove arg__1, arg__2, etc
+						rawSig.remove(QRegularExpression(QStringLiteral(R"(:\s*\w+)"))); // Remove type hints like ": int"
+						rawSig.remove(QStringLiteral(", /"));
+						rawSig.remove(QStringLiteral("/"));
+						rawSig.remove(QStringLiteral(", ,")); // Clean up double commas
+
+						info.signature = rawSig.simplified();
+					}
+
+					// Extract docstring (skip first line if it's the signature)
+					if (newlinePos > 0) {
+						QString remainingDoc = doc.mid(newlinePos + 1).trimmed();
+						// Take first meaningful line as docstring
+						int nextNewline = remainingDoc.indexOf(QLatin1Char('\n'));
+						if (nextNewline > 0)
+							info.docstring = remainingDoc.left(nextNewline).trimmed();
+						else
+							info.docstring = remainingDoc;
+					}
+				}
+				if (docObj)
+					Py_DECREF(docObj);
+
+				// Try to get return type from __annotations__
+				PyObject* annotationsObj = PyObject_GetAttrString(attr, "__annotations__");
+				if (annotationsObj && PyDict_Check(annotationsObj)) {
+					PyObject* returnObj = PyDict_GetItemString(annotationsObj, "return"); // Borrowed ref
+					if (returnObj && PyUnicode_Check(returnObj))
+						info.returnType = PythonScriptRuntime::pyUnicodeToQString(returnObj);
+				}
+				if (annotationsObj)
+					Py_DECREF(annotationsObj);
+			}
+
+			Py_DECREF(attr);
+			members.append(info);
+		}
+		Py_DECREF(dirList);
+	}
+
+	Py_DECREF(classObj);
+	PyGILState_Release(gil);
+
+	return members;
 }

@@ -67,6 +67,8 @@ McapFilter::~McapFilter() = default;
 reads the content of the file \c fileName.
 */
 void McapFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 

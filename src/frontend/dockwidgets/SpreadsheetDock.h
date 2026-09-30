@@ -35,6 +35,7 @@ private:
 
 	void load();
 	void loadConfig(KConfig&);
+	void updateRowCountSpinbox();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in SpreadsheetDock

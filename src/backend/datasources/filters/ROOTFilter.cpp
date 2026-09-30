@@ -36,6 +36,8 @@ ROOTFilter::ROOTFilter()
 ROOTFilter::~ROOTFilter() = default;
 
 void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 

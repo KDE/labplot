@@ -28,6 +28,8 @@ CANFilter::~CANFilter() = default;
   reads the content of the file \c fileName to the data source \c dataSource.
 */
 void CANFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
+	if (!validateFileName(fileName))
+		return;
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 

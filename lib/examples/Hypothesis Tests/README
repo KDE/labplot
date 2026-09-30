@@ -1,0 +1,129 @@
+Hypothesis Tests
+================
+
+Comprehensive comparison of LabPlot's HypothesisTest implementation against standard Python statistical packages (scipy.stats, statsmodels).
+
+## Overview
+
+This example demonstrates all 15 statistical hypothesis tests supported by LabPlot's HypothesisTest class. For each test, it:
+1. Generates appropriate test data
+2. Runs the test using scipy.stats or statsmodels
+3. Creates a LabPlot HypothesisTest object with the same data
+4. Displays results side-by-side for comparison
+
+## Tests Included
+
+### Parametric Tests
+- **One-Sample t-Test** - Test if sample mean equals hypothesized value
+- **Two-Sample t-Test** - Compare two independent sample means (equal variances)
+- **Paired t-Test** - Compare two paired sample means
+- **Welch's t-Test** - Compare two independent sample means (unequal variances)
+- **One-Way ANOVA** - Compare means across multiple independent groups
+
+### Non-Parametric Tests
+- **Mann-Whitney U Test** - Compare two independent samples (rank-based)
+- **Kruskal-Wallis Test** - Compare multiple independent groups (rank-based)
+- **Wilcoxon Signed-Rank Test** - Compare two paired samples (rank-based)
+
+### Categorical Tests
+- **Chi-Square Test of Independence** - Test independence in contingency table
+
+### Time Series Tests
+- **Mann-Kendall Trend Test** - Test for monotonic trend in time series
+
+### Additional Tests (in code but not fully demonstrated)
+- One-Way Repeated Measures ANOVA
+- Friedman Test (non-parametric repeated measures)
+- Chi-Square Goodness of Fit Test
+- Log-Rank Test (survival analysis)
+- Wald-Wolfowitz Runs Test (randomness)
+- Ramirez-Runger Test (stability/change point)
+
+## Requirements
+
+```bash
+pip install numpy scipy statsmodels
+```
+
+## How to Use
+
+1. **Run the script** in LabPlot's Python console:
+   - Opens script.py in LabPlot
+   - Execute to see console output with scipy/statsmodels results
+
+2. **Compare results**:
+   - Console shows scipy/statsmodels test statistics and p-values
+   - LabPlot HypothesisTest objects are created in the project
+   - Open each HypothesisTest in the GUI to see LabPlot's results
+   - Compare manually
+
+3. **What to compare**:
+   - Test statistics (t, F, H, U, W, χ²) should match closely
+   - p-values should match within numerical precision (~1e-6)
+   - Degrees of freedom should be identical
+   - Descriptive statistics (means, variances) should align
+
+## Key Concepts
+
+### One-Sample Tests
+Test if a sample comes from a population with a specific parameter (e.g., mean = 100).
+
+### Two-Sample Tests
+Compare two independent groups. Use t-test if data is normally distributed, Mann-Whitney if not.
+
+### Paired Tests
+Compare measurements on the same subjects before/after treatment. Use paired t-test or Wilcoxon.
+
+### Multiple Group Tests
+ANOVA (parametric) or Kruskal-Wallis (non-parametric) for 3+ groups.
+
+### Choosing Equal vs Unequal Variance
+- **Equal variances**: Standard two-sample t-test
+- **Unequal variances**: Welch's t-test (more conservative)
+
+Rule of thumb: If variance ratio > 2, use Welch's test.
+
+## Expected Output
+
+For each test, you'll see:
+
+```
+================================================================================
+Test Name: H₀: hypothesis statement
+================================================================================
+
+SciPy/StatsModels Results:
+----------------------------------------
+  Statistic name: value
+  p-value: value
+  df: value
+  ...
+
+LabPlot HypothesisTest Results:
+----------------------------------------
+[Output from LabPlot]
+```
+
+## Validation
+
+Small differences (< 1e-4) in p-values are expected due to:
+- Different numerical implementations
+- LabPlot uses NSL library (C/GSL)
+- SciPy uses different algorithms
+
+Both are mathematically correct; differences are in precision, not correctness.
+
+## Educational Value
+
+This example teaches:
+- How to choose the right statistical test for your data
+- Parametric vs non-parametric tests
+- When to use paired vs independent samples
+- How to interpret p-values and test statistics
+- Comparing implementations across different software
+
+## References
+
+- SciPy Documentation: https://docs.scipy.org/doc/scipy/reference/stats.html
+- StatsModels: https://www.statsmodels.org/
+- LabPlot NSL Statistical Tests: See src/backend/nsl/nsl_statistical_test.h

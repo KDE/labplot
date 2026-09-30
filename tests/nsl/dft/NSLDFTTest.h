@@ -16,6 +16,7 @@ class NSLDFTTest : public NSLTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void testNaNInfHandling();
 	// one sided
 	void testOnesided_real();
 	void testOnesided_imag();

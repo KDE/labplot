@@ -1112,7 +1112,7 @@ void BarPlotPrivate::updateValues() {
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
 	const auto numberLocale = QLocale();
-	if (value->type() == Value::BinEntries) {
+	if (value->type() == Value::Values) {
 		for (int i = 0; i < valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
 				continue;
@@ -1122,12 +1122,12 @@ void BarPlotPrivate::updateValues() {
 				if (type == BarPlot::Type::Stacked_100_Percent)
 					m_valuesStrings << prefix + numberToString(point.y(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
+					m_valuesStrings << prefix + numberToString(point.y(), numberLocale, value->numericFormat(), value->precision()) + suffix;
 			} else {
 				if (type == BarPlot::Type::Stacked_100_Percent)
 					m_valuesStrings << prefix + numberToString(point.x(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
+					m_valuesStrings << prefix + numberToString(point.x(), numberLocale, value->numericFormat(), value->precision()) + suffix;
 			}
 		}
 	} else if (value->type() == Value::CustomColumn) {

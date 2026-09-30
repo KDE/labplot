@@ -52,6 +52,7 @@ private Q_SLOTS:
 
 	// LOWESS tests
 	void testLOWESS_basic();
+	void testNaNInfHandling();
 
 	// performance
 	void testPerformance_interp();
