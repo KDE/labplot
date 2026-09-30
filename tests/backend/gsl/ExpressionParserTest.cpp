@@ -102,6 +102,37 @@ void ExpressionParserTest::testFunctionArguments2() {
 	QCOMPARE(ExpressionParser::parameters(functionName), i18n("(%1; %2; %3)", i18n("condition"), i18n("trueValue"), i18n("falseValue")));
 }
 
+void ExpressionParserTest::testFunctionMetadataAndUtilityAPI() {
+	auto* parser = ExpressionParser::getInstance();
+
+	QCOMPARE(ExpressionParser::functionArgumentCount(QStringLiteral("sin")), 1);
+	QCOMPARE(ExpressionParser::functionArgumentCount(QStringLiteral("rand")), 0);
+	QCOMPARE(ExpressionParser::functionArgumentString(QStringLiteral("sin"), XYEquationCurve::EquationType::Cartesian), QStringLiteral("(x)"));
+	QCOMPARE(ExpressionParser::functionArgumentString(QStringLiteral("rand"), XYEquationCurve::EquationType::Cartesian), QStringLiteral("()"));
+	QCOMPARE(ExpressionParser::parameters(QStringLiteral("if")), i18n("(%1; %2; %3)", i18n("condition"), i18n("trueValue"), i18n("falseValue")));
+	QVERIFY(!parser->functionDescription(QStringLiteral("sin")).isEmpty());
+	QVERIFY(!parser->constantDescription(QStringLiteral("pi")).isEmpty());
+	QVERIFY(parser->constants().contains(QStringLiteral("pi")));
+	QCOMPARE(parser->constantsValues().size(), parser->constants().size());
+	QCOMPARE(parser->constantsUnits().size(), parser->constants().size());
+}
+
+void ExpressionParserTest::testGetParameter() {
+	auto* parser = ExpressionParser::getInstance();
+	const QString expression = QStringLiteral("customParam + foo + 3 + x + sin(y) + pi");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	const auto parameters = parser->getParameter(expression, vars);
+	QCOMPARE(parameters.size(), 2);
+	QVERIFY(parameters.contains(QStringLiteral("customParam")));
+	QVERIFY(parameters.contains(QStringLiteral("foo")));
+	QVERIFY(!parameters.contains(QStringLiteral("alpha")));
+	QVERIFY(!parameters.contains(QStringLiteral("x")));
+	QVERIFY(!parameters.contains(QStringLiteral("y")));
+	QVERIFY(!parameters.contains(QStringLiteral("sin")));
+	QVERIFY(!parameters.contains(QStringLiteral("pi")));
+}
+
 void ExpressionParserTest::testUniques() {
 	QSet<QString> names;
 	for (int i = 0; i < _number_functions; i++) {
@@ -743,6 +774,18 @@ void ExpressionParserTest::testevaluateCartesianConstExpr() {
 	// All yVector rows are filled
 	for (const auto v : yVector)
 		QCOMPARE(v, 5. + 5.);
+}
+
+void ExpressionParserTest::testEvaluateCartesianWithParameters() {
+	auto* parser = ExpressionParser::getInstance();
+	QVector<double> xVector({1., 2., 3.});
+	QVector<double> yVector({NAN, NAN, NAN});
+
+	QVERIFY(parser->tryEvaluateCartesian(QStringLiteral("x + a"), &xVector, &yVector, {QStringLiteral("a")}, {10.}));
+	QCOMPARE(yVector.size(), 3);
+	QCOMPARE(yVector.at(0), 11.);
+	QCOMPARE(yVector.at(1), 12.);
+	QCOMPARE(yVector.at(2), 13.);
 }
 
 void ExpressionParserTest::testEvaluateAnd() {

@@ -20,6 +20,9 @@ class ExpressionParserTest : public CommonTest {
 private Q_SLOTS:
 	void testFunctionArguments1();
 	void testFunctionArguments2();
+	void testFunctionMetadataAndUtilityAPI();
+	void testGetParameter();
+	void testEvaluateCartesianWithParameters();
 	void testUniques();
 	void testgreaterThan();
 	void testgreaterEqualThan();
