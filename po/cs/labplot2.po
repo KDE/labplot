@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2026-10-01 00:30+0200\n"
+"PO-Revision-Date: 2026-10-01 12:02+0200\n"
 "Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -6138,17 +6138,17 @@ msgstr "nebyl nalezen žádný prvek note"
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "Forward (Convolution)"
-msgstr ""
+msgstr "Vpřed (konvoluce)"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "Backward (Deconvolution)"
-msgstr ""
+msgstr "Zpět (dekonvoluce)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
 msgid "Linear (Zero-padded)"
-msgstr ""
+msgstr "Lineární (s doplňováním nulami)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
@@ -6220,77 +6220,77 @@ msgstr "Eukleidovské"
 #: src/backend/nsl/nsl_conv.c:23
 #, kde-format
 msgid "Center (Acausal)"
-msgstr ""
+msgstr "Střed (nekauzální)"
 
 #: src/backend/nsl/nsl_conv.c:24
 #, kde-format
 msgid "Sliding Average"
-msgstr ""
+msgstr "Klouzavý průměr"
 
 #: src/backend/nsl/nsl_conv.c:25
 #, kde-format
 msgid "Triangular Smooth"
-msgstr ""
+msgstr "Trojúhelníkové hladké"
 
 #: src/backend/nsl/nsl_conv.c:26
 #, kde-format
 msgid "Pseudo-Gaussian Smooth"
-msgstr ""
+msgstr "Pseudogaussovské vyhlazení"
 
 #: src/backend/nsl/nsl_conv.c:27
 #, kde-format
 msgid "First Derivative"
-msgstr ""
+msgstr "První derivace"
 
 #: src/backend/nsl/nsl_conv.c:28
 #, kde-format
 msgid "Smooth First Derivative"
-msgstr ""
+msgstr "Hladká první derivace"
 
 #: src/backend/nsl/nsl_conv.c:29 src/backend/nsl/nsl_interp.c:26
 #, kde-format
 msgid "Second Derivative"
-msgstr ""
+msgstr "Druhá derivace"
 
 #: src/backend/nsl/nsl_conv.c:30
 #, kde-format
 msgid "Third Derivative"
-msgstr ""
+msgstr "Třetí derivace"
 
 #: src/backend/nsl/nsl_conv.c:31
 #, kde-format
 msgid "Fourth Derivative"
-msgstr ""
+msgstr "Čtvrtá derivace"
 
 #: src/backend/nsl/nsl_conv.c:32
 #, kde-format
 msgid "Gaussian"
-msgstr "Gaussovo"
+msgstr "Gaussovské"
 
 #: src/backend/nsl/nsl_conv.c:33
 #, kde-format
 msgid "Lorentzian"
-msgstr ""
+msgstr "Lorentziánské"
 
 #: src/backend/nsl/nsl_corr.c:19
 #, kde-format
 msgid "Biased"
-msgstr ""
+msgstr "Zaujaté"
 
 #: src/backend/nsl/nsl_corr.c:19
 #, kde-format
 msgid "Unbiased"
-msgstr ""
+msgstr "Nezaujaté"
 
 #: src/backend/nsl/nsl_corr.c:19
 #, kde-format
 msgid "Coeff"
-msgstr ""
+msgstr "Koeficient"
 
 #: src/backend/nsl/nsl_dft.c:18
 #, kde-format
 msgid "Magnitude"
-msgstr "Hvězdná velikost"
+msgstr "Magnituda"
 
 #: src/backend/nsl/nsl_dft.c:19
 #, kde-format
@@ -6322,22 +6322,22 @@ msgstr "Fáze"
 #: src/backend/nsl/nsl_dft.c:24
 #, kde-format
 msgid "Amplitude in dB"
-msgstr ""
+msgstr "Amplituda v dB"
 
 #: src/backend/nsl/nsl_dft.c:25
 #, kde-format
 msgid "Normalized Amplitude in dB"
-msgstr ""
+msgstr "Normalizovaná amplituda v dB"
 
 #: src/backend/nsl/nsl_dft.c:26
 #, kde-format
 msgid "Magnitude Squared"
-msgstr ""
+msgstr "Druhá mocnina magnitudy"
 
 #: src/backend/nsl/nsl_dft.c:27
 #, kde-format
 msgid "Amplitude Squared"
-msgstr ""
+msgstr "Druhá mocnina amplitudy"
 
 #: src/backend/nsl/nsl_dft.c:28
 #, kde-format
@@ -6393,7 +6393,7 @@ msgstr "Šestá"
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
 msgid "Low Pass"
-msgstr "Dolní pásmová propust"
+msgstr "Dolní propust"
 
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
@@ -6408,12 +6408,12 @@ msgstr "Pásmová propust"
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
 msgid "Band Reject"
-msgstr ""
+msgstr "Pásmové potlačení"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Ideal"
-msgstr ""
+msgstr "Ideální"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
@@ -6423,22 +6423,22 @@ msgstr "Butterworth"
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Chebyshev Type I"
-msgstr ""
+msgstr "Čebyševův typ I"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Chebyshev Type II"
-msgstr ""
+msgstr "Čebyševův typ II"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Legendre (Optimum L)"
-msgstr ""
+msgstr "Legendre (Optimum L)"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Bessel (Thomson)"
-msgstr ""
+msgstr "Bessel (Thomson)"
 
 #: src/backend/nsl/nsl_filter.c:23
 #, kde-format
@@ -6453,17 +6453,17 @@ msgstr "Základní funkce"
 #: src/backend/nsl/nsl_fit.c:21
 #, kde-format
 msgid "Peak Functions"
-msgstr ""
+msgstr "Funkce vrcholu"
 
 #: src/backend/nsl/nsl_fit.c:22
 #, kde-format
 msgid "Growth (Sigmoidal)"
-msgstr ""
+msgstr "Růst (sigmoidální)"
 
 #: src/backend/nsl/nsl_fit.c:23
 #, kde-format
 msgid "Statistics (Distributions)"
-msgstr ""
+msgstr "Statistika (rozdělení)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
@@ -6483,7 +6483,7 @@ msgstr "Vlastní"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:529
 #, kde-format
 msgid "Inverse Exponential"
-msgstr ""
+msgstr "Inverzní exponenciální"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
@@ -6494,49 +6494,49 @@ msgstr "Exponenciální"
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:15
 #, kde-format
 msgid "Polynomial"
-msgstr ""
+msgstr "Polynomické"
 
 #: src/backend/nsl/nsl_fit.c:26
 #, kde-format
 msgid "Fourier"
-msgstr "Fourier"
+msgstr "Fourierovo"
 
 #: src/backend/nsl/nsl_fit.c:30
 #, kde-format
 msgid "Gaussian (normal)"
-msgstr ""
+msgstr "Gaussovské (normální)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:537
 #, kde-format
 msgid "Cauchy-Lorentz"
-msgstr ""
+msgstr "Cauchy-Lorentz"
 
 #: src/backend/nsl/nsl_fit.c:32 src/backend/nsl/nsl_sf_stats.c:45
 #, kde-format
 msgid "Hyperbolic Secant (sech)"
-msgstr ""
+msgstr "Hyperbolická sekanta (sech)"
 
 #: src/backend/nsl/nsl_fit.c:33
 #, kde-format
 msgid "Logistic (sech squared)"
-msgstr ""
+msgstr "Logaritmus (mocnina sech)"
 
 #: src/backend/nsl/nsl_fit.c:34
 #, kde-format
 msgid "Voigt Profile"
-msgstr ""
+msgstr "Voightův profil"
 
 #: src/backend/nsl/nsl_fit.c:35
 #, kde-format
 msgid "Pseudo-Voigt (same width)"
-msgstr ""
+msgstr "Pseudo-Voigtův (stejná šířka)"
 
 #: src/backend/nsl/nsl_fit.c:44
 #, kde-format
 msgid "Inverse Tangent"
-msgstr ""
+msgstr "Inverzní tangens"
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:569
@@ -6548,62 +6548,62 @@ msgstr "Hyperbolický tangens"
 #: src/backend/nsl/nsl_fit.c:46
 #, kde-format
 msgid "Algebraic Sigmoid"
-msgstr ""
+msgstr "Algebraická sigmoida"
 
 #: src/backend/nsl/nsl_fit.c:47
 #, kde-format
 msgid "Logistic Function"
-msgstr ""
+msgstr "Logistická funkce"
 
 #: src/backend/nsl/nsl_fit.c:48
 #, kde-format
 msgid "Error Function (erf)"
-msgstr ""
+msgstr "Chybová funkce (erf)"
 
 #: src/backend/nsl/nsl_fit.c:49
 #, kde-format
 msgid "Hill"
-msgstr ""
+msgstr "Hill"
 
 #: src/backend/nsl/nsl_fit.c:50
 #, kde-format
 msgid "Gompertz"
-msgstr ""
+msgstr "Gompertz"
 
 #: src/backend/nsl/nsl_fit.c:51
 #, kde-format
 msgid "Gudermann (gd)"
-msgstr ""
+msgstr "Gudermann (gd)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:16
 #, kde-format
 msgid "Douglas-Peucker (Number)"
-msgstr ""
+msgstr "Douglas-Peucker (číslo)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:17
 #, kde-format
 msgid "Douglas-Peucker (Tolerance)"
-msgstr ""
+msgstr "Douglas-Peucker (tolerance)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:18
 #, kde-format
 msgid "Visvalingam-Whyatt"
-msgstr ""
+msgstr "Visvalingam-Whyatt"
 
 #: src/backend/nsl/nsl_geom_linesim.c:19
 #, kde-format
 msgid "Reumann-Witkam"
-msgstr ""
+msgstr "Reumann-Witkam"
 
 #: src/backend/nsl/nsl_geom_linesim.c:20
 #, kde-format
 msgid "Perpendicular Distance"
-msgstr ""
+msgstr "Kolmá vzdálenost"
 
 #: src/backend/nsl/nsl_geom_linesim.c:21
 #, kde-format
 msgid "n-th Point"
-msgstr ""
+msgstr "n-tý bod"
 
 #: src/backend/nsl/nsl_geom_linesim.c:22
 #, kde-format
