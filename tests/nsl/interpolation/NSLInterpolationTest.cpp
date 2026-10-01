@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for NSL rational interpolation
 	--------------------------------------------------------------------
-        SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+		SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */

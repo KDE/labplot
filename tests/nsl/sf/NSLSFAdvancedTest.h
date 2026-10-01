@@ -3,8 +3,8 @@
 	Project              : LabPlot
 	Description          : Tests for additional NSL special functions
 	--------------------------------------------------------------------
-        SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
-        
+		SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NSLSFADVANCEDTEST_H

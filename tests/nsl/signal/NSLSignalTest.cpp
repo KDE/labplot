@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for NSL signal processing algorithms
 	--------------------------------------------------------------------
-        SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+		SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -47,24 +47,40 @@ void NSLSignalTest::testConvolution() {
 
 	double signalCopy[] = {1, 2, 3};
 	double responseCopy[] = {1, 1};
-	QCOMPARE(nsl_conv_convolution(signalCopy, 3, responseCopy, 2, nsl_conv_type_linear, nsl_conv_method_direct, nsl_conv_norm_none, nsl_conv_wrap_none, output), 0);
-	for (size_t i = 0; i < 4; ++i)
-		QVERIFY(std::abs(output[i] - expected[i]) < 1.e-12);
-
-	QCOMPARE(nsl_conv_convolution_direction(signalCopy, 3, responseCopy, 2, nsl_conv_direction_forward, nsl_conv_type_linear, nsl_conv_method_direct,
-											nsl_conv_norm_none, nsl_conv_wrap_none, output),
+	QCOMPARE(nsl_conv_convolution(signalCopy, 3, responseCopy, 2, nsl_conv_type_linear, nsl_conv_method_direct, nsl_conv_norm_none, nsl_conv_wrap_none, output),
 			 0);
 	for (size_t i = 0; i < 4; ++i)
 		QVERIFY(std::abs(output[i] - expected[i]) < 1.e-12);
 
-	QCOMPARE(nsl_conv_fft_type(signal, 3, responseCopy, 2, nsl_conv_direction_forward, nsl_conv_type_linear, nsl_conv_norm_none, nsl_conv_wrap_none, output), 0);
+	QCOMPARE(nsl_conv_convolution_direction(signalCopy,
+											3,
+											responseCopy,
+											2,
+											nsl_conv_direction_forward,
+											nsl_conv_type_linear,
+											nsl_conv_method_direct,
+											nsl_conv_norm_none,
+											nsl_conv_wrap_none,
+											output),
+			 0);
+	for (size_t i = 0; i < 4; ++i)
+		QVERIFY(std::abs(output[i] - expected[i]) < 1.e-12);
+
+	QCOMPARE(nsl_conv_fft_type(signal, 3, responseCopy, 2, nsl_conv_direction_forward, nsl_conv_type_linear, nsl_conv_norm_none, nsl_conv_wrap_none, output),
+			 0);
 	for (size_t i = 0; i < 4; ++i)
 		QVERIFY(std::abs(output[i] - expected[i]) < 1.e-10);
 
 	double deconvolutionInput[] = {1, 3, 5, 3};
 	double deconvolutionResponse[] = {1, 1};
 	double deconvolutionOutput[5] = {};
-	QCOMPARE(nsl_conv_deconvolution(deconvolutionInput, 4, deconvolutionResponse, 2, nsl_conv_type_linear, nsl_conv_norm_none, nsl_conv_wrap_none,
+	QCOMPARE(nsl_conv_deconvolution(deconvolutionInput,
+									4,
+									deconvolutionResponse,
+									2,
+									nsl_conv_type_linear,
+									nsl_conv_norm_none,
+									nsl_conv_wrap_none,
 									deconvolutionOutput),
 			 0);
 
@@ -75,15 +91,15 @@ void NSLSignalTest::testConvolution() {
 		QVERIFY(std::abs(value - 6.) < 1.e-12);
 
 	const std::array<std::pair<nsl_conv_kernel_type, size_t>, 10> kernels = {{{nsl_conv_kernel_avg, 3},
-																		{nsl_conv_kernel_smooth_triangle, 3},
-																		{nsl_conv_kernel_smooth_gaussian, 5},
-																		{nsl_conv_kernel_first_derivative, 2},
-																		{nsl_conv_kernel_smooth_first_derivative, 3},
-																		{nsl_conv_kernel_second_derivative, 3},
-																		{nsl_conv_kernel_third_derivative, 4},
-																		{nsl_conv_kernel_fourth_derivative, 5},
-																		{nsl_conv_kernel_gaussian, 5},
-																		{nsl_conv_kernel_lorentzian, 5}}};
+																			  {nsl_conv_kernel_smooth_triangle, 3},
+																			  {nsl_conv_kernel_smooth_gaussian, 5},
+																			  {nsl_conv_kernel_first_derivative, 2},
+																			  {nsl_conv_kernel_smooth_first_derivative, 3},
+																			  {nsl_conv_kernel_second_derivative, 3},
+																			  {nsl_conv_kernel_third_derivative, 4},
+																			  {nsl_conv_kernel_fourth_derivative, 5},
+																			  {nsl_conv_kernel_gaussian, 5},
+																			  {nsl_conv_kernel_lorentzian, 5}}};
 	for (const auto& [type, size] : kernels) {
 		std::array<double, 9> kernel{};
 		QCOMPARE(nsl_conv_standard_kernel(kernel.data(), size, type), 0);

@@ -3,8 +3,8 @@
 	Project              : LabPlot
 	Description          : Tests for additional NSL special functions
 	--------------------------------------------------------------------
-        SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
-        
+		SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -37,12 +37,8 @@ void NSLSFAdvancedTest::testKernelFunctions() {
 		QCOMPARE(compactKernels[i](1.1), 0.);
 	}
 
-	const Kernel unboundedKernels[] = {nsl_sf_kernel_gaussian,
-										nsl_sf_kernel_cauchy,
-										nsl_sf_kernel_logistic,
-										nsl_sf_kernel_picard,
-										nsl_sf_kernel_sigmoid,
-										nsl_sf_kernel_silverman};
+	const Kernel unboundedKernels[] =
+		{nsl_sf_kernel_gaussian, nsl_sf_kernel_cauchy, nsl_sf_kernel_logistic, nsl_sf_kernel_picard, nsl_sf_kernel_sigmoid, nsl_sf_kernel_silverman};
 	const double unboundedCenters[] = {1. / std::sqrt(2. * M_PI), 1. / M_PI, 0.25, 0.5, 1. / M_PI, std::sqrt(0.5) / 2.};
 	for (size_t i = 0; i < std::size(unboundedKernels); ++i) {
 		QVERIFY(std::abs(unboundedKernels[i](0.) - unboundedCenters[i]) < 1.e-12);
@@ -110,7 +106,7 @@ void NSLSFAdvancedTest::testDistributionMetadata() {
 		const bool supportsRNG = i != nsl_sf_stats_maxwell_boltzmann && i != nsl_sf_stats_sech && i != nsl_sf_stats_levy && i != nsl_sf_stats_frechet;
 		QVERIFY(nsl_sf_stats_distribution_supports_RNG(distribution) == supportsRNG);
 		const bool supportsML = i == nsl_sf_stats_gaussian || i == nsl_sf_stats_exponential || i == nsl_sf_stats_laplace || i == nsl_sf_stats_cauchy_lorentz
-								|| i == nsl_sf_stats_lognormal || i == nsl_sf_stats_poisson || i == nsl_sf_stats_binomial;
+			|| i == nsl_sf_stats_lognormal || i == nsl_sf_stats_poisson || i == nsl_sf_stats_binomial;
 		QVERIFY(nsl_sf_stats_distribution_supports_ML(distribution) == supportsML);
 	}
 }

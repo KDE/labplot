@@ -3,8 +3,8 @@
 	Project              : LabPlot
 	Description          : Tests for NSL kernel density estimation
 	--------------------------------------------------------------------
-        SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
-        
+		SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -24,8 +24,14 @@ void NSLKDETest::testDensityAndBandwidth() {
 	QCOMPARE(nsl_kde(data, 2.001, nsl_kernel_uniform, 2., 1), 0.);
 	QVERIFY(std::abs(nsl_kde(data, 0., nsl_kernel_gauss, 2., 1) - 1. / (2. * std::sqrt(2. * M_PI))) < 1.e-12);
 
-	const nsl_kernel_type kernels[] = {nsl_kernel_uniform, nsl_kernel_triangular, nsl_kernel_parabolic, nsl_kernel_quartic,
-										nsl_kernel_triweight, nsl_kernel_tricube, nsl_kernel_cosine, nsl_kernel_gauss};
+	const nsl_kernel_type kernels[] = {nsl_kernel_uniform,
+									   nsl_kernel_triangular,
+									   nsl_kernel_parabolic,
+									   nsl_kernel_quartic,
+									   nsl_kernel_triweight,
+									   nsl_kernel_tricube,
+									   nsl_kernel_cosine,
+									   nsl_kernel_gauss};
 	for (const auto kernel : kernels)
 		QVERIFY(std::isfinite(nsl_kde(data, 0.25, kernel, 1., 1)));
 
