@@ -3,12 +3,14 @@
 	Project              : LabPlot
 	Description          : NSL Tests for smoothing
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NSLSmoothTest.h"
+
+#include <cmath>
 
 extern "C" {
 #include "backend/nsl/nsl_smooth.h"
@@ -454,6 +456,22 @@ void NSLSmoothTest::testLOWESS_basic() {
 	// (values should be closer to parabola than the noisy input)
 	QVERIFY(fabs(ydata[8] - xdata[8] * xdata[8]) < 0.1);
 	QVERIFY(fabs(ydata[10] - xdata[10] * xdata[10]) < 0.1);
+}
+
+void NSLSmoothTest::testDefaultHelpers() {
+	const double oldLeft = nsl_smooth_pad_constant_lvalue;
+	const double oldRight = nsl_smooth_pad_constant_rvalue;
+	nsl_smooth_pad_constant_set(-1., 3.);
+	QCOMPARE(nsl_smooth_pad_constant_lvalue, -1.);
+	QCOMPARE(nsl_smooth_pad_constant_rvalue, 3.);
+	nsl_smooth_pad_constant_set(oldLeft, oldRight);
+
+	double defaultData[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
+	double interpolatedData[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
+	QCOMPARE(nsl_smooth_savgol_default(defaultData, N, 5, 2), 0);
+	QCOMPARE(nsl_smooth_savgol(interpolatedData, N, 5, 2, nsl_smooth_pad_constant), 0);
+	for (int i = 0; i < N; ++i)
+		QVERIFY(std::abs(defaultData[i] - interpolatedData[i]) < 1.e-12);
 }
 
 void NSLSmoothTest::testNaNInfHandling() {

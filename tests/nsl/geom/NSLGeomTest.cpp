@@ -3,12 +3,14 @@
 	Project              : LabPlot
 	Description          : NSL Tests for geometric functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NSLGeomTest.h"
+
+#include <cmath>
 
 extern "C" {
 #include "backend/nsl/nsl_geom.h"
@@ -204,6 +206,38 @@ void NSLGeomTest::testLineSim() {
 
 	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result4[i]);
+}
+
+void NSLGeomTest::testLineSimAutomatic() {
+	const double x[] = {0., 1., 2.};
+	const double flat[] = {0., 0., 0.};
+	size_t indices[3] = {};
+	const size_t expected[] = {0, 2};
+	using AutoSimplifier = size_t (*)(const double[], const double[], size_t, size_t[]);
+	const AutoSimplifier simplifiers[] = {nsl_geom_linesim_douglas_peucker_auto,
+										  nsl_geom_linesim_raddist_auto,
+										  nsl_geom_linesim_perpdist_auto,
+										  nsl_geom_linesim_interp_auto,
+										  nsl_geom_linesim_reumann_witkam_auto};
+	for (const auto simplifier : simplifiers) {
+		QCOMPARE(simplifier(x, flat, 3, indices), size_t(2));
+		QCOMPARE(indices[0], expected[0]);
+		QCOMPARE(indices[1], expected[1]);
+	}
+
+	QCOMPARE(nsl_geom_linesim_visvalingam_whyatt_auto(x, flat, 3, indices), size_t(3));
+	QCOMPARE(indices[0], size_t(0));
+	QCOMPARE(indices[1], size_t(1));
+	QCOMPARE(indices[2], size_t(2));
+
+	const double triangle[] = {0., 1., 0.};
+	QVERIFY(std::abs(nsl_geom_linesim_positional_error(x, triangle, 3, expected) - 1. / 3.) < 1.e-12);
+	QCOMPARE(nsl_geom_linesim_perpdist(x, flat, 3, 0.1, indices), size_t(2));
+
+	const double shortX[] = {0., 1.};
+	const double shortY[] = {0., 0.};
+	QCOMPARE(nsl_geom_linesim_opheim_auto(shortX, shortY, 2, indices), size_t(2));
+	QCOMPARE(nsl_geom_linesim_lang_auto(shortX, shortY, 2, indices), size_t(2));
 }
 
 #ifdef _MSC_VER // crashes on Windows

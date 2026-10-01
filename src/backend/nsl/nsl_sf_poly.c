@@ -96,7 +96,7 @@ double nsl_sf_poly_interp_lagrange_1(double v, const double* x, const double* y)
 	return (y[0] * (x[1] - v) + y[1] * (v - x[0])) / (x[1] - x[0]);
 }
 double nsl_sf_poly_interp_lagrange_1_deriv(const double* x, const double* y) {
-	return (y[0] - y[1]) / (x[1] - x[0]);
+	return (y[1] - y[0]) / (x[1] - x[0]);
 }
 double nsl_sf_poly_interp_lagrange_1_int(const double* x, const double* y) {
 	/* trapezoid rule (2-point) */

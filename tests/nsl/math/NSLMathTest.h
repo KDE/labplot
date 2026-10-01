@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for math functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2024-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,6 +18,7 @@ class NSLMathTest : public NSLTest {
 private Q_SLOTS:
 	void mathMultiple();
 	void approximatelyEqual();
+	void testFiniteHelpers();
 	void testNaNInfHandling();
 	// performance
 	// void testPerformance();

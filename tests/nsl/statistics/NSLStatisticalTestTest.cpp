@@ -5,8 +5,9 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "NSLStatisticalTestTest.h"
 
@@ -603,6 +604,16 @@ void NSLStatisticalTestTest::testWaldWolfowitzRuns03() {
 	QCOMPARE(result.n, 10);
 	QVERIFY(result.z > 2.0); // z should be significantly positive
 	QVERIFY(result.p < 0.05); // p-value should be small (not random, alternating)
+}
+
+void NSLStatisticalTestTest::testRamirezRunger() {
+	const double sample[] = {0., 1., 2.};
+	const ramirez_runger_test_result result = nsl_stats_ramirez_runger(sample, 3, nsl_stats_tail_type_two);
+	QVERIFY(std::abs(result.stability_ratio - 1.272384) < 1.e-5);
+	QCOMPARE(result.dof, size_t(2));
+	QCOMPARE(result.mean_diff, 1.);
+	QVERIFY(std::isfinite(result.p));
+	QVERIFY(result.p >= 0. && result.p <= 1.);
 }
 
 QTEST_MAIN(NSLStatisticalTestTest)

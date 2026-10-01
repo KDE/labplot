@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for smoothing
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -52,6 +52,7 @@ private Q_SLOTS:
 
 	// LOWESS tests
 	void testLOWESS_basic();
+	void testDefaultHelpers();
 	void testNaNInfHandling();
 
 	// performance

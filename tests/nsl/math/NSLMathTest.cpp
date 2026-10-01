@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL tests for math functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2024-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -43,6 +43,25 @@ void NSLMathTest::approximatelyEqual() {
 	QVERIFY(nsl_math_approximately_equal_eps(0., 2.8e-17, 1.e-12));
 	QVERIFY(nsl_math_approximately_equal_eps(100., 100.00005, 1.e-6));
 	QVERIFY(!nsl_math_approximately_equal_eps(0., 2.e-6, 1.e-7));
+	QVERIFY(nsl_math_essentially_equal_eps(1.0, 1.0 + 1.e-8, 1.e-7));
+	QVERIFY(nsl_math_definitely_greater_than_eps(2.0, 1.0, 1.e-7));
+	QVERIFY(nsl_math_definitely_less_than_eps(1.0, 2.0, 1.e-7));
+}
+
+void NSLMathTest::testFiniteHelpers() {
+	QCOMPARE(nsl_math_places(1.234, 2, Round), 1.23);
+	QCOMPARE(nsl_math_places(1.239, 2, Floor), 1.23);
+	QCOMPARE(nsl_math_places(1.231, 2, Ceil), 1.24);
+	QCOMPARE(nsl_math_places(-1.239, 2, Trunc), -1.23);
+	QCOMPARE(nsl_math_round_precision(1234.5, 2), 1230.);
+	QCOMPARE(nsl_math_round_basex(1.234, 2, 2.), 1.25);
+	QCOMPARE(nsl_math_decimal_places(0.06), 2);
+	QCOMPARE(nsl_math_rounded_decimals(0.006), 2);
+	QCOMPARE(nsl_math_rounded_decimals_max(0.006, 1), 1);
+
+	int exponent = 0;
+	QVERIFY(std::abs(nsl_math_frexp10(123.4, &exponent) - 1.234) < 1.e-12);
+	QCOMPARE(exponent, 2);
 }
 
 void NSLMathTest::testNaNInfHandling() {

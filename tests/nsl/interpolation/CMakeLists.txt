@@ -1,0 +1,5 @@
+add_executable(NSLInterpolationTest NSLInterpolationTest.cpp)
+
+target_link_libraries(NSLInterpolationTest labplottest)
+
+add_test(NAME NSLInterpolationTest COMMAND NSLInterpolationTest)

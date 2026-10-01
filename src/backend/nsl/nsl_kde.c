@@ -108,5 +108,5 @@ double nsl_kde_scott_bandwidth(double* data, int n) {
 	// gsl_sort(data, 1, n);
 	const double sigma = gsl_stats_sd(data, 1, n);
 
-	return 1.059 * sigma * pow(n, 0.2);
+	return 1.059 * sigma * pow(n, -0.2);
 }

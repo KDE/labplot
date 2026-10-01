@@ -5,8 +5,9 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef NSLSTATISTICALTESTTEST_H
@@ -39,5 +40,6 @@ private Q_SLOTS:
 	void testWaldWolfowitzRuns01();
 	void testWaldWolfowitzRuns02();
 	void testWaldWolfowitzRuns03();
+	void testRamirezRunger();
 };
 #endif // NSLSTATISTICALTESTTEST_H

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for statistical functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -69,6 +69,42 @@ void NSLStatsTest::testNaNInfHandling() {
 	QVERIFY(std::isnan(nsl_stats_maximum(all_invalid, 3, nullptr)));
 	QVERIFY(std::isnan(nsl_stats_median(all_invalid, 1, 3, nsl_stats_quantile_type7)));
 	QVERIFY(std::isnan(nsl_stats_quantile(all_invalid, 1, 3, 0.5, nsl_stats_quantile_type7)));
+}
+
+void NSLStatsTest::testRemainingStatistics() {
+	const double sorted[] = {1, 2, 3, 4, 5};
+	QCOMPARE(nsl_stats_median_from_sorted_data(sorted, 1, 5), 3.);
+	QCOMPARE(nsl_stats_quantile_from_sorted_data(sorted, 1, 5, 0.25), 2.);
+
+	const double data[] = {3, -2, 8, 8};
+	size_t index = 99;
+	QCOMPARE(nsl_stats_minimum(data, 4, &index), -2.);
+	QCOMPARE(index, size_t(1));
+	QCOMPARE(nsl_stats_maximum(data, 4, &index), 8.);
+	QCOMPARE(index, size_t(2));
+	QVERIFY(std::isnan(nsl_stats_minimum(data, 0, &index)));
+	QCOMPARE(index, size_t(0));
+
+	QCOMPARE(nsl_stats_rsquare(2., 10.), 0.8);
+	QVERIFY(std::abs(nsl_stats_rsquareAdj(0.8, 2, 8, 2) - 0.775) < 1.e-12);
+	QCOMPARE(nsl_stats_tdist_t(2., 0.5), 4.);
+	QCOMPARE(nsl_stats_tdist_p(0., 10.), 1.);
+	const double tCritical = nsl_stats_tdist_z(0.05, 100.);
+	QVERIFY(tCritical > 1.9 && tCritical < 2.1);
+	QVERIFY(std::abs(nsl_stats_tdist_margin(0.05, 100., 0.5) - 0.5 * tCritical) < 1.e-12);
+	QCOMPARE(nsl_stats_chisq_p(0., 4.), 1.);
+	QVERIFY(nsl_stats_chisq_low(0.05, 4.) < nsl_stats_chisq_high(0.05, 4.));
+	QCOMPARE(nsl_stats_fdist_F(0.5, 2, 10), 10.);
+	QCOMPARE(nsl_stats_fdist_p(0., 2, 10.), 1.);
+
+	QVERIFY(std::isfinite(nsl_stats_logLik(4., 10)));
+	QVERIFY(std::isfinite(nsl_stats_aic(4., 10, 2, 1)));
+	QVERIFY(std::isfinite(nsl_stats_aic(4., 10, 2, 2)));
+	QVERIFY(std::isfinite(nsl_stats_aic(4., 10, 2, 3)));
+	QVERIFY(std::isfinite(nsl_stats_aicc(4., 10, 2, 1)));
+	QVERIFY(std::isfinite(nsl_stats_aicc(4., 10, 2, 2)));
+	QVERIFY(std::isfinite(nsl_stats_bic(4., 10, 2, 1)));
+	QVERIFY(std::isfinite(nsl_stats_bic(4., 10, 2, 2)));
 }
 
 // ##############################################################################

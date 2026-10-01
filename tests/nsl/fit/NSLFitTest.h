@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for fitting
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,6 +18,7 @@ class NSLFitTest : public NSLTest {
 private Q_SLOTS:
 	void testBounds();
 	void testNaNInfHandling();
+	void testModelParameterDerivatives();
 	// performance
 	// void testPerformance();
 private:

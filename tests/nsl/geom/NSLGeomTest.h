@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL Tests for geometric functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,6 +20,7 @@ private Q_SLOTS:
 
 	void testDist();
 	void testLineSim();
+	void testLineSimAutomatic();
 	void testLineSimMorse();
 	void testNaNInfHandling();
 	// performance

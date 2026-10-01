@@ -140,8 +140,9 @@ nsl_changepoint_pelt(const double x[], const double y[], size_t n, double penalt
 		F[t] = DBL_MAX;
 		cp[t] = 0;
 
-		size_t start = (t > min_segment_size) ? min_segment_size : 0;
-		for (size_t s = start; s <= t - min_segment_size; s++) {
+		for (size_t s = 0; s <= t - min_segment_size; s++) {
+			if (s > 0 && s < min_segment_size)
+				continue;
 			double cost = F[s] + segment_cost(x, y, s, t) + penalty;
 			if (cost < F[t]) {
 				F[t] = cost;
