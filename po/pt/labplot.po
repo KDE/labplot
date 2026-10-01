@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-29 00:40+0000\n"
+"POT-Creation-Date: 2026-10-01 00:40+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -1382,7 +1382,7 @@ msgstr "Não foi possível aceder ao dispositivo."
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
-#: src/backend/datasources/filters/XLSXFilter.cpp:513
+#: src/backend/datasources/filters/XLSXFilter.cpp:514
 #, fuzzy, kde-format
 #| msgid "Number"
 msgid "Not enough memory."
@@ -2286,7 +2286,7 @@ msgid "Sheet count: %1"
 msgstr "Número de folhas: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:227
-#: src/backend/datasources/filters/XLSXFilter.cpp:630
+#: src/backend/datasources/filters/XLSXFilter.cpp:631
 #, fuzzy, kde-format
 #| msgid "No data set selected"
 msgid "No sheet selected."
@@ -2716,7 +2716,7 @@ msgstr "Tempo_10µs"
 msgid "Sheets: "
 msgstr "Folhas: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:634
+#: src/backend/datasources/filters/XLSXFilter.cpp:635
 #, fuzzy, kde-format
 #| msgid "Invalid tolerance specified"
 msgid "Invalid region specified."

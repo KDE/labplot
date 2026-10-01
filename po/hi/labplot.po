@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-29 00:40+0000\n"
+"POT-Creation-Date: 2026-10-01 00:40+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -1306,7 +1306,7 @@ msgstr "डिवाइस/फ़ाइल खोलने में विफ�
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
-#: src/backend/datasources/filters/XLSXFilter.cpp:513
+#: src/backend/datasources/filters/XLSXFilter.cpp:514
 #, kde-format
 msgid "Not enough memory."
 msgstr "पर्याप्त स्मृति नहीं."
@@ -2185,7 +2185,7 @@ msgid "Sheet count: %1"
 msgstr "शीट गणना: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:227
-#: src/backend/datasources/filters/XLSXFilter.cpp:630
+#: src/backend/datasources/filters/XLSXFilter.cpp:631
 #, kde-format
 msgid "No sheet selected."
 msgstr "कोई शीट चयनित नहीं."
@@ -2589,7 +2589,7 @@ msgstr "समय_10µs"
 msgid "Sheets: "
 msgstr "शीट:"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:634
+#: src/backend/datasources/filters/XLSXFilter.cpp:635
 #, kde-format
 msgid "Invalid region specified."
 msgstr "अमान्य क्षेत्र निर्दिष्ट किया गया."

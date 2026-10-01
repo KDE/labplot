@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-29 00:40+0000\n"
+"POT-Creation-Date: 2026-10-01 00:40+0000\n"
 "PO-Revision-Date: 2026-09-23 09:55+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -1310,7 +1310,7 @@ msgstr "Impossibile aprire il dispositivo o il file, oppure è vuoto."
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
-#: src/backend/datasources/filters/XLSXFilter.cpp:513
+#: src/backend/datasources/filters/XLSXFilter.cpp:514
 #, kde-format
 msgid "Not enough memory."
 msgstr "Memoria insufficiente."
@@ -2202,7 +2202,7 @@ msgid "Sheet count: %1"
 msgstr "Conteggio dei fogli: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:227
-#: src/backend/datasources/filters/XLSXFilter.cpp:630
+#: src/backend/datasources/filters/XLSXFilter.cpp:631
 #, kde-format
 msgid "No sheet selected."
 msgstr "Nessun foglio selezionato."
@@ -2588,7 +2588,7 @@ msgstr "Tempo_10µs"
 msgid "Sheets: "
 msgstr "Fogli: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:634
+#: src/backend/datasources/filters/XLSXFilter.cpp:635
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Regione specificata non valida."

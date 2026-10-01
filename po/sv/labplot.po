@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-29 00:40+0000\n"
+"POT-Creation-Date: 2026-10-01 00:40+0000\n"
 "PO-Revision-Date: 2026-09-20 10:40+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -1303,7 +1303,7 @@ msgstr "Misslyckades öppna enheten/filen eller så är den tom."
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
-#: src/backend/datasources/filters/XLSXFilter.cpp:513
+#: src/backend/datasources/filters/XLSXFilter.cpp:514
 #, kde-format
 msgid "Not enough memory."
 msgstr "Inte tillräckligt med minne."
@@ -2186,7 +2186,7 @@ msgid "Sheet count: %1"
 msgstr "Antal blad: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:227
-#: src/backend/datasources/filters/XLSXFilter.cpp:630
+#: src/backend/datasources/filters/XLSXFilter.cpp:631
 #, kde-format
 msgid "No sheet selected."
 msgstr "Inget blad valt."
@@ -2572,7 +2572,7 @@ msgstr "Tid_10µs"
 msgid "Sheets: "
 msgstr "Blad: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:634
+#: src/backend/datasources/filters/XLSXFilter.cpp:635
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Ogiltigt område angivet."
