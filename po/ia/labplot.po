@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-01 00:40+0000\n"
+"POT-Creation-Date: 2026-10-01 17:36+0000\n"
 "PO-Revision-Date: 2026-09-21 15:07+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -639,19 +639,19 @@ msgstr "%1: assigna formula de cella"
 msgid "%1: clear all formulas"
 msgstr "%1: clara omne formulas"
 
-#: src/backend/core/column/columncommands.h:233
+#: src/backend/core/column/columncommands.h:232
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: assigna valor per rango %2"
 
-#: src/backend/core/column/columncommands.h:295
+#: src/backend/core/column/columncommands.h:294
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1150
 #, kde-format
 msgid "%1: replace values"
 msgstr "%1: reimplacia valores"
 
-#: src/backend/core/column/columncommands.h:297
+#: src/backend/core/column/columncommands.h:296
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: reimplacia le valores per rangos %2 a %3"
@@ -2273,14 +2273,14 @@ msgstr "Formato de file non supportate."
 msgid "The file has no data to import."
 msgstr ""
 
-#: src/backend/datasources/filters/QJsonModel.cpp:132
+#: src/backend/datasources/filters/QJsonModel.cpp:135
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:62
 #, kde-format
 msgid "Key"
 msgstr "Clave"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/QJsonModel.cpp:133
+#: src/backend/datasources/filters/QJsonModel.cpp:136
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
@@ -2296,17 +2296,17 @@ msgstr "Clave"
 msgid "Value"
 msgstr "Valor"
 
-#: src/backend/datasources/filters/QJsonModel.cpp:134
+#: src/backend/datasources/filters/QJsonModel.cpp:137
 #, kde-format
 msgid "Size in Bytes"
 msgstr "Dimension in Bytes"
 
-#: src/backend/datasources/filters/QJsonModel.cpp:200
+#: src/backend/datasources/filters/QJsonModel.cpp:203
 #, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
 msgstr ""
 
-#: src/backend/datasources/filters/QJsonModel.cpp:206
+#: src/backend/datasources/filters/QJsonModel.cpp:209
 #, kde-format
 msgid "Failed to load JSON document. Error: %1."
 msgstr ""

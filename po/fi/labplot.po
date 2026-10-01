@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-01 00:40+0000\n"
+"POT-Creation-Date: 2026-10-01 17:36+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -692,12 +692,12 @@ msgstr "%1: aseta solun kaava"
 msgid "%1: clear all formulas"
 msgstr "%1: tyhjennä kaikki kaavat"
 
-#: src/backend/core/column/columncommands.h:233
+#: src/backend/core/column/columncommands.h:232
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: aseta rivin %2 arvo"
 
-#: src/backend/core/column/columncommands.h:295
+#: src/backend/core/column/columncommands.h:294
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1150
 #, fuzzy, kde-format
@@ -705,7 +705,7 @@ msgstr "%1: aseta rivin %2 arvo"
 msgid "%1: replace values"
 msgstr "Arvot"
 
-#: src/backend/core/column/columncommands.h:297
+#: src/backend/core/column/columncommands.h:296
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: korvaa arvot riveillä %2–%3"
@@ -2469,14 +2469,14 @@ msgstr "Tietolähteen tyyppi"
 msgid "The file has no data to import."
 msgstr "Ei tuotavaa tietoa."
 
-#: src/backend/datasources/filters/QJsonModel.cpp:132
+#: src/backend/datasources/filters/QJsonModel.cpp:135
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:62
 #, kde-format
 msgid "Key"
 msgstr "Avain"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/QJsonModel.cpp:133
+#: src/backend/datasources/filters/QJsonModel.cpp:136
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
@@ -2492,18 +2492,18 @@ msgstr "Avain"
 msgid "Value"
 msgstr "Arvo"
 
-#: src/backend/datasources/filters/QJsonModel.cpp:134
+#: src/backend/datasources/filters/QJsonModel.cpp:137
 #, kde-format
 msgid "Size in Bytes"
 msgstr "Koko tavuina"
 
-#: src/backend/datasources/filters/QJsonModel.cpp:200
+#: src/backend/datasources/filters/QJsonModel.cpp:203
 #, fuzzy, kde-format
 #| msgid "no valid XML document found"
 msgid "Failed to load the JSON file. Empty JSON document."
 msgstr "kelvollista XML-asiakirjaa ei löytynyt"
 
-#: src/backend/datasources/filters/QJsonModel.cpp:206
+#: src/backend/datasources/filters/QJsonModel.cpp:209
 #, fuzzy, kde-format
 #| msgid "no valid XML document found"
 msgid "Failed to load JSON document. Error: %1."

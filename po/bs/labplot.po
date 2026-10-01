@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-01 00:40+0000\n"
+"POT-Creation-Date: 2026-10-01 17:36+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -689,12 +689,12 @@ msgstr "%1: postavi formulu za ćeliju"
 msgid "%1: clear all formulas"
 msgstr "%1: obriši sve formule"
 
-#: src/backend/core/column/columncommands.h:233
+#: src/backend/core/column/columncommands.h:232
 #, kde-format
 msgid "%1: set value for row %2"
 msgstr "%1: postavi vrijednost za red %2"
 
-#: src/backend/core/column/columncommands.h:295
+#: src/backend/core/column/columncommands.h:294
 #: src/backend/matrix/matrixcommands.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1150
 #, fuzzy, kde-format
@@ -702,7 +702,7 @@ msgstr "%1: postavi vrijednost za red %2"
 msgid "%1: replace values"
 msgstr "%1: rotiraj vrijednosti"
 
-#: src/backend/core/column/columncommands.h:297
+#: src/backend/core/column/columncommands.h:296
 #, kde-format
 msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: zamijeni vrijednosti za redove %2 i %3"
@@ -2476,14 +2476,14 @@ msgstr "Datoteka podatak izvor"
 msgid "The file has no data to import."
 msgstr ""
 
-#: src/backend/datasources/filters/QJsonModel.cpp:132
+#: src/backend/datasources/filters/QJsonModel.cpp:135
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:62
 #, kde-format
 msgid "Key"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/QJsonModel.cpp:133
+#: src/backend/datasources/filters/QJsonModel.cpp:136
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
@@ -2499,19 +2499,19 @@ msgstr ""
 msgid "Value"
 msgstr "Vrijednost"
 
-#: src/backend/datasources/filters/QJsonModel.cpp:134
+#: src/backend/datasources/filters/QJsonModel.cpp:137
 #, fuzzy, kde-format
 #| msgid "Skip empty parts"
 msgid "Size in Bytes"
 msgstr "Preskoči prazne dijelove"
 
-#: src/backend/datasources/filters/QJsonModel.cpp:200
+#: src/backend/datasources/filters/QJsonModel.cpp:203
 #, fuzzy, kde-format
 #| msgid "no valid XML document found"
 msgid "Failed to load the JSON file. Empty JSON document."
 msgstr "nije pronađen validan XML dokument"
 
-#: src/backend/datasources/filters/QJsonModel.cpp:206
+#: src/backend/datasources/filters/QJsonModel.cpp:209
 #, fuzzy, kde-format
 #| msgid "no valid XML document found"
 msgid "Failed to load JSON document. Error: %1."
