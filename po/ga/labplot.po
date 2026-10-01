@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-29 00:40+0000\n"
+"POT-Creation-Date: 2026-10-01 00:40+0000\n"
 "PO-Revision-Date: 2026-03-15 15:36+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -1314,7 +1314,7 @@ msgstr "Theip ar an ngléas/comhad a oscailt nó tá sé folamh."
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:341
-#: src/backend/datasources/filters/XLSXFilter.cpp:513
+#: src/backend/datasources/filters/XLSXFilter.cpp:514
 #, kde-format
 msgid "Not enough memory."
 msgstr "Gan dóthain cuimhne."
@@ -2202,7 +2202,7 @@ msgid "Sheet count: %1"
 msgstr "Líon na mbileog: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:227
-#: src/backend/datasources/filters/XLSXFilter.cpp:630
+#: src/backend/datasources/filters/XLSXFilter.cpp:631
 #, kde-format
 msgid "No sheet selected."
 msgstr "Níl aon bhileog roghnaithe."
@@ -2605,7 +2605,7 @@ msgstr "Am_10µs"
 msgid "Sheets: "
 msgstr "Bileoga: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:634
+#: src/backend/datasources/filters/XLSXFilter.cpp:635
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Réigiún neamhbhailí sonraithe."
