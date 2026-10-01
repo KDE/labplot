@@ -12,14 +12,14 @@
 #ifndef COLUMNCOMMANDS_H
 #define COLUMNCOMMANDS_H
 
-#include <QBitArray>
-
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/IntervalAttribute.h"
 
 #include <KLocalizedString>
 
+#include <QBitArray>
+#include <QDateTime>
 #include <QUndoCommand>
 
 class AbstractSimpleFilter;
