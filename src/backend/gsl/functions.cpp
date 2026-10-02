@@ -37,6 +37,7 @@ double greaterEqualThan(const double v1, const double v2);
 double lessThan(const double v1, const double v2);
 double lessEqualThan(const double v1, const double v2);
 double equal(const double v1, const double v2);
+double isnan(const double v);
 double ifCondition(const double condition, const double valueIfTrue, const double valueIfFalse);
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);
@@ -333,6 +334,7 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		{[]() { return i18n("greaterEqualThan"); }, "greaterEqualThan", greaterEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("lessEqualThan"); }, "lessEqualThan", lessEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("equal"); }, "equal", equal, 2, nullptr, FunctionGroups::ComparisonFunctions},
+		{[]() { return i18n("is nan"); }, "isnan", isnan, 1, nullptr, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("equal with epsilon"); }, "equalE", equalEpsilon, 3, &equalEpsilonParameterNames, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("between with boundaries included"); }, "between_inc", betweenIncluded, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("outside with boundaries included"); }, "outside_inc", outsideIncluded, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
@@ -905,6 +907,10 @@ double lessEqualThan(const double v1, const double v2) {
 
 double equal(const double v1, const double v2) {
 	return v1 == v2;
+}
+
+double isnan(const double v1) {
+	return std::isnan(v1);
 }
 
 bool convertDoubleToBool(const double value) {

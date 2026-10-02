@@ -199,6 +199,19 @@ void ExpressionParserTest::testequal() {
 	QCOMPARE(fnct(0, -0), 1);
 }
 
+void ExpressionParserTest::test_isnan() {
+	auto fnct = getFunction1(QStringLiteral("isnan"));
+	QVERIFY(fnct);
+
+	QCOMPARE(fnct(-100.), false);
+	QCOMPARE(fnct(1.), false);
+	QCOMPARE(fnct(0.0), false);
+	QCOMPARE(fnct(INFINITY), false);
+	QCOMPARE(fnct(NAN), true);
+	QCOMPARE(fnct(std::nan("0")), true);
+	QCOMPARE(fnct(std::nan("1")), true);
+}
+
 void ExpressionParserTest::testifCondition() {
 	auto fnct = getFunction3(QStringLiteral("if"));
 	QVERIFY(fnct);

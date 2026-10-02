@@ -29,6 +29,7 @@ private Q_SLOTS:
 	void testlessThan();
 	void testlessEqualThan();
 	void testequal();
+	void test_isnan();
 	void testifCondition();
 	void testandFunction();
 	void testorFunction();
