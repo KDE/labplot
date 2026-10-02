@@ -1406,7 +1406,12 @@ void XYFitCurveDock::resultCopy(bool copyAll) {
 			if (!rowStr.isEmpty())
 				rowStr += QLatin1Char('\t');
 
-			rowStr += tw->item(i, j)->text();
+			// use the full numerical precision of double for the export if available (table shows a rounded/truncated text)
+			const auto& data = tw->item(i, j)->data(Qt::UserRole);
+			if (data.isValid())
+				rowStr += QLocale().toString(data.toDouble(), 'g', std::numeric_limits<double>::max_digits10);
+			else
+				rowStr += tw->item(i, j)->text();
 		}
 		if (!rowStr.isEmpty()) {
 			if (!str.isEmpty())
@@ -1450,10 +1455,14 @@ void XYFitCurveDock::showFitResult() {
 	DEBUG(Q_FUNC_INFO)
 	// clear the previous result
 	uiGeneralTab.twParameters->setRowCount(0);
-	for (int row = 0; row < uiGeneralTab.twGoodness->rowCount(); ++row)
+	for (int row = 0; row < uiGeneralTab.twGoodness->rowCount(); ++row) {
 		uiGeneralTab.twGoodness->item(row, 1)->setText(QString());
-	for (int row = 0; row < uiGeneralTab.twLog->rowCount(); ++row)
+		uiGeneralTab.twGoodness->item(row, 1)->setData(Qt::UserRole, QVariant());
+	}
+	for (int row = 0; row < uiGeneralTab.twLog->rowCount(); ++row) {
 		uiGeneralTab.twLog->item(row, 1)->setText(QString());
+		uiGeneralTab.twLog->item(row, 1)->setData(Qt::UserRole, QVariant());
+	}
 
 	const auto& fitResult = m_fitCurve->fitResult();
 
@@ -1484,6 +1493,7 @@ void XYFitCurveDock::showFitResult() {
 	// log
 	uiGeneralTab.twLog->item(1, 1)->setText(numberLocale.toString(fitResult.iterations));
 	uiGeneralTab.twLog->item(2, 1)->setText(numberLocale.toString(m_fitData.eps));
+	uiGeneralTab.twLog->item(2, 1)->setData(Qt::UserRole, m_fitData.eps);
 	if (fitResult.elapsedTime > 1000)
 		uiGeneralTab.twLog->item(3, 1)->setText(numberLocale.toString(fitResult.elapsedTime / 1000) + QStringLiteral(" s"));
 	else
@@ -1535,13 +1545,17 @@ void XYFitCurveDock::showFitResult() {
 		item->setBackground(QApplication::palette().color(QPalette::Window));
 		uiGeneralTab.twParameters->setItem(i, 0, item);
 		item = new QTableWidgetItem(numberLocale.toString(paramValue));
+		item->setData(Qt::UserRole, paramValue);
 		uiGeneralTab.twParameters->setItem(i, 1, item);
 
 		if (!m_fitData.paramFixed.at(i)) {
 			if (!std::isnan(errorValue)) {
 				item = new QTableWidgetItem(numberLocale.toString(errorValue));
+				item->setData(Qt::UserRole, errorValue);
 				uiGeneralTab.twParameters->setItem(i, 2, item);
-				item = new QTableWidgetItem(numberLocale.toString(100. * errorValue / std::abs(paramValue), 'g', 3));
+				const double errorPercent = 100. * errorValue / std::abs(paramValue);
+				item = new QTableWidgetItem(numberLocale.toString(errorPercent, 'g', 3));
+				item->setData(Qt::UserRole, errorPercent);
 				uiGeneralTab.twParameters->setItem(i, 3, item);
 			} else {
 				item = new QTableWidgetItem(UTF8_QSTRING("∞"));
@@ -1557,11 +1571,14 @@ void XYFitCurveDock::showFitResult() {
 			else
 				tdistValueString = UTF8_QSTRING("∞");
 			item = new QTableWidgetItem(tdistValueString);
+			if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
+				item->setData(Qt::UserRole, fitResult.tdist_tValues.at(i));
 			uiGeneralTab.twParameters->setItem(i, 4, item);
 
 			// p values
 			const double p = fitResult.tdist_pValues.at(i);
 			item = new QTableWidgetItem(numberLocale.toString(p, 'g', 3));
+			item->setData(Qt::UserRole, p);
 			// color p values depending on value
 			if (p > 0.05)
 				item->setForeground(QBrush(QApplication::palette().color(QPalette::LinkVisited)));
@@ -1584,9 +1601,13 @@ void XYFitCurveDock::showFitResult() {
 				if (fitResult.marginValues.size() >= i && fitResult.marginValues.at(i) != 0.)
 					marginHigh = fitResult.marginValues.at(i);
 
-				item = new QTableWidgetItem(numberLocale.toString(paramValue - marginLow));
+				const double lower = paramValue - marginLow;
+				const double upper = paramValue + marginHigh;
+				item = new QTableWidgetItem(numberLocale.toString(lower));
+				item->setData(Qt::UserRole, lower);
 				uiGeneralTab.twParameters->setItem(i, 6, item);
-				item = new QTableWidgetItem(numberLocale.toString(paramValue + marginHigh));
+				item = new QTableWidgetItem(numberLocale.toString(upper));
+				item->setData(Qt::UserRole, upper);
 				uiGeneralTab.twParameters->setItem(i, 7, item);
 			}
 		}
@@ -1594,23 +1615,34 @@ void XYFitCurveDock::showFitResult() {
 
 	// Goodness of fit
 	uiGeneralTab.twGoodness->item(0, 1)->setText(numberLocale.toString(fitResult.sse));
+	uiGeneralTab.twGoodness->item(0, 1)->setData(Qt::UserRole, fitResult.sse);
 
 	if (fitResult.dof != 0) {
 		uiGeneralTab.twGoodness->item(1, 1)->setText(numberLocale.toString(fitResult.rms));
+		uiGeneralTab.twGoodness->item(1, 1)->setData(Qt::UserRole, fitResult.rms);
 		uiGeneralTab.twGoodness->item(2, 1)->setText(numberLocale.toString(fitResult.rsd));
+		uiGeneralTab.twGoodness->item(2, 1)->setData(Qt::UserRole, fitResult.rsd);
 
 		uiGeneralTab.twGoodness->item(3, 1)->setText(numberLocale.toString(fitResult.rsquare));
+		uiGeneralTab.twGoodness->item(3, 1)->setData(Qt::UserRole, fitResult.rsquare);
 		uiGeneralTab.twGoodness->item(4, 1)->setText(numberLocale.toString(fitResult.rsquareAdj));
+		uiGeneralTab.twGoodness->item(4, 1)->setData(Qt::UserRole, fitResult.rsquareAdj);
 
 		// chi^2 and F test p-values
 		uiGeneralTab.twGoodness->item(5, 1)->setText(numberLocale.toString(fitResult.chisq_p, 'g', 3));
+		uiGeneralTab.twGoodness->item(5, 1)->setData(Qt::UserRole, fitResult.chisq_p);
 		uiGeneralTab.twGoodness->item(6, 1)->setText(numberLocale.toString(fitResult.fdist_F, 'g', 3));
+		uiGeneralTab.twGoodness->item(6, 1)->setData(Qt::UserRole, fitResult.fdist_F);
 		uiGeneralTab.twGoodness->item(7, 1)->setText(numberLocale.toString(fitResult.fdist_p, 'g', 3));
+		uiGeneralTab.twGoodness->item(7, 1)->setData(Qt::UserRole, fitResult.fdist_p);
 		uiGeneralTab.twGoodness->item(9, 1)->setText(numberLocale.toString(fitResult.aic, 'g', 3));
+		uiGeneralTab.twGoodness->item(9, 1)->setData(Qt::UserRole, fitResult.aic);
 		uiGeneralTab.twGoodness->item(10, 1)->setText(numberLocale.toString(fitResult.bic, 'g', 3));
+		uiGeneralTab.twGoodness->item(10, 1)->setData(Qt::UserRole, fitResult.bic);
 	}
 
 	uiGeneralTab.twGoodness->item(8, 1)->setText(numberLocale.toString(fitResult.mae));
+	uiGeneralTab.twGoodness->item(8, 1)->setData(Qt::UserRole, fitResult.mae);
 
 	// resize the table headers to fit the new content
 	uiGeneralTab.twLog->resizeColumnsToContents();
