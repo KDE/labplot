@@ -334,7 +334,7 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		{[]() { return i18n("greaterEqualThan"); }, "greaterEqualThan", greaterEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("lessEqualThan"); }, "lessEqualThan", lessEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("equal"); }, "equal", equal, 2, nullptr, FunctionGroups::ComparisonFunctions},
-		{[]() { return i18n("is nan"); }, "isnan", isnan, 1, nullptr, FunctionGroups::ComparisonFunctions},
+		{[]() { return i18n("Not a Number"); }, "isnan", isnan, 1, nullptr, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("equal with epsilon"); }, "equalE", equalEpsilon, 3, &equalEpsilonParameterNames, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("between with boundaries included"); }, "between_inc", betweenIncluded, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
 		{[]() { return i18n("outside with boundaries included"); }, "outside_inc", outsideIncluded, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
