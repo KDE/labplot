@@ -567,10 +567,10 @@ QString GuiTools::loadFunction(ExpressionTextEdit* te, KComboBox* cbCategory, KC
 
 		KConfig config(fileName);
 		auto general = config.group(QLatin1String("General"));
-		te->setPlainText(general.readEntry("Function", ""));
-		// switch to custom model
+		// switch to custom model before setting the function text so that parameter names are parsed from the loaded text
 		if (cbCategory)
 			cbCategory->setCurrentIndex(cbCategory->count() - 1);
+		te->setPlainText(general.readEntry("Function", ""));
 
 		auto description = general.readEntry("Description", "");
 		auto comment = general.readEntry("Comment", "");

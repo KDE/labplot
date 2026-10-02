@@ -185,6 +185,9 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* fdata) {
 	}
 	m_initializing = false;
 
+	// parameter names may have changed -> adjust the width of the name column
+	ui.tableWidget->resizeColumnToContents(0);
+
 	updateTableSize();
 }
 

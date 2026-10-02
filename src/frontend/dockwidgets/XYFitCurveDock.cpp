@@ -1224,6 +1224,9 @@ void XYFitCurveDock::loadFunction() {
 			}
 		}
 	}
+
+	// update parameter widget
+	parametersChanged();
 }
 
 void XYFitCurveDock::saveFunction() {
