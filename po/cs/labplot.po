@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-01 17:36+0000\n"
-"PO-Revision-Date: 2026-10-01 12:02+0200\n"
+"PO-Revision-Date: 2026-10-02 00:00+0200\n"
 "Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -46,7 +46,7 @@ msgstr "Vložit '%1'"
 #: src/backend/core/AbstractAspect.cpp:401
 #, kde-format
 msgid "Create Data Spreadsheet"
-msgstr "Vytvořit sešit s daty"
+msgstr "Vytvořit tabulku s daty"
 
 #: src/backend/core/AbstractAspect.cpp:451
 #, kde-format
@@ -3651,7 +3651,7 @@ msgstr "Exponenciální rozložení"
 #: src/backend/gsl/functions.cpp:144
 #, kde-format
 msgid "Laplace Distribution"
-msgstr "Laplaceovo rozložení"
+msgstr "Laplaceovo rozdělení"
 
 #: src/backend/gsl/functions.cpp:146
 #, kde-format
@@ -7129,7 +7129,7 @@ msgstr "n-tý bod"
 #: src/backend/nsl/nsl_geom_linesim.c:22
 #, kde-format
 msgid "Radial Distance"
-msgstr ""
+msgstr "Radiální vzdálenost"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
@@ -7147,7 +7147,7 @@ msgstr "Opheim"
 #: src/backend/nsl/nsl_geom_linesim.c:25
 #, kde-format
 msgid "Lang"
-msgstr ""
+msgstr "Lang"
 
 #: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:119
 #, kde-format
@@ -7157,82 +7157,82 @@ msgstr "Obálka"
 #: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Rectangle (1-point)"
-msgstr ""
+msgstr "Obdélník (1 bod)"
 
 #: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Trapezoid (2-point)"
-msgstr ""
+msgstr "Trapéz (2 body)"
 
 #: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Simpson's (3-point)"
-msgstr ""
+msgstr "Simpson (3 body)"
 
 #: src/backend/nsl/nsl_int.c:20
 #, kde-format
 msgid "Simpson's 3/8 (4-point)"
-msgstr ""
+msgstr "Simpson 3/8 (4 body)"
 
 #: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:445
 #, kde-format
 msgid "Cubic Spline (Natural)"
-msgstr ""
+msgstr "Kubická spline křivka (přirozená)"
 
 #: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:446
 #, kde-format
 msgid "Cubic Spline (Periodic)"
-msgstr ""
+msgstr "Kubická spline křivka (periodická)"
 
 #: src/backend/nsl/nsl_interp.c:18
 #, kde-format
 msgid "Akima-Spline (Natural)"
-msgstr ""
+msgstr "Akima spline křivka (přirozená)"
 
 #: src/backend/nsl/nsl_interp.c:19
 #, kde-format
 msgid "Akima-Spline (Periodic)"
-msgstr ""
+msgstr "Akima spline křivka (periodická)"
 
 #: src/backend/nsl/nsl_interp.c:20
 #, kde-format
 msgid "Steffen-Spline"
-msgstr ""
+msgstr "Steffen spline křivka"
 
 #: src/backend/nsl/nsl_interp.c:23
 #, kde-format
 msgid "Piecewise Cubic Hermite (PCH)"
-msgstr ""
+msgstr "Úseková kubická Hermitova funkce (PCH)"
 
 #: src/backend/nsl/nsl_interp.c:24
 #, kde-format
 msgid "Rational Functions"
-msgstr ""
+msgstr "Racionální funkce"
 
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Finite Differences"
-msgstr ""
+msgstr "Konečná diference"
 
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Catmull-Rom"
-msgstr ""
+msgstr "Catmull-Romova spline křivka"
 
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Cardinal"
-msgstr "Základní"
+msgstr "Kardinální spline křivka"
 
 #: src/backend/nsl/nsl_interp.c:25
 #, kde-format
 msgid "Kochanek-Bartels (TCB)"
-msgstr ""
+msgstr "Křivka Kochanek-Bartels (TCB)"
 
 #: src/backend/nsl/nsl_interp.c:26
 #, kde-format
 msgid "Derivative"
-msgstr ""
+msgstr "Derivát"
 
 #: src/backend/nsl/nsl_interp.c:26
 #, kde-format
@@ -7243,28 +7243,28 @@ msgstr "Integrál"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:813
 #, kde-format
 msgid "Gaussian (Normal)"
-msgstr ""
+msgstr "Gaussovské (normální)"
 
 #: src/backend/nsl/nsl_sf_stats.c:14
 #, kde-format
 msgid "Gaussian Tail"
-msgstr ""
+msgstr "Gaussův rozptyl"
 
 #: src/backend/nsl/nsl_sf_stats.c:16
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:821
 #, kde-format
 msgid "Laplace"
-msgstr "Laplaceův"
+msgstr "Laplace"
 
 #: src/backend/nsl/nsl_sf_stats.c:17
 #, kde-format
 msgid "Exponential Power"
-msgstr ""
+msgstr "Exponenciální mocnina"
 
 #: src/backend/nsl/nsl_sf_stats.c:18
 #, kde-format
 msgid "Cauchy-Lorentz (Breit-Wigner)"
-msgstr ""
+msgstr "Cauchy-Lorentz (Breit-Wigner)"
 
 #: src/backend/nsl/nsl_sf_stats.c:19
 #, kde-format
@@ -7274,22 +7274,22 @@ msgstr "Rayleigh"
 #: src/backend/nsl/nsl_sf_stats.c:20
 #, kde-format
 msgid "Rayleigh Tail"
-msgstr ""
+msgstr "Rayleighův rozptyl"
 
 #: src/backend/nsl/nsl_sf_stats.c:21
 #, kde-format
 msgid "Landau"
-msgstr ""
+msgstr "Landau"
 
 #: src/backend/nsl/nsl_sf_stats.c:22
 #, kde-format
 msgid "Levy Alpha-stable"
-msgstr ""
+msgstr "Levyho alfa-stabilní"
 
 #: src/backend/nsl/nsl_sf_stats.c:23
 #, kde-format
 msgid "Levy Skew Alpha-stable"
-msgstr ""
+msgstr "Levyho zkosení alfa-stabilní"
 
 #: src/backend/nsl/nsl_sf_stats.c:24
 #, kde-format
@@ -7299,27 +7299,27 @@ msgstr "Gama"
 #: src/backend/nsl/nsl_sf_stats.c:25
 #, kde-format
 msgid "Flat (Uniform)"
-msgstr ""
+msgstr "Ploché (jednotné)"
 
 #: src/backend/nsl/nsl_sf_stats.c:26
 #, kde-format
 msgid "Log-Normal (Galton)"
-msgstr ""
+msgstr "Lognormální (Galton)"
 
 #: src/backend/nsl/nsl_sf_stats.c:27
 #, kde-format
 msgid "Chi-Squared"
-msgstr ""
+msgstr "Chi-kvadrát"
 
 #: src/backend/nsl/nsl_sf_stats.c:28
 #, kde-format
 msgid "F (Fisher-Snedecor)"
-msgstr ""
+msgstr "F (Fisher-Snedecor)"
 
 #: src/backend/nsl/nsl_sf_stats.c:29
 #, kde-format
 msgid "Student's t"
-msgstr ""
+msgstr "Studentovo t"
 
 #: src/backend/nsl/nsl_sf_stats.c:30
 #, kde-format
@@ -7329,49 +7329,49 @@ msgstr "Beta"
 #: src/backend/nsl/nsl_sf_stats.c:31
 #, kde-format
 msgid "Logistic (Sech-Squared)"
-msgstr ""
+msgstr "Logistické (Sech-kvadrát)"
 
 #: src/backend/nsl/nsl_sf_stats.c:32
 #, kde-format
 msgid "Pareto"
-msgstr ""
+msgstr "Pareto"
 
 #: src/backend/nsl/nsl_sf_stats.c:33
 #, kde-format
 msgid "Weibull"
-msgstr ""
+msgstr "Weibull"
 
 #: src/backend/nsl/nsl_sf_stats.c:34
 #, kde-format
 msgid "Gumbel Type-1 (Maximum Value; log-Weibull)"
-msgstr ""
+msgstr "Gumbel typ 1 (max. hodnota; log-Weibull)"
 
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr ""
+msgstr "Gumbel typ 2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:835
 #, kde-format
 msgid "Poisson"
-msgstr "Poissonovo"
+msgstr "Poisson"
 
 #: src/backend/nsl/nsl_sf_stats.c:37
 #, kde-format
 msgid "Bernoulli"
-msgstr ""
+msgstr "Bernoulli"
 
 #: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:30
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:839
 #, kde-format
 msgid "Binomial"
-msgstr ""
+msgstr "Binomické"
 
 #: src/backend/nsl/nsl_sf_stats.c:39
 #, kde-format
 msgid "Negative Binomial"
-msgstr ""
+msgstr "Negativní binomické"
 
 #: src/backend/nsl/nsl_sf_stats.c:40
 #, kde-format
@@ -7386,12 +7386,12 @@ msgstr "Geometrické"
 #: src/backend/nsl/nsl_sf_stats.c:42
 #, kde-format
 msgid "Hypergeometric"
-msgstr ""
+msgstr "Hypergeometrické"
 
 #: src/backend/nsl/nsl_sf_stats.c:43
 #, kde-format
 msgid "Logarithmic"
-msgstr "Logaritmický"
+msgstr "Logaritmické"
 
 #: src/backend/nsl/nsl_sf_stats.c:44
 #, kde-format
@@ -7401,43 +7401,43 @@ msgstr "Maxwell-Boltzmann"
 #: src/backend/nsl/nsl_sf_stats.c:46
 #, kde-format
 msgid "Levy"
-msgstr ""
+msgstr "Levy"
 
 #: src/backend/nsl/nsl_sf_stats.c:47
 #, kde-format
 msgid "Frechet (Inverse Weibull)"
-msgstr ""
+msgstr "Frechet (inverzní Weibull)"
 
 #: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
 #: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #, kde-format
 msgid "Triangular"
-msgstr "Trojúhelníkový"
+msgstr "Trojúhelníkové"
 
 #: src/backend/nsl/nsl_sf_window.c:15
 #, kde-format
 msgid "Rectangular (Uniform)"
-msgstr ""
+msgstr "Obdélníkové (jednotné)"
 
 #: src/backend/nsl/nsl_sf_window.c:17
 #, kde-format
 msgid "Triangular II (Bartlett)"
-msgstr ""
+msgstr "Trojúhelníkové II (Bartlett)"
 
 #: src/backend/nsl/nsl_sf_window.c:18
 #, kde-format
 msgid "Triangular III (Parzen)"
-msgstr ""
+msgstr "Trojúhelníkové III (Parzen)"
 
 #: src/backend/nsl/nsl_sf_window.c:19
 #, kde-format
 msgid "Welch (Parabolic)"
-msgstr ""
+msgstr "Welch (parabolické)"
 
 #: src/backend/nsl/nsl_sf_window.c:20
 #, kde-format
 msgid "Hann (Raised Cosine)"
-msgstr ""
+msgstr "Hann (zvýšený kosinus)"
 
 #: src/backend/nsl/nsl_sf_window.c:21
 #, kde-format
@@ -7452,27 +7452,27 @@ msgstr "Blackman"
 #: src/backend/nsl/nsl_sf_window.c:23
 #, kde-format
 msgid "Nuttall"
-msgstr ""
+msgstr "Nuttall"
 
 #: src/backend/nsl/nsl_sf_window.c:24
 #, kde-format
 msgid "Blackman-Nuttall"
-msgstr ""
+msgstr "Blackman-Nuttall"
 
 #: src/backend/nsl/nsl_sf_window.c:25
 #, kde-format
 msgid "Blackman-Harris"
-msgstr ""
+msgstr "Blackman-Harris"
 
 #: src/backend/nsl/nsl_sf_window.c:26
 #, kde-format
 msgid "Flat Top"
-msgstr ""
+msgstr "Rovnoměrné ploché"
 
 #: src/backend/nsl/nsl_sf_window.c:28
 #, kde-format
 msgid "Bartlett-Hann"
-msgstr ""
+msgstr "Bartlett-Hann"
 
 #: src/backend/nsl/nsl_sf_window.c:29
 #, kde-format
@@ -7482,32 +7482,32 @@ msgstr "Lanczos"
 #: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
 msgid "Moving Average (Central)"
-msgstr ""
+msgstr "Klouzavý průměr (střední)"
 
 #: src/backend/nsl/nsl_smooth.c:23
 #, kde-format
 msgid "Moving Average (Lagged)"
-msgstr ""
+msgstr "Klouzavý průměr (se zpožděním)"
 
 #: src/backend/nsl/nsl_smooth.c:25
 #, kde-format
 msgid "Savitzky-Golay"
-msgstr ""
+msgstr "Savitzky-Golayův filtr"
 
 #: src/backend/nsl/nsl_smooth.c:26
 #, kde-format
 msgid "LOWESS"
-msgstr ""
+msgstr "LOWESS"
 
 #: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Interpolating"
-msgstr ""
+msgstr "Interpolace"
 
 #: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
 msgid "Mirror"
-msgstr "Zrcadlit"
+msgstr "Zrcadlení"
 
 #: src/backend/nsl/nsl_smooth.c:27
 #, kde-format
@@ -7523,32 +7523,32 @@ msgstr "Konstanta"
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:44
 #, kde-format
 msgid "Periodic"
-msgstr "Periodický"
+msgstr "Periodické"
 
 #: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:159
 #, kde-format
 msgid "Uniform (Rectangular)"
-msgstr ""
+msgstr "Jednotné (obdélníkové)"
 
 #: src/backend/nsl/nsl_smooth.c:31 src/frontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Parabolic (Epanechnikov)"
-msgstr ""
+msgstr "Parabolické (Epanechnikov)"
 
 #: src/backend/nsl/nsl_smooth.c:32 src/frontend/dockwidgets/KDEPlotDock.cpp:162
 #, kde-format
 msgid "Quartic (Biweight)"
-msgstr ""
+msgstr "Kvartické (dvojváhové)"
 
 #: src/backend/nsl/nsl_smooth.c:33 src/frontend/dockwidgets/KDEPlotDock.cpp:163
 #, kde-format
 msgid "Triweight"
-msgstr ""
+msgstr "Tříváhové"
 
 #: src/backend/nsl/nsl_smooth.c:34 src/frontend/dockwidgets/KDEPlotDock.cpp:164
 #, kde-format
 msgid "Tricube"
-msgstr ""
+msgstr "Trikubické"
 
 #: src/backend/script/Script.cpp:109
 #, kde-format
@@ -7612,12 +7612,12 @@ msgstr "Řádky: %1"
 #: src/backend/spreadsheet/Spreadsheet.cpp:409
 #, kde-format
 msgid "%1: remove rows with missing values"
-msgstr ""
+msgstr "%1: odstranit řádky s chybějícími hodnotami"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:427
 #, kde-format
 msgid "%1: mask rows with missing values"
-msgstr ""
+msgstr "%1: maskovat řádky s chybějícími hodnotami"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:484
 #, kde-format
@@ -7634,7 +7634,7 @@ msgstr "%1: přepnout hlavičku malých čárových grafů"
 #: src/backend/spreadsheet/Spreadsheet.cpp:560
 #, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr ""
+msgstr "%1: nastavit propojenou tabulku"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:662
 #, kde-format
@@ -7655,17 +7655,17 @@ msgstr[2] "%1: vložit %2 sloupců"
 #: src/backend/spreadsheet/Spreadsheet.cpp:732
 #, kde-format
 msgid "%1: clear selected columns"
-msgstr ""
+msgstr "%1: vymazat vybrané sloupce"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:748
 #, kde-format
 msgid "%1: clear all masks"
-msgstr ""
+msgstr "%1: vymazat všechno maskování"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:958
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
-msgstr ""
+msgstr "%1: přesunout sloupec %2 z pozice %3 na %4."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1011
 #, kde-format
@@ -7675,15 +7675,15 @@ msgstr "%1: seřadit sloupce"
 #: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr ""
+msgstr "%1: propojená tabulka odstraněna"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1833
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "data s dvojitou přesností, %1 prvek"
+msgstr[1] "číselná data, %1 prvky"
+msgstr[2] "číselná data, %1 prvků"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1836
 #, kde-format
