@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-10-02 00:00+0200\n"
+"PO-Revision-Date: 2026-10-02 11:49+0200\n"
 "Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -7365,58 +7365,64 @@ msgstr[2] "číselná data, %1 prvků"
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "celočíselná data, %1 prvek"
+msgstr[1] "celočíselná data, %1 prvky"
+msgstr[2] "celočíselná data, %1 prvků"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1582
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "velká celočíselná data, %1 prvek"
+msgstr[1] "velká celočíselná data, %1 prvky"
+msgstr[2] "velká celočíselná data, %1 prvků"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1585
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "textová data, %1 prvek"
+msgstr[1] "textová data, %1 prvky"
+msgstr[2] "textová data, %1 prvků"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1588
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "měsíční data, %1 prvek"
+msgstr[1] "měsíční data, %1 prvky"
+msgstr[2] "měsíční data, %1 prvků"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1591
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "denní data, %1 prvek"
+msgstr[1] "denní data, %1 prvky"
+msgstr[2] "denní data, %1 prvků"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1594
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "denní a časová data, %1 prvek"
+msgstr[1] "denní a časová data, %1 prvky"
+msgstr[2] "denní a časová data, %1 prvků"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:138
 #, kde-format
 msgid "%1, masked (ignored in all operations)"
-msgstr ""
+msgstr "%1, maskováno (při všech operacích se ignoruje)"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:143
 #, kde-format
 msgid "invalid cell, masked (ignored in all operations)"
-msgstr ""
+msgstr "neplatná buňka, maskováno (při všech operacích se ignoruje)"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:145
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
-msgstr ""
+msgstr "neplatná buňka (při všech operacích se ignoruje)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
@@ -7432,38 +7438,38 @@ msgstr "Počet"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #, kde-format
 msgid "ArithmeticMean"
-msgstr ""
+msgstr "AritmetickýPrůměr"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #, kde-format
 msgid "GeometricMean"
-msgstr ""
+msgstr "GeometrickýPrůměr"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
 #, kde-format
 msgid "HarmonicMean"
-msgstr ""
+msgstr "HarmonickýPrůměr"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
 #, kde-format
 msgid "ContraharmonicMean"
-msgstr ""
+msgstr "KontraharmonickýPrůměr"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
 #, kde-format
 msgid "FirstQuartile"
-msgstr ""
+msgstr "PrvníKvartil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
 #, kde-format
 msgid "ThirdQuartile"
-msgstr ""
+msgstr "TřetíKvartil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Interquartile Range"
-msgstr ""
+msgstr "Mezikvartilové rozpětí"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #, kde-format
@@ -7511,17 +7517,17 @@ msgstr "Směrodatná odchylka"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #, kde-format
 msgid "MeanDeviation"
-msgstr ""
+msgstr "PrůměrnáOdchylka"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
 #, kde-format
 msgid "MeanDeviationAroundMedian"
-msgstr ""
+msgstr "PrůměrnáOdchylkaKolemMediánu"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
 #, kde-format
 msgid "MedianDeviation"
-msgstr ""
+msgstr "StředníOdchylka"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
