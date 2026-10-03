@@ -59,12 +59,12 @@ protected:
     void getNoteProperties(const std::string &, unsigned int, const std::string &, unsigned int,
                            const std::string &, unsigned int);
     void getColorMap(ColorMap &, const std::string &, unsigned int);
-    void getZcolorsMap(ColorMap &, const std::string &, unsigned int);
+    static void getZcolorsMap(ColorMap &, const std::string &, unsigned int);
     void getProjectLeafProperties(tree<ProjectNode>::iterator, const std::string &, unsigned int);
     void getProjectFolderProperties(tree<ProjectNode>::iterator, const std::string &, unsigned int);
     void outputProjectTree(std::ostream &);
 
-    inline time_t doubleToPosixTime(double jdt)
+    static inline time_t doubleToPosixTime(double jdt)
     {
         /* 2440587.5 is julian date for the unixtime epoch */
         return (time_t)floor((jdt - 2440587) * 86400. + 0.5);

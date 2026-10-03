@@ -2885,7 +2885,6 @@ void OriginAnyParser::getAxisParameterProperties(const string &apdata, unsigned 
         GraphLayer &glayer = graphs[igraph].layers[ilayer];
         GraphAxis axis = glayer.xAxis;
         if (naxis == 1) {
-            axis = glayer.xAxis;
         } else if (naxis == 2) {
             axis = glayer.yAxis;
         } else if (naxis == 3) {
