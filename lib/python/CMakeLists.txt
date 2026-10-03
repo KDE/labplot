@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Manuel Alcaraz Zambrano <manuelalcarazzam@gmail.com>
 # SPDX-License-Identifier: BSD-2-Clause
 
-find_package(Python3 COMPONENTS Development Interpreter REQUIRED)
+# Python3 is already found by the main CMakeLists.txt with stable ABI override
 find_package(PySide6 QUIET)
 find_package(Shiboken6 QUIET)
 
