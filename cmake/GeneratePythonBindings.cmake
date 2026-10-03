@@ -93,7 +93,8 @@ function(generate_python_bindings)
     set(FORCE_PROCESS_INCLUDE_DIRS "")
 
     if(WIN32)
-        set(PATH_SEP "\;")
+        # a literal ';' gets split again by CMake list expansion, the genex survives until the command is generated
+        set(PATH_SEP "$<SEMICOLON>")
     else()
         set(PATH_SEP ":")
     endif()
@@ -188,6 +189,10 @@ function(generate_python_bindings)
 
     target_compile_options(${PB_PACKAGE_NAME} PRIVATE
         $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wno-keyword-macro -Wno-shadow -Wno-cast-function-type -Wno-zero-as-null-pointer-constant>
+    )
+    # MSVC counterpart of -Wno-keyword-macro, shiboken's wrappers macroize the keyword 'protected'
+    target_compile_definitions(${PB_PACKAGE_NAME} PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:_ALLOW_KEYWORD_MACROS>
     )
     target_link_libraries(${PB_PACKAGE_NAME} PRIVATE
         PySide6::pyside6
