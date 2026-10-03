@@ -198,7 +198,7 @@ struct Rect
     short bottom;
 
     explicit Rect(short width = 0, short height = 0)
-        : left(0), top(0), right(width), bottom(height){};
+        : left(0), top(0), right(width), bottom(height) { };
 
     int height() const { return bottom - top; };
 
@@ -260,7 +260,7 @@ struct Window
           modificationDate(0),
           windowBackgroundColorGradient(NoGradient),
           windowBackgroundColorBase({ Color::Regular, { Color::White } }),
-          windowBackgroundColorEnd({ Color::Regular, { Color::White } }){};
+          windowBackgroundColorEnd({ Color::Regular, { Color::White } }) { };
 };
 
 // Variant type with boost-free functions
@@ -309,14 +309,14 @@ public:
         m_type = v.m_type;
         return *this;
     }
-    bool operator< (const Origin::Variant& v) const
+    bool operator<(const Origin::Variant &v) const
     {
-	if (m_type == V_DOUBLE && v.m_type == V_DOUBLE)
+        if (m_type == V_DOUBLE && v.m_type == V_DOUBLE)
             return as_double() < v.as_double();
-	else if (m_type == V_STRING && v.m_type == V_STRING)
-	    return as_string() < v.as_string();
-	else
-	    return false;
+        else if (m_type == V_STRING && v.m_type == V_STRING)
+            return as_string() < v.as_string();
+        else
+            return false;
     }
 
     ~Variant()
@@ -339,6 +339,12 @@ private:
     }
 } variant;
 
+struct MetadataRecord
+{
+    std::string name;
+    std::string payload;
+};
+
 struct SpreadColumn
 {
     enum ColumnType { X, Y, Z, XErr, YErr, Label, NONE };
@@ -352,7 +358,10 @@ struct SpreadColumn
     int decimalPlaces;
     NumericDisplayType numericDisplayType;
     std::string command;
+    std::string longName;
+    std::string units;
     std::string comment;
+    std::vector<MetadataRecord> metadata;
     int width;
     unsigned int index;
     unsigned int colIndex;
@@ -376,7 +385,7 @@ struct SpreadColumn
           sheet(0),
           numRows(0),
           beginRow(0),
-          endRow(0){};
+          endRow(0) { };
 };
 
 struct SpreadSheet : public Window
@@ -387,7 +396,7 @@ struct SpreadSheet : public Window
     std::vector<SpreadColumn> columns;
 
     explicit SpreadSheet(const std::string &_name = std::string())
-        : Window(_name), maxRows(30), loose(true), sheets(1){};
+        : Window(_name), maxRows(30), loose(true), sheets(1) { };
 };
 
 struct Excel : public Window
@@ -399,7 +408,7 @@ struct Excel : public Window
     explicit Excel(const std::string &_name = std::string(),
                    const std::string &_label = std::string(), int _maxRows = 0,
                    bool _hidden = false, bool _loose = true)
-        : Window(_name, _label, _hidden), maxRows(_maxRows), loose(_loose){};
+        : Window(_name, _label, _hidden), maxRows(_maxRows), loose(_loose) { };
 };
 
 struct MatrixSheet
@@ -450,7 +459,7 @@ struct Matrix : public Window
     std::vector<MatrixSheet> sheets;
 
     explicit Matrix(const std::string &_name = std::string())
-        : Window(_name), activeSheet(0), header(ColumnRow){};
+        : Window(_name), activeSheet(0), header(ColumnRow) { };
 };
 
 struct Function
@@ -466,7 +475,7 @@ struct Function
     unsigned int index;
 
     explicit Function(const std::string &_name = std::string(), unsigned int _index = 0)
-        : name(_name), type(Normal), begin(0.0), end(0.0), totalPoints(0), index(_index){};
+        : name(_name), type(Normal), begin(0.0), end(0.0), totalPoints(0), index(_index) { };
 };
 
 struct TextBox
@@ -489,7 +498,7 @@ struct TextBox
           tab(8),
           borderType(BlackLine),
           attach(Frame),
-          shown(true){};
+          shown(true) { };
 
     TextBox(const std::string &_text, Rect _clientRect, Color _color, unsigned short _fontSize,
             int _rotation, int _tab, BorderType _borderType, Attach _attach, bool _shown = true)
@@ -501,7 +510,7 @@ struct TextBox
           tab(_tab),
           borderType(_borderType),
           attach(_attach),
-          shown(_shown){};
+          shown(_shown) { };
 };
 
 struct PieProperties
@@ -537,7 +546,7 @@ struct PieProperties
           formatPercentages(false),
           formatCategories(false),
           positionAssociate(false),
-          distance(25){};
+          distance(25) { };
 };
 
 struct VectorProperties
@@ -568,7 +577,7 @@ struct VectorProperties
           position(Tail),
           multiplier(1.0),
           constAngle(0),
-          constMagnitude(0){};
+          constMagnitude(0) { };
 };
 
 struct TextProperties
@@ -651,7 +660,7 @@ struct PercentileProperties
           boxCoeff(1.0),
           whiskersCoeff(1.5),
           diamondBox(true),
-          labels(0){};
+          labels(0) { };
 };
 
 struct GraphCurve
@@ -807,7 +816,7 @@ struct GraphAxisBreak
           scaleIncrementBefore(5),
           scaleIncrementAfter(5),
           minorTicksBefore(1),
-          minorTicksAfter(1){};
+          minorTicksAfter(1) { };
 };
 
 struct GraphGrid
@@ -905,7 +914,7 @@ struct Figure
           fillAreaPattern(FillPattern::NoFill),
           fillAreaPatternColor({ Color::Regular, { Color::Black } }),
           fillAreaPatternWidth(1),
-          useBorderColor(false){};
+          useBorderColor(false) { };
 };
 
 struct LineVertex
@@ -916,7 +925,7 @@ struct LineVertex
     double x;
     double y;
 
-    LineVertex() : shapeType(0), shapeWidth(0.0), shapeLength(0.0), x(0.0), y(0.0){};
+    LineVertex() : shapeType(0), shapeWidth(0.0), shapeLength(0.0), x(0.0), y(0.0) { };
 };
 
 struct Line
@@ -940,7 +949,7 @@ struct Bitmap
     unsigned char *data;
 
     explicit Bitmap(const std::string &_name = std::string())
-        : attach(Frame), size(0), windowName(_name), borderType(BlackLine), data(nullptr){};
+        : attach(Frame), size(0), windowName(_name), borderType(BlackLine), data(nullptr) { };
 
     Bitmap(const Bitmap &bitmap)
         : clientRect(bitmap.clientRect),
@@ -975,7 +984,7 @@ struct ColorScale
           reverseOrder(false),
           labelGap(5),
           colorBarThickness(3),
-          labelsColor({ Color::Regular, { Color::Black } }){};
+          labelsColor({ Color::Regular, { Color::Black } }) { };
 };
 
 struct GraphLayer
@@ -1089,7 +1098,7 @@ struct GraphLayerRange
     double step;
 
     explicit GraphLayerRange(double _min = 0.0, double _max = 0.0, double _step = 0.0)
-        : min(_min), max(_max), step(_step){};
+        : min(_min), max(_max), step(_step) { };
 };
 
 struct Graph : public Window
@@ -1097,6 +1106,8 @@ struct Graph : public Window
     std::vector<GraphLayer> layers;
     unsigned short width;
     unsigned short height;
+    unsigned short dpiX;
+    unsigned short dpiY;
     bool is3D;
     bool isLayout;
     bool connectMissingData;
@@ -1106,15 +1117,17 @@ struct Graph : public Window
         : Window(_name),
           width(400),
           height(300),
+          dpiX(0),
+          dpiY(0),
           is3D(false),
           isLayout(false),
-          connectMissingData(false){};
+          connectMissingData(false) { };
 };
 
 struct Note : public Window
 {
     std::string text;
-    explicit Note(const std::string &_name = std::string()) : Window(_name){};
+    explicit Note(const std::string &_name = std::string()) : Window(_name) { };
 };
 
 struct ProjectNode
@@ -1134,7 +1147,7 @@ struct ProjectNode
           name(_name),
           creationDate(_creationDate),
           modificationDate(_modificationDate),
-          active(_active){};
+          active(_active) { };
 };
 }
 

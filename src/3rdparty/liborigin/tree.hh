@@ -371,7 +371,7 @@ public:
     template<typename iter>
     iter insert(iter position, const T &x);
     /// Specialisation of previous member.
-    sibling_iterator insert(sibling_iterator position, const T &x);
+    sibling_iterator insert(const sibling_iterator& position, const T &x);
     /// Insert node (with children) pointed to by subtree as previous sibling of node pointed to by
     /// position.
     template<typename iter>
@@ -1080,7 +1080,7 @@ iter tree<T, tree_node_allocator>::insert(iter position, const T &x)
 
 template<class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::sibling_iterator
-tree<T, tree_node_allocator>::insert(sibling_iterator position, const T &x)
+tree<T, tree_node_allocator>::insert(const sibling_iterator& position, const T &x)
 {
     tree_node *tmp = alloc_.allocate(1, nullptr);
     kp::constructor(&tmp->data, x);

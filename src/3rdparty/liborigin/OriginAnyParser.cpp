@@ -14,6 +14,11 @@
 
 #include <sstream>
 #include <cinttypes>
+#include <algorithm>
+#include <charconv>
+#include <optional>
+#include <string_view>
+#include <vector>
 
 using namespace std;
 
@@ -93,7 +98,7 @@ bool OriginAnyParser::parse()
     d_file_size = file.tellg();
     file.seekg(0, ios_base::beg);
 
-    LOG_PRINT(logfile, "File size: %" PRId64 "\n", d_file_size)
+    LOG_PRINT(logfile, "File size: %" PRId64 "\n", static_cast<int64_t>(d_file_size))
 
     // get file and program version, check it is a valid file
     readFileVersion();
@@ -1488,6 +1493,12 @@ void OriginAnyParser::getWindowProperties(Origin::Window &window, const string &
         GET_SHORT(stmp, graphs[igraph].width)
         GET_SHORT(stmp, graphs[igraph].height)
 
+        if (wde_header_size > 0x5A) {
+            stmp.str(wde_header.substr(0x57));
+            GET_SHORT(stmp, graphs[igraph].dpiX)
+            GET_SHORT(stmp, graphs[igraph].dpiY)
+        }
+
         unsigned char co = wde_header[0x38];
         graphs[igraph].connectMissingData = ((co & 0x40) != 0);
 
@@ -1538,6 +1549,12 @@ void OriginAnyParser::getLayerProperties(const string &lye_header, unsigned int 
     } else if (iexcel != -1) { // excel
 
         excels[iexcel].loose = false;
+        if (lye_header_size > 0x12d) {
+            ilayer = (unsigned char)lye_header[0x12d];
+            LOG_PRINT(logfile, "  Apparent layer index = %d\n", ilayer)
+        }
+        if ((unsigned int)ilayer >= excels[iexcel].sheets.size())
+            excels[iexcel].sheets.resize(ilayer + 1);
         if (lye_header_size > 0xD2) {
             excels[iexcel].sheets[ilayer].name = lye_header.substr(0xD2, 32).c_str();
         }
@@ -2147,6 +2164,104 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
     return;
 }
 
+namespace {
+
+constexpr std::string_view kSigil = "@${[";
+constexpr std::string_view kHeaderEnd = "]}";
+
+bool isXmlMetadataSection(std::string_view name)
+{
+    return name == "TREE" || name == "ColComment" || name == "VarInfo"
+            || name == "Organizer" || name == "Script" || name == "ExperimentProperties";
+}
+
+std::string_view withoutTrailingCr(std::string_view text)
+{
+    if (!text.empty() && text.back() == '\r')
+        text.remove_suffix(1);
+    return text;
+}
+
+std::string_view takeLine(std::string_view &text)
+{
+    const std::string_view::size_type end = text.find('\n');
+    const std::string_view line = text.substr(0, end);
+    text.remove_prefix(end == std::string_view::npos ? text.size() : end + 1);
+    return withoutTrailingCr(line);
+}
+
+void parseColumnLabel(std::string_view cvedt, Origin::SpreadColumn &column)
+{
+    std::string_view label = cvedt.substr(0, std::min(cvedt.find(kSigil), cvedt.find('\0')));
+    column.longName = std::string(takeLine(label));
+    column.units = std::string(takeLine(label));
+    column.comment = std::string(withoutTrailingCr(label));
+}
+
+std::vector<std::string_view> splitFields(std::string_view text, char separator)
+{
+    std::vector<std::string_view> fields;
+    std::string_view::size_type end = text.find(separator);
+    while (end != std::string_view::npos) {
+        fields.push_back(text.substr(0, end));
+        text.remove_prefix(end + 1);
+        end = text.find(separator);
+    }
+    fields.push_back(text);
+    return fields;
+}
+
+struct StorageRecord {
+    std::string name;
+    std::string_view payload;
+};
+
+std::optional<StorageRecord> takeStorageRecord(std::string_view &text)
+{
+    constexpr std::size_t kNameField = 2, kSizeField = 3, kHeaderFieldCount = 5;
+
+    if (text.substr(0, kSigil.size()) != kSigil)
+        return std::nullopt;
+
+    const std::string_view::size_type fieldsEnd = text.find(kHeaderEnd, kSigil.size());
+    if (fieldsEnd == std::string_view::npos)
+        return std::nullopt;
+
+    const std::vector<std::string_view> fields =
+            splitFields(text.substr(kSigil.size(), fieldsEnd - kSigil.size()), '|');
+    if (fields.size() < kHeaderFieldCount)
+        return std::nullopt;
+
+    const std::string_view sizeField = fields[kSizeField];
+    const char *const sizeEnd = sizeField.data() + sizeField.size();
+    std::string_view::size_type size = 0;
+    const auto result = std::from_chars(sizeField.data(), sizeEnd, size);
+    if (result.ec != std::errc() || result.ptr != sizeEnd)
+        return std::nullopt;
+
+    const std::string_view::size_type payloadStart = fieldsEnd + kHeaderEnd.size();
+    if (payloadStart > text.size() || size > text.size() - payloadStart)
+        return std::nullopt;
+
+    const StorageRecord record{ std::string(fields[kNameField]),
+                                text.substr(payloadStart, size) };
+    text.remove_prefix(payloadStart + size);
+    return record;
+}
+
+std::vector<Origin::MetadataRecord> parseColumnMetadata(std::string_view cvedt)
+{
+    std::vector<Origin::MetadataRecord> records;
+    std::string_view rest = cvedt.substr(std::min(cvedt.find(kSigil), cvedt.size()));
+    while (std::optional<StorageRecord> record = takeStorageRecord(rest)) {
+        if (isXmlMetadataSection(record->name))
+            records.push_back({ std::move(record->name), std::string(record->payload) });
+    }
+    return records;
+}
+
+}
+
 void OriginAnyParser::getCurveProperties(const string &cvehd, unsigned int cvehdsz,
                                          const string &cvedt, unsigned int cvedtsz)
 {
@@ -2247,7 +2362,8 @@ void OriginAnyParser::getCurveProperties(const string &cvehd, unsigned int cvehd
                 break;
             }
             if (cvedtsz > 0) {
-                spreadSheets[ispread].columns[col_index].comment = cvedt.c_str();
+                parseColumnLabel(cvedt, spreadSheets[ispread].columns[col_index]);
+                spreadSheets[ispread].columns[col_index].metadata = parseColumnMetadata(cvedt);
             }
             // TODO: check that spreadsheet columns are stored in proper order
             // header.push_back(spreadSheets[ispread].columns[col_index]);
@@ -2368,7 +2484,9 @@ void OriginAnyParser::getCurveProperties(const string &cvehd, unsigned int cvehd
                 break;
             }
             if (cvedtsz > 0) {
-                excels[iexcel].sheets[isheet].columns[col_index].comment = cvedt.c_str();
+                parseColumnLabel(cvedt, excels[iexcel].sheets[isheet].columns[col_index]);
+                excels[iexcel].sheets[isheet].columns[col_index].metadata =
+                        parseColumnMetadata(cvedt);
             }
         }
 
