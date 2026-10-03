@@ -1,6 +1,0 @@
-mkdir build
-cd build
-cmake -DGENERATE_CODE_FOR_LOG=1 ..
-make
-# make install
-

@@ -1131,7 +1131,7 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
         name = col_header.substr(0x58, 25).c_str();
     }
     string dataset_name = name;
-    string::size_type colpos = name.find_last_of("_");
+    string::size_type colpos = name.find_last_of('_');
 
     if (colpos != string::npos) {
         column_name = name.substr(colpos + 1);
@@ -1165,7 +1165,7 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
         if (data_type == 0x6081) { // Function
             functions.push_back(Function(name, objectIndex));
             Origin::Function &f = functions.back();
-            f.formula = toLowerCase(col_data.c_str());
+            f.formula = toLowerCase(col_data);
 
             stmp.str(col_header.substr(0x0A));
             short t;
@@ -1186,7 +1186,7 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
 
         } else { // Matrix
             vector<Origin::Matrix>::difference_type mIndex = -1;
-            string::size_type pos = name.find_first_of("@");
+            string::size_type pos = name.find_first_of('@');
             if (pos != string::npos) {
                 string sheetName = name;
                 name.resize(pos);
@@ -1207,7 +1207,6 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
     } else {
         size_t current_col = 1; //, nr = 0, nbytes = 0;
         static unsigned int col_index = 0;
-        unsigned int current_sheet = 0;
 
         if (spreadSheets.size() == 0 || findSpreadByName(name) == -1) {
             LOG_PRINT(logfile, "\n  NEW SPREADSHEET\n");
@@ -1228,13 +1227,13 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
         spreadSheets[spread].columns.back().beginRow = first_row;
         spreadSheets[spread].columns.back().endRow = last_row;
 
-        string::size_type sheetpos = spreadSheets[spread].columns.back().name.find_last_of("@");
+        string::size_type sheetpos = spreadSheets[spread].columns.back().name.find_last_of('@');
         if (sheetpos != string::npos) {
             unsigned int sheet = strtol(column_name.substr(sheetpos + 1).c_str(), nullptr, 10);
             if (sheet > 1) {
                 spreadSheets[spread].columns.back().name = column_name;
 
-                current_sheet = sheet - 1;
+                unsigned int current_sheet = sheet - 1;
 
                 spreadSheets[spread].columns.back().sheet = current_sheet;
                 if (spreadSheets[spread].sheets < sheet)
@@ -1689,7 +1688,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
     (void)andt3;
     (void)andt3sz;
 
-    string sec_name = anhd.substr(0x46, 41).c_str();
+    string sec_name = anhd.substr(0x46, 41);
 
     if (ispread != -1) {
 
@@ -1706,7 +1705,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
 
         stmp.str(andt1.c_str());
         if (sec_name == "MV") {
-            sheet.command = andt1.c_str();
+            sheet.command = andt1;
         } else if (sec_name == "Y2") {
             stmp >> sheet.coordinates[0];
         } else if (sec_name == "X2") {
@@ -1753,29 +1752,29 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
         Color color = getColor(anhd.substr(0x33, 4));
 
         if (sec_name == "PL")
-            glayer.yAxis.formatAxis[0].prefix = andt1.c_str();
+            glayer.yAxis.formatAxis[0].prefix = andt1;
         if (sec_name == "PR")
-            glayer.yAxis.formatAxis[1].prefix = andt1.c_str();
+            glayer.yAxis.formatAxis[1].prefix = andt1;
         if (sec_name == "PB")
-            glayer.xAxis.formatAxis[0].prefix = andt1.c_str();
+            glayer.xAxis.formatAxis[0].prefix = andt1;
         if (sec_name == "PT")
-            glayer.xAxis.formatAxis[1].prefix = andt1.c_str();
+            glayer.xAxis.formatAxis[1].prefix = andt1;
         if (sec_name == "SL")
-            glayer.yAxis.formatAxis[0].suffix = andt1.c_str();
+            glayer.yAxis.formatAxis[0].suffix = andt1;
         if (sec_name == "SR")
-            glayer.yAxis.formatAxis[1].suffix = andt1.c_str();
+            glayer.yAxis.formatAxis[1].suffix = andt1;
         if (sec_name == "SB")
-            glayer.xAxis.formatAxis[0].suffix = andt1.c_str();
+            glayer.xAxis.formatAxis[0].suffix = andt1;
         if (sec_name == "ST")
-            glayer.xAxis.formatAxis[1].suffix = andt1.c_str();
+            glayer.xAxis.formatAxis[1].suffix = andt1;
         if (sec_name == "OL")
-            glayer.yAxis.formatAxis[0].factor = andt1.c_str();
+            glayer.yAxis.formatAxis[0].factor = andt1;
         if (sec_name == "OR")
-            glayer.yAxis.formatAxis[1].factor = andt1.c_str();
+            glayer.yAxis.formatAxis[1].factor = andt1;
         if (sec_name == "OB")
-            glayer.xAxis.formatAxis[0].factor = andt1.c_str();
+            glayer.xAxis.formatAxis[0].factor = andt1;
         if (sec_name == "OT")
-            glayer.xAxis.formatAxis[1].factor = andt1.c_str();
+            glayer.xAxis.formatAxis[1].factor = andt1;
         if (sec_name == "X1T") {
             glayer.xAxis.anchor = stod(andt1);
             LOG_PRINT(logfile, "     x axis anchor = %g\n", glayer.xAxis.anchor)
@@ -1934,37 +1933,37 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
         }
 
         if (sec_name == "XB") {
-            string text = andt2.c_str();
+            string text = andt2;
             glayer.xAxis.position = GraphAxis::Bottom;
             glayer.xAxis.formatAxis[0].label = TextBox(
                     text, r, color, fontSize, rotation / 10, tab,
                     (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "XT") {
-            string text = andt2.c_str();
+            string text = andt2;
             glayer.xAxis.position = GraphAxis::Top;
             glayer.xAxis.formatAxis[1].label = TextBox(
                     text, r, color, fontSize, rotation / 10, tab,
                     (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "YL") {
-            string text = andt2.c_str();
+            string text = andt2;
             glayer.yAxis.position = GraphAxis::Left;
             glayer.yAxis.formatAxis[0].label = TextBox(
                     text, r, color, fontSize, rotation / 10, tab,
                     (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "YR") {
-            string text = andt2.c_str();
+            string text = andt2;
             glayer.yAxis.position = GraphAxis::Right;
             glayer.yAxis.formatAxis[1].label = TextBox(
                     text, r, color, fontSize, rotation / 10, tab,
                     (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "ZF") {
-            string text = andt2.c_str();
+            string text = andt2;
             glayer.zAxis.position = GraphAxis::Front;
             glayer.zAxis.formatAxis[0].label = TextBox(
                     text, r, color, fontSize, rotation / 10, tab,
                     (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "ZB") {
-            string text = andt2.c_str();
+            string text = andt2;
             glayer.zAxis.position = GraphAxis::Back;
             glayer.zAxis.formatAxis[1].label = TextBox(
                     text, r, color, fontSize, rotation / 10, tab,
@@ -1993,7 +1992,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
 
             glayer.orthographic3D = (andt2[0x240] != 0);
         } else if ((sec_name == "Legend") || (sec_name == "legend")) {
-            string text = andt2.c_str();
+            string text = andt2;
             glayer.legend =
                     TextBox(text, r, color, fontSize, rotation / 10, tab,
                             (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach);
@@ -2072,8 +2071,8 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
             glayer.colorScale.labelsColor = getColor(andt2.substr(0x5C, 4));
         } else if (sec_name == "&0") {
             glayer.isWaterfall = true;
-            string text = andt1.c_str();
-            string::size_type commaPos = text.find_first_of(",");
+            string text = andt1;
+            string::size_type commaPos = text.find_first_of(',');
             stmp.str(text.substr(0, commaPos));
             stmp >> glayer.xOffset;
             stmp.str(text.substr(commaPos + 1));
@@ -2089,7 +2088,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
            Line/Arrow, 0x23 for Polygon/Polyline)
         */
         else if ((ankind == 0x0) && (sec_name != "DelData")) { // text
-            string text = andt2.c_str();
+            string text = andt2;
             if (sec_name.substr(0, 3) == "PIE")
                 glayer.pieTexts.push_back(TextBox(
                         text, r, color, fontSize, rotation / 10, tab,
@@ -2243,7 +2242,7 @@ std::optional<StorageRecord> takeStorageRecord(std::string_view &text)
     if (payloadStart > text.size() || size > text.size() - payloadStart)
         return std::nullopt;
 
-    const StorageRecord record{ std::string(fields[kNameField]),
+    StorageRecord record{ std::string(fields[kNameField]),
                                 text.substr(payloadStart, size) };
     text.remove_prefix(payloadStart + size);
     return record;
@@ -2880,7 +2879,7 @@ void OriginAnyParser::getAxisParameterProperties(const string &apdata, unsigned 
 
     if (igraph != -1) {
         static int iaxispar = 0;
-        unsigned char h = 0;
+        unsigned char h;
         unsigned short w = 0;
 
         GraphLayer &glayer = graphs[igraph].layers[ilayer];
@@ -3124,7 +3123,7 @@ void OriginAnyParser::getNoteProperties(const string &nwehd, unsigned int nwehds
     GET_INT(stmp, coord)
     rect.bottom = static_cast<short>(coord);
 
-    string name = nwelb.c_str();
+    string name = nwelb;
 
     // ResultsLog note window has left, top, right, bottom all zero.
     // All other parameters are also zero, except "name" and "text".
@@ -3292,7 +3291,7 @@ void OriginAnyParser::getZcolorsMap(ColorMap &colorMap, const string &cmapdata,
         color.type = Origin::Color::Custom;
         color.custom[0] = cmapdata[0x66 + 10 * i];
         color.custom[1] = cmapdata[0x67 + 10 * i];
-        color.custom[2] = cmapdata[0x68 + 10 * i];
+	color.custom[2] = cmapdata[0x68 + 10 * i];
         // skip an unsigned char at 0x69+10*i
         stmp.str(cmapdata.substr(0x6A + 10 * i));
         GET_SHORT(stmp, val)
@@ -3373,13 +3372,13 @@ void OriginAnyParser::outputProjectTree(std::ostream &out)
     size_t windowsCount =
             spreadSheets.size() + matrixes.size() + excels.size() + graphs.size() + notes.size();
 
-    out << "Project has " << windowsCount << " windows." << endl;
-    out << "Origin project Tree" << endl;
+    out << "Project has " << windowsCount << " windows." << '\n';
+    out << "Origin project Tree" << '\n';
 
     char cdsz[21];
     for (tree<ProjectNode>::sibling_iterator it = projectTree.begin(projectTree.begin());
          it != projectTree.end(projectTree.begin()); ++it) {
         strftime(cdsz, sizeof(cdsz), "%F %T", gmtime(&(*it).creationDate));
-        out << string(projectTree.depth(it) - 1, ' ') << (*it).name.c_str() << "\t" << cdsz << endl;
+        out << string(projectTree.depth(it) - 1, ' ') << (*it).name.c_str() << "\t" << cdsz << '\n';
     }
 }

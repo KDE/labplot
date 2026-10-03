@@ -51,7 +51,7 @@ public:
     Origin::Excel &excel(std::vector<Origin::Excel>::size_type e) const; //!< get excel e
 
     const tree<Origin::ProjectNode> *project() const; //!< get project tree
-    std::string resultsLogString() const; //!< get Results Log
+    const std::string& resultsLogString() const; //!< get Results Log
 
 private:
     unsigned int fileVersion, buildVersion, ioError;

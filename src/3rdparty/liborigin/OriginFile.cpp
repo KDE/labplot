@@ -263,7 +263,7 @@ Origin::Excel &OriginFile::excel(vector<Origin::Excel>::size_type e) const
     return parser->excels[e];
 }
 
-string OriginFile::resultsLogString() const
+const string& OriginFile::resultsLogString() const
 {
     return parser->resultsLog;
 }
