@@ -867,11 +867,11 @@ void OriginAnyParser::readProjectTree()
 
     // first preamble size and data (usually 4)
     unsigned int pte_pre1_size = readObjectSize();
-    string pte_pre1 = readObjectAsString(pte_pre1_size);
+    readObjectAsString(pte_pre1_size);
 
     // second preamble size and data (usually 16)
     unsigned int pte_pre2_size = readObjectSize();
-    string pte_pre2 = readObjectAsString(pte_pre2_size);
+    readObjectAsString(pte_pre2_size);
 
     // root element and children
     unsigned int rootfolder = readFolderTree(
@@ -919,7 +919,7 @@ unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent,
     fle_prop_size = readObjectSize();
     for (unsigned int i = 0; i < fle_prop_size; i++) {
         unsigned int obj_size = readObjectSize();
-        string obj_data = readObjectAsString(obj_size);
+        readObjectAsString(obj_size);
     }
 
     // get project folder properties
@@ -974,7 +974,7 @@ void OriginAnyParser::readProjectLeaf(tree<ProjectNode>::iterator current_folder
 {
     // preamble size (usually 0) and data
     unsigned int ptl_pre_size = readObjectSize();
-    string ptl_pre = readObjectAsString(ptl_pre_size);
+    readObjectAsString(ptl_pre_size);
 
     // file data size (usually 8) and data
     unsigned int ptl_data_size = readObjectSize();
@@ -1048,7 +1048,7 @@ void OriginAnyParser::readAttachmentList()
                       iattno, curpos, curpos, att_data_size)
 
             // get data
-            string att_data = readObjectAsString(att_data_size);
+            readObjectAsString(att_data_size);
             // even if att_data_size is zero, we get a '\n' mark
             if (att_data_size == 0)
                 file.seekg(1, ios_base::cur);
@@ -3270,12 +3270,12 @@ void OriginAnyParser::getZcolorsMap(ColorMap &colorMap, const string &cmapdata,
     // skip a short at 0x18-0x19
 
     for (int i = 0; i < 4; ++i) { // low, high, middle and missing data colors
-        Color color;
-        (void)color;
-        color.type = Origin::Color::Custom;
-        color.custom[0] = cmapdata[0x1A + 4 * i];
-        color.custom[1] = cmapdata[0x1B + 4 * i];
-        color.custom[2] = cmapdata[0x1C + 4 * i];
+        //Color color;
+        //(void)color;
+        //color.type = Origin::Color::Custom;
+        //color.custom[0] = cmapdata[0x1A + 4 * i];
+        //color.custom[1] = cmapdata[0x1B + 4 * i];
+        //color.custom[2] = cmapdata[0x1C + 4 * i];
     }
 
     double zmin, zmax, zmissing;
@@ -3286,12 +3286,12 @@ void OriginAnyParser::getZcolorsMap(ColorMap &colorMap, const string &cmapdata,
 
     short val;
     for (int i = 0; i < 2; ++i) {
-        Color color;
-        (void)color;
-        color.type = Origin::Color::Custom;
-        color.custom[0] = cmapdata[0x66 + 10 * i];
-        color.custom[1] = cmapdata[0x67 + 10 * i];
-	color.custom[2] = cmapdata[0x68 + 10 * i];
+        //Color color;
+        //(void)color;
+        //color.type = Origin::Color::Custom;
+        //color.custom[0] = cmapdata[0x66 + 10 * i];
+        //color.custom[1] = cmapdata[0x67 + 10 * i];
+	//color.custom[2] = cmapdata[0x68 + 10 * i];
         // skip an unsigned char at 0x69+10*i
         stmp.str(cmapdata.substr(0x6A + 10 * i));
         GET_SHORT(stmp, val)
