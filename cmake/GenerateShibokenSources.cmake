@@ -167,6 +167,9 @@ function(generate_shiboken_sources)
 	        GENERATED TRUE
 		COMPILE_FLAGS
             "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wno-keyword-macro -Wno-shadow -Wno-cast-function-type -Wno-zero-as-null-pointer-constant>"
+            # MSVC counterpart of -Wno-keyword-macro, shiboken's wrappers macroize the keyword 'protected'
+            COMPILE_DEFINITIONS
+                "$<$<CXX_COMPILER_ID:MSVC>:_ALLOW_KEYWORD_MACROS>"
     )
 
     # # Set the cpp files which will be used for the bindings library.

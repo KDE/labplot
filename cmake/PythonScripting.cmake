@@ -314,6 +314,9 @@ endif()
 # 3. O to avoid warning: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Wcpp]
 if(NOT MSVC)
     set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_OPTIONS -Wno-cast-function-type -Wno-missing-include-dirs -O)
+else()
+    # shiboken's wrappers macroize the keyword 'protected', which MSVC's xkeycheck.h rejects
+    set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS _ALLOW_KEYWORD_MACROS)
 endif()
 
 # Previously, we were adding the python_scripting_includes to the liblabplotbackendlib target, but we can actually restrict things further and add these includes to only the
