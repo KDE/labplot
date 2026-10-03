@@ -9,6 +9,8 @@ include:
       - /gitlab-templates/json-validation.yml
       - /gitlab-templates/xml-lint.yml
       - /gitlab-templates/yaml-lint.yml
+      # unused
+      # - /gitlab-templates/qml-lint.yml
       # - /gitlab-templates/reuse-lint.yml
       - /gitlab-templates/reuse-lint-relaxed.yml
       - /gitlab-templates/clang-format.yml
