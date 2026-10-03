@@ -809,6 +809,11 @@ endif()
 if(ENABLE_PYTHON_SCRIPTING)
     find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development.Embed REQUIRED)
     add_definitions(-DHAVE_PYTHON_SCRIPTING)
+    # Windows: Python headers contain #pragma comment(lib, "python3XX.lib") which forces the
+    # linker to search for the versioned lib. Add Python's library directory to the search path.
+    if(WIN32 AND Python3_LIBRARY_DIRS)
+        link_directories(${Python3_LIBRARY_DIRS})
+    endif()
     math(EXPR PYTHON_ABI_VERSION_HEX
         "(((${PYTHON_ABI_MAJOR_VERSION}) & 0xff) << 24) |
         (((${PYTHON_ABI_MINOR_VERSION}) & 0xff) << 16) |
