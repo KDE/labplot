@@ -31,7 +31,15 @@ set(KF_MIN_VERSION "6.5.0")
 
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
-find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
+include(FeatureSummary)
+find_package(ECM ${KF_MIN_VERSION} NO_MODULE)
+set_package_properties(ECM PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Extra CMake Modules."
+    URL "https://commits.kde.org/extra-cmake-modules"
+)
+feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH})
 # used by modern fnd_package (<Pkg>Config.cmake)
 #set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH})
