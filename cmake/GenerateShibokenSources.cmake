@@ -83,7 +83,8 @@ function(generate_shiboken_sources)
     set(FORCE_PROCESS_INCLUDE_DIRS "")
 
     if(WIN32)
-        set(PATH_SEP "\;")
+        # a literal ';' gets split again by CMake list expansion, the genex survives until the command is generated
+        set(PATH_SEP "$<SEMICOLON>")
     else()
         set(PATH_SEP ":")
     endif()
