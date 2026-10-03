@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 LabPlot Team
+# SPDX-License-Identifier: BSD-2-Clause
+
 cmake_policy(SET CMP0079 NEW)
 
 set(FRONTEND_DIR ../src/frontend)

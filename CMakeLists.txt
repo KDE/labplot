@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 LabPlot Team
+# SPDX-License-Identifier: BSD-2-Clause
+
 # see https://community.kde.org/Policies/CMake_Coding_Style
 cmake_minimum_required(VERSION 3.17.0)
 project(labplot VERSION 2.12.80 LANGUAGES CXX C)

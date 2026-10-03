@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 LabPlot Team
+# SPDX-License-Identifier: BSD-2-Clause
+
 if(APPLE AND ENABLE_TOUCHBAR)
     add_subdirectory(kdmactouchbar)
 endif()

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 LabPlot Team
+# SPDX-License-Identifier: BSD-2-Clause
+
 find_package(SharedMimeInfo REQUIRED)
 set(FRONTEND_DIR "${CMAKE_CURRENT_LIST_DIR}/frontend")
 set(BACKEND_DIR "${CMAKE_CURRENT_LIST_DIR}/backend")
