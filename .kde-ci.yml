@@ -1,7 +1,7 @@
 # see https://invent.kde.org/sysadmin/repo-metadata/-/blob/master/branch-rules.yml
 Dependencies:
-- 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5', 'macOS/Qt5']
-  'require':
+ - 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5', 'macOS/Qt5']
+   'require':
     'frameworks/extra-cmake-modules': '@stable'
     'frameworks/kcrash': '@stable'
     'frameworks/kguiaddons': '@stable'
@@ -20,8 +20,8 @@ Dependencies:
     'frameworks/purpose': '@stable'
     'education/cantor': '@latest'
 
-- 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6', 'macOS/Qt6']
-  'require':
+ - 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6', 'macOS/Qt6']
+   'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
     'frameworks/kcrash': '@latest-kf6'
     'frameworks/kguiaddons': '@latest-kf6'
