@@ -782,18 +782,6 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     set(PYTHON_ABI_MINOR_VERSION "9")
     set(PYTHON_ABI_VERSION "${PYTHON_ABI_MAJOR_VERSION}.${PYTHON_ABI_MINOR_VERSION}")
     find_package(Python3 "${PYTHON_ABI_VERSION}" COMPONENTS Development REQUIRED)
-
-    # Windows: Use Python stable ABI library (python3.lib) for PySide6 compatibility
-    # CMake's FindPython finds python311.lib but PySide6 requires stable ABI linking
-    if(WIN32)
-        get_filename_component(_python_lib_dir "${Python3_LIBRARIES}" DIRECTORY)
-        set(_python3_lib "${_python_lib_dir}/python3.lib")
-        if(EXISTS "${_python3_lib}")
-            message(STATUS "Using Python stable ABI library: ${_python3_lib}")
-            set(Python3_LIBRARIES "${_python3_lib}" CACHE FILEPATH "Python library" FORCE)
-        endif()
-    endif()
-
     message(STATUS "Building with Python ${Python3_VERSION} (stable ABI minimum: ${PYTHON_ABI_VERSION})")
     find_package(PySide6 QUIET)
     if(PySide6_FOUND)
