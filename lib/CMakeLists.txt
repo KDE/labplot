@@ -281,7 +281,7 @@ set_target_properties(liblabplot PROPERTIES
     EXPORT_NAME SDK
     CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN 1
-    OUTPUT_NAME labplot
+    OUTPUT_NAME liblabplot
 )
 
 target_compile_definitions(liblabplot PRIVATE -DSDK ${LABPLOT_COMPILE_DEFINITIONS})
