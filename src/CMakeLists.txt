@@ -627,6 +627,7 @@ ki18n_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 
 # static library
 add_library(labplotnsllib STATIC ${NSL_SOURCES})
+set_target_properties(labplotnsllib PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # OBJECT libraries per module
 add_library(labplot_core_obj OBJECT ${LABPLOT_CORE_SOURCES})
@@ -644,7 +645,10 @@ add_library(labplotbackendlib STATIC
     $<TARGET_OBJECTS:labplot_worksheet_obj>
     $<TARGET_OBJECTS:labplot_datasources_obj>
 )
+set_target_properties(labplotbackendlib PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${FRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
+set_target_properties(labplotlib PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # Propagate include path to all OBJECT libs so AUTOMOC and compilation find NumberSpinBox.h, etc.
 foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
