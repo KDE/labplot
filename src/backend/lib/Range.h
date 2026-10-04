@@ -275,10 +275,10 @@ public:
 	QString toString(bool round = true, QLocale locale = QLocale()) const {
 		Q_UNUSED(round)
 		if (m_format == Format::Numeric)
-			return locale.toString(m_start) + QStringLiteral(" .. ") + locale.toString(m_end);
+			return QStringLiteral("%1 .. %2").arg(locale.toString(m_start), locale.toString(m_end));
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
-				+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
+			return QStringLiteral("%1 .. %2").arg(QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat),
+												   QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat));
 	}
 	std::string toStdString(bool round = true) const {
 		return STDSTRING(toString(round));
@@ -710,13 +710,13 @@ inline QString Range<double>::toString(bool round, QLocale locale) const {
 		if (round) {
 			const int relPrec = relativePrecision();
 			// DEBUG(Q_FUNC_INFO << ", rel prec = " << relPrec)
-			return locale.toString(nsl_math_round_precision(m_start, relPrec), 'g', relPrec) + QLatin1String(" .. ")
-				+ locale.toString(nsl_math_round_precision(m_end, relPrec), 'g', relPrec);
+			return QStringLiteral("%1 .. %2").arg(locale.toString(nsl_math_round_precision(m_start, relPrec), 'g', relPrec),
+												   locale.toString(nsl_math_round_precision(m_end, relPrec), 'g', relPrec));
 		} else
-			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
+			return QStringLiteral("%1 .. %2").arg(locale.toString(m_start, 'g', 12), locale.toString(m_end, 'g', 12));
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
-			+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
+		return QStringLiteral("%1 .. %2").arg(QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat),
+											   QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat));
 }
 
 #endif

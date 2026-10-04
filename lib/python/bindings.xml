@@ -499,9 +499,8 @@
         <declare-function signature="setOpacity(double)" return-type="void"/>
     </object-type>
     <value-type name="Range" disable-wrapper="yes" generate="no"/>
-    <!-- DoubleRange/IntRange disabled on Windows due to Qt ABI mismatch in QStringBuilder -->
-    <!-- <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/> -->
-    <!-- <typedef-type name="IntRange" source="Range&lt;int&gt;"/> -->
+    <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/>
+    <typedef-type name="IntRange" source="Range&lt;int&gt;"/>
     <rejection class="RangeT" field-name="*"/>
     <rejection class="RangeT" function-name="*"/>
     <value-type name="RangeT" disable-wrapper="yes">
@@ -619,9 +618,8 @@
         <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
         <declare-function signature="position()const" return-type="Axis::Position"/>
         <declare-function signature="setPosition(Axis::Position)" return-type="void"/>
-        <!-- Disabled due to Qt ABI mismatch on Windows -->
-        <!-- <declare-function signature="range()const" return-type="DoubleRange"/> -->
-        <!-- <declare-function signature="setRange(DoubleRange)" return-type="void"/> -->
+        <declare-function signature="range()const" return-type="DoubleRange"/>
+        <declare-function signature="setRange(DoubleRange)" return-type="void"/>
         <declare-function signature="scale()const" return-type="RangeT::Scale"/>
         <declare-function signature="setScale(RangeT::Scale)" return-type="void"/>
 
@@ -1502,20 +1500,19 @@
         </declare-function>
 
         <declare-function signature="rangeCount(const CartesianCoordinateSystem::Dimension)const" return-type="int"/>
-        <!-- Disabled due to Qt ABI mismatch on Windows -->
-        <!-- <declare-function signature="range(const CartesianCoordinateSystem::Dimension,int)const" return-type="const DoubleRange&amp;">
+        <declare-function signature="range(const CartesianCoordinateSystem::Dimension,int)const" return-type="const DoubleRange&amp;">
             <modify-argument index="2">
                 <replace-default-expression with="-1"/>
             </modify-argument>
-        </declare-function> -->
-        <!-- <declare-function signature="setRangeDefault(const CartesianCoordinateSystem::Dimension,const DoubleRange)" return-type="void"/> -->
-        <!-- <declare-function signature="setRange(const CartesianCoordinateSystem::Dimension,const int,const DoubleRange)" return-type="void"/> -->
-        <!-- <declare-function signature="setXRange(int,const DoubleRange&amp;)" return-type="void"/> -->
-        <!-- <declare-function signature="setYRange(int,const DoubleRange&amp;)" return-type="void"/> -->
+        </declare-function>
+        <declare-function signature="setRangeDefault(const CartesianCoordinateSystem::Dimension,const DoubleRange)" return-type="void"/>
+        <declare-function signature="setRange(const CartesianCoordinateSystem::Dimension,const int,const DoubleRange)" return-type="void"/>
+        <declare-function signature="setXRange(int,const DoubleRange&amp;)" return-type="void"/>
+        <declare-function signature="setYRange(int,const DoubleRange&amp;)" return-type="void"/>
         <declare-function signature="addXRange()" return-type="void"/>
         <declare-function signature="addYRange()" return-type="void"/>
-        <!-- <declare-function signature="addXRange(const DoubleRange&amp;)" return-type="void"/> -->
-        <!-- <declare-function signature="addYRange(const DoubleRange&amp;)" return-type="void"/> -->
+        <declare-function signature="addXRange(const DoubleRange&amp;)" return-type="void"/>
+        <declare-function signature="addYRange(const DoubleRange&amp;)" return-type="void"/>
         <declare-function signature="removeRange(const CartesianCoordinateSystem::Dimension,int)" return-type="void"/>
         <declare-function signature="setMin(const CartesianCoordinateSystem::Dimension,int,double)" return-type="void"/>
         <declare-function signature="setMax(const CartesianCoordinateSystem::Dimension,int,double)" return-type="void"/>
