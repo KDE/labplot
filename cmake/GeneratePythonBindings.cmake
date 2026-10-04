@@ -194,16 +194,6 @@ function(generate_python_bindings)
     target_compile_definitions(${PB_PACKAGE_NAME} PRIVATE
         $<$<CXX_COMPILER_ID:MSVC>:_ALLOW_KEYWORD_MACROS>
     )
-    # MSVC: Disable QStringBuilder to avoid Qt ABI mismatch (QAbstractConcatenable::appendLatin1To
-    # visibility differs between Qt versions). Undefine and redefine to 0 to ensure disabled.
-    target_compile_options(${PB_PACKAGE_NAME} PRIVATE
-        $<$<CXX_COMPILER_ID:MSVC>:/UQT_USE_QSTRINGBUILDER /UQT_USE_FAST_CONCATENATION /UQT_USE_FAST_OPERATOR_PLUS>
-    )
-    target_compile_definitions(${PB_PACKAGE_NAME} PRIVATE
-        $<$<CXX_COMPILER_ID:MSVC>:QT_USE_QSTRINGBUILDER=0>
-        $<$<CXX_COMPILER_ID:MSVC>:QT_USE_FAST_CONCATENATION=0>
-        $<$<CXX_COMPILER_ID:MSVC>:QT_USE_FAST_OPERATOR_PLUS=0>
-    )
     target_link_libraries(${PB_PACKAGE_NAME} PRIVATE
         PySide6::pyside6
         Shiboken6::libshiboken

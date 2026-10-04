@@ -249,14 +249,20 @@ set(LABPLOT_COMPILE_DEFINITIONS
     -DQT_NO_CAST_FROM_ASCII
     -DQT_NO_CAST_FROM_BYTEARRAY
     -DQT_NO_URL_CAST_FROM_STRING
-    -DQT_USE_FAST_CONCATENATION
-    -DQT_USE_FAST_OPERATOR_PLUS
-    -DQT_USE_QSTRINGBUILDER
     -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
     -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
     -DKF_DEPRECATED_WARNINGS_SINCE=0x060000
 )
+# QStringBuilder optimization causes Qt ABI mismatch on MSVC when PySide6's Qt headers
+# differ from Craft's Qt libraries (QAbstractConcatenable::appendLatin1To visibility).
+if(NOT MSVC)
+    list(APPEND LABPLOT_COMPILE_DEFINITIONS
+        -DQT_USE_FAST_CONCATENATION
+        -DQT_USE_FAST_OPERATOR_PLUS
+        -DQT_USE_QSTRINGBUILDER
+    )
+endif()
 if(NOT WIN32)
     # Strict iterators can't be used on Windows, they lead to a link error
     # when application code iterates over a QVector<QPoint> for instance, unless
