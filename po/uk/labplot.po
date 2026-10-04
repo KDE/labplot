@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-03 00:40+0000\n"
-"PO-Revision-Date: 2026-09-20 15:01+0300\n"
+"PO-Revision-Date: 2026-10-03 13:33+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -4205,8 +4205,7 @@ msgid "equal"
 msgstr "equal"
 
 #: src/backend/gsl/functions.cpp:337
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not a Number"
 msgstr "Не є числом"
 

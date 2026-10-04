@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-03 00:40+0000\n"
-"PO-Revision-Date: 2026-09-20 10:40+0200\n"
+"PO-Revision-Date: 2026-10-03 14:11+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -4182,8 +4182,7 @@ msgid "equal"
 msgstr "lika med"
 
 #: src/backend/gsl/functions.cpp:337
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not a Number"
 msgstr "Inte ett tal"
 
