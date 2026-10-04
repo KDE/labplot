@@ -541,15 +541,6 @@ if(ENABLE_PYTHON_SCRIPTING)
         set_source_files_properties(${shiboken_scripting_generated_sources}
             PROPERTIES COMPILE_FLAGS "-Wno-keyword-macro -Wno-shadow")
     endif()
-    # Windows: Disable QStringBuilder for shiboken-generated files to avoid Qt ABI mismatch.
-    # QAbstractConcatenable::appendLatin1To visibility (public vs protected) differs between
-    # Qt versions, causing LNK2019 when PySide6's Qt headers don't match Craft's Qt libraries.
-    # Use /U to undefine the macros, followed by redefining them to 0 to ensure they're disabled
-    # even if other flags define them.
-    if(MSVC)
-        set_source_files_properties(${shiboken_scripting_generated_sources}
-            PROPERTIES COMPILE_FLAGS "/UQT_USE_QSTRINGBUILDER /UQT_USE_FAST_CONCATENATION /UQT_USE_FAST_OPERATOR_PLUS /DQT_USE_QSTRINGBUILDER=0 /DQT_USE_FAST_CONCATENATION=0 /DQT_USE_FAST_OPERATOR_PLUS=0")
-    endif()
 endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
