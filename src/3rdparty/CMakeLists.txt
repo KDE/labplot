@@ -3,10 +3,12 @@
 
 if(APPLE AND ENABLE_TOUCHBAR)
     add_subdirectory(kdmactouchbar)
+    set_target_properties(kdmactouchbar PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
 if(ENABLE_LIBORIGIN AND NOT LIBORIGIN_FOUND)
     add_subdirectory(liborigin)
+    set_target_properties(liborigin-static PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
 if(BUILD_READSTAT)
@@ -117,6 +119,8 @@ if(ENABLE_VECTOR_BLF)
       # Force disable tests - they require Catch2 via FetchContent
       set(DBC_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
       add_subdirectory(dbc_parser_cpp EXCLUDE_FROM_ALL)
+      # dbc library needs PIC when linked into shared liblabplot
+      set_target_properties(dbc PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
       # headerfiles of the projects are referring to <libdbc/someheader.h> and therefore
       # the path must be added
@@ -144,6 +148,7 @@ if(ENABLE_VECTOR_BLF)
   if(${LOCAL_VECTOR_BLF})
     add_subdirectory(vector_blf EXCLUDE_FROM_ALL)
     set_property(TARGET Vector_BLF PROPERTY AUTOMOC OFF)
+    set_property(TARGET Vector_BLF PROPERTY POSITION_INDEPENDENT_CODE ON)
     # disable warning _FORTIFY_SOURCE requires compiling with optimization (-O)
     # disable shadow warnings
     if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
@@ -192,6 +197,7 @@ if(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
     )
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
     FetchContent_MakeAvailable(qt_advanced_dock)
+    set_target_properties(qtadvanceddocking-qt${QT_VERSION_MAJOR} PROPERTIES POSITION_INDEPENDENT_CODE ON)
     target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"git\")
 elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
@@ -199,6 +205,7 @@ elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
     set(ADS_VERSION ${labplot_VERSION})
     add_subdirectory(Qt-Advanced-Docking-System EXCLUDE_FROM_ALL)
+    set_target_properties(qtadvanceddocking-qt${QT_VERSION_MAJOR} PROPERTIES POSITION_INDEPENDENT_CODE ON)
     target_include_directories(labplotlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
     target_include_directories(labplot_core_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
     target_include_directories(labplot_data_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
