@@ -4,7 +4,7 @@
 # see https://community.kde.org/Policies/CMake_Coding_Style
 cmake_minimum_required(VERSION 3.17.0)
 project(labplot VERSION 2.12.80 LANGUAGES CXX C)
-set(YEAR 2025)
+set(YEAR 2026)
 
 # Use ccache if available to speed up incremental builds by caching compiled objects
 find_program(CCACHE_PROGRAM ccache)

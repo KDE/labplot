@@ -153,10 +153,10 @@ nsl_changepoint_pelt(const double x[], const double y[], size_t n, double penalt
 
 	/* backtrack to find changepoints */
 	size_t count = 0;
-	size_t current = n;
 	size_t* temp = (size_t*)malloc(max_changepoints * sizeof(size_t));
 
 	if (temp) {
+		size_t current = n;
 		while (current > 0 && count < max_changepoints) {
 			size_t prev = cp[current];
 			if (prev > 0 && prev < n)
