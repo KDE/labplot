@@ -6111,3 +6111,15 @@ const QColor CartesianPlot::plotColor(int index) const {
 
 	return d->plotColors.at(i);
 }
+
+// Explicit template instantiations for Range<T> on Windows DLLs.
+// On Windows, template class methods defined in headers need explicit instantiation
+// to be exported from a DLL. Even though Range<T> methods are inline, the DLL export
+// mechanism requires the compiler to see a concrete instantiation in a translation unit
+// that's compiled with dllexport (__declspec(dllexport) via LABPLOT_EXPORT).
+// Without this, consumers (like pylabplot.dll) get unresolved external symbol errors
+// for Range<int> and Range<double> methods when linking against liblabplot.dll.
+#if defined(SDK) && defined(Q_OS_WIN)
+template class Range<double>;
+template class Range<int>;
+#endif
