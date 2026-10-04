@@ -301,15 +301,11 @@ target_include_directories(liblabplot
     INTERFACE $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/labplot>
 )
 
-get_target_property(labplotlib_LINK_LIBRARIES labplotlib LINK_LIBRARIES)
-get_target_property(labplotbackendlib_LINK_LIBRARIES labplotbackendlib LINK_LIBRARIES)
-get_target_property(labplotnsllib_LINK_LIBRARIES labplotnsllib LINK_LIBRARIES)
-
 target_link_libraries(liblabplot
     PRIVATE
-    ${labplotlib_LINK_LIBRARIES}
-    ${labplotbackendlib_LINK_LIBRARIES}
-    ${labplotnsllib_LINK_LIBRARIES}
+    labplotlib
+    labplotbackendlib
+    labplotnsllib
     PUBLIC
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui
