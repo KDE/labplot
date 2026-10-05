@@ -66,7 +66,11 @@ public:
 		Range<double> evalRange{0., 0.}; // x range to evaluate fit function
 	};
 
+#ifdef SDK
+	struct LABPLOT_EXPORT FitResult : public XYAnalysisCurve::Result {
+#else
 	struct FitResult : public XYAnalysisCurve::Result {
+#endif
 		FitResult() {
 		}
 		void calculateResult(size_t n, unsigned int np); // calculate depending results (uses dof, sse, sst)
