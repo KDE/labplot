@@ -307,6 +307,12 @@ endif()
 target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK Qt${QT_MAJOR_VERSION}::Core Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Widgets)
 target_compile_definitions(${bindings_library} PRIVATE SDK)
 
+# Windows: Ensure pylabplot can find all necessary exports
+# Add verbose linker output to diagnose missing symbols
+if(WIN32)
+    target_link_options(${bindings_library} PRIVATE /VERBOSE:LIB)
+endif()
+
 execute_process(
     COMMAND ${Python_EXECUTABLE} -Esc "import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '${CMAKE_INSTALL_PREFIX}', 'base': '${CMAKE_INSTALL_PREFIX}'}))"
     OUTPUT_VARIABLE PYTHON_INSTALL_DIR
