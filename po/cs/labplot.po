@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-03 00:40+0000\n"
-"PO-Revision-Date: 2026-10-03 23:41+0200\n"
+"PO-Revision-Date: 2026-10-04 23:45+0200\n"
 "Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -4193,8 +4193,7 @@ msgid "equal"
 msgstr "je rovno"
 
 #: src/backend/gsl/functions.cpp:337
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not a Number"
 msgstr "Toto není číslo"
 
@@ -10027,81 +10026,78 @@ msgstr "%1: změnit %2-rozsah %3"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1672
 #, kde-format
 msgid "%1: change x-range %2 scale"
-msgstr ""
+msgstr "%1: změnit rozsah osy x, měřítko %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
 #, kde-format
 msgid "%1: set default plot range"
-msgstr ""
+msgstr "%1: nastavit výchozí rozsah grafu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1818
 #, kde-format
 msgid "%1: x-range breaking enabled"
-msgstr ""
+msgstr "%1: překročení rozsahu osy x povoleno"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
 #, kde-format
 msgid "%1: x-range breaks changed"
-msgstr ""
+msgstr "%1: překročení rozsahu osy x změněno"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1836
 #, kde-format
 msgid "%1: y-range breaking enabled"
-msgstr ""
+msgstr "%1: překročení rozsahu osy y povoleno"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1845
 #, kde-format
 msgid "%1: y-range breaks changed"
-msgstr ""
+msgstr "%1: překročení rozsahu osy y změněno"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1859
 #, kde-format
 msgid "%1: Cursor0 enable"
-msgstr ""
+msgstr "%1: Kurzor0 zapnut"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1871
 #, kde-format
 msgid "%1: Cursor1 enable"
-msgstr ""
+msgstr "%1: Kurzor1 zapnut"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1880
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1881
-#, fuzzy, kde-format
-#| msgid "%1: set data column"
+#, kde-format
 msgid "%1: set plot color mode"
-msgstr "%1: nastavit sloupec dat"
+msgstr "%1: nastavit režim barev grafu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1892
 #: src/backend/worksheet/Worksheet.cpp:892
 #, kde-format
 msgid "%1: load theme %2"
-msgstr ""
+msgstr "%1: načíst motiv %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1894
 #: src/backend/worksheet/Worksheet.cpp:894
 #, kde-format
 msgid "%1: load default theme"
-msgstr ""
+msgstr "%1: načíst výchozí motiv"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6026
 #: src/backend/worksheet/Worksheet.cpp:896
 #, kde-format
 msgid "%1: set theme"
-msgstr ""
+msgstr "%1: nastavit motiv"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1905
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1906
-#, fuzzy, kde-format
-#| msgid "%1: set data column"
+#, kde-format
 msgid "%1: set plot color map"
-msgstr "%1: nastavit sloupec dat"
+msgstr "%1: nastavit barevnou mapu grafu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1917
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: set y-offset"
-msgstr "%1: nastavit rozvržení"
+msgstr "%1: nastavit posun po ose y"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1925
 #, kde-format
@@ -10112,37 +10108,36 @@ msgstr "%1: změněn typ okraje"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:236
 #, kde-format
 msgid "%1: set border corner radius"
-msgstr ""
+msgstr "%1: nastavit zaoblení rohů ohraničení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2096
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:322
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:327
 #, kde-format
 msgid "Convolution"
-msgstr ""
+msgstr "Konvoluce"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2189
 #, kde-format
 msgid "%1: distribution fit to '%2'"
-msgstr ""
+msgstr "%1: rozdělení přizpůsobené '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2190
 #, kde-format
 msgid "Distribution Fit to '%1'"
-msgstr ""
+msgstr "Přizpůsobit rozdělení '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2237
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:871
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "Zjednodušení"
+msgstr "Zjednodušení '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2250
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:844
 #, kde-format
 msgid "Derivative of '%1'"
-msgstr ""
+msgstr "Derivace '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2256
@@ -10170,24 +10165,23 @@ msgstr "Integrace"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:850
 #, kde-format
 msgid "Interpolation of '%1'"
-msgstr ""
+msgstr "Interpolace '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2289
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:853
 #, kde-format
 msgid "Smoothing of '%1'"
-msgstr ""
+msgstr "Vyhlazení '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2302
 #, kde-format
 msgid "Baseline correction for '%1'"
-msgstr ""
+msgstr "Korekce základní linie pro '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2308
-#, fuzzy, kde-format
-#| msgid "Delete Connection"
+#, kde-format
 msgid "Baseline Correction"
-msgstr "Smazat spojení"
+msgstr "Korekce základní linie"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2323
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2338
@@ -10195,12 +10189,12 @@ msgstr "Smazat spojení"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
-msgstr ""
+msgstr "Přizpůsobit '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
 #, kde-format
 msgid "Fourier filtering of '%1'"
-msgstr ""
+msgstr "Fourierovo filtrování '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2374
 #, kde-format
@@ -10224,18 +10218,18 @@ msgstr "text"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2505
 #, kde-format
 msgid "%1: add inset plot"
-msgstr ""
+msgstr "%1: přidat vložený graf"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2519
 #, kde-format
 msgid "%1: add inset plot with data"
-msgstr ""
+msgstr "%1: přidat vložený graf s daty"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2850
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:635
 #, kde-format
 msgid "Cumulative Percentage"
-msgstr ""
+msgstr "Kumulativní procento"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3466
 #, kde-format
@@ -10265,19 +10259,19 @@ msgstr "%1: zvětšení %2 %3"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4375
 #, kde-format
 msgid "Not inside of the bounding rect"
-msgstr ""
+msgstr "Ne uvnitř ohraničujícího obdélníku"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4499
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4520
 #, kde-format
 msgid "from x=%1 to x=%2"
-msgstr ""
+msgstr "od x=%1 do x=%2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4507
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4533
 #, kde-format
 msgid "from y=%1 to y=%2"
-msgstr ""
+msgstr "od y=%1 do y=%2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4552
 #, kde-format
@@ -10290,15 +10284,14 @@ msgid "%1: pan"
 msgstr "%1: pan"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4648
-#, fuzzy, kde-format
-#| msgid "%1: set function"
+#, kde-format
 msgid "%1: zoom selection"
-msgstr "%1: nastavit funkci"
+msgstr "%1: výběr přiblížení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4771
 #, kde-format
 msgid "%1: wheel zoom"
-msgstr ""
+msgstr "%1: přiblížení pomocí kolečka"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format
@@ -10308,78 +10301,78 @@ msgstr "%1: nastavit písmo"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:207
 #, kde-format
 msgid "%1: use plot's color"
-msgstr ""
+msgstr "%1: použít barvu grafu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
 #: src/backend/worksheet/TextLabel.cpp:408
 #, kde-format
 msgid "%1: set font color"
-msgstr ""
+msgstr "%1: nastavit barvu písma"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:221
 #, kde-format
 msgid "%1: change column order"
-msgstr ""
+msgstr "%1: změnit pořadí sloupců"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:228
 #, kde-format
 msgid "%1: change line+symbol width"
-msgstr ""
+msgstr "%1: změnit šířku řádku a symbolu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
 #: src/backend/worksheet/Worksheet.cpp:764
 #: src/backend/worksheet/Worksheet.cpp:765
 #, kde-format
 msgid "%1: set layout top margin"
-msgstr ""
+msgstr "%1: nastavit horní okraj rozvržení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
 #: src/backend/worksheet/Worksheet.cpp:774
 #: src/backend/worksheet/Worksheet.cpp:775
 #, kde-format
 msgid "%1: set layout bottom margin"
-msgstr ""
+msgstr "%1: nastavit spodní okraj rozvržení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
 #: src/backend/worksheet/Worksheet.cpp:784
 #: src/backend/worksheet/Worksheet.cpp:785
 #, kde-format
 msgid "%1: set layout left margin"
-msgstr ""
+msgstr "%1: nastavit levý okraj rozvržení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
 #: src/backend/worksheet/Worksheet.cpp:794
 #: src/backend/worksheet/Worksheet.cpp:795
 #, kde-format
 msgid "%1: set layout right margin"
-msgstr ""
+msgstr "%1: nastavit pravý okraj rozvržení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
 #: src/backend/worksheet/Worksheet.cpp:804
 #: src/backend/worksheet/Worksheet.cpp:805
 #, kde-format
 msgid "%1: set layout vertical spacing"
-msgstr ""
+msgstr "%1: nastavit svislé mezery v rozvržení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
 #: src/backend/worksheet/Worksheet.cpp:814
 #: src/backend/worksheet/Worksheet.cpp:815
 #, kde-format
 msgid "%1: set layout horizontal spacing"
-msgstr ""
+msgstr "%1: nastavit vodorovné mezery v rozvržení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
 #: src/backend/worksheet/Worksheet.cpp:834
 #: src/backend/worksheet/Worksheet.cpp:835
 #, kde-format
 msgid "%1: set layout column count"
-msgstr ""
+msgstr "%1: nastavit počet sloupců rozvržení"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:140
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:188
 #, kde-format
 msgid "%1: error type changed"
-msgstr ""
+msgstr "%1: typ chyby změněn"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:147
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:159
@@ -10387,62 +10380,62 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:207
 #, kde-format
 msgid "%1: set error column"
-msgstr ""
+msgstr "%1: nastavit chybový sloupec"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
 #, kde-format
 msgid "%1: error bar type changed"
-msgstr ""
+msgstr "%1: typ chybového pruhu změněn"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
 msgid "%1: set error bar cap size"
-msgstr ""
+msgstr "%1: nastavit maximální velikost chybového pruhu"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:168
 #, kde-format
 msgid "bin positions"
-msgstr ""
+msgstr "polohy seskupení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
 #, kde-format
 msgid "bin values"
-msgstr ""
+msgstr "hodnoty v seskupení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:191
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
-msgstr ""
+msgstr "Přizpůsobit gaussovské (normální) rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:197
 #, kde-format
 msgid "Fit Exponential Distribution"
-msgstr ""
+msgstr "Přizpůsobit exponenciální rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:203
 #, kde-format
 msgid "Fit Laplace Distribution"
-msgstr ""
+msgstr "Přizpůsobit Laplaceovo rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:209
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
-msgstr ""
+msgstr "Přizpůsobit Cauchy-Lorentzovo rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:215
 #, kde-format
 msgid "Fit Log-normal Distribution"
-msgstr ""
+msgstr "Přizpůsobit log-normální rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:221
 #, kde-format
 msgid "Fit Poisson Distribution"
-msgstr ""
+msgstr "Přizpůsobit Poissonovo rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:227
 #, kde-format
 msgid "Fit Binomial Distribution"
-msgstr ""
+msgstr "Přizpůsobit binomické rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:421
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:258
@@ -10468,37 +10461,37 @@ msgstr "%1: nastavit orientaci histogramu"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:447
 #, kde-format
 msgid "%1: set histogram normalization"
-msgstr ""
+msgstr "%1: nastavit normalizaci histogramu"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:454
 #, kde-format
 msgid "%1: set binning method"
-msgstr ""
+msgstr "%1: nastavit metodu seskupování"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:461
 #, kde-format
 msgid "%1: set bin count"
-msgstr ""
+msgstr "%1: nastavit počet seskupení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:468
 #, kde-format
 msgid "%1: set bin width"
-msgstr ""
+msgstr "%1: nastavit šířku seskupení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:476
 #, kde-format
 msgid "%1: change auto bin ranges"
-msgstr ""
+msgstr "%1: změnit rozsahy automatického seskupení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:524
 #, kde-format
 msgid "%1: set bin ranges start"
-msgstr ""
+msgstr "%1: nastavit počátek rozsahů seskupení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:531
 #, kde-format
 msgid "%1: set bin ranges end"
-msgstr ""
+msgstr "%1: nastavit konec rozsahů seskupení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:864
 #, kde-format
@@ -10512,136 +10505,134 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:270
 #, kde-format
 msgid "%1: set kernel type"
-msgstr ""
+msgstr "%1: nastavit typ jádra"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:277
 #, kde-format
 msgid "%1: set bandwidth type"
-msgstr ""
+msgstr "%1: nastavit typ šířky pásma"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:284
 #, kde-format
 msgid "%1: set bandwidth"
-msgstr ""
+msgstr "%1: nastavit šířku pásma"
 
 #: src/backend/worksheet/plots/cartesian/Plot.cpp:112
 #, kde-format
 msgid "%1: legend visibility changed"
-msgstr "%1: změněna viditelnost vysvětlivek"
+msgstr "%1: viditelnost legendy změněna"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:561
 #, kde-format
 msgid "%1: set limits type"
-msgstr ""
+msgstr "%1: nastavit typ limitů"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
 #, kde-format
 msgid "%1: set limits metric"
-msgstr ""
+msgstr "%1: nastavit limity metriky"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:575
 #, kde-format
 msgid "%1: set sample size"
-msgstr ""
+msgstr "%1: nastavit velikost vzorku"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:583
 #, kde-format
 msgid "%1: enable exact limits"
-msgstr ""
+msgstr "%1: zapnout přesné limity"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:583
 #, kde-format
 msgid "%1: disable exact limits"
-msgstr ""
+msgstr "%1: vypnout přesné limity"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:592
 #, kde-format
 msgid "%1: set maximal upper limit"
-msgstr ""
+msgstr "%1: nastavit maximální horní hranici"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:599
 #, kde-format
 msgid "%1: set minimal lower limit"
-msgstr ""
+msgstr "%1: nastavit minimální dolní hranici"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:606
 #, kde-format
 msgid "%1: set center specification"
-msgstr ""
+msgstr "%1: nastavit specifikaci středu"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:613
 #, kde-format
 msgid "%1: set upper limit specification"
-msgstr ""
+msgstr "%1: nastavit specifikaci horní hranice"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:620
 #, kde-format
 msgid "%1: set lower limit specification"
-msgstr ""
+msgstr "%1: nastavit specifikaci dolní hranice"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:629
 #, kde-format
 msgid "%1: enable control labels"
-msgstr ""
+msgstr "%1: zapnout popisky ovládacích prvků"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:629
 #, kde-format
 msgid "%1: disable control labels"
-msgstr ""
+msgstr "%1: vypnout popisky ovládacích prvků"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:651
 #, kde-format
 msgid "%1: set labels border shape"
-msgstr ""
+msgstr "%1: nastavit tvar ohraničení popisků"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:666
 #, kde-format
 msgid "%1: set labels font"
-msgstr ""
+msgstr "%1: nastavit písmo popisků"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:701
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:733
 #, kde-format
 msgid "%1: set labels background color"
-msgstr ""
+msgstr "%1: nastavit barvu pozadí popisků"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:791
 #, kde-format
 msgid "%1: set labels border style"
-msgstr ""
+msgstr "%1: nastavit styl ohraničení popisků"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:802
 #, kde-format
 msgid "%1: set labels border width"
-msgstr ""
+msgstr "%1: nastavit šířku ohraničení popisků"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:813
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:824
 #, kde-format
 msgid "%1: set labels border color"
-msgstr ""
+msgstr "%1: nastavit barvu ohraničení popisků"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
-msgstr ""
+msgstr "Nebylo poskytnuto dostatek dat."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
-msgstr ""
+msgstr "Poslední vzorek je neúplný a byl vynechán."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:289
 #, kde-format
 msgid "%1: set distribution"
-msgstr ""
+msgstr "%1: nastavit rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:184
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgid "Move Reference Line"
-msgstr "Vlastnosti: Referenční přímka"
+msgstr "Přesunout referenční čáru"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:145
 #, kde-format
@@ -10651,23 +10642,22 @@ msgstr "Ohraničení"
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:221
 #, kde-format
 msgid "%1: set start logical position"
-msgstr ""
+msgstr "%1: nastavit začátek logické polohy"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, kde-format
 msgid "%1: set end logical position"
-msgstr ""
+msgstr "%1: nastavit konec logické polohy"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:466
-#, fuzzy, kde-format
-#| msgid "Reference Range"
+#, kde-format
 msgid "Move Reference Range"
-msgstr "Referenční rozsah"
+msgstr "Přesunout referenční rozsah"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:285
 #, kde-format
 msgid "%1: set center metric"
-msgstr ""
+msgstr "%1: nastavit metriku středu"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -10677,32 +10667,32 @@ msgstr "%1: nastavit styl symbolu"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:157
 #, kde-format
 msgid "%1: set symbol size"
-msgstr ""
+msgstr "%1: nastavit velikost symbolu"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:164
 #, kde-format
 msgid "%1: set symbol color"
-msgstr ""
+msgstr "%1: nastavit barvu symbolu"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:171
 #, kde-format
 msgid "%1: rotate symbols"
-msgstr ""
+msgstr "%1: otočit symboly"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:178
 #, kde-format
 msgid "%1: set symbol filling"
-msgstr ""
+msgstr "%1: nastavit vyplnění symbolu"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:185
 #, kde-format
 msgid "%1: set symbol outline style"
-msgstr ""
+msgstr "%1: nastavit styl obrysu symbolu"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:192
 #, kde-format
 msgid "%1: set symbols opacity"
-msgstr ""
+msgstr "%1: nastavit průhlednost symbolů"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:294
 #, kde-format
@@ -10737,12 +10727,12 @@ msgstr "sloupec"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:306
 #, kde-format
 msgid "peaked bar"
-msgstr ""
+msgstr "vrcholový pruh"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:308
 #, kde-format
 msgid "skewed bar"
-msgstr ""
+msgstr "šikmý pruh"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:310
 #, kde-format
@@ -10752,17 +10742,17 @@ msgstr "diamant"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:312
 #, kde-format
 msgid "lozenge"
-msgstr ""
+msgstr "pastilka"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:314
 #, kde-format
 msgid "tie"
-msgstr ""
+msgstr "kravata"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:316
 #, kde-format
 msgid "tiny tie"
-msgstr ""
+msgstr "malá kravata"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:318
 #, kde-format
@@ -10777,7 +10767,7 @@ msgstr "bumerang"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:322
 #, kde-format
 msgid "small boomerang"
-msgstr ""
+msgstr "malý bumerang"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:324
 #, kde-format
@@ -10832,17 +10822,17 @@ msgstr "x plus"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:344
 #, kde-format
 msgid "tall plus"
-msgstr ""
+msgstr "vysoké plus"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:346
 #, kde-format
 msgid "latin cross"
-msgstr ""
+msgstr "latinský kříž"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:348
 #, kde-format
 msgid "dot plus"
-msgstr ""
+msgstr "tečka plus"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:350
 #, kde-format
@@ -10852,72 +10842,72 @@ msgstr "hash"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:352
 #, kde-format
 msgid "square x"
-msgstr ""
+msgstr "čtverec x"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:354
 #, kde-format
 msgid "square plus"
-msgstr ""
+msgstr "čtverec plus"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:356
 #, kde-format
 msgid "half square"
-msgstr ""
+msgstr "poloviční čtverec"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:358
 #, kde-format
 msgid "square dot"
-msgstr ""
+msgstr "čtvercová tečka"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:360
 #, kde-format
 msgid "diag square"
-msgstr ""
+msgstr "diagonální čtverec"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:362
 #, kde-format
 msgid "square triangle"
-msgstr ""
+msgstr "pravoúhlý trojúhelník"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:364
 #, kde-format
 msgid "circle half"
-msgstr ""
+msgstr "poloviční kruh"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:366
 #, kde-format
 msgid "circle dot"
-msgstr ""
+msgstr "kruh tečka"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:368
 #, kde-format
 msgid "circle x"
-msgstr ""
+msgstr "kruh x"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:370
 #, kde-format
 msgid "circle tri"
-msgstr ""
+msgstr "kruh tri"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:372
 #, kde-format
 msgid "peace"
-msgstr ""
+msgstr "mír"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:374
 #, kde-format
 msgid "triangle dot"
-msgstr ""
+msgstr "trojúhelník tečka"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:376
 #, kde-format
 msgid "triangle line"
-msgstr ""
+msgstr "trojúhelník čára"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:378
 #, kde-format
 msgid "half triangle"
-msgstr ""
+msgstr "poloviční trojúhelník"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:380
 #, kde-format
@@ -11002,77 +10992,77 @@ msgstr "muž"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:412
 #, kde-format
 msgid "spade"
-msgstr ""
+msgstr "lopata"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:414
 #, kde-format
 msgid "club"
-msgstr ""
+msgstr "klub"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:107
 #, kde-format
 msgid "%1: set values type"
-msgstr ""
+msgstr "%1: nastavit typ hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:118
 #, kde-format
 msgid "%1: set values column"
-msgstr ""
+msgstr "%1: nastavit sloupec hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:135
 #, kde-format
 msgid "%1: set values position"
-msgstr ""
+msgstr "%1: nastavit polohu hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:142
 #, kde-format
 msgid "%1: set values distance"
-msgstr ""
+msgstr "%1: nastavit vzdálenost hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:149
 #, kde-format
 msgid "%1: rotate values"
-msgstr ""
+msgstr "%1: otočit hodnoty"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:156
 #, kde-format
 msgid "%1: set values opacity"
-msgstr ""
+msgstr "%1: nastavit průhlednost hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:163
 #, kde-format
 msgid "%1: set values numeric format"
-msgstr ""
+msgstr "%1: nastavit číselný formát hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:170
 #, kde-format
 msgid "%1: set values precision"
-msgstr ""
+msgstr "%1: nastavit přesnost hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:177
 #, kde-format
 msgid "%1: set values datetime format"
-msgstr ""
+msgstr "%1: nastavit datový formát hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:184
 #, kde-format
 msgid "%1: set values prefix"
-msgstr ""
+msgstr "%1: nastavit předponu hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:191
 #, kde-format
 msgid "%1: set values suffix"
-msgstr ""
+msgstr "%1: nastavit příponu hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:198
 #, kde-format
 msgid "%1: set values font"
-msgstr ""
+msgstr "%1: nastavit písmo hodnot"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:205
 #, kde-format
 msgid "%1: set values color"
-msgstr ""
+msgstr "%1: nastavit barvu hodnot"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:212
 #, fuzzy, kde-format
@@ -11260,13 +11250,13 @@ msgstr ""
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Lower"
-msgstr "Dát do pozadí"
+msgstr "Dolní"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
 #, kde-format
 msgid "Upper"
-msgstr "Velká"
+msgstr "Horní"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
 #, kde-format

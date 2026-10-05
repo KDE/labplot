@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-03 00:40+0000\n"
-"PO-Revision-Date: 2026-10-03 08:16+0200\n"
+"PO-Revision-Date: 2026-10-04 10:09+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -23246,7 +23246,7 @@ msgstr "Предупреждения при импорте"
 #: src/frontend/ui/datasources/importwarningsdialog.ui:38
 #, kde-format
 msgid "OK"
-msgstr "OK"
+msgstr "ОК"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbImportObjectNames)
 #: src/frontend/ui/datasources/jsonoptionswidget.ui:99
