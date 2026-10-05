@@ -1479,3 +1479,11 @@ void Matrix::finalizeImport(size_t /*columnOffset*/,
 	setChanged();
 	setUndoAware(true);
 }
+
+// Explicit template instantiations for Matrix template methods on Windows DLLs.
+// Same rationale as Range<T> in CartesianPlot.cpp - Windows DLL export requires
+// explicit instantiation for template methods to be available to pylabplot.dll.
+#if defined(SDK) && defined(Q_OS_WIN)
+template double Matrix::cell<double>(int, int) const;
+template void Matrix::setCell<double>(int, int, double);
+#endif

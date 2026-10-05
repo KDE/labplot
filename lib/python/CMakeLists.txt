@@ -304,7 +304,7 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     endif()
 endif()
 
-target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK)
+target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK Qt${QT_MAJOR_VERSION}::Core Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Widgets)
 target_compile_definitions(${bindings_library} PRIVATE SDK)
 
 execute_process(
