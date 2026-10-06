@@ -84,9 +84,9 @@ LiveDataSource::~LiveDataSource() {
 
 QWidget* LiveDataSource::view() const {
 	if (!m_partView) {
-		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
-		m_view->setSuppressResizeHeader(true);
-		m_partView = m_view;
+		auto* newView = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+		newView->setSuppressResizeHeader(true);
+		m_partView = newView;
 	}
 	return m_partView;
 }

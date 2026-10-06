@@ -173,7 +173,7 @@ void Worksheet::fillElementsContextMenu(QMenu* menu) {
 	menu->addAction(action);
 
 	// TODO: add more actions if applicable.
-	// menu->addAction(m_view->changeSelectedLockAction);
+	// menu->addAction(view_specific()->changeSelectedLockAction);
 	// auto* changeSelectedLockAction = new QAction(QIcon::fromTheme(QStringLiteral("object-locked")), i18n("Change &Lock Status"), this);
 	// connect(changeSelectedLockAction, &QAction::triggered, m_worksheet, &Worksheet::changeSelectedLock);
 }
@@ -182,10 +182,10 @@ void Worksheet::fillElementsContextMenu(QMenu* menu) {
  * changes visibility for all selected worksheet elements
  */
 void Worksheet::changeSelectedVisibility() {
-	if (!m_view)
+	if (!view_specific())
 		return;
 
-	const auto& selectedItems = m_view->selectedItems();
+	const auto& selectedItems = view_specific()->selectedItems();
 	if (selectedItems.isEmpty())
 		return;
 
@@ -224,18 +224,23 @@ void Worksheet::changeSelectedVisibility() {
 QWidget* Worksheet::view() const {
 	DEBUG(Q_FUNC_INFO)
 	if (!m_partView) {
-		m_view = new WorksheetView(const_cast<Worksheet*>(this));
-		m_partView = m_view;
-		connect(m_view, &WorksheetView::statusInfo, this, &Worksheet::statusInfo);
-		connect(m_view, &WorksheetView::propertiesExplorerRequested, this, &Worksheet::propertiesExplorerRequested);
-		connect(this, &Worksheet::cartesianPlotMouseModeChanged, m_view, &WorksheetView::cartesianPlotMouseModeChangedSlot);
-		connect(this, &Worksheet::childContextMenuRequested, m_view, &WorksheetView::childContextMenuRequested);
-		connect(this, &Worksheet::viewAboutToBeDeleted, [this]() {
-			m_view = nullptr;
-		});
+		auto* newView = new WorksheetView(const_cast<Worksheet*>(this));
+		m_partView = newView;
+		connect(newView, &WorksheetView::statusInfo, this, &Worksheet::statusInfo);
+		connect(newView, &WorksheetView::propertiesExplorerRequested, this, &Worksheet::propertiesExplorerRequested);
+		connect(this, &Worksheet::cartesianPlotMouseModeChanged, newView, &WorksheetView::cartesianPlotMouseModeChangedSlot);
+		connect(this, &Worksheet::childContextMenuRequested, newView, &WorksheetView::childContextMenuRequested);
 		Q_EMIT const_cast<Worksheet*>(this)->changed();
 	}
 	return m_partView;
+}
+
+/*!
+ * returns the WorksheetView if the view was already created, nullptr otherwise.
+ * Doesn't create the view.
+ */
+WorksheetView* Worksheet::view_specific() const {
+	return static_cast<WorksheetView*>(m_partView);
 }
 
 /*!
@@ -263,7 +268,7 @@ bool Worksheet::exportToFile(const QString& path, const ExportFormat format, con
 
 bool Worksheet::exportView() const {
 #ifndef SDK
-	auto* dlg = new ExportWorksheetDialog(m_view);
+	auto* dlg = new ExportWorksheetDialog(view_specific());
 	dlg->setProjectFileName(const_cast<Worksheet*>(this)->project()->fileName());
 	dlg->setFileName(name());
 	bool ret;
@@ -275,7 +280,7 @@ bool Worksheet::exportView() const {
 		const int resolution = dlg->exportResolution();
 
 		WAIT_CURSOR_AUTO_RESET;
-		m_view->exportToFile(path, format, area, background, resolution);
+		view_specific()->exportToFile(path, format, area, background, resolution);
 	}
 	delete dlg;
 	return ret;
@@ -285,10 +290,10 @@ bool Worksheet::exportView() const {
 }
 
 bool Worksheet::exportView(QPixmap& pixmap) const {
-	if (!m_view)
+	if (!view_specific())
 		return false;
 
-	m_view->exportToPixmap(pixmap);
+	view_specific()->exportToPixmap(pixmap);
 	return true;
 }
 
@@ -296,11 +301,11 @@ bool Worksheet::printView() {
 #ifndef SDK
 	setPrinting(true);
 	QPrinter printer;
-	auto* dlg = new QPrintDialog(&printer, m_view);
+	auto* dlg = new QPrintDialog(&printer, view_specific());
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
-		m_view->print(&printer);
+		view_specific()->print(&printer);
 
 	delete dlg;
 	setPrinting(false);
@@ -313,8 +318,8 @@ bool Worksheet::printView() {
 bool Worksheet::printPreview() const {
 #ifndef SDK
 	setPrinting(true);
-	auto* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
+	auto* dlg = new QPrintPreviewDialog(view_specific());
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view_specific(), &WorksheetView::print);
 	const auto r = dlg->exec();
 	setPrinting(false);
 	return r;
@@ -454,7 +459,7 @@ QRectF Worksheet::pageRect() const {
 }
 
 double Worksheet::zoomFactor() const {
-	return m_view->zoomFactor();
+	return view_specific()->zoomFactor();
 }
 
 /*!
@@ -504,8 +509,8 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool sele
 		Q_EMIT childAspectDeselectedInView(aspect);
 
 	// handle the resize items on selection changes
-	if (selected && m_view) {
-		const auto& items = m_view->selectedItems();
+	if (selected && view_specific()) {
+		const auto& items = view_specific()->selectedItems();
 		if (items.size() == 1) {
 			// only one object is selected, make it resiable if it's a container and
 			// 1. a child of a worksheet without any active layout
@@ -570,13 +575,13 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 }
 
 void Worksheet::setIsClosing() {
-	if (m_view)
-		m_view->setIsClosing();
+	if (view_specific())
+		view_specific()->setIsClosing();
 }
 
 void Worksheet::suppressSelectionChangedEvent(bool value) {
-	if (m_view)
-		m_view->suppressSelectionChangedEvent(value);
+	if (view_specific())
+		view_specific()->suppressSelectionChangedEvent(value);
 }
 
 /*!
@@ -667,9 +672,9 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 }
 
 void Worksheet::setInteractive(bool value) {
-	if (!m_view)
+	if (!view_specific())
 		view();
-	m_view->setInteractive(value);
+	view_specific()->setInteractive(value);
 }
 
 void Worksheet::setPlotsInteractive(bool interactive) {
@@ -686,20 +691,20 @@ void Worksheet::setPlotsInteractive(bool interactive) {
 }
 
 void Worksheet::registerShortcuts() {
-	m_view->registerShortcuts();
+	view_specific()->registerShortcuts();
 }
 
 WorksheetElement* Worksheet::currentSelection() {
-	if (!m_view) {
+	if (!view_specific()) {
 		view();
 		return nullptr;
 	}
 
-	return m_view->selectedElement();
+	return view_specific()->selectedElement();
 }
 
 void Worksheet::unregisterShortcuts() {
-	m_view->unregisterShortcuts();
+	view_specific()->unregisterShortcuts();
 }
 
 /* =============================== getter methods for general options ==================================== */
@@ -919,7 +924,7 @@ void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 			plot->mousePressZoomSelectionMode(logicPos, -1);
 		}
 	} else {
-		int index = CartesianPlot::cSystemIndex(m_view->selectedElement());
+		int index = CartesianPlot::cSystemIndex(view_specific()->selectedElement());
 		senderPlot->mousePressZoomSelectionMode(logicPos, index);
 	}
 }
@@ -937,7 +942,7 @@ void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
 			plot->setMouseMode(mouseMode);
 		}
 	} else {
-		int index = CartesianPlot::cSystemIndex(m_view->selectedElement());
+		int index = CartesianPlot::cSystemIndex(view_specific()->selectedElement());
 		auto* plot = static_cast<CartesianPlot*>(QObject::sender());
 		plot->mouseReleaseZoomSelectionMode(index);
 	}
@@ -967,7 +972,7 @@ void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 		for (auto* plot : plots)
 			plot->mouseMoveZoomSelectionMode(logicPos, -1);
 	} else
-		senderPlot->mouseMoveZoomSelectionMode(logicPos, CartesianPlot::cSystemIndex(m_view->selectedElement()));
+		senderPlot->mouseMoveZoomSelectionMode(logicPos, CartesianPlot::cSystemIndex(view_specific()->selectedElement()));
 }
 
 void Worksheet::cartesianPlotMouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd) {
@@ -1008,8 +1013,8 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 		for (auto* plot : plots)
 			plot->mouseHoverZoomSelectionMode(logicPos, -1);
 	} else {
-		if (m_view->selectedElement()->parent<CartesianPlot>() == senderPlot)
-			senderPlot->mouseHoverZoomSelectionMode(logicPos, CartesianPlot::cSystemIndex(m_view->selectedElement()));
+		if (view_specific()->selectedElement()->parent<CartesianPlot>() == senderPlot)
+			senderPlot->mouseHoverZoomSelectionMode(logicPos, CartesianPlot::cSystemIndex(view_specific()->selectedElement()));
 		else
 			senderPlot->mouseHoverZoomSelectionMode(logicPos, -1);
 	}
@@ -1629,8 +1634,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	// determine the currently selected plot/container and make it
 	// resizable or not depending on the layout settings
 	bool resizable = (layout == Worksheet::Layout::NoLayout);
-	if (q->m_view) {
-		const auto& items = q->m_view->selectedItems();
+	if (q->view_specific()) {
+		const auto& items = q->view_specific()->selectedItems();
 		if (items.size() == 1) {
 			const auto& item = items.constFirst();
 			const auto& containers = q->children<WorksheetElementContainer>();

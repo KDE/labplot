@@ -52,12 +52,12 @@ public:
 private:
 	QString m_language;
 	ScriptRuntime* m_scriptRuntime{nullptr};
-	mutable ScriptEditor* m_view{nullptr};
 	KTextEditor::Document* m_kTextEditorDocument{nullptr};
 	bool m_initialized{false};
 	QString m_outputHtml;
 
 	void prepareDocument() const;
+	ScriptEditor* view_specific() const;
 
 public Q_SLOTS:
 	void runScript();

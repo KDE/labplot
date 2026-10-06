@@ -53,6 +53,12 @@ Script::Script(const QString& name, const QString& lang)
 	, m_kTextEditorDocument(KTextEditor::Editor::instance()->createDocument(this)) {
 	if (!lang.isEmpty())
 		setRuntime(lang);
+
+	connect(this, &Script::viewAboutToBeDeleted, [this]() {
+		// keep the output of the editor so it is still available when saving the project or re-opening the view
+		if (auto* editor = view_specific())
+			m_outputHtml = editor->outputText().isEmpty() ? QString() : editor->outputHtml();
+	});
 }
 
 bool Script::setRuntime(const QString& runtime) {
@@ -135,13 +141,21 @@ bool Script::exportView() const {
 
 QWidget* Script::view() const {
 	if (!m_partView) {
-		m_view = new ScriptEditor(const_cast<Script*>(this));
+		auto* newView = new ScriptEditor(const_cast<Script*>(this));
 		if (!m_outputHtml.isEmpty())
-			m_view->setOutputHtml(m_outputHtml);
-		m_partView = m_view;
+			newView->setOutputHtml(m_outputHtml);
+		m_partView = newView;
 	}
 
 	return m_partView;
+}
+
+/*!
+ * returns the ScriptEditor if the view was already created, nullptr otherwise.
+ * Doesn't create the view.
+ */
+ScriptEditor* Script::view_specific() const {
+	return static_cast<ScriptEditor*>(m_partView);
 }
 
 void Script::save(QXmlStreamWriter* writer) const {
@@ -161,9 +175,9 @@ void Script::save(QXmlStreamWriter* writer) const {
 	const auto group = Settings::group(QStringLiteral("ScriptEditor"));
 	if (group.readEntry(QStringLiteral("SaveOutput"), true)) {
 		QString outputHtml;
-		if (m_view) {
-			if (!m_view->outputText().isEmpty())
-				outputHtml = m_view->outputHtml();
+		if (auto* editor = view_specific()) {
+			if (!editor->outputText().isEmpty())
+				outputHtml = editor->outputHtml();
 		} else {
 			outputHtml = m_outputHtml;
 		}
@@ -183,8 +197,13 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 		return false;
 	}
 	const QString runtime = readRuntime(reader);
-	if (runtime.isEmpty() || !setRuntime(runtime))
+	if (runtime.isEmpty())
 		return false;
+
+	if (!setRuntime(runtime)) {
+		reader->raiseError(i18n("failed to initialize the script runtime '%1'", runtime));
+		return false;
+	}
 
 	if (!readBasicAttributes(reader))
 		return false;
@@ -209,8 +228,8 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 			m_kTextEditorDocument->setText(attribs.value(QStringLiteral("text")).toString());
 		} else if (!preview && reader->name() == QLatin1String("output")) {
 			m_outputHtml = reader->readElementText(QXmlStreamReader::SkipChildElements);
-			if (m_view)
-				m_view->setOutputHtml(m_outputHtml);
+			if (auto* editor = view_specific())
+				editor->setOutputHtml(m_outputHtml);
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
@@ -378,12 +397,12 @@ QString Script::readRuntime(XmlStreamReader* reader) {
 	QString str = attribs.value(QStringLiteral("runtime")).toString();
 
 	if (str.isEmpty()) {
-		reader->raiseError(QStringLiteral("runtime"));
+		reader->raiseError(i18n("attribute 'runtime' is missing or empty"));
 		return {};
 	}
 
 	if (!Script::languages.contains(str, Qt::CaseInsensitive)) {
-		reader->raiseError(QStringLiteral("runtime"));
+		reader->raiseError(i18n("unsupported script runtime '%1'", str));
 		return {};
 	}
 

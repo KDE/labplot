@@ -163,11 +163,8 @@ QWidget* Spreadsheet::view() const {
 #ifndef SDK
 	if (!m_partView) {
 		Q_D(const Spreadsheet);
-		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), d->readOnly);
-		m_partView = m_view;
-		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
-			m_view = nullptr;
-		});
+		auto* newView = new SpreadsheetView(const_cast<Spreadsheet*>(this), d->readOnly);
+		m_partView = newView;
 	}
 	return m_partView;
 #else
@@ -175,9 +172,17 @@ QWidget* Spreadsheet::view() const {
 #endif
 }
 
+/*!
+ * returns the SpreadsheetView if the view was already created, nullptr otherwise.
+ * Doesn't create the view.
+ */
+SpreadsheetView* Spreadsheet::view_specific() const {
+	return static_cast<SpreadsheetView*>(m_partView);
+}
+
 bool Spreadsheet::exportView() const {
 #ifndef SDK
-	return m_view->exportView();
+	return view_specific()->exportView();
 #else
 	return true;
 #endif
@@ -185,7 +190,7 @@ bool Spreadsheet::exportView() const {
 
 bool Spreadsheet::printView() {
 #ifndef SDK
-	return m_view->printView();
+	return view_specific()->printView();
 #else
 	return true;
 #endif
@@ -193,7 +198,7 @@ bool Spreadsheet::printView() {
 
 bool Spreadsheet::printPreview() const {
 #ifndef SDK
-	return m_view->printPreview();
+	return view_specific()->printPreview();
 #else
 	return true;
 #endif
@@ -300,11 +305,11 @@ void Spreadsheet::updateHorizontalHeader() {
 
 		// if the header name of the first column has changed (column mode to be shown, etc.),
 		// reset the column widths and request the view to adjuste the column sizes to the  content
-		if (oldHeader != newHeader && m_view) {
+		if (oldHeader != newHeader && view_specific()) {
 			const auto& columns = children<Column>();
 			for (auto col : columns)
 				col->setWidth(0);
-			m_view->resizeHeader();
+			view_specific()->resizeHeader();
 		}
 	}
 #endif
@@ -930,8 +935,8 @@ QMenu* Spreadsheet::createContextMenu() {
 
 void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #ifndef SDK
-	if (m_view)
-		m_view->fillColumnContextMenu(menu, column);
+	if (view_specific())
+		view_specific()->fillColumnContextMenu(menu, column);
 #else
 	Q_UNUSED(menu)
 	Q_UNUSED(column)
@@ -940,8 +945,8 @@ void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 void Spreadsheet::fillColumnsContextMenu(QMenu* menu) {
 #ifndef SDK
-	if (m_view)
-		m_view->fillColumnsContextMenu(menu);
+	if (view_specific())
+		view_specific()->fillColumnsContextMenu(menu);
 #else
 	Q_UNUSED(menu)
 #endif
@@ -1985,8 +1990,8 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		m_model->suppressSignals(false);
 
 #ifndef SDK
-	if (m_partView && m_view)
-		m_view->resizeHeader();
+	if (view_specific())
+		view_specific()->resizeHeader();
 #endif
 
 	// row count most probably changed after the import, notify the dock widget.
@@ -2019,12 +2024,12 @@ QString SpreadsheetPrivate::name() const {
 
 void SpreadsheetPrivate::updateCommentsHeader() {
 #ifndef SDK
-	q->m_view->showComments(q->showComments());
+	q->view_specific()->showComments(q->showComments());
 #endif
 }
 
 void SpreadsheetPrivate::updateSparklinesHeader() {
 #ifndef SDK
-	q->m_view->showSparklines(q->showSparklines());
+	q->view_specific()->showSparklines(q->showSparklines());
 #endif
 }

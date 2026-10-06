@@ -129,7 +129,7 @@ private:
 	Q_DECLARE_PRIVATE(DatapickerImage)
 	DatapickerImagePrivate* const d_ptr;
 
-	mutable DatapickerImageView* m_view{nullptr};
+	DatapickerImageView* view_specific() const;
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
 	int m_currentRefPoint{-1};

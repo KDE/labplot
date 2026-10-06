@@ -62,7 +62,7 @@ public Q_SLOTS:
 	void updateSettings();
 
 private:
-	mutable NotebookView* m_view{nullptr};
+	NotebookView* view_specific() const;
 	QString m_backendName;
 	QString m_error;
 #ifdef HAVE_CANTOR_LIBS
