@@ -448,21 +448,13 @@ void Matrix::clearRow(int r) {
 	}
 }
 
-// MSVC doesn't export the instantiations of member templates of an exported class,
-// the instantiations used outside of the library (pylabplot) need to be exported explicitly.
-#if defined(SDK) && defined(Q_OS_WIN)
-#define MATRIX_TEMPLATE_EXPORT LABPLOT_EXPORT
-#else
-#define MATRIX_TEMPLATE_EXPORT
-#endif
-
 //! Return the value in the given cell (needs explicit instantiation)
 template<typename T>
 T Matrix::cell(int row, int col) const {
 	Q_D(const Matrix);
 	return d->cell<T>(row, col);
 }
-template MATRIX_TEMPLATE_EXPORT double Matrix::cell<double>(int row, int col) const;
+template double Matrix::cell<double>(int row, int col) const;
 template int Matrix::cell<int>(int row, int col) const;
 template qint64 Matrix::cell<qint64>(int row, int col) const;
 template QDateTime Matrix::cell<QDateTime>(int row, int col) const;
@@ -496,7 +488,7 @@ void Matrix::setCell(int row, int col, T value) {
 		return;
 	exec(new MatrixSetCellValueCmd<T>(d, row, col, value));
 }
-template MATRIX_TEMPLATE_EXPORT void Matrix::setCell<double>(int row, int col, double value);
+template void Matrix::setCell<double>(int row, int col, double value);
 template void Matrix::setCell<int>(int row, int col, int value);
 template void Matrix::setCell<qint64>(int row, int col, qint64 value);
 template void Matrix::setCell<QString>(int row, int col, QString value);
@@ -1487,3 +1479,11 @@ void Matrix::finalizeImport(size_t /*columnOffset*/,
 	setChanged();
 	setUndoAware(true);
 }
+
+// Explicit template instantiations for Matrix template methods on Windows DLLs.
+// Same rationale as Range<T> in CartesianPlot.cpp - Windows DLL export requires
+// explicit instantiation for template methods to be available to pylabplot.dll.
+#if defined(SDK) && defined(Q_OS_WIN)
+template double Matrix::cell<double>(int, int) const;
+template void Matrix::setCell<double>(int, int, double);
+#endif

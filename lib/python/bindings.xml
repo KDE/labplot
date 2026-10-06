@@ -499,38 +499,8 @@
         <declare-function signature="setOpacity(double)" return-type="void"/>
     </object-type>
     <value-type name="Range" disable-wrapper="yes" generate="no"/>
-    <typedef-type name="DoubleRange" source="Range&lt;double&gt;">
-        <!-- these return a reference to an enum, for which shiboken generates
-             invalid code with avoid-protected-hack (required for MSVC), return by value instead -->
-        <modify-function signature="format()">
-            <inject-code class="target" position="beginning">
-                const RangeT::Format cppResult = %CPPSELF.%FUNCTION_NAME();
-                %PYARG_0 = %CONVERTTOPYTHON[RangeT::Format](cppResult);
-            </inject-code>
-        </modify-function>
-        <modify-function signature="scale()">
-            <inject-code class="target" position="beginning">
-                const RangeT::Scale cppResult = %CPPSELF.%FUNCTION_NAME();
-                %PYARG_0 = %CONVERTTOPYTHON[RangeT::Scale](cppResult);
-            </inject-code>
-        </modify-function>
-    </typedef-type>
-    <typedef-type name="IntRange" source="Range&lt;int&gt;">
-        <!-- these return a reference to an enum, for which shiboken generates
-             invalid code with avoid-protected-hack (required for MSVC), return by value instead -->
-        <modify-function signature="format()">
-            <inject-code class="target" position="beginning">
-                const RangeT::Format cppResult = %CPPSELF.%FUNCTION_NAME();
-                %PYARG_0 = %CONVERTTOPYTHON[RangeT::Format](cppResult);
-            </inject-code>
-        </modify-function>
-        <modify-function signature="scale()">
-            <inject-code class="target" position="beginning">
-                const RangeT::Scale cppResult = %CPPSELF.%FUNCTION_NAME();
-                %PYARG_0 = %CONVERTTOPYTHON[RangeT::Scale](cppResult);
-            </inject-code>
-        </modify-function>
-    </typedef-type>
+    <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/>
+    <typedef-type name="IntRange" source="Range&lt;int&gt;"/>
     <rejection class="RangeT" field-name="*"/>
     <rejection class="RangeT" function-name="*"/>
     <value-type name="RangeT" disable-wrapper="yes">

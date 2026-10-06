@@ -38,11 +38,7 @@ public:
 	virtual void setParentGraphicsItem(QGraphicsItem*) override;
 	~InfoElement();
 
-#ifdef SDK
-	struct LABPLOT_EXPORT MarkerPoints_T {
-#else
 	struct MarkerPoints_T {
-#endif
 		MarkerPoints_T() = default;
 		MarkerPoints_T(CustomPoint*, const XYCurve*, const QString& curvePath);
 		CustomPoint* customPoint{nullptr};

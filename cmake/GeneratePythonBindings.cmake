@@ -156,12 +156,6 @@ function(generate_python_bindings)
 	--typesystem-paths=${PySide6_TYPESYSTEMS}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})
 
-    # MSVC encodes the access specifier in the mangled name, so wrappers compiled with
-    # shiboken's '#define protected public' reference symbols which don't exist in the libraries.
-    if(MSVC)
-        list(APPEND shiboken_options --avoid-protected-hack)
-    endif()
-
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})
 
     # Add custom target to run shiboken to generate the binding cpp files.
@@ -195,6 +189,10 @@ function(generate_python_bindings)
 
     target_compile_options(${PB_PACKAGE_NAME} PRIVATE
         $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wno-keyword-macro -Wno-shadow -Wno-cast-function-type -Wno-zero-as-null-pointer-constant>
+    )
+    # MSVC counterpart of -Wno-keyword-macro, shiboken's wrappers macroize the keyword 'protected'
+    target_compile_definitions(${PB_PACKAGE_NAME} PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:_ALLOW_KEYWORD_MACROS>
     )
     target_link_libraries(${PB_PACKAGE_NAME} PRIVATE
         PySide6::pyside6
