@@ -1052,6 +1052,7 @@ QString Column::caption() const {
 	QString caption = AbstractAspect::caption();
 
 	caption += QLatin1String("<br>");
+	caption += QLatin1String("<br>") + i18n("Path: %1", path());
 	caption += QLatin1String("<br>") + i18n("Size: %1", rowCount());
 	// TODO: active this once we have a more efficient implementation of this function
 	// caption += QLatin1String("<br>") + i18n("Values: %1", col->availableRowCount());
