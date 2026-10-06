@@ -154,7 +154,7 @@ QMenu* AbstractPart::createContextMenu() {
 
 	// window state related actions
 #ifndef SDK
-	if (m_dockWidget) {
+	if (m_dockWidget && m_dockWidget->dockManager()) {
 		const QStyle* style = m_dockWidget->style();
 		if (!m_dockWidget->isClosed()) {
 			auto* action = menu->addAction(i18n("&Close"), [this]() {
@@ -174,11 +174,8 @@ QMenu* AbstractPart::createContextMenu() {
 		auto parentType = parentAspect()->type();
 		bool disableShow = ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && parentType == AspectType::Workbook)
 			|| (type == AspectType::Spreadsheet && parentType == AspectType::DatapickerCurve);
-		if (!disableShow) {
-			menu->addAction(i18n("Show"), [this]() {
-				m_dockWidget->toggleView(true);
-			});
-		}
+		if (!disableShow)
+			menu->addAction(i18n("Show"), this, &AbstractPart::showRequested);
 	}
 #endif
 
