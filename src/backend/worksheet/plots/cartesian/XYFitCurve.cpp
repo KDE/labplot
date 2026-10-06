@@ -2330,6 +2330,8 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	const auto np = fitData.paramNames.size(); // number of fit parameters
 	if (np == 0) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no parameter found.")
+		xVector->clear();
+		yVector->clear();
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters!");
@@ -2337,9 +2339,12 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	}
 
 	if (yErrorColumn && yErrorColumn->rowCount() < tmpXDataColumn->rowCount()) {
+		xVector->clear();
+		yVector->clear();
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("Not sufficient weight data points provided!");
+		fitResult.status = i18n("Insufficient weight data points. X has %1 points, y-error has %2 points.",
+								tmpXDataColumn->rowCount(), yErrorColumn->rowCount());
 		return;
 	}
 
@@ -2414,6 +2419,8 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	const auto n = xdataVector.size();
 	DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
 	if (n == 0) {
+		xVector->clear();
+		yVector->clear();
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("No X data available!");
@@ -2421,13 +2428,17 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	}
 
 	if (n < np) {
+		xVector->clear();
+		yVector->clear();
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2)!", n, np);
+		fitResult.status = i18n("Number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
 		return;
 	}
 
 	if (fitData.model.simplified().isEmpty()) {
+		xVector->clear();
+		yVector->clear();
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Fit model not specified!");

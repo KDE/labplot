@@ -591,6 +591,7 @@ void XYAnalysisCurvePrivate::recalculate() {
 			recalc();
 		}
 	}
+	Q_EMIT q->resultChanged();
 	Q_EMIT q->dataChanged();
 	QApplication::restoreOverrideCursor();
 }

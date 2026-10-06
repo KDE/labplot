@@ -100,6 +100,10 @@ void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableText
 }
 
 void XYAnalysisCurveDock::setAnalysisCurves(const QList<XYCurve*>& curves) {
+	// disconnect from the old curve
+	if (m_analysisCurve)
+		disconnect(m_analysisCurve, nullptr, this, nullptr);
+
 	m_analysisCurves.clear();
 	m_analysisCurve = nullptr;
 

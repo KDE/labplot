@@ -91,6 +91,8 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 
 	// check column sizes
 	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
+		xVector->clear();
+		yVector->clear();
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Number of x and y data points must be equal.");
@@ -127,6 +129,8 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	// number of data points to interpolate
 	const size_t n = (size_t)xdataVector.size();
 	if (n < 2) {
+		xVector->clear();
+		yVector->clear();
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Not enough data points available.");
@@ -139,9 +143,12 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	for (unsigned int i = 1; i < n; i++) {
 		if (xdata[i - 1] >= xdata[i]) {
 			DEBUG("ERROR: x data not strictly increasing: x_{i-1} >= x_i @ i = " << i << ": " << xdata[i - 1] << " >= " << xdata[i])
-			interpolationResult.status = i18n("interpolation failed since x data is not strictly monotonic increasing!");
+			xVector->clear();
+			yVector->clear();
 			interpolationResult.available = true;
-			return false;
+			interpolationResult.valid = false;
+			interpolationResult.status = i18n("interpolation failed since x data is not strictly monotonic increasing at x_%1 = %2 (previous x_%3 = %4).", i, xdata[i], i-1, xdata[i-1]);
+			return true;
 		}
 	}
 

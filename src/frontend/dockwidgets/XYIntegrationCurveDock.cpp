@@ -138,6 +138,11 @@ void XYIntegrationCurveDock::initGeneralTab() {
 */
 void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 	CONDITIONAL_LOCK_RETURN;
+
+	// disconnect from the old curve
+	if (m_integrationCurve)
+		disconnect(m_integrationCurve, nullptr, this, nullptr);
+
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);

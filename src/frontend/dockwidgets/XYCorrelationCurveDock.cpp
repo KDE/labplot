@@ -135,6 +135,11 @@ void XYCorrelationCurveDock::initGeneralTab() {
 */
 void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	CONDITIONAL_LOCK_RETURN;
+
+	// disconnect from the old curve
+	if (m_correlationCurve)
+		disconnect(m_correlationCurve, nullptr, this, nullptr);
+
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);

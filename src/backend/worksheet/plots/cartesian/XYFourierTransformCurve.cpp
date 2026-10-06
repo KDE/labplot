@@ -116,6 +116,8 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	// number of data points to transform
 	auto n = (unsigned int)ydataVector.size();
 	if (n == 0) {
+		xVector->clear();
+		yVector->clear();
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");

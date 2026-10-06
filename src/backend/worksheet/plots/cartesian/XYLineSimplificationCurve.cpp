@@ -112,9 +112,11 @@ bool XYLineSimplificationCurvePrivate::recalculateSpecific(const AbstractColumn*
 	// number of data points to use
 	const size_t n = (size_t)xdataVector.size();
 	if (n < 2) {
+		xVector->clear();
+		yVector->clear();
 		lineSimplificationResult.available = true;
 		lineSimplificationResult.valid = false;
-		lineSimplificationResult.status = i18n("Not enough data points available.");
+		lineSimplificationResult.status = i18n("Line simplification requires at least 2 points, only %1 provided.", n);
 		return true;
 	}
 

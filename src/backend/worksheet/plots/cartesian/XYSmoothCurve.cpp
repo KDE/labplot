@@ -107,9 +107,12 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 
 	// check column sizes
 	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
+		xVector->clear();
+		yVector->clear();
 		smoothResult.available = true;
 		smoothResult.valid = false;
-		smoothResult.status = i18n("Number of x and y data points must be equal.");
+		smoothResult.status = i18n("Number of x and y data points must be equal. x has %1 points, y has %2 points.",
+									tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 		return true;
 	}
 
@@ -132,9 +135,11 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 	// number of data points to smooth
 	const size_t n = (size_t)xdataVector.size();
 	if (n < 2) {
+		xVector->clear();
+		yVector->clear();
 		smoothResult.available = true;
 		smoothResult.valid = false;
-		smoothResult.status = i18n("Not enough data points available.");
+		smoothResult.status = i18n("Smoothing requires at least 2 points, only %1 provided.", n);
 		return true;
 	}
 

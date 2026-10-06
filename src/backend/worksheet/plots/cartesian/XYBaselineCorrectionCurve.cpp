@@ -87,9 +87,11 @@ bool XYBaselineCorrectionCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 	const size_t n = (size_t)ydataVector.size();
 	if (n < 1) {
+		xVector->clear();
+		yVector->clear();
 		baselineResult.available = true;
 		baselineResult.valid = false;
-		baselineResult.status = i18n("Not enough data points available.");
+		baselineResult.status = i18n("Baseline correction requires at least 1 point, none provided.");
 		return true;
 	}
 

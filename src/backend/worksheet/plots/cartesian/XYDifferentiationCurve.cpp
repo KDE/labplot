@@ -105,9 +105,11 @@ bool XYDifferentiationCurvePrivate::recalculateSpecific(const AbstractColumn* tm
 	// number of data points to differentiate
 	const size_t n = (size_t)xdataVector.size();
 	if (n < 3) {
+		xVector->clear();
+		yVector->clear();
 		differentiationResult.available = true;
 		differentiationResult.valid = false;
-		differentiationResult.status = i18n("Not enough data points available.");
+		differentiationResult.status = i18n("Differentiation requires at least 3 points, only %1 provided.", n);
 		return true;
 	}
 

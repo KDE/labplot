@@ -133,6 +133,11 @@ void XYConvolutionCurveDock::initGeneralTab() {
 */
 void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	CONDITIONAL_LOCK_RETURN;
+
+	// disconnect from the old curve
+	if (m_convolutionCurve)
+		disconnect(m_convolutionCurve, nullptr, this, nullptr);
+
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);

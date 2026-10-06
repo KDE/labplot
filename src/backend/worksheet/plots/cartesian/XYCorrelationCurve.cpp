@@ -146,9 +146,11 @@ bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	const size_t n = (size_t)ydataVector.size(); // number of points for signal
 	const size_t m = (size_t)y2dataVector.size(); // number of points for response
 	if (n < 1 || m < 1) {
+		xVector->clear();
+		yVector->clear();
 		correlationResult.available = true;
 		correlationResult.valid = false;
-		correlationResult.status = i18n("Not enough data points available.");
+		correlationResult.status = i18n("Correlation requires at least 1 point per signal. Signal 1 has %1 points, signal 2 has %2 points.", n, m);
 		return true;
 	}
 

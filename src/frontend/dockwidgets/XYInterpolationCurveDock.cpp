@@ -179,6 +179,7 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	connect(m_interpolationCurve, &XYInterpolationCurve::yDataColumnChanged, this, &XYInterpolationCurveDock::curveYDataColumnChanged);
 	connect(m_interpolationCurve, &XYInterpolationCurve::interpolationDataChanged, this, &XYInterpolationCurveDock::curveInterpolationDataChanged);
 	connect(m_interpolationCurve, &XYInterpolationCurve::sourceDataChanged, this, &XYInterpolationCurveDock::enableRecalculate);
+	connect(m_interpolationCurve, &XYInterpolationCurve::resultChanged, this, &XYInterpolationCurveDock::showInterpolationResult);
 }
 
 /*!
@@ -186,6 +187,11 @@ void XYInterpolationCurveDock::initGeneralTab() {
 */
 void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	CONDITIONAL_LOCK_RETURN;
+
+	// disconnect from the old curve
+	if (m_interpolationCurve)
+		disconnect(m_interpolationCurve, nullptr, this, nullptr);
+
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
@@ -517,7 +523,6 @@ void XYInterpolationCurveDock::recalculateClicked() {
 		static_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	Q_EMIT info(i18n("Interpolation status: %1", m_interpolationCurve->result().status));
 }
 
 /*!

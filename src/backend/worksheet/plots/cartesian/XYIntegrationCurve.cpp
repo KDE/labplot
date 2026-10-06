@@ -104,9 +104,11 @@ bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 
 	const size_t n = (size_t)xdataVector.size(); // number of data points to integrate
 	if (n < 2) {
+		xVector->clear();
+		yVector->clear();
 		integrationResult.available = true;
 		integrationResult.valid = false;
-		integrationResult.status = i18n("Not enough data points available.");
+		integrationResult.status = i18n("Integration requires at least 2 points, only %1 provided.", n);
 		return true;
 	}
 

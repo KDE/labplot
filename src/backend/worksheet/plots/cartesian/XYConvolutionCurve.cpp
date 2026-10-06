@@ -153,9 +153,11 @@ bool XYConvolutionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	const size_t n = (size_t)ydataVector.size(); // number of points for signal
 	const size_t m = (size_t)y2dataVector.size(); // number of points for response
 	if (n < 1 || m < 1) {
+		xVector->clear();
+		yVector->clear();
 		convolutionResult.available = true;
 		convolutionResult.valid = false;
-		convolutionResult.status = i18n("Not enough data points available.");
+		convolutionResult.status = i18n("Convolution requires at least 1 point per input. Signal has %1 points, response has %2 points.", n, m);
 		return true;
 	}
 

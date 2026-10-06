@@ -162,6 +162,8 @@ bool XYFourierFilterCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	// number of data points to filter
 	const size_t n = (size_t)xdataVector.size();
 	if (n == 0) {
+		xVector->clear();
+		yVector->clear();
 		filterResult.available = true;
 		filterResult.valid = false;
 		filterResult.status = i18n("No data points available.");

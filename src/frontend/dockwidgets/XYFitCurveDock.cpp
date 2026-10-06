@@ -256,6 +256,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, &XYFitCurve::yErrorColumnChanged, this, &XYFitCurveDock::curveYErrorColumnChanged);
 	connect(m_fitCurve, &XYFitCurve::fitDataChanged, this, &XYFitCurveDock::curveFitDataChanged);
 	connect(m_fitCurve, &XYFitCurve::sourceDataChanged, this, &XYFitCurveDock::enableRecalculate);
+	connect(m_fitCurve, &XYFitCurve::resultChanged, this, &XYFitCurveDock::showFitResult);
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
 	connect(fitParametersWidget, &FitParametersWidget::parametersValid, this, &XYFitCurveDock::parametersValid);
@@ -289,6 +290,11 @@ void XYFitCurveDock::setModel() {
 */
 void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	CONDITIONAL_LOCK_RETURN;
+
+	// disconnect from the old curve
+	if (m_fitCurve)
+		disconnect(m_fitCurve, nullptr, this, nullptr);
+
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
