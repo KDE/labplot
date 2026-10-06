@@ -1183,7 +1183,7 @@ void MainWin::print() {
 	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock.data())->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -1195,7 +1195,7 @@ void MainWin::printPreview() {
 	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock.data())->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -1445,7 +1445,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			ads::CDockAreaWidget* areaWidget{nullptr};
 			// when a dock area is empty, it is deleted and becomes invalid (for example after all its dock widgets are hidden/unpinned)
 			// so we also need to check that the dock area of the current aspect is valid
-			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock || !m_currentAspectDockArea) {
+			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock || !m_currentAspectDockArea || m_currentAspectDock->isAutoHide()) {
 				// If only project explorer and properties dock exist place it right to the project explorer
 				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
@@ -2058,7 +2058,7 @@ void MainWin::exportDialog() {
 	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock.data())->part();
 	if (part->exportView())
 		statusBar()->showMessage(i18n("%1 exported", part->name()));
 }

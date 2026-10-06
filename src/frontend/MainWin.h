@@ -85,7 +85,7 @@ private:
 	ads::CDockWidget* m_propertiesDock{nullptr};
 	ads::CDockWidget* m_worksheetPreviewDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
-	ads::CDockWidget* m_currentAspectDock{nullptr};
+	QPointer<ads::CDockWidget> m_currentAspectDock;
 	// introduce a QPointer for the current aspect dock area
 	// we use QPointer because it internally sets itself to nullptr when the object it manages is deleted
 	QPointer<ads::CDockAreaWidget> m_currentAspectDockArea{nullptr};

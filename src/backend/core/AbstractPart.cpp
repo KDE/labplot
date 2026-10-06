@@ -31,8 +31,10 @@ AbstractPart::AbstractPart(const QString& name, AspectType type)
 
 AbstractPart::~AbstractPart() {
 #ifndef SDK
-	if (m_dockWidget)
+	if (m_dockWidget) {
+		disconnect(m_dockWidget, &QObject::destroyed, this, nullptr);
 		delete m_dockWidget;
+	}
 #endif
 }
 
@@ -73,6 +75,13 @@ ContentDockWidget* AbstractPart::dockWidget() const {
 				m_dockWidget = nullptr;
 				deleteView();
 			}
+		});
+		connect(m_dockWidget, &QObject::destroyed, this, [this](QObject* dock) {
+			if (dock != m_dockWidget)
+				return;
+			m_dockWidget = nullptr;
+			Q_EMIT viewAboutToBeDeleted();
+			m_partView = nullptr;
 		});
 	}
 	return m_dockWidget;
