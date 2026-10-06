@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-10-04 23:45+0200\n"
-"Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
+"PO-Revision-Date: 2026-10-06 00:47+0200\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -9634,32 +9634,32 @@ msgstr "%1: nastavit barvu hodnot"
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
 #, kde-format
 msgid "%1: data source type changed"
-msgstr ""
+msgstr "%1: zdroj dat změněn"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
 #, kde-format
 msgid "%1: data source curve changed"
-msgstr ""
+msgstr "%1: křivka zdroje dat změněna"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:221
 #, kde-format
 msgid "%1: assign x-data"
-msgstr ""
+msgstr "%1: přiřadit data x"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:229
 #, kde-format
 msgid "%1: assign y-data"
-msgstr ""
+msgstr "%1: přiřadit data y"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:237
 #, kde-format
 msgid "%1: assign second y-data"
-msgstr ""
+msgstr "%1: přiřadit sekundární data y"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the convolution"
-msgstr ""
+msgstr "%1: nastavit parametry a provést konvoluci"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:151
@@ -9675,12 +9675,12 @@ msgstr "Není k dispozici dostatek datových bodů."
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the correlation"
-msgstr ""
+msgstr "%1: nastavit parametry a provést korelaci"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:273
 #, kde-format
 msgid "Navigate to \"%1\""
-msgstr "Přejít na %1"
+msgstr "Přejít na \"%1\""
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:547
 #, kde-format
@@ -9695,37 +9695,37 @@ msgstr "%1: změněn zdroj dat y"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:579
 #, kde-format
 msgid "%1: set skip line gaps"
-msgstr ""
+msgstr "%1: nastavit přeskočení mezer mezi řádky"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:586
 #, kde-format
 msgid "%1: set increasing X"
-msgstr ""
+msgstr "%1: nastavit vzestupné X"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:593
 #, kde-format
 msgid "%1: set the number of interpolation points"
-msgstr ""
+msgstr "%1: nastavit počet interpolačních bodů"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:712
 #, kde-format
 msgid "%1: set rug orientation"
-msgstr ""
+msgstr "%1: nastavit orientaci podložky"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1573
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
-msgstr ""
+msgstr "Chyba: Interpolace pomocí Akima spline vyžaduje minimálně 5 bodů."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1575
 #, kde-format
 msgid "Error: Could not initialize the spline function."
-msgstr ""
+msgstr "Chyba: Nepodařilo se inicializovat funkci spline."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1588
 #, kde-format
 msgid "x values must be monotonically increasing."
-msgstr ""
+msgstr "Hodnoty x musí monotónně narůstat."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1591
 #, kde-format
@@ -9740,7 +9740,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:65
 #, kde-format
 msgid "%1: set options and perform the differentiation"
-msgstr ""
+msgstr "%1: nastavit parametry a provést derivaci"
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:94
 #, kde-format
@@ -9750,33 +9750,33 @@ msgstr "%1: nastavit rovnici"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:917
 #, kde-format
 msgid "%1: data source histogram changed"
-msgstr ""
+msgstr "%1: histogram zdroje dat změněn"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:929
 #, kde-format
 msgid "%1: assign x-error"
-msgstr ""
+msgstr "%1: přiřadit chybu x"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:944
 #, kde-format
 msgid "%1: assign y-error"
-msgstr ""
+msgstr "%1: přiřadit chybu y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:960
 #, kde-format
 msgid "%1: set fit options and perform the fit"
-msgstr ""
+msgstr "%1: nastavit parametry přizpůsobení a provést přizpůsobení"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1820
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
-msgstr ""
+msgstr "Výsledky přizpůsobení"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1846
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr ""
+msgstr "Nelineární přizpůsobení dat X/Y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
 #, kde-format
@@ -9791,7 +9791,7 @@ msgstr "Stupeň"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1861
 #, kde-format
 msgid "Peaks"
-msgstr ""
+msgstr "Vrcholy"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #, kde-format
@@ -9813,7 +9813,7 @@ msgstr "Nepřesnost, %"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1887
 #, kde-format
 msgid "t Statistic"
-msgstr ""
+msgstr "t statistika"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:404
@@ -9830,38 +9830,38 @@ msgstr "Horní"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1952
 #, kde-format
 msgid "GOODNESS OF FIT"
-msgstr ""
+msgstr "OPTIMÁLNÍ PŘIZPŮSOBENÍ"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1954
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:960
 #, kde-format
 msgid "Sum of squared residuals"
-msgstr ""
+msgstr "Součet čtverců reziduí"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
 #, kde-format
 msgid "Residuals mean square"
-msgstr ""
+msgstr "Střední kvadratická odchylka reziduí"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1956
 #, kde-format
 msgid "Root mean square deviation"
-msgstr ""
+msgstr "Střední kvadratická odchylka"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:990
 #, kde-format
 msgid "Coefficient of determination"
-msgstr ""
+msgstr "Koeficient determinace"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1958
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1000
 #, kde-format
 msgid "Adj. coefficient of determination"
-msgstr ""
+msgstr "Upravený koeficient determinace"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
@@ -9876,32 +9876,33 @@ msgstr "Test"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1960
 #, kde-format
 msgid "F-Test"
-msgstr ""
+msgstr "F-Test"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
 #, kde-format
 msgid "Mean absolute error"
-msgstr ""
+msgstr "Průměrná absolutní chyba"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1963
 #, kde-format
 msgid "Akaike information criterion"
-msgstr ""
+msgstr "Akaikeho informační kritérium"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
 #, kde-format
 msgid "Bayesian information criterion"
-msgstr ""
+msgstr "Bayesovo informační kritérium"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2323
 #, kde-format
 msgid "Model has no parameters!"
-msgstr ""
+msgstr "Model nemá žádné parametry!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2330
 #, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr ""
+"Nebylo zadáno dostatečné množství datových bodů týkajících se hmotnosti!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2407
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:366
@@ -9915,34 +9916,35 @@ msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
+"Počet datových bodů (%1) musí být větší nebo roven počtu parametrů (%2)!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2421
 #, kde-format
 msgid "Fit model not specified!"
-msgstr ""
+msgstr "Není zadán model přizpůsobení!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3164
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
-msgstr ""
+msgstr "Výsledky přizpůsobení"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:76
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
-msgstr ""
+msgstr "%1: nastavit parametry filtru a provést Fourierův filtr"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:166
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:122
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:123
 #, kde-format
 msgid "No data points available."
-msgstr ""
+msgstr "Nejsou k dispozici žádné datové body."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:70
 #, kde-format
 msgid "%1: set transform options and perform the Fourier transform"
-msgstr ""
+msgstr "%1: nastavit parametry transformace a provést Fourierovu transformaci"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:99
 #, kde-format
@@ -9952,73 +9954,74 @@ msgstr "%1: nastavit funkci"
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:318
 #, kde-format
 msgid "First curve not valid"
-msgstr ""
+msgstr "První křivka není platná"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
 #, kde-format
 msgid "xColumn of first curve not valid"
-msgstr ""
+msgstr "xSloupec první křivky není platný"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
 #, kde-format
 msgid "yColumn of first curve not valid"
-msgstr ""
+msgstr "ySloupec první křivky není platný"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:324
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
-msgstr ""
+msgstr "Počet hodnot x a y u první křivky se neshoduje"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
 #, kde-format
 msgid "Curve '%1' not valid"
-msgstr ""
+msgstr "Křivka '%1' je neplatná"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
-msgstr ""
+msgstr "xSloupec křivky '%1' je neplatný"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
-msgstr ""
+msgstr "ySloupec křivky '%1' je neplatný"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:343
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
-msgstr ""
+msgstr "Počet hodnot x a y se neshoduje u křivky '%1'"
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:63
 #, kde-format
 msgid "%1: set transform options and perform the Hilbert transform"
-msgstr ""
+msgstr "%1: nastavit parametry transformace a provést Hilbertovu transformaci"
 
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the integration"
-msgstr ""
+msgstr "%1: nastavit parametry a provést integraci"
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the interpolation"
-msgstr ""
+msgstr "%1: nastavit parametry a provést interpolaci"
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:96
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:112
 #, kde-format
 msgid "Number of x and y data points must be equal."
-msgstr ""
+msgstr "Počet datových bodů na osách x a y musí být stejný."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:142
 #, kde-format
 msgid "interpolation failed since x data is not strictly monotonic increasing!"
 msgstr ""
+"Interpolace se nezdařila, protože data x nejsou striktně monotónně rostoucí!"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
 msgid "%1: set options and perform the smooth"
-msgstr ""
+msgstr "%1: nastavit parametry a provést vyhlazení"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:141
 #, kde-format
@@ -10042,38 +10045,38 @@ msgstr ""
 #: src/backend/worksheet/TextLabel.cpp:351
 #, kde-format
 msgid "%1: set label text"
-msgstr ""
+msgstr "%1: nastavit text popisku"
 
 #: src/backend/worksheet/TextLabel.cpp:394
 #, kde-format
 msgid "%1: set label placeholdertext"
-msgstr ""
+msgstr "%1: nastavit zástupný text popisku"
 
 #: src/backend/worksheet/TextLabel.cpp:401
 #, kde-format
 msgid "%1: set TeX main font"
-msgstr ""
+msgstr "%1: nastavit hlavní písmo TeXu"
 
 #: src/backend/worksheet/TextLabel.cpp:416
 #, kde-format
 msgid "%1: set border shape"
-msgstr ""
+msgstr "%1: nastavit tvar ohraničení"
 
 #: src/backend/worksheet/Worksheet.cpp:242
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
-msgstr "Vytisknout pracovní list"
+msgstr "Vytisknout list"
 
 #: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change size type"
-msgstr ""
+msgstr "%1: změnit typ velikosti"
 
 #: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
-msgstr ""
+msgstr "%1: změnit vlastnost \"přepočítat obsah\""
 
 #: src/backend/worksheet/Worksheet.cpp:711
 #: src/backend/worksheet/Worksheet.cpp:712
@@ -10085,14 +10088,14 @@ msgstr "%1: nastavit rozvržení"
 #: src/backend/worksheet/Worksheet.cpp:782
 #, kde-format
 msgid "%1: set layout row count"
-msgstr ""
+msgstr "%1: nastavit počet řádků rozvržení"
 
 #: src/backend/worksheet/Worksheet.cpp:822
 #: src/backend/worksheet/Worksheet.cpp:823
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
-msgstr ""
+msgstr "%1: nastavit velikost stránky"
 
 #: src/backend/worksheet/Worksheet.cpp:1574
 #, kde-format
@@ -10155,26 +10158,26 @@ msgstr "Uzamknout"
 #: src/backend/worksheet/WorksheetElement.cpp:238
 #, kde-format
 msgid "Drawing &order"
-msgstr ""
+msgstr "Pořadí vy&kreslení"
 
 #: src/backend/worksheet/WorksheetElement.cpp:241
 #: src/backend/worksheet/WorksheetElement.cpp:287
 #: src/backend/worksheet/WorksheetElement.cpp:290
 #, kde-format
 msgid "Move &behind"
-msgstr ""
+msgstr "Přesunout &za"
 
 #: src/backend/worksheet/WorksheetElement.cpp:245
 #: src/backend/worksheet/WorksheetElement.cpp:285
 #: src/backend/worksheet/WorksheetElement.cpp:292
 #, kde-format
 msgid "Move in &front of"
-msgstr ""
+msgstr "Přesunout &před"
 
 #: src/backend/worksheet/WorksheetElement.cpp:774
 #, kde-format
 msgid "%1: set horizontal alignment"
-msgstr ""
+msgstr "%1: nastavit vodorovné zarovnání"
 
 #: src/backend/worksheet/WorksheetElement.cpp:786
 #, kde-format
@@ -10184,12 +10187,12 @@ msgstr "%1: nastavit svislé zarovnání"
 #: src/backend/worksheet/WorksheetElement.cpp:801
 #, kde-format
 msgid "%1: use logical coordinates"
-msgstr ""
+msgstr "%1: použít logické souřadnice"
 
 #: src/backend/worksheet/WorksheetElement.cpp:811
 #, kde-format
 msgid "%1: set logical position"
-msgstr ""
+msgstr "%1: nastavit logickou pozici"
 
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
@@ -10199,12 +10202,12 @@ msgstr "Co je nového"
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Copy Environment"
-msgstr ""
+msgstr "Kopírovat prostředí"
 
 #: src/frontend/AboutDialog.cpp:93
 #, kde-format
 msgid "Copy Citation"
-msgstr ""
+msgstr "Kopírovat citaci"
 
 #: src/frontend/AboutDialog.cpp:97
 #, kde-format
@@ -10219,7 +10222,7 @@ msgstr "Zkopírovat do schránky"
 #: src/frontend/AboutDialog.cpp:142
 #, kde-format
 msgid "Release build"
-msgstr ""
+msgstr "Sestavení pro vydání"
 
 #: src/frontend/AboutDialog.cpp:144
 #, kde-format
@@ -10266,12 +10269,12 @@ msgstr "Navštívit webovou stránku:"
 #: src/frontend/AboutDialog.cpp:195
 #, kde-format
 msgid "Watch video tutorials:"
-msgstr ""
+msgstr "Podívejte se na videonávody:"
 
 #: src/frontend/AboutDialog.cpp:196
 #, kde-format
 msgid "Discuss on Mastodon:"
-msgstr ""
+msgstr "Diskutujte na Mastodonu:"
 
 #: src/frontend/AboutDialog.cpp:197
 #, kde-format
@@ -10286,7 +10289,7 @@ msgstr "Prosím hlaste chyby na:"
 #: src/frontend/AboutDialog.cpp:199
 #, kde-format
 msgid "Partly funded by:"
-msgstr ""
+msgstr "Částečně financováno:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -10297,123 +10300,124 @@ msgstr "chybí"
 #: src/frontend/AboutDialog.cpp:216
 #, kde-format
 msgid "Frontend to Mathematical Applications"
-msgstr ""
+msgstr "Uživatelské rozhraní pro matematické aplikace"
 
 #: src/frontend/AboutDialog.cpp:222
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
+"Podpora datových souborů ve formátu FITS (Flexible Image Transport System)"
 
 #: src/frontend/AboutDialog.cpp:228
 #, kde-format
 msgid "Markdown markup language support"
-msgstr ""
+msgstr "Podpora značkovacího jazyka Markdown"
 
 #: src/frontend/AboutDialog.cpp:234
 #, kde-format
 msgid "C++ library for linear algebra"
-msgstr ""
+msgstr "Knihovna C++ pro lineární algebru"
 
 #: src/frontend/AboutDialog.cpp:240
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
-msgstr ""
+msgstr "Nejrychlejší Fourierova transformace na Západě"
 
 #: src/frontend/AboutDialog.cpp:241
 #, kde-format
 msgid "GNU Scientific Library"
-msgstr ""
+msgstr "Vědecká knihovna GNU"
 
 #: src/frontend/AboutDialog.cpp:247
 #, kde-format
 msgid "High-performance data management and storage suite"
-msgstr ""
+msgstr "Sada nástrojů pro vysoce výkonné řízení a ukládání dat"
 
 #: src/frontend/AboutDialog.cpp:253
 #, kde-format
 msgid "Syntax highlighting engine"
-msgstr ""
+msgstr "Jádro pro zvýrazňování syntaxe"
 
 #: src/frontend/AboutDialog.cpp:259
 #, kde-format
 msgid "Support collecting feedback from users"
-msgstr ""
+msgstr "Podpora sběru zpětné vazby od uživatelů"
 
 #: src/frontend/AboutDialog.cpp:265
 #, kde-format
 msgid "Complex error and related functions"
-msgstr ""
+msgstr "Komplexní chybové a související funkce"
 
 #: src/frontend/AboutDialog.cpp:271
 #, kde-format
 msgid "importing Origin OPJ project files"
-msgstr ""
+msgstr "Import projektových souborů OPJ z programu Origin"
 
 #: src/frontend/AboutDialog.cpp:277
 #, kde-format
 msgid "Import binary MATLAB MAT files"
-msgstr ""
+msgstr "Import binárních souborů MAT z MATLABu"
 
 #: src/frontend/AboutDialog.cpp:283
 #, kde-format
 msgid "MCAP file support"
-msgstr ""
+msgstr "Podpora souborů MCAP"
 
 #: src/frontend/AboutDialog.cpp:289
 #, kde-format
 msgid "Network Common Data Form"
-msgstr ""
+msgstr "Všeobecný síťový datový formulář"
 
 #: src/frontend/AboutDialog.cpp:295
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
-msgstr ""
+msgstr "Import souborů ODS (Open Document Spreadsheet)"
 
 #: src/frontend/AboutDialog.cpp:301
 #, kde-format
 msgid "PDF rendering library"
-msgstr ""
+msgstr "Knihovna pro vykreslování PDF"
 
 #: src/frontend/AboutDialog.cpp:307
 #, kde-format
 msgid "Offers available actions for a specific purpose"
-msgstr ""
+msgstr "Nabídka dostupných akcí pro konkrétní účel"
 
 #: src/frontend/AboutDialog.cpp:308
 #, kde-format
 msgid "Qt Advanced Docking System"
-msgstr ""
+msgstr "Pokročilý dokovací systém Qt"
 
 #: src/frontend/AboutDialog.cpp:314
 #, kde-format
 msgid "Support data from MQTT brokers"
-msgstr ""
+msgstr "Podpora dat z MQTT brokerů"
 
 #: src/frontend/AboutDialog.cpp:320
 #, kde-format
 msgid "Serial port functionality support"
-msgstr ""
+msgstr "Podpora funkcí sériového portu"
 
 #: src/frontend/AboutDialog.cpp:326
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "Podpora exportu do formátu SVG"
 
 #: src/frontend/AboutDialog.cpp:332
 #, kde-format
 msgid "Import Excel xlsx files"
-msgstr ""
+msgstr "Import souborů Excel ve formátu xlsx"
 
 #: src/frontend/AboutDialog.cpp:338
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
-msgstr ""
+msgstr "Čtení (a zápis) datových souborů z programů SAS, Stata a SPSS"
 
 #: src/frontend/AboutDialog.cpp:344
 #, kde-format
 msgid "Binary Log File (BLF) file support"
-msgstr ""
+msgstr "Podpora souborů binárního protokolu (BLF)"
 
 #: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:372
 #, kde-format
@@ -10423,7 +10427,7 @@ msgstr "Kompilátor C++: "
 #: src/frontend/AboutDialog.cpp:352 src/frontend/AboutDialog.cpp:372
 #, kde-format
 msgid "C++ Compiler Flags:"
-msgstr ""
+msgstr "Přepínače kompilátoru C++:"
 
 #: src/frontend/AboutDialog.cpp:366
 #, kde-format
@@ -10447,6 +10451,9 @@ msgid ""
 "Visualization and Analysis software accessible to everyone, (Version %2) "
 "[Computer software]. %3."
 msgstr ""
+"Tým LabPlot (%1), LabPlot: BEZPLATNÝ, open-source, multiplatformní software "
+"pro vizualizaci a analýzu dat, přístupný všem, (verze %2) [počítačový "
+"software]. %3."
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10458,7 +10465,7 @@ msgstr "Prohlížeč barevných map"
 #: src/frontend/examples/ExamplesWidget.cpp:34
 #, kde-format
 msgid "Switch between icon and list views"
-msgstr ""
+msgstr "Přepínání mezi zobrazením ikon a seznamem"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:53
 #: src/frontend/datasources/ImportDatasetWidget.cpp:51
@@ -10466,7 +10473,7 @@ msgstr ""
 #: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Enter the keyword you want to search for"
-msgstr ""
+msgstr "Zadejte klíčové slovo, které chcete vyhledat"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:56
 #: src/frontend/datasources/ImportDatasetWidget.cpp:54
@@ -10505,17 +10512,17 @@ msgstr "Nasycení"
 #: src/frontend/colormaps/ColorMapsWidget.cpp:224
 #, kde-format
 msgid "Icon View"
-msgstr "Pohled s ikonami"
+msgstr "Zobrazení s ikonami"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:232
 #, kde-format
 msgid "List View"
-msgstr "Pohled se seznamem"
+msgstr "Zobrazení se seznamem"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:240
 #, kde-format
 msgid "List View with Details"
-msgstr ""
+msgstr "Zobrazení se seznamem s detaily"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
@@ -10594,17 +10601,17 @@ msgstr "Nastavit body osy"
 #: src/frontend/datapicker/DatapickerImageView.cpp:150
 #, kde-format
 msgid "Set Curve Points"
-msgstr ""
+msgstr "Nastavit body křivky"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:154
 #, kde-format
 msgid "Select Curve Segments"
-msgstr ""
+msgstr "Vybrat úseky křivky"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:158
 #, kde-format
 msgid "New Curve"
-msgstr ""
+msgstr "Nová křivka"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
@@ -10630,19 +10637,19 @@ msgstr "Posunout dolů"
 #: src/frontend/worksheet/WorksheetView.cpp:197
 #, kde-format
 msgid "No Magnification"
-msgstr ""
+msgstr "Žádné zvětšení"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:176
 #: src/frontend/worksheet/WorksheetView.cpp:201
 #, kde-format
 msgid "2x Magnification"
-msgstr ""
+msgstr "Zvětšení 2x"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:179
 #: src/frontend/worksheet/WorksheetView.cpp:204
 #, kde-format
 msgid "3x Magnification"
-msgstr ""
+msgstr "Zvětšení 3x"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:182
 #: src/frontend/worksheet/WorksheetView.cpp:207
@@ -13327,7 +13334,7 @@ msgstr "Pokračovat ve čtení"
 #: src/frontend/ui/dockwidgets/livedatadock.ui:238
 #, kde-format
 msgid "Pause Reading"
-msgstr ""
+msgstr "Pozastavit čtení"
 
 #: src/frontend/dockwidgets/LiveDataDock.cpp:664
 #, kde-format
@@ -13577,7 +13584,7 @@ msgstr ""
 #: src/frontend/worksheet/WorksheetView.cpp:242
 #, kde-format
 msgid "No Layout"
-msgstr ""
+msgstr "Žádné rozvržení"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:233
@@ -13595,7 +13602,7 @@ msgstr "Vodorovné rozvržení"
 #: src/frontend/worksheet/WorksheetView.cpp:239
 #, kde-format
 msgid "Grid Layout"
-msgstr ""
+msgstr "Mřížkové rozvržení"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:607
 #, kde-format
@@ -14091,7 +14098,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
-msgstr "%1 Pracovní list"
+msgstr "%1 list"
 
 #: src/frontend/GuiObserver.cpp:232
 #, kde-format
@@ -14833,7 +14840,7 @@ msgstr "&Matice"
 #: src/frontend/labplotui.rc:83
 #, kde-format
 msgid "&Worksheet"
-msgstr "&Pracovní list"
+msgstr "&List"
 
 #. i18n: ectx: Menu (datapicker)
 #: src/frontend/labplotui.rc:85
@@ -14898,7 +14905,7 @@ msgstr "Sešit"
 #: src/frontend/MainWin.cpp:641
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
-msgstr ""
+msgstr "Vytvoří nový sešit pro tabulky, matice a grafy sbírky"
 
 #: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:1975
 #, kde-format
@@ -14908,29 +14915,29 @@ msgstr "Extraktor dat"
 #: src/frontend/MainWin.cpp:645
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
-msgstr ""
+msgstr "Vytvoří nástroj pro extrakci dat z obrázku"
 
 #: src/frontend/MainWin.cpp:651
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
-msgstr ""
+msgstr "Vytvoří nový sešit pro úpravy dat"
 
 #: src/frontend/MainWin.cpp:657
 #, kde-format
 msgid "Creates a new matrix for data editing"
-msgstr ""
+msgstr "Vytvoří novou matici pro úpravy dat"
 
 #: src/frontend/MainWin.cpp:661 src/frontend/MainWin.cpp:2019
 #: src/frontend/SettingsDialog.cpp:59
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
-msgstr "Pracovní list"
+msgstr "List"
 
 #: src/frontend/MainWin.cpp:663
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
-msgstr ""
+msgstr "Vytvoří nový list pro vykreslování dat"
 
 #: src/frontend/MainWin.cpp:667 src/frontend/MainWin.cpp:2027
 #, kde-format
@@ -14940,7 +14947,7 @@ msgstr "Poznámka"
 #: src/frontend/MainWin.cpp:668
 #, kde-format
 msgid "Creates a new note for arbitrary text"
-msgstr ""
+msgstr "Vytvoří novou poznámku s libovolným textem"
 
 #: src/frontend/MainWin.cpp:672 src/frontend/MainWin.cpp:1959
 #, kde-format
@@ -14950,7 +14957,7 @@ msgstr "Složka"
 #: src/frontend/MainWin.cpp:673
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
-msgstr ""
+msgstr "Vytvoří novou složku pro ukládání listů a dalších prvků"
 
 #: src/frontend/MainWin.cpp:678
 #, kde-format
@@ -14965,7 +14972,7 @@ msgstr "Vytvoří zdroj měnících se dat pro čtení dat ze zařízení v reá
 #: src/frontend/MainWin.cpp:686 src/frontend/MainWin.cpp:695
 #, kde-format
 msgid "Import data from a regular file"
-msgstr ""
+msgstr "Import dat z běžného souboru"
 
 #: src/frontend/MainWin.cpp:700
 #, kde-format
@@ -14980,17 +14987,17 @@ msgstr "Importovat data z kaggle.com"
 #: src/frontend/MainWin.cpp:706
 #, kde-format
 msgid "Import data from a SQL database"
-msgstr ""
+msgstr "Import dat z databáze SQL"
 
 #: src/frontend/MainWin.cpp:710
 #, kde-format
 msgid "From Dataset Collection..."
-msgstr ""
+msgstr "Z kolekce datových sad..."
 
 #: src/frontend/MainWin.cpp:711
 #, kde-format
 msgid "Import data from an online dataset"
-msgstr ""
+msgstr "Import dat z online datového souboru"
 
 #: src/frontend/MainWin.cpp:715
 #, kde-format
@@ -15000,17 +15007,17 @@ msgstr "Projekt LabPlot..."
 #: src/frontend/MainWin.cpp:716
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
-msgstr ""
+msgstr "Import projektu ze souboru projektu LabPlot (.lml)"
 
 #: src/frontend/MainWin.cpp:721
 #, kde-format
 msgid "Origin Project (OPJ)..."
-msgstr ""
+msgstr "Origin Project (OPJ)..."
 
 #: src/frontend/MainWin.cpp:722
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
-msgstr ""
+msgstr "Importovat projekt ze souboru projektu OriginLab Origin (.opj)"
 
 #: src/frontend/MainWin.cpp:727
 #, kde-format
@@ -15020,7 +15027,7 @@ msgstr "Exportovat..."
 #: src/frontend/MainWin.cpp:728
 #, kde-format
 msgid "Export selected element"
-msgstr ""
+msgstr "Exportovat vybraný prvek"
 
 #: src/frontend/MainWin.cpp:734 src/frontend/MainWin.cpp:2511
 #: src/frontend/MainWin.cpp:2519
@@ -15036,7 +15043,7 @@ msgstr "Prohlížeč barevných map"
 #: src/frontend/MainWin.cpp:740
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
-msgstr ""
+msgstr "Otevřít dialogové okno a procházet dostupné barevné mapy."
 
 #: src/frontend/MainWin.cpp:749
 #, kde-format
@@ -15046,7 +15053,7 @@ msgstr "Editor metadat FITS..."
 #: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "Open editor to edit FITS meta data"
-msgstr ""
+msgstr "Otevřít editor pro úpravu metadat souboru FITS"
 
 #: src/frontend/MainWin.cpp:759
 #, kde-format
@@ -15076,7 +15083,7 @@ msgstr "Nás&ledující"
 #: src/frontend/MainWin.cpp:788
 #, kde-format
 msgid "Move the focus to the next window"
-msgstr ""
+msgstr "Přesunout zaměření do dalšího okna"
 
 #: src/frontend/MainWin.cpp:791
 #, kde-format
@@ -15086,7 +15093,7 @@ msgstr "&Předchozí"
 #: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "Move the focus to the previous window"
-msgstr ""
+msgstr "Přesunout zaměření do předchozího okna"
 
 #: src/frontend/MainWin.cpp:800
 #, kde-format
@@ -15106,7 +15113,7 @@ msgstr "&Vše"
 #: src/frontend/MainWin.cpp:831
 #, kde-format
 msgid "Show Memory Usage"
-msgstr ""
+msgstr "Zobrazit využití paměti"
 
 #: src/frontend/MainWin.cpp:839
 #, kde-format
@@ -15121,7 +15128,7 @@ msgstr "Prohlížeč vlastností"
 #: src/frontend/MainWin.cpp:849
 #, kde-format
 msgid "Worksheet Preview"
-msgstr ""
+msgstr "Náhled listu"
 
 #: src/frontend/MainWin.cpp:872
 #, kde-format
@@ -15134,6 +15141,8 @@ msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
+"Otevřít nastavení systémů počítačové algebry, kde lze upravit dostupné "
+"systémy nebo povolit nové"
 
 #: src/frontend/MainWin.cpp:933
 #, kde-format
@@ -15299,17 +15308,17 @@ msgstr "Kurzor"
 #: src/frontend/MainWin.cpp:2511
 #, kde-format
 msgid "There was a problem sharing the project: %1"
-msgstr ""
+msgstr "Při sdílení projektu došlo k problému: %1"
 
 #: src/frontend/MainWin.cpp:2515
 #, kde-format
 msgid "Project shared successfully"
-msgstr ""
+msgstr "Projekt byl úspěšně sdílen"
 
 #: src/frontend/MainWin.cpp:2518
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
-msgstr ""
+msgstr "Sdílený projekt najdete na adrese: <a href=\"%1\">%1</a>"
 
 #: src/frontend/MainWin.cpp:2791
 #, kde-format
@@ -15351,7 +15360,7 @@ msgstr "Zdroj měnících se dat %1"
 #: src/frontend/MainWin.cpp:2950
 #, kde-format
 msgid "Creates a new %1 notebook"
-msgstr ""
+msgstr "Vytvoří nový zápisník %1"
 
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:45
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:43
@@ -15548,7 +15557,7 @@ msgstr ""
 #: src/frontend/matrix/MatrixView.cpp:284 src/frontend/ui/colormapswidget.ui:60
 #, kde-format
 msgid "View"
-msgstr "Pohled"
+msgstr "Zobrazení"
 
 #: src/frontend/matrix/MatrixView.cpp:289
 #, kde-format
@@ -15647,7 +15656,7 @@ msgstr "Restartovat podpůrnou vrstvu"
 #: src/frontend/notebook/NotebookView.cpp:344
 #, kde-format
 msgid "Evaluate Notebook"
-msgstr ""
+msgstr "Vyhodnotit zápisník"
 
 #: src/frontend/notebook/NotebookView.cpp:85
 #, kde-format
@@ -16713,7 +16722,7 @@ msgstr "Pro provedené této operace není dostatek paměti."
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:77
 #, kde-format
 msgid "Export Spreadsheet"
-msgstr "Exportovat pracovní sešit"
+msgstr "Exportovat sešit"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:78
 #, kde-format
@@ -16729,7 +16738,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Spreadsheet"
-msgstr "Exportovat pracovní sešit"
+msgstr "Exportovat sešit"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:226
 #, kde-format
@@ -17003,7 +17012,7 @@ msgstr "Oblast zákresu - %1"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:435
 #, kde-format
 msgid "Worksheet - %1"
-msgstr "Pracovní list - %1"
+msgstr "List - %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:434
 #, kde-format
@@ -17507,7 +17516,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Delete Selected Column(s)"
-msgstr ""
+msgstr "Smazat vybrané sloupce"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1640
@@ -17640,7 +17649,7 @@ msgstr "&Seřadit..."
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:475
 #, kde-format
 msgid "Sort multiple columns together"
-msgstr ""
+msgstr "Seřadit více sloupců najednou"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:476
 #, kde-format
@@ -17650,7 +17659,7 @@ msgstr "Seřadit &vzestupně"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:477
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
-msgstr ""
+msgstr "Seřadit vybrané sloupce samostatně vzestupně"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
@@ -17660,7 +17669,7 @@ msgstr "Seřadit &sestupně"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
-msgstr ""
+msgstr "Seřadit vybrané sloupce samostatně sestupně"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
@@ -17690,7 +17699,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr ""
+msgstr "Odstranit &vybrané řádky"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
@@ -24372,7 +24381,7 @@ msgstr "%1 (plocha)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Worksheet"
-msgstr "Exportovat pracovní list"
+msgstr "Exportovat list"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:235
 #, kde-format
@@ -24589,12 +24598,12 @@ msgstr "Vybrat oblast a přiblížit ji"
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Select X-Region and Zoom In"
-msgstr ""
+msgstr "Vybrat oblast X a přiblížit"
 
 #: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Select Y-Region and Zoom In"
-msgstr ""
+msgstr "Vybrat oblast Y a přiblížit"
 
 #: src/frontend/worksheet/WorksheetView.cpp:370
 #, kde-format
@@ -24604,52 +24613,52 @@ msgstr "Automaticky měnit velikost"
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Auto Scale X"
-msgstr ""
+msgstr "Automatické měřítko X"
 
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
 msgid "Auto Scale Y"
-msgstr ""
+msgstr "Automatické měřítko Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Zoom In X"
-msgstr ""
+msgstr "Přiblížit X"
 
 #: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Zoom Out X"
-msgstr ""
+msgstr "Oddálit X"
 
 #: src/frontend/worksheet/WorksheetView.cpp:398
 #, kde-format
 msgid "Zoom In Y"
-msgstr ""
+msgstr "Přiblížit Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Zoom Out Y"
-msgstr ""
+msgstr "Oddálit Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Left X"
-msgstr ""
+msgstr "Posun X vlevo"
 
 #: src/frontend/worksheet/WorksheetView.cpp:408
 #, kde-format
 msgid "Shift Right X"
-msgstr ""
+msgstr "Posun X vpravo"
 
 #: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Shift Up Y"
-msgstr ""
+msgstr "Posun Y nahoru"
 
 #: src/frontend/worksheet/WorksheetView.cpp:412
 #, kde-format
 msgid "Shift Down Y"
-msgstr ""
+msgstr "Posun Y dolů"
 
 #: src/frontend/worksheet/WorksheetView.cpp:426
 #: src/frontend/worksheet/WorksheetView.cpp:489
