@@ -2343,8 +2343,8 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		yVector->clear();
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("Insufficient weight data points. X has %1 points, y-error has %2 points.",
-								tmpXDataColumn->rowCount(), yErrorColumn->rowCount());
+		fitResult.status =
+			i18n("Insufficient weight data points. X has %1 points, y-error has %2 points.", tmpXDataColumn->rowCount(), yErrorColumn->rowCount());
 		return;
 	}
 

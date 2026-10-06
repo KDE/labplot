@@ -111,8 +111,8 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 		yVector->clear();
 		smoothResult.available = true;
 		smoothResult.valid = false;
-		smoothResult.status = i18n("Number of x and y data points must be equal. x has %1 points, y has %2 points.",
-									tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
+		smoothResult.status =
+			i18n("Number of x and y data points must be equal. x has %1 points, y has %2 points.", tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 		return true;
 	}
 

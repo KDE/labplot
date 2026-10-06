@@ -148,6 +148,11 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 			interpolationResult.available = true;
 			interpolationResult.valid = false;
 			interpolationResult.status = i18n("interpolation failed since x data is not strictly monotonic increasing at x_%1 = %2 (previous x_%3 = %4).", i, xdata[i], i-1, xdata[i-1]);
+			interpolationResult.status = i18n("interpolation failed since x data is not strictly monotonic increasing at x_%1 = %2 (previous x_%3 = %4).",
+											  i,
+											  xdata[i],
+											  i - 1,
+											  xdata[i - 1]);
 			return true;
 		}
 	}
