@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-03 00:40+0000\n"
+"POT-Creation-Date: 2026-10-07 00:41+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -585,6 +585,12 @@ msgid "%1: set random values"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/core/column/Column.cpp:1055
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Path: %1"
+msgstr "Rotation"
+
+#: src/backend/core/column/Column.cpp:1056
 #: src/frontend/datasources/ImportFileWidget.cpp:1740
 #, fuzzy, kde-format
 #| msgid "Size"
@@ -592,64 +598,64 @@ msgid "Size: %1"
 msgstr "Størrelse"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/column/Column.cpp:1058
+#: src/backend/core/column/Column.cpp:1059
 #, fuzzy, kde-format
 #| msgid "Type"
 msgid "Type: %1"
 msgstr "Type"
 
-#: src/backend/core/column/Column.cpp:1059
+#: src/backend/core/column/Column.cpp:1060
 #, fuzzy, kde-format
 #| msgid "Position:"
 msgid "Plot Designation: %1"
 msgstr "Position:"
 
-#: src/backend/core/column/Column.cpp:1063
+#: src/backend/core/column/Column.cpp:1064
 #, fuzzy, kde-format
 #| msgid "Format:"
 msgid "Formula:"
 msgstr "Format:"
 
-#: src/backend/core/column/Column.cpp:1085
+#: src/backend/core/column/Column.cpp:1086
 #, fuzzy, kde-format
 #| msgid "auto-save"
 msgid "auto update: true"
 msgstr "autogemning"
 
-#: src/backend/core/column/Column.cpp:1087
+#: src/backend/core/column/Column.cpp:1088
 #, fuzzy, kde-format
 #| msgid "auto-save"
 msgid "auto update: false"
 msgstr "autogemning"
 
-#: src/backend/core/column/Column.cpp:1100
+#: src/backend/core/column/Column.cpp:1101
 #: src/backend/spreadsheet/Spreadsheet.cpp:233
 #, fuzzy, kde-format
 #| msgid "%1: add %2 rows(s)"
 msgid "Used in Plots:"
 msgstr "%1: tilføj %2 rækker"
 
-#: src/backend/core/column/Column.cpp:1115
+#: src/backend/core/column/Column.cpp:1116
 #: src/backend/spreadsheet/Spreadsheet.cpp:250
 #, kde-format
 msgid "Used in Axes:"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1138
+#: src/backend/core/column/Column.cpp:1139
 #: src/backend/spreadsheet/Spreadsheet.cpp:271
 #, fuzzy, kde-format
 #| msgid "Tab position"
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Fanebladsposition"
 
-#: src/backend/core/column/Column.cpp:1794
+#: src/backend/core/column/Column.cpp:1795
 #, kde-format
 msgid "invalid or missing row index"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1803
-#: src/backend/core/column/Column.cpp:1812
-#: src/backend/core/column/Column.cpp:1821
+#: src/backend/core/column/Column.cpp:1804
+#: src/backend/core/column/Column.cpp:1813
+#: src/backend/core/column/Column.cpp:1822
 #, kde-format
 msgid "invalid row value"
 msgstr ""
@@ -2463,7 +2469,7 @@ msgstr ""
 #: src/backend/datasources/filters/QJsonModel.cpp:136
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #: src/frontend/matrix/MatrixView.cpp:638
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2631
@@ -3465,7 +3471,7 @@ msgstr ""
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1324
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1330
 #, kde-format
 msgid "Success"
 msgstr ""
@@ -4099,7 +4105,7 @@ msgstr "Sum"
 #: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/backend/statistics/HypothesisTest.cpp:616
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:104
@@ -4115,7 +4121,7 @@ msgstr ""
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:616
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:181
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:105
@@ -4142,7 +4148,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:183
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:134
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:525
@@ -6957,7 +6963,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/statistics/HypothesisTest.cpp:616
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:182
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
 #, fuzzy, kde-format
@@ -6966,14 +6972,14 @@ msgid "Mean"
 msgstr "Gennemsnit"
 
 #: src/backend/nsl/nsl_baseline.cpp:49
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:179
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:184
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "End Points"
 msgstr "Antal punkter"
 
 #: src/backend/nsl/nsl_baseline.cpp:49
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:185
 #, kde-format
 msgid "Linear Regression"
 msgstr ""
@@ -7359,7 +7365,7 @@ msgstr "Retning"
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:566
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:571
 #, kde-format
 msgid "Custom"
 msgstr ""
@@ -10344,7 +10350,7 @@ msgstr "Statistik"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:658
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:409
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
 #, kde-format
 msgid "Histogram"
@@ -10658,8 +10664,8 @@ msgid "%1: set border corner radius"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2096
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:322
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:327
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:332
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Convolution"
@@ -11749,16 +11755,9 @@ msgstr "&Indsæt tomme rækker"
 msgid "%1: set baseline options and perform correction"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:92
-#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:110
-#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:109
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:132
-#: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:117
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:137
+#: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:94
 #, kde-format
-msgid "Not enough data points available."
+msgid "Baseline correction requires at least 1 point, none provided."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
@@ -11766,11 +11765,25 @@ msgstr ""
 msgid "%1: set options and perform the convolution"
 msgstr ""
 
+#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:160
+#, kde-format
+msgid ""
+"Convolution requires at least 1 point per input. Signal has %1 points, "
+"response has %2 points."
+msgstr ""
+
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set options and perform the correlation"
 msgstr "&Indsæt tomme kolonner"
+
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:153
+#, kde-format
+msgid ""
+"Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
+"signal 2 has %2 points."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11823,6 +11836,11 @@ msgstr "Format:"
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:64
 #, kde-format
 msgid "%1: set options and perform the differentiation"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:112
+#, kde-format
+msgid "Differentiation requires at least 3 points, only %1 provided."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
@@ -11887,13 +11905,13 @@ msgid "PARAMETERS"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1895
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Uncertainty"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1896
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Uncertainty, %"
 msgstr ""
@@ -11905,14 +11923,14 @@ msgid "t Statistic"
 msgstr "Statistik"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Lower"
 msgstr "Funktion"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Upper"
 msgstr ""
@@ -11985,38 +12003,38 @@ msgstr ""
 msgid "Bayesian information criterion"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2337
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Model has no parameters!"
 msgstr "Antal punkter"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid "Number of points"
-msgid "Not sufficient weight data points provided!"
-msgstr "Antal punkter"
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2347
+#, kde-format
+msgid ""
+"Insufficient weight data points. X has %1 points, y-error has %2 points."
+msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2419
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "No X data available!"
 msgstr "%1: Klip markerede celler"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
 #, kde-format
 msgid ""
-"The number of data points (%1) must be greater than or equal to the number "
-"of parameters (%2)!"
+"Number of data points (%1) must be greater than or equal to the number of "
+"parameters (%2)."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2433
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
 msgid "Fit model not specified!"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3194
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3205
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
@@ -12027,9 +12045,9 @@ msgstr ""
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:167
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:121
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:122
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:169
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:123
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:124
 #, kde-format
 msgid "No data points available."
 msgstr ""
@@ -12096,20 +12114,31 @@ msgstr "&Indsæt tomme kolonner"
 msgid "%1: set options and perform the integration"
 msgstr ""
 
+#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:111
+#, kde-format
+msgid "Integration requires at least 2 points, only %1 provided."
+msgstr ""
+
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the interpolation"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:96
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:112
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:98
 #, kde-format
 msgid "Number of x and y data points must be equal."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:142
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:136
 #, kde-format
-msgid "interpolation failed since x data is not strictly monotonic increasing!"
+msgid "Not enough data points available."
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
+#, kde-format
+msgid ""
+"interpolation failed since x data is not strictly monotonic increasing at x_"
+"%1 = %2 (previous x_%3 = %4)."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:69
@@ -12117,6 +12146,11 @@ msgstr ""
 #| msgid "&Insert Empty Columns"
 msgid "%1: set options and perform the line simplification"
 msgstr "&Indsæt tomme kolonner"
+
+#: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:119
+#, kde-format
+msgid "Line simplification requires at least 2 points, only %1 provided."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, fuzzy, kde-format
@@ -12143,7 +12177,7 @@ msgstr "%1: Klip markerede celler"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:516
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:571
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:576
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Status: %1"
@@ -12212,6 +12246,18 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
 msgid "%1: set options and perform the smooth"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
+#, kde-format
+msgid ""
+"Number of x and y data points must be equal. x has %1 points, y has %2 "
+"points."
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
+#, kde-format
+msgid "Smoothing requires at least 2 points, only %1 provided."
 msgstr ""
 
 #: src/backend/worksheet/TextLabel.cpp:318
@@ -12709,7 +12755,7 @@ msgstr ""
 #: src/frontend/ActionsManager.cpp:234
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:76
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:401
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
 #: src/frontend/MainWin.cpp:1236 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -13600,9 +13646,9 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:308
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1459
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1465
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1471
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1477
 #, fuzzy, kde-format
 #| msgid "Clea&r Columns"
 msgid "Copy Selection"
@@ -13610,9 +13656,9 @@ msgstr "&Ryd kolonner"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:309
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1460
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1466
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1472
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1478
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "Copy All"
@@ -17148,18 +17194,18 @@ msgstr ""
 #. tooltip texts
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:72
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:157
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:77
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:402
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
 #, kde-format
 msgid "XY-Curve"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:189
 #, kde-format
 msgid ""
 "Method used to calculate the baseline correction:<ul><li>arPLS - "
@@ -17171,7 +17217,7 @@ msgid ""
 "Regression - do a linear regression to the data and subtract it.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:197
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:202
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:162
 #, kde-format
 msgid ""
@@ -17179,7 +17225,7 @@ msgid ""
 "background."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:201
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:206
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:166
 #, kde-format
 msgid ""
@@ -17187,51 +17233,51 @@ msgid ""
 "less negative values."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:205
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:210
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:170
 #, fuzzy, kde-format
 #| msgid "Number of rows"
 msgid "Number of iterations to perform."
 msgstr "Antal rækker"
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:307
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Baseline correction status: %1"
 msgstr "Rotation"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:169
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:174
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "or Kernel/Size:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:183
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:188
 #, kde-format
 msgid "with Kernel/Size:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:323
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:326
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:328
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:331
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Deconvolution"
 msgstr "Forbindelse:"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:362
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:367
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Convolution status: %1"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:364
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:369
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Deconvolution status: %1"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:275
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Correlation status: %1"
@@ -17296,7 +17342,7 @@ msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:374
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:379
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Differentiation status: %1"
@@ -17346,38 +17392,38 @@ msgstr ""
 msgid "t, max"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:362
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "No X and Y column specified!"
 msgstr "%1: Klip markerede celler"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:364
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "No X column specified!"
 msgstr "%1: Klip markerede celler"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:366
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "No Y column specified!"
 msgstr "%1: Klip markerede celler"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "No Y data available!"
 msgstr "%1: Klip markerede celler"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "t statistic"
 msgstr "Statistik"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:439
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:445
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:111
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:353
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:217
@@ -17393,112 +17439,112 @@ msgstr "Statistik"
 msgid "Curve:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:460
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:466
 #, fuzzy, kde-format
 #| msgid "Data, -"
 msgid "Histogram:"
 msgstr "Data, -"
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:755
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:761
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:730
 #, kde-format
 msgid "Model:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:812
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
 #: src/frontend/GuiTools.cpp:633
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Description:"
 msgstr "Retning"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:813
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:819
 #, kde-format
 msgid "User defined model"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:857
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:863
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:457
 #, kde-format
 msgid "Degree:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:917
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:923
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Number of peaks:"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1325
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1331
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Statistik"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1336
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1342
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "No data source available!"
 msgstr "%1: Klip markerede celler"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1515
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1521
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1516
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1522
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:272
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:277
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:266
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Cutoff:"
 msgstr "Funktion"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:285
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Lower cutoff:"
 msgstr "Funktion"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:281
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:286
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Upper cutoff:"
 msgstr "Funktion"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:350
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:355
 #, kde-format
 msgctxt "@label:spinbox Suffix for the frequency"
 msgid "%v Hz"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:416
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:421
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
 "cutoff value. Please fix this."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:417
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:422
 #, kde-format
 msgid "band width <= 0"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:425
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:430
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "Fourier-Filter status: %1"
 msgstr "Filter"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:222
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:227
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "Fourier transformation status: %1"
@@ -17512,56 +17558,50 @@ msgid ""
 "again."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:174
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:179
 #, fuzzy, kde-format
 #| msgid "Filter"
 msgid "Hilbert transformation status: %1"
 msgstr "Filter"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:310
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:315
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Integration status: %1"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:322
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:327
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "value: %1"
 msgstr "Værdier"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:520
-#, fuzzy, kde-format
-#| msgid "Rotation"
-msgid "Interpolation status: %1"
-msgstr "Rotation"
-
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:564
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:569
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Auto (5x data points)"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:565
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:570
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Multiple of data points"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:568
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:573
 #, kde-format
 msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:177
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:182
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr ""
 
 #. i18n-team: some algorithm are named after their creators like Douglas and Peucker, Visvalingam and Whyatt, Opheim, Lang
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:181
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:186
 #, kde-format
 msgid ""
 "Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
@@ -17582,126 +17622,126 @@ msgid ""
 "the simplified line.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:209
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:213
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:214
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, fuzzy, kde-format
 #| msgid "Distance"
 msgid "Tolerance (distance):"
 msgstr "Afstand"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:210
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:215
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:214
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:224
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Number of points:"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:228
 #, kde-format
 msgid "Target number of points in the simplified line"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
 #, kde-format
 msgid "Step size:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
 #, kde-format
 msgid "Repeats:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:237
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:233
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:238
 #, fuzzy, kde-format
 #| msgid "Number of rows"
 msgid "Number of iterations to apply the simplification"
 msgstr "Antal rækker"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
 #, kde-format
 msgid "Tolerance (area):"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:237
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Minimum tolerance:"
 msgstr "Varians"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:247
 #, kde-format
 msgid "Minimum distance threshold from retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:243
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
 msgid "Maximum distance threshold from retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:247
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:252
 #, kde-format
 msgid "Search region:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:253
 #, kde-format
 msgid "Minimum point spacing distance"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:254
 #, kde-format
 msgid "Search region size in units of points"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:591
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "number of points: %1"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:587
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:592
 #, kde-format
 msgid "positional squared error: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:588
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, fuzzy, kde-format
 #| msgid "Created"
 msgid "area error: %1"
@@ -17776,7 +17816,7 @@ msgstr ""
 msgid "Maximum X-value of the data used for the fit."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:199
 #, kde-format
 msgid ""
 "Method used to smooth the data:<ul><li>Moving Average (Central) - smoothing "
@@ -17789,63 +17829,63 @@ msgid ""
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:206
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:211
 #, fuzzy, kde-format
 #| msgid "Number of columns"
 msgid "Number of points in the moving window"
 msgstr "Antal kolonner"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:210
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:215
 #, kde-format
 msgid ""
 "Weighting type to define different weights for the points in the moving "
 "window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:214
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:219
 #, kde-format
 msgid "Percentile of the points in the moving window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:218
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:223
 #, kde-format
 msgid "The order of the polynomial used to fit the points in the moving window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:222
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:227
 #, kde-format
 msgid "The fraction of the data used to perform the local fit."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:231
 #, kde-format
 msgid ""
 "If delta > 0, values of y-data within delta of each other will use "
 "interpolation instead of full regression."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:230
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:235
 #, fuzzy, kde-format
 #| msgid "Enter number of rows"
 msgid "The number of robustifying iterations"
 msgstr "Angiv antal rækker"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:234
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:239
 #, kde-format
 msgid "Padding mode to handle the edges of the data set"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:238
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:243
 #, kde-format
 msgid "The value for constant padding at the left edge"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:242
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:247
 #, kde-format
 msgid "The value for constant padding at the right edge"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:523
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Smoothing status: %1"
@@ -29536,6 +29576,16 @@ msgstr ""
 #| msgid "Could not open file %1 for reading."
 msgid "Unable to open file:"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
+
+#, fuzzy
+#~| msgid "Number of points"
+#~ msgid "Not sufficient weight data points provided!"
+#~ msgstr "Antal punkter"
+
+#, fuzzy
+#~| msgid "Rotation"
+#~ msgid "Interpolation status: %1"
+#~ msgstr "Rotation"
 
 #, fuzzy
 #~| msgid "Open project"

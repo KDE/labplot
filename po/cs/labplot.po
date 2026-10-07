@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-03 00:40+0000\n"
-"PO-Revision-Date: 2026-10-06 00:47+0200\n"
-"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
+"POT-Creation-Date: 2026-10-07 00:41+0000\n"
+"PO-Revision-Date: 2026-10-06 16:57+0200\n"
+"Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -555,63 +555,69 @@ msgid "%1: set random values"
 msgstr "%1: nastavit náhodné hodnoty"
 
 #: src/backend/core/column/Column.cpp:1055
+#, fuzzy, kde-format
+#| msgid "Path:"
+msgid "Path: %1"
+msgstr "Cesta:"
+
+#: src/backend/core/column/Column.cpp:1056
 #: src/frontend/datasources/ImportFileWidget.cpp:1740
 #, kde-format
 msgid "Size: %1"
 msgstr "Velikost: %1"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/column/Column.cpp:1058
+#: src/backend/core/column/Column.cpp:1059
 #, kde-format
 msgid "Type: %1"
 msgstr "Druh: %1"
 
-#: src/backend/core/column/Column.cpp:1059
+#: src/backend/core/column/Column.cpp:1060
 #, kde-format
 msgid "Plot Designation: %1"
 msgstr "Označení grafu: %1"
 
-#: src/backend/core/column/Column.cpp:1063
+#: src/backend/core/column/Column.cpp:1064
 #, kde-format
 msgid "Formula:"
 msgstr "Vzorec:"
 
-#: src/backend/core/column/Column.cpp:1085
+#: src/backend/core/column/Column.cpp:1086
 #, kde-format
 msgid "auto update: true"
 msgstr "automatická aktualizace: true"
 
-#: src/backend/core/column/Column.cpp:1087
+#: src/backend/core/column/Column.cpp:1088
 #, kde-format
 msgid "auto update: false"
 msgstr "automatická aktualizace: false"
 
-#: src/backend/core/column/Column.cpp:1100
+#: src/backend/core/column/Column.cpp:1101
 #: src/backend/spreadsheet/Spreadsheet.cpp:233
 #, kde-format
 msgid "Used in Plots:"
 msgstr "Použito v grafech:"
 
-#: src/backend/core/column/Column.cpp:1115
+#: src/backend/core/column/Column.cpp:1116
 #: src/backend/spreadsheet/Spreadsheet.cpp:250
 #, kde-format
 msgid "Used in Axes:"
 msgstr "Použito v osách:"
 
-#: src/backend/core/column/Column.cpp:1138
+#: src/backend/core/column/Column.cpp:1139
 #: src/backend/spreadsheet/Spreadsheet.cpp:271
 #, kde-format
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Použito v tabulkových výpočtech:"
 
-#: src/backend/core/column/Column.cpp:1794
+#: src/backend/core/column/Column.cpp:1795
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "neplatný nebo chybějící index řádku"
 
-#: src/backend/core/column/Column.cpp:1803
-#: src/backend/core/column/Column.cpp:1812
-#: src/backend/core/column/Column.cpp:1821
+#: src/backend/core/column/Column.cpp:1804
+#: src/backend/core/column/Column.cpp:1813
+#: src/backend/core/column/Column.cpp:1822
 #, kde-format
 msgid "invalid row value"
 msgstr "neplatná hodnota řádku"
@@ -2338,7 +2344,7 @@ msgstr "Klíč"
 #: src/backend/datasources/filters/QJsonModel.cpp:136
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
 #: src/frontend/colormaps/ColorMapsWidget.cpp:189
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #: src/frontend/matrix/MatrixView.cpp:638
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:187
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2631
@@ -3287,7 +3293,7 @@ msgstr "Energie 1 ergu"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1324
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1330
 #, kde-format
 msgid "Success"
 msgstr "Úspěch"
@@ -3855,7 +3861,7 @@ msgstr "Celkem"
 #: src/backend/gsl/functions.cpp:266 src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/backend/statistics/HypothesisTest.cpp:616
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:175
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:104
@@ -3871,7 +3877,7 @@ msgstr "Minimum"
 #: src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:616
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:176
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:181
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:105
@@ -3898,7 +3904,7 @@ msgstr "Aritmetický průměr"
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:178
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:183
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:134
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:525
@@ -6619,7 +6625,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/statistics/HypothesisTest.cpp:616
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:177
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:182
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
 #, kde-format
@@ -6627,13 +6633,13 @@ msgid "Mean"
 msgstr "Střední hodnota"
 
 #: src/backend/nsl/nsl_baseline.cpp:49
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:179
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:184
 #, kde-format
 msgid "End Points"
 msgstr "Koncové body"
 
 #: src/backend/nsl/nsl_baseline.cpp:49
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:185
 #, kde-format
 msgid "Linear Regression"
 msgstr "Lineární regrese"
@@ -7000,7 +7006,7 @@ msgstr "Statistika (rozdělení)"
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:566
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:571
 #, kde-format
 msgid "Custom"
 msgstr "Vlastní"
@@ -9833,7 +9839,7 @@ msgstr "Statistické grafy"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:658
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:409
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
 #, kde-format
 msgid "Histogram"
@@ -10111,8 +10117,8 @@ msgid "%1: set border corner radius"
 msgstr "%1: nastavit zaoblení rohů ohraničení"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2096
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:322
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:327
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:332
 #, kde-format
 msgid "Convolution"
 msgstr "Konvoluce"
@@ -11099,27 +11105,34 @@ msgstr "%1: přiřadit sekundární data y"
 msgid "%1: set baseline options and perform correction"
 msgstr "%1: nastavit základní parametry a provést korekci"
 
-#: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:92
-#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:110
-#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:109
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:132
-#: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:117
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:137
+#: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:94
 #, kde-format
-msgid "Not enough data points available."
-msgstr "Není k dispozici dostatek datových bodů."
+msgid "Baseline correction requires at least 1 point, none provided."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the convolution"
 msgstr "%1: nastavit parametry a provést konvoluci"
 
+#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:160
+#, kde-format
+msgid ""
+"Convolution requires at least 1 point per input. Signal has %1 points, "
+"response has %2 points."
+msgstr ""
+
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the correlation"
 msgstr "%1: nastavit parametry a provést korelaci"
+
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:153
+#, kde-format
+msgid ""
+"Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
+"signal 2 has %2 points."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11170,6 +11183,11 @@ msgstr "Chyba: %1"
 #, kde-format
 msgid "%1: set options and perform the differentiation"
 msgstr "%1: nastavit parametry a provést derivaci"
+
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:112
+#, kde-format
+msgid "Differentiation requires at least 3 points, only %1 provided."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
@@ -11229,13 +11247,13 @@ msgid "PARAMETERS"
 msgstr "PARAMETRY"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1895
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Uncertainty"
 msgstr "Nepřesnost"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1896
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "Nepřesnost, %"
@@ -11246,13 +11264,13 @@ msgid "t Statistic"
 msgstr "t statistika"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Lower"
 msgstr "Dolní"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Upper"
 msgstr "Horní"
@@ -11323,37 +11341,40 @@ msgstr "Akaikeho informační kritérium"
 msgid "Bayesian information criterion"
 msgstr "Bayesovo informační kritérium"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2337
 #, kde-format
 msgid "Model has no parameters!"
 msgstr "Model nemá žádné parametry!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2347
 #, kde-format
-msgid "Not sufficient weight data points provided!"
+msgid ""
+"Insufficient weight data points. X has %1 points, y-error has %2 points."
 msgstr ""
-"Nebylo zadáno dostatečné množství datových bodů týkajících se hmotnosti!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2419
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
 #, kde-format
 msgid "No X data available!"
 msgstr "Nejsou dostupná žádná data X!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
-#, kde-format
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
+#, fuzzy, kde-format
+#| msgid ""
+#| "The number of data points (%1) must be greater than or equal to the "
+#| "number of parameters (%2)!"
 msgid ""
-"The number of data points (%1) must be greater than or equal to the number "
-"of parameters (%2)!"
+"Number of data points (%1) must be greater than or equal to the number of "
+"parameters (%2)."
 msgstr ""
 "Počet datových bodů (%1) musí být větší nebo roven počtu parametrů (%2)!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2433
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
 msgid "Fit model not specified!"
 msgstr "Není zadán model přizpůsobení!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3194
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3205
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
@@ -11364,9 +11385,9 @@ msgstr "Výsledky přizpůsobení"
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: nastavit parametry filtru a provést Fourierův filtr"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:167
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:121
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:122
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:169
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:123
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:124
 #, kde-format
 msgid "No data points available."
 msgstr "Nejsou k dispozici žádné datové body."
@@ -11431,20 +11452,33 @@ msgstr "%1: nastavit parametry transformace a provést Hilbertovu transformaci"
 msgid "%1: set options and perform the integration"
 msgstr "%1: nastavit parametry a provést integraci"
 
+#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:111
+#, kde-format
+msgid "Integration requires at least 2 points, only %1 provided."
+msgstr ""
+
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the interpolation"
 msgstr "%1: nastavit parametry a provést interpolaci"
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:96
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:112
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:98
 #, kde-format
 msgid "Number of x and y data points must be equal."
 msgstr "Počet datových bodů na osách x a y musí být stejný."
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:142
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:136
 #, kde-format
-msgid "interpolation failed since x data is not strictly monotonic increasing!"
+msgid "Not enough data points available."
+msgstr "Není k dispozici dostatek datových bodů."
+
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
+#, fuzzy, kde-format
+#| msgid ""
+#| "interpolation failed since x data is not strictly monotonic increasing!"
+msgid ""
+"interpolation failed since x data is not strictly monotonic increasing at x_"
+"%1 = %2 (previous x_%3 = %4)."
 msgstr ""
 "Interpolace se nezdařila, protože data x nejsou striktně monotónně rostoucí!"
 
@@ -11452,6 +11486,11 @@ msgstr ""
 #, kde-format
 msgid "%1: set options and perform the line simplification"
 msgstr "%1: nastavit parametry a provést zjednodušení čáry"
+
+#: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:119
+#, kde-format
+msgid "Line simplification requires at least 2 points, only %1 provided."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, kde-format
@@ -11476,7 +11515,7 @@ msgstr "Zatím nejsou k dispozici žádné výsledky"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:516
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:571
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:576
 #, kde-format
 msgid "Status: %1"
 msgstr "Stav: %1"
@@ -11542,6 +11581,19 @@ msgstr "Informační kritéria:"
 #, kde-format
 msgid "%1: set options and perform the smooth"
 msgstr "%1: nastavit parametry a provést vyhlazení"
+
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
+#, fuzzy, kde-format
+#| msgid "Number of x and y data points must be equal."
+msgid ""
+"Number of x and y data points must be equal. x has %1 points, y has %2 "
+"points."
+msgstr "Počet datových bodů na osách x a y musí být stejný."
+
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
+#, kde-format
+msgid "Smoothing requires at least 2 points, only %1 provided."
+msgstr ""
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333
@@ -12019,7 +12071,7 @@ msgstr "Vytvoří nástroj pro extrakci dat z obrázku"
 #: src/frontend/ActionsManager.cpp:234
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:76
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:401
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
 #: src/frontend/MainWin.cpp:1236 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12861,18 +12913,18 @@ msgstr "Zobrazení se seznamem s detaily"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:308
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1459
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1465
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1471
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1477
 #, kde-format
 msgid "Copy Selection"
 msgstr "Zkopírovat výběr"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:309
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1460
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1466
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1472
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1478
 #, kde-format
 msgid "Copy All"
 msgstr "Zkopírovat vše"
@@ -12920,13 +12972,13 @@ msgstr "Zvětšení 3x"
 #: src/frontend/worksheet/WorksheetView.cpp:214
 #, kde-format
 msgid "4x Magnification"
-msgstr ""
+msgstr "Zvětšení 4x"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:190
 #: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "5x Magnification"
-msgstr ""
+msgstr "Zvětšení 5x"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:218
 #: src/frontend/worksheet/WorksheetView.cpp:449
@@ -12938,12 +12990,12 @@ msgstr "Režim s myší"
 #: src/frontend/datapicker/DatapickerImageView.cpp:227
 #, kde-format
 msgid "Zoom View"
-msgstr ""
+msgstr "Zvětšit zobrazení"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:235
 #, kde-format
 msgid "Move Last Point"
-msgstr ""
+msgstr "Přesunout poslední bod"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:241
 #: src/frontend/worksheet/WorksheetView.cpp:467
@@ -12959,23 +13011,23 @@ msgstr "%1, aktivní křivka \"%2\": %3=%4, %5=%6"
 #: src/frontend/datapicker/DatapickerImageView.cpp:607
 #, kde-format
 msgid "Remove existing reference points?"
-msgstr ""
+msgstr "Odstranit stávající referenční body?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:608
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
-msgstr ""
+msgstr "Všechny dostupné referenční body budou odstraněny. Chcete pokračovat?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:693
 #, kde-format
 msgid "%1: change position of selected points"
-msgstr ""
+msgstr "%1: změnit polohu vybraných bodů"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:742
 #, kde-format
 msgid "%1: add new curve."
-msgstr ""
+msgstr "%1: přidat novou křivku."
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:743
 #, kde-format
@@ -12997,6 +13049,7 @@ msgstr "Export selhal"
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
+"Zápis do souboru '%1' se nezdařil. Zkontrolujte prosím cestu k souboru."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:42
@@ -13020,21 +13073,22 @@ msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
+"Je-li zaškrtnuto, bude k určení názvů sloupců použita zadaný řádek v souboru."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:56
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
-msgstr ""
+msgstr "Řádek v souboru, který by měl být použit k určení názvů sloupců."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:59
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
-msgstr ""
+msgstr "Vlastní názvy sloupců, oddělené čárkami. Např. \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:63
 #, kde-format
 msgid "Custom column data types, comma separated"
-msgstr ""
+msgstr "Vlastní datové typy sloupců, oddělené čárkami"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:70
 #, kde-format
@@ -13052,6 +13106,18 @@ msgid ""
 "%6</td><td>Number of 100-nanosecond intervals since January 1, 1601 (UTC), "
 "converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
+"Pokud pole není prázdné, musí počet sloupců odpovídat počtu názvů sloupců "
+"(jsou-li uvedeny) a musí se shodovat s počtem sloupců v importovaném souboru."
+"<br>Datové typy:<table><tr><td>%1</td><td>Celé číslo o velikosti 32 bitů (−2 "
+"147 483 648 .. 2 147 483 647).</td></tr><tr><td>%2</td><td>Celé číslo o "
+"velikosti 64 bitů (−9 223 372 036 854 775 808 .. 9 223 372 036 854 775 807)."
+"</td></tr><tr><td>%3</td><td>Číslo s plovoucí desetinnou čárkou o velikosti "
+"64 bitů. Rozlišení přibližně 16 číslic.</td></tr><tr><td>%4</td><td>Datum a "
+"čas ve formátu z textového pole data a času, pokud není prázdné; v opačném "
+"případě se určí automaticky.</td></tr><tr><td>%5</td><td>Počet sekund od 1. "
+"ledna 1970 (UTC), převedený na DateTime.</td></tr><tr><td>%6</td><td>Počet "
+"intervalů po 100 nanosekundách od 1. ledna 1601 (UTC), převedený na DateTime."
+"</td></tr><tr><td>%7</td><td>Text.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:88
 #, kde-format
@@ -13061,7 +13127,7 @@ msgstr "%1 nebo %2"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:199
 #, kde-format
 msgid "Invalid data type '%1'"
-msgstr ""
+msgstr "Neplatný datový typ '%1'"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -13079,13 +13145,15 @@ msgid ""
 "This option determines the data type that the imported data while converting "
 "to numbers."
 msgstr ""
+"Tato volba určuje datový typ, do kterého se importovaná data při převodu na "
+"číselné hodnoty převedou."
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:39
 #, kde-format
 msgid ""
 "This option determines the byte order of the imported data when converting "
 "to numbers."
-msgstr ""
+msgstr "Tato volba určuje pořadí bajtů importovaných dat při převodu na čísla."
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:41
 #, kde-format
@@ -13094,11 +13162,14 @@ msgid ""
 "Intel x86 processors.</td></tr><tr><td>big endian</td><td>typical byte order "
 "on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
 msgstr ""
+"<table><tr><td>little endian</td><td>typické pořadí bajtů (endianita) u "
+"procesorů Intel x86.</td></tr><tr><td>big endian</td><td>typické pořadí "
+"bajtů u mainframů (IBM) a procesorů SPARC/PowerPC/Motorola.</td></tr></table>"
 
 #: src/frontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
 msgid "Use NAN"
-msgstr ""
+msgstr "Použít NAN"
 
 #: src/frontend/datasources/CANOptionsWidget.cpp:14
 #, kde-format
@@ -13109,33 +13180,33 @@ msgstr "Použít předchozí hodnotu"
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections"
-msgstr ""
+msgstr "Připojení k databázi SQL"
 
 #: src/frontend/datasources/DatabaseManagerDialog.cpp:66
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections  [Changed]"
-msgstr ""
+msgstr "Připojení k databázi SQL  [změněno]"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:48
 #, kde-format
 msgid "Add new database connection"
-msgstr ""
+msgstr "Přidat nové připojení k databázi"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:49
 #, kde-format
 msgid "Delete selected database connection"
-msgstr ""
+msgstr "Smazat vybrané připojení k databázi"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:50
 #, kde-format
 msgid "Open database file"
-msgstr ""
+msgstr "Otevřít databázový soubor"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:51
 #, kde-format
 msgid "Test selected database connection"
-msgstr ""
+msgstr "Otestovat vybrané připojení k databázi"
 
 #. i18n: ectx: property (text), widget (QLabel, lDatabase)
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:158
@@ -13148,13 +13219,13 @@ msgstr "Databáze:"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:170
 #, kde-format
 msgid "Data Source Name:"
-msgstr ""
+msgstr "Název zdroje dat:"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:211
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Database File"
-msgstr ""
+msgstr "Vybrat databázový soubor"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:349
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:409
@@ -13180,7 +13251,7 @@ msgstr "Připojení selhalo"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:526
 #, kde-format
 msgid "Failed to connect to the database '%1'."
-msgstr ""
+msgstr "Nepodařilo se připojit k databázi '%1'."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:643
@@ -13191,7 +13262,7 @@ msgstr "Připojení proběhlo úspěšně"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #, kde-format
 msgid "Connection to the database '%1' was successful."
-msgstr ""
+msgstr "Připojení k databázi '%1' proběhlo úspěšně."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:549
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:572
@@ -13203,17 +13274,17 @@ msgstr "Nové připojení"
 #, kde-format
 msgctxt "@title:window"
 msgid "Dataset metadata manager"
-msgstr ""
+msgstr "Správce metadat datových sad"
 
 #: src/frontend/datasources/DatasetMetadataManagerWidget.cpp:513
 #, kde-format
 msgid "column_description_%1"
-msgstr ""
+msgstr "popis_sloupce_%1"
 
 #: src/frontend/datasources/DatasetMetadataManagerWidget.cpp:523
 #, kde-format
 msgid "Description for column %1"
-msgstr ""
+msgstr "Popis sloupce %1"
 
 #: src/frontend/datasources/FITSOptionsWidget.cpp:22
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:98
@@ -13236,13 +13307,13 @@ msgstr "Vlastnosti"
 #: src/frontend/datasources/ImageOptionsWidget.cpp:28
 #, kde-format
 msgid "This option determines how the image is converted when importing."
-msgstr ""
+msgstr "Tato volba určuje, jakým způsobem se obrázek při importu převede."
 
 #: src/frontend/datasources/ImportDatasetDialog.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
-msgstr ""
+msgstr "Import z kolekce datových sad"
 
 #: src/frontend/datasources/ImportDatasetDialog.cpp:92
 #: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:85
@@ -13254,12 +13325,12 @@ msgstr "Soubor dat%1"
 #: src/frontend/datasources/ImportDatasetDialog.cpp:102
 #, kde-format
 msgid "Failed to connect within %1 seconds"
-msgstr ""
+msgstr "Nepodařilo se navázat spojení během %1 sekund"
 
 #: src/frontend/datasources/ImportDatasetDialog.cpp:127
 #, kde-format
 msgid "Dataset imported in %1 seconds."
-msgstr ""
+msgstr "Datová sada byl importována za %1 sekund."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/frontend/datasources/ImportDatasetWidget.cpp:166
@@ -13284,6 +13355,8 @@ msgid ""
 "Couldn't open the dataset collections file %1. Please check your "
 "installation."
 msgstr ""
+"Nepodařilo se otevřít soubor kolekce datových sad %1. Zkontrolujte prosím "
+"svou instalaci."
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:537
 #, kde-format
@@ -13307,13 +13380,13 @@ msgstr "Importovat do"
 #: src/frontend/datasources/ImportDialog.cpp:65
 #, kde-format
 msgid "Data container:"
-msgstr ""
+msgstr "Datový kontejner:"
 
 #: src/frontend/datasources/ImportDialog.cpp:66
 #: src/frontend/datasources/ImportDialog.cpp:72
 #, kde-format
 msgid "Data container where the data has to be imported into"
-msgstr ""
+msgstr "Datový kontejner, do kterého je třeba data importovat"
 
 #: src/frontend/datasources/ImportDialog.cpp:90
 #, kde-format
@@ -13367,27 +13440,27 @@ msgstr "Nahradit"
 #: src/frontend/datasources/ImportDialog.cpp:139
 #, kde-format
 msgid "Add a new Workbook"
-msgstr ""
+msgstr "Přidat nový sešit"
 
 #: src/frontend/datasources/ImportDialog.cpp:140
 #, kde-format
 msgid "Workbook name:"
-msgstr ""
+msgstr "Název sešitu:"
 
 #: src/frontend/datasources/ImportDialog.cpp:142
 #, kde-format
 msgid "Add a new Spreadsheet"
-msgstr ""
+msgstr "Přidat novou tabulku"
 
 #: src/frontend/datasources/ImportDialog.cpp:143
 #, kde-format
 msgid "Spreadsheet name:"
-msgstr ""
+msgstr "Název tabulky:"
 
 #: src/frontend/datasources/ImportDialog.cpp:145
 #, kde-format
 msgid "Add a new Matrix"
-msgstr ""
+msgstr "Přidat novou matici"
 
 #: src/frontend/datasources/ImportDialog.cpp:146
 #, kde-format
@@ -13397,7 +13470,7 @@ msgstr "Název matice:"
 #: src/frontend/datasources/ImportDialog.cpp:148
 #, kde-format
 msgid "Add a new Folder"
-msgstr ""
+msgstr "Přidat novou složku"
 
 #: src/frontend/datasources/ImportDialog.cpp:149
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
@@ -13414,12 +13487,12 @@ msgstr "Nová složka"
 #: src/frontend/datasources/ImportDialog.cpp:189
 #, kde-format
 msgid "New Workbook"
-msgstr ""
+msgstr "Nový sešit"
 
 #: src/frontend/datasources/ImportDialog.cpp:193
 #, kde-format
 msgid "New Spreadsheet"
-msgstr "Nový sešit"
+msgstr "Nová tabulka"
 
 #: src/frontend/datasources/ImportDialog.cpp:197
 #, kde-format
@@ -13431,14 +13504,14 @@ msgstr "Nová matice"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:155
 #, kde-format
 msgid "Close the dialog and import the data."
-msgstr ""
+msgstr "Zavřít dialogové okno a importovat data."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:73
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:39
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
-msgstr ""
+msgstr "Import dat do tabulky nebo matice"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:75
 #, kde-format
@@ -13469,81 +13542,81 @@ msgstr "Zobrazit možnosti"
 #: src/frontend/datasources/ImportFileDialog.cpp:149
 #, kde-format
 msgid "Live data source created in %1 seconds."
-msgstr ""
+msgstr "Živý zdroj dat byl vytvořen za %1 sekund."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:175
 #, kde-format
 msgid "No target data container selected"
-msgstr ""
+msgstr "Není vybrán žádný kontejner s cílovými daty"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:199
 #, kde-format
 msgid "File %1 imported in %2 seconds."
-msgstr ""
+msgstr "Soubor %1 byl importován za %2 sekund."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:203
 #, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr ""
+msgstr "Adresář %1 neexistuje."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:233
 #, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr ""
+msgstr "%1 souborů importováno za %2 sekund."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:403
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:149
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
-msgstr ""
+msgstr "Nelze importovat do matice, protože data obsahují nečíselné hodnoty."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:415
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:133
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
-msgstr ""
+msgstr "Vyberte datový kontejner, do kterého mají být data importována."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:428
 #, kde-format
 msgid "No file provided for import."
-msgstr ""
+msgstr "Nebyly zadány žádné soubory k importu."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:453
 #, kde-format
 msgid "The provided file doesn't exist."
-msgstr ""
+msgstr "Zadaný soubor neexistuje."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:473
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
-msgstr ""
+msgstr "Nepodařilo se připojit k zadanému lokálnímu soketu. Chyba: %1."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:477
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
-msgstr ""
+msgstr "Nepodařilo se připojit k zadanému lokálnímu soketu. Soket neexistuje."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:492
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
-msgstr ""
+msgstr "Nepodařilo se připojit k zadanému TCP soketu. Chyba: %1."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:496
 #: src/frontend/datasources/ImportFileDialog.cpp:516
 #, kde-format
 msgid "Either the host name or the port number is missing."
-msgstr ""
+msgstr "Chybí buď název hostitele, nebo číslo portu."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:512
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
-msgstr ""
+msgstr "Nepodařilo se připojit k zadanému UDP soketu. Chyba: %1."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:544
 #, kde-format
 msgid "Serial port number is missing."
-msgstr ""
+msgstr "Chybí číslo sériového portu."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:556
 #, kde-format
@@ -13551,6 +13624,8 @@ msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
 "filter is not ASCII."
 msgstr ""
+"Buď není navázáno připojení, nebo nebyly provedeny žádné odběry, anebo filtr "
+"souborů není v kódování ASCII."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:112
 #, kde-format
@@ -13565,22 +13640,22 @@ msgstr "Binární data"
 #: src/frontend/datasources/ImportFileWidget.cpp:116
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
-msgstr ""
+msgstr "Excel 2007+ (XSLX)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:119
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr ""
+msgstr "OpenDocument Spreadsheet (ODS)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:122
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
-msgstr ""
+msgstr "Hierarchical Data Format 5 (HDF5)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:125
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
-msgstr ""
+msgstr "Network Common Data Format (NetCDF)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:128
 #, kde-format
@@ -13590,7 +13665,7 @@ msgstr "Vector Binary Logfile (BLF)"
 #: src/frontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
-msgstr ""
+msgstr "Flexible Image Transport System Data Format (FITS)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:133
 #, kde-format
@@ -13601,7 +13676,7 @@ msgstr "Data JSON"
 #: src/frontend/datasources/ImportFileWidget.cpp:164
 #, kde-format
 msgid "ROOT (CERN)"
-msgstr ""
+msgstr "ROOT (CERN)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:137
 #: src/frontend/datasources/ImportFileWidget.cpp:166
@@ -13612,12 +13687,12 @@ msgstr "Spice"
 #: src/frontend/datasources/ImportFileWidget.cpp:139
 #, kde-format
 msgid "SAS, Stata or SPSS"
-msgstr ""
+msgstr "SAS, Stata nebo SPSS"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:142
 #, kde-format
 msgid "MATLAB MAT file"
-msgstr ""
+msgstr "Soubor MATLAB MAT"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
@@ -13627,17 +13702,17 @@ msgstr "Data MCAP"
 #: src/frontend/datasources/ImportFileWidget.cpp:148
 #, kde-format
 msgid "Apache Parquet"
-msgstr ""
+msgstr "Apache Parquet"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:149
 #, kde-format
 msgid "Arrow IPC (Feather)"
-msgstr ""
+msgstr "Arrow IPC (Feather)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:151
 #, kde-format
 msgid "Apache ORC"
-msgstr ""
+msgstr "Apache ORC"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:161
 #, kde-format
@@ -13655,6 +13730,8 @@ msgid ""
 "If this option is checked, only the link to the file is stored in the "
 "project file but not its content."
 msgstr ""
+"Je-li tato možnost zaškrtnuta, v souboru projektu se uloží pouze odkaz na "
+"soubor, nikoli však jeho obsah."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:175
 #, kde-format
@@ -13662,13 +13739,15 @@ msgid ""
 "If this option is checked, the relative path of the file (relative to "
 "project's folder) will be saved."
 msgstr ""
+"Je-li tato možnost zaškrtnuta, uloží se relativní cesta k souboru (vzhledem "
+"ke složce projektu)."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/datasources/ImportFileWidget.cpp:183
 #: src/frontend/ui/dockwidgets/livedatadock.ui:361
 #, kde-format
 msgid "Continuously Fixed"
-msgstr ""
+msgstr "Kontinuálně pevně"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/datasources/ImportFileWidget.cpp:184
@@ -13680,7 +13759,7 @@ msgstr "Od konce"
 #: src/frontend/datasources/ImportFileWidget.cpp:185
 #, kde-format
 msgid "Till End"
-msgstr ""
+msgstr "Do konce"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:186
 #, kde-format
@@ -13698,6 +13777,13 @@ msgid ""
 "li><li>Whole file - on every read the whole file is re-read completely and "
 "processed. Only available for \"File Or Named Pipe\" data sources.</li></ul>"
 msgstr ""
+"Určete, jak má být zdroj dat zpracován při každém načtení:"
+"<ul><li>Kontinuálně pevně – zpracovává se pevně stanovený počet vzorků "
+"počínaje od začátku nově přijatých dat.</li><li>Od konce – zpracovává se "
+"pevně stanovený počet vzorků počínaje od konce nově přijatých dat.</"
+"li><li>Do konce – zpracují se všechna nově přijatá data.</li><li>Celý soubor "
+"– při každém čtení se celý soubor znovu načte a zpracuje. K dispozici pouze "
+"pro zdroje dat typu \"Soubor nebo pojmenovaná pipe\".</li></ul>"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:232
 #, kde-format
@@ -13706,6 +13792,8 @@ msgid ""
 "Only needs to be specified for the reading mode \"Continuously Fixed\" and "
 "\"From End\"."
 msgstr ""
+"Počet vzorků (řádků), které se mají zpracovat při každém čtení.\n"
+"Je třeba zadat pouze v režimech čtení \"Kontinuálně pevně\" a \"Od konce\"."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:238
 #, kde-format
@@ -13715,11 +13803,15 @@ msgid ""
 "specified time interval.</li><li>On New Data - the data source is read when "
 "new data arrives.</li></ul>"
 msgstr ""
+"Určete, kdy a jak často má být zdroj dat načítán:<ul><li>Pravidelně – zdroj "
+"dat je načítán pravidelně v časových intervalech určených uživatelem.</"
+"li><li>Při příchodu nových dat – zdroj dat je načítán při příchodu nových "
+"dat.</li></ul>"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:246
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
-msgstr ""
+msgstr "Zadejte, jak často se má zdroj dat načítat."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:251
 #, kde-format
@@ -13727,6 +13819,8 @@ msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
 "Use \"All\" if all data has to be kept."
 msgstr ""
+"Zadejte, kolik vzorků má být po načtení uchováno v paměti.\n"
+"Pokud mají být uchována všechna data, zadejte \"Vše\"."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:256
 #, kde-format
@@ -13734,11 +13828,12 @@ msgid ""
 "Enable to use the first row of the selected data region for the column names "
 "of the spreadsheet."
 msgstr ""
+"Povolit použití prvního řádku vybrané oblasti dat jako názvů sloupců tabulky."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:271
 #, kde-format
 msgid "Manage MQTT connections"
-msgstr ""
+msgstr "Spravovat MQTT připojení"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:273
 #: src/frontend/dockwidgets/LiveDataDock.cpp:84
@@ -13747,24 +13842,26 @@ msgid ""
 "Specify the 'Last Will and Testament' message (LWT). At least one topic has "
 "to be subscribed."
 msgstr ""
+"Zadejte zprávu 'Poslední vůle a závěť' (LWT). Je nutné se přihlásit k odběru "
+"alespoň jednoho tématu."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:290
 #, kde-format
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
-msgstr ""
+msgstr "Počet řádků se vypočítává na základě hodnot v kartě s datovou částí"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1079
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr ""
+msgstr "Vyberte zdroj dat adresáře"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1081
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
-msgstr ""
+msgstr "Vyberte zdroj dat souboru"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
@@ -13782,12 +13879,16 @@ msgstr "Soubor DBC (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
+"Soubory projektu Origin je třeba otevřít pomocí \"Importovat -> Origin "
+"Project\"!"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1201
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
+"Soubory projektu LabPlot je třeba otevřít pomocí \"Importovat -> Projekt "
+"LabPlot\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/frontend/datasources/ImportFileWidget.cpp:1349
@@ -13813,12 +13914,12 @@ msgstr "Náhled"
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
-msgstr ""
+msgstr "Část dat k přečtení"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1398
 #, kde-format
 msgid "Data format && preview"
-msgstr "Formát dat && náhled"
+msgstr "Formát dat a náhled"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1445
 #, kde-format
@@ -13828,7 +13929,7 @@ msgstr "Automaticky"
 #: src/frontend/datasources/ImportFileWidget.cpp:1707
 #, kde-format
 msgid "file command not found"
-msgstr ""
+msgstr "příkaz file nebyl nalezen"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1718
 #, kde-format
@@ -13888,13 +13989,13 @@ msgstr "Program: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:1827
 #, kde-format
 msgid "Birth time: %1"
-msgstr ""
+msgstr "Čas vytvoření: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1735
 #: src/frontend/datasources/ImportFileWidget.cpp:1828
 #, kde-format
 msgid "Last metadata changed: %1"
-msgstr ""
+msgstr "Poslední změna metadat: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1736
 #: src/frontend/datasources/ImportFileWidget.cpp:1829
@@ -13906,7 +14007,7 @@ msgstr "Poslední změna: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:1830
 #, kde-format
 msgid "Last read: %1"
-msgstr "Poslední přístup ke čtení: %1"
+msgstr "Poslední načtení: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1738
 #: src/frontend/datasources/ImportFileWidget.cpp:1831
@@ -13943,7 +14044,7 @@ msgstr "Obsah:"
 #: src/frontend/datasources/ImportFileWidget.cpp:1807
 #, kde-format
 msgid "Could not open file %1 for reading."
-msgstr "Nelze otevřít soubor %1 pro čtení."
+msgstr "Soubor %1 nelze otevřít pro čtení."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1837
 #, kde-format
@@ -16227,18 +16328,18 @@ msgstr ""
 #. tooltip texts
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:72
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:157
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:77
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:402
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
 #, kde-format
 msgid "XY-Curve"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:189
 #, kde-format
 msgid ""
 "Method used to calculate the baseline correction:<ul><li>arPLS - "
@@ -16250,7 +16351,7 @@ msgid ""
 "Regression - do a linear regression to the data and subtract it.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:197
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:202
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:162
 #, kde-format
 msgid ""
@@ -16258,7 +16359,7 @@ msgid ""
 "background."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:201
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:206
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:166
 #, kde-format
 msgid ""
@@ -16266,46 +16367,46 @@ msgid ""
 "less negative values."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:205
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:210
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:170
 #, kde-format
 msgid "Number of iterations to perform."
 msgstr "Počet iterací, které se mají provést."
 
-#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:302
+#: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:307
 #, kde-format
 msgid "Baseline correction status: %1"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:169
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:174
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "or Kernel/Size:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:183
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:188
 #, kde-format
 msgid "with Kernel/Size:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:323
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:326
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:328
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:331
 #, kde-format
 msgid "Deconvolution"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:362
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:367
 #, kde-format
 msgid "Convolution status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:364
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:369
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:275
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
 #, kde-format
 msgid "Correlation status: %1"
 msgstr ""
@@ -16365,7 +16466,7 @@ msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:374
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:379
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr ""
@@ -16414,33 +16515,33 @@ msgstr "t, min"
 msgid "t, max"
 msgstr "t, max"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:362
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X and Y column specified!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:364
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X column specified!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:366
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
 #, kde-format
 msgid "No Y column specified!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format
 msgid "No Y data available!"
 msgstr "Nejsou dostupná žádná data Y!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "t statistic"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:439
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:445
 #: src/frontend/ui/dockwidgets/xybaselinecorrectioncurvedockgeneraltab.ui:111
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:353
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:217
@@ -16456,103 +16557,103 @@ msgstr ""
 msgid "Curve:"
 msgstr "Křivka:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:460
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:466
 #, kde-format
 msgid "Histogram:"
 msgstr "Histogram:"
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:755
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:761
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:730
 #, kde-format
 msgid "Model:"
 msgstr "Model:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:812
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
 #: src/frontend/GuiTools.cpp:633
 #, kde-format
 msgid "Description:"
 msgstr "Popis:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:813
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:819
 #, kde-format
 msgid "User defined model"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:857
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:863
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:457
 #, kde-format
 msgid "Degree:"
 msgstr "Stupeň:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:917
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:923
 #, kde-format
 msgid "Number of peaks:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1325
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1331
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1336
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1342
 #, kde-format
 msgid "No data source available!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1515
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1521
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1516
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1522
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:272
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:277
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:266
 #, kde-format
 msgid "Cutoff:"
 msgstr "Bod zkrácení:"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:285
 #, kde-format
 msgid "Lower cutoff:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:281
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:286
 #, kde-format
 msgid "Upper cutoff:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:350
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:355
 #, kde-format
 msgctxt "@label:spinbox Suffix for the frequency"
 msgid "%v Hz"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:416
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:421
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
 "cutoff value. Please fix this."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:417
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:422
 #, kde-format
 msgid "band width <= 0"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:425
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:430
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:222
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:227
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr ""
@@ -16565,50 +16666,45 @@ msgid ""
 "again."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:174
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:179
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:310
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:315
 #, kde-format
 msgid "Integration status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:322
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:327
 #, kde-format
 msgid "value: %1"
 msgstr "hodnota: %1"
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:520
-#, kde-format
-msgid "Interpolation status: %1"
-msgstr ""
-
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:564
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:569
 #, kde-format
 msgid "Auto (5x data points)"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:565
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:570
 #, kde-format
 msgid "Multiple of data points"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:568
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:573
 #, kde-format
 msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:177
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:182
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr ""
 
 #. i18n-team: some algorithm are named after their creators like Douglas and Peucker, Visvalingam and Whyatt, Opheim, Lang
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:181
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:186
 #, kde-format
 msgid ""
 "Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
@@ -16629,122 +16725,122 @@ msgid ""
 "the simplified line.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:209
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:213
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:214
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:210
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:215
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:214
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:224
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Number of points:"
 msgstr "Počet bodů:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:228
 #, kde-format
 msgid "Target number of points in the simplified line"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
 #, kde-format
 msgid "Step size:"
 msgstr "Velikost kroku:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
 #, kde-format
 msgid "Repeats:"
 msgstr "Opakuje se:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:237
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:233
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:238
 #, fuzzy, kde-format
 #| msgid "Number of iterations to perform."
 msgid "Number of iterations to apply the simplification"
 msgstr "Počet iterací, které se mají provést."
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
 #, kde-format
 msgid "Tolerance (area):"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:237
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:247
 #, kde-format
 msgid "Minimum distance threshold from retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:243
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
 msgid "Maximum distance threshold from retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:247
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:252
 #, kde-format
 msgid "Search region:"
 msgstr "Hledat oblast:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:253
 #, kde-format
 msgid "Minimum point spacing distance"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:254
 #, kde-format
 msgid "Search region size in units of points"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:591
 #, kde-format
 msgid "number of points: %1"
 msgstr "počet bodů: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:587
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:592
 #, kde-format
 msgid "positional squared error: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:588
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, kde-format
 msgid "area error: %1"
 msgstr ""
@@ -16816,7 +16912,7 @@ msgstr ""
 msgid "Maximum X-value of the data used for the fit."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:194
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:199
 #, kde-format
 msgid ""
 "Method used to smooth the data:<ul><li>Moving Average (Central) - smoothing "
@@ -16829,61 +16925,61 @@ msgid ""
 "locally weighted scatterplot smoothing.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:206
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:211
 #, kde-format
 msgid "Number of points in the moving window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:210
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:215
 #, kde-format
 msgid ""
 "Weighting type to define different weights for the points in the moving "
 "window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:214
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:219
 #, kde-format
 msgid "Percentile of the points in the moving window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:218
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:223
 #, kde-format
 msgid "The order of the polynomial used to fit the points in the moving window"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:222
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:227
 #, kde-format
 msgid "The fraction of the data used to perform the local fit."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:231
 #, kde-format
 msgid ""
 "If delta > 0, values of y-data within delta of each other will use "
 "interpolation instead of full regression."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:230
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:235
 #, kde-format
 msgid "The number of robustifying iterations"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:234
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:239
 #, kde-format
 msgid "Padding mode to handle the edges of the data set"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:238
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:243
 #, kde-format
 msgid "The value for constant padding at the left edge"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:242
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:247
 #, kde-format
 msgid "The value for constant padding at the right edge"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:523
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr ""
@@ -27783,6 +27879,10 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
+
+#~ msgid "Not sufficient weight data points provided!"
+#~ msgstr ""
+#~ "Nebylo zadáno dostatečné množství datových bodů týkajících se hmotnosti!"
 
 #~ msgid "Open a project file."
 #~ msgstr "Otevřít soubor projektu."
