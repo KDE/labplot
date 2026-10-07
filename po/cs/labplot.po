@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-10-06 00:47+0200\n"
-"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
+"PO-Revision-Date: 2026-10-06 16:57+0200\n"
+"Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -10655,13 +10655,13 @@ msgstr "Zvětšení 3x"
 #: src/frontend/worksheet/WorksheetView.cpp:207
 #, kde-format
 msgid "4x Magnification"
-msgstr ""
+msgstr "Zvětšení 4x"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:185
 #: src/frontend/worksheet/WorksheetView.cpp:210
 #, kde-format
 msgid "5x Magnification"
-msgstr ""
+msgstr "Zvětšení 5x"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:218
 #: src/frontend/worksheet/WorksheetView.cpp:441
@@ -10673,12 +10673,12 @@ msgstr "Režim s myší"
 #: src/frontend/datapicker/DatapickerImageView.cpp:227
 #, kde-format
 msgid "Zoom View"
-msgstr ""
+msgstr "Zvětšit zobrazení"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:235
 #, kde-format
 msgid "Move Last Point"
-msgstr ""
+msgstr "Přesunout poslední bod"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:241
 #: src/frontend/worksheet/WorksheetView.cpp:458
@@ -10694,23 +10694,23 @@ msgstr "%1, aktivní křivka \"%2\": %3=%4, %5=%6"
 #: src/frontend/datapicker/DatapickerImageView.cpp:625
 #, kde-format
 msgid "Remove existing reference points?"
-msgstr ""
+msgstr "Odstranit stávající referenční body?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:626
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
-msgstr ""
+msgstr "Všechny dostupné referenční body budou odstraněny. Chcete pokračovat?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:692
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
-msgstr ""
+msgstr "%1: změnit polohu vybraných bodů DatapickerPoints."
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:745
 #, kde-format
 msgid "%1: add new curve."
-msgstr ""
+msgstr "%1: přidat novou křivku."
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:746
 #, kde-format
@@ -10732,6 +10732,7 @@ msgstr "Export selhal"
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
+"Zápis do souboru '%1' se nezdařil. Zkontrolujte prosím cestu k souboru."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:49
@@ -10869,21 +10870,22 @@ msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
+"Je-li zaškrtnuto, bude k určení názvů sloupců použita zadaný řádek v souboru."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:108
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
-msgstr ""
+msgstr "Řádek v souboru, který by měl být použit k určení názvů sloupců."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:111
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
-msgstr ""
+msgstr "Vlastní názvy sloupců, oddělené čárkami. Např. \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
 #, kde-format
 msgid "Custom column data types, comma separated"
-msgstr ""
+msgstr "Vlastní datové typy sloupců, oddělené čárkami"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -10899,6 +10901,16 @@ msgid ""
 "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
 "td></tr></table>"
 msgstr ""
+"Pokud pole není prázdné, musí počet sloupců odpovídat počtu názvů sloupců "
+"(jsou-li uvedeny) a musí se shodovat s počtem sloupců v importovaném souboru."
+"<br>Datové typy:<table><tr><td>%1</td><td>Celé číslo o velikosti 32 bitů (−2 "
+"147 483 648 .. 2 147 483 647).</td></tr><tr><td>%2</td><td>Celé číslo o "
+"velikosti 64 bitů (−9 223 372 036 854 775 808 .. 9 223 372 036 854 775 807)."
+"</td></tr><tr><td>%3</td><td>Číslo s plovoucí desetinnou čárkou o velikosti "
+"64 bitů. Rozlišení přibližně 16 číslic.</td></tr><tr><td>%4</td><td>Datum a "
+"čas ve formátu z textového pole data a času, pokud není prázdné; v opačném "
+"případě se určí automaticky.</td></tr><tr><td>%5</td><td>Text.</td></tr></"
+"table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
@@ -10908,7 +10920,7 @@ msgstr "%1 nebo %2"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:249
 #, kde-format
 msgid "Datatype not found: %1"
-msgstr ""
+msgstr "Datový typ nebyl nalezen: %1"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -10926,13 +10938,15 @@ msgid ""
 "This option determines the data type that the imported data while converting "
 "to numbers."
 msgstr ""
+"Tato volba určuje datový typ, do kterého se importovaná data při převodu na "
+"číselné hodnoty převedou."
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:39
 #, kde-format
 msgid ""
 "This option determines the byte order of the imported data when converting "
 "to numbers."
-msgstr ""
+msgstr "Tato volba určuje pořadí bajtů importovaných dat při převodu na čísla."
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:41
 #, kde-format
@@ -10941,11 +10955,14 @@ msgid ""
 "Intel x86 processors.</td></tr><tr><td>big endian</td><td>typical byte order "
 "on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
 msgstr ""
+"<table><tr><td>little endian</td><td>typické pořadí bajtů (endianita) u "
+"procesorů Intel x86.</td></tr><tr><td>big endian</td><td>typické pořadí "
+"bajtů u mainframů (IBM) a procesorů SPARC/PowerPC/Motorola.</td></tr></table>"
 
 #: src/frontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
 msgid "Use NAN"
-msgstr ""
+msgstr "Použít NAN"
 
 #: src/frontend/datasources/CANOptionsWidget.cpp:14
 #, kde-format
@@ -10956,33 +10973,33 @@ msgstr "Použít předchozí hodnotu"
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections"
-msgstr ""
+msgstr "Připojení k databázi SQL"
 
 #: src/frontend/datasources/DatabaseManagerDialog.cpp:66
 #, kde-format
 msgctxt "@title:window"
 msgid "SQL Database Connections  [Changed]"
-msgstr ""
+msgstr "Připojení k databázi SQL  [změněno]"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:48
 #, kde-format
 msgid "Add new database connection"
-msgstr ""
+msgstr "Přidat nové připojení k databázi"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:49
 #, kde-format
 msgid "Delete selected database connection"
-msgstr ""
+msgstr "Smazat vybrané připojení k databázi"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:50
 #, kde-format
 msgid "Open database file"
-msgstr ""
+msgstr "Otevřít databázový soubor"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:51
 #, kde-format
 msgid "Test selected database connection"
-msgstr ""
+msgstr "Otestovat vybrané připojení k databázi"
 
 #. i18n: ectx: property (text), widget (QLabel, lDatabase)
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:158
@@ -10995,13 +11012,13 @@ msgstr "Databáze:"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:170
 #, kde-format
 msgid "Data Source Name:"
-msgstr ""
+msgstr "Název zdroje dat:"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:211
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Database File"
-msgstr ""
+msgstr "Vybrat databázový soubor"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:349
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:409
@@ -11027,7 +11044,7 @@ msgstr "Připojení selhalo"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:526
 #, kde-format
 msgid "Failed to connect to the database '%1'."
-msgstr ""
+msgstr "Nepodařilo se připojit k databázi '%1'."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:643
@@ -11038,7 +11055,7 @@ msgstr "Připojení proběhlo úspěšně"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #, kde-format
 msgid "Connection to the database '%1' was successful."
-msgstr ""
+msgstr "Připojení k databázi '%1' proběhlo úspěšně."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:549
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:572
@@ -11050,17 +11067,17 @@ msgstr "Nové připojení"
 #, kde-format
 msgctxt "@title:window"
 msgid "Dataset metadata manager"
-msgstr ""
+msgstr "Správce metadat datových sad"
 
 #: src/frontend/datasources/DatasetMetadataManagerWidget.cpp:513
 #, kde-format
 msgid "column_description_%1"
-msgstr ""
+msgstr "popis_sloupce_%1"
 
 #: src/frontend/datasources/DatasetMetadataManagerWidget.cpp:523
 #, kde-format
 msgid "Description for column %1"
-msgstr ""
+msgstr "Popis sloupce %1"
 
 #: src/frontend/datasources/FITSOptionsWidget.cpp:22
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:98
@@ -11083,13 +11100,13 @@ msgstr "Vlastnosti"
 #: src/frontend/datasources/ImageOptionsWidget.cpp:28
 #, kde-format
 msgid "This option determines how the image is converted when importing."
-msgstr ""
+msgstr "Tato volba určuje, jakým způsobem se obrázek při importu převede."
 
 #: src/frontend/datasources/ImportDatasetDialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
-msgstr ""
+msgstr "Import z kolekce datových sad"
 
 #: src/frontend/datasources/ImportDatasetDialog.cpp:93
 #: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:86
@@ -11101,12 +11118,12 @@ msgstr "Soubor dat%1"
 #: src/frontend/datasources/ImportDatasetDialog.cpp:103
 #, kde-format
 msgid "Failed to connect within %1 seconds"
-msgstr ""
+msgstr "Nepodařilo se navázat spojení během %1 sekund"
 
 #: src/frontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
 msgid "Dataset imported in %1 seconds."
-msgstr ""
+msgstr "Datová sada byl importována za %1 sekund."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/frontend/datasources/ImportDatasetWidget.cpp:161
@@ -11130,6 +11147,8 @@ msgid ""
 "Couldn't open the dataset collections file %1. Please check your "
 "installation."
 msgstr ""
+"Nepodařilo se otevřít soubor kolekce datových sad %1. Zkontrolujte prosím "
+"svou instalaci."
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:522
 #, kde-format
@@ -11146,12 +11165,12 @@ msgstr "Popis"
 #: src/frontend/datasources/ImportDialog.cpp:52
 #, kde-format
 msgid "New Workbook"
-msgstr ""
+msgstr "Nový sešit"
 
 #: src/frontend/datasources/ImportDialog.cpp:53
 #, kde-format
 msgid "New Spreadsheet"
-msgstr "Nový sešit"
+msgstr "Nová tabulka"
 
 #: src/frontend/datasources/ImportDialog.cpp:54
 #, kde-format
@@ -11168,13 +11187,13 @@ msgstr "Importovat do"
 #: src/frontend/datasources/ImportDialog.cpp:77
 #, kde-format
 msgid "Data container:"
-msgstr ""
+msgstr "Datový kontejner:"
 
 #: src/frontend/datasources/ImportDialog.cpp:78
 #: src/frontend/datasources/ImportDialog.cpp:84
 #, kde-format
 msgid "Data container where the data has to be imported into"
-msgstr ""
+msgstr "Datový kontejner, do kterého je třeba data importovat"
 
 #: src/frontend/datasources/ImportDialog.cpp:97
 #, kde-format
@@ -11226,27 +11245,27 @@ msgstr "Nahradit"
 #: src/frontend/datasources/ImportDialog.cpp:146
 #, kde-format
 msgid "Add a new Workbook"
-msgstr ""
+msgstr "Přidat nový sešit"
 
 #: src/frontend/datasources/ImportDialog.cpp:147
 #, kde-format
 msgid "Workbook name:"
-msgstr ""
+msgstr "Název sešitu:"
 
 #: src/frontend/datasources/ImportDialog.cpp:149
 #, kde-format
 msgid "Add a new Spreadsheet"
-msgstr ""
+msgstr "Přidat novou tabulku"
 
 #: src/frontend/datasources/ImportDialog.cpp:150
 #, kde-format
 msgid "Spreadsheet name:"
-msgstr ""
+msgstr "Název tabulky:"
 
 #: src/frontend/datasources/ImportDialog.cpp:152
 #, kde-format
 msgid "Add a new Matrix"
-msgstr ""
+msgstr "Přidat novou matici"
 
 #: src/frontend/datasources/ImportDialog.cpp:153
 #, kde-format
@@ -11258,14 +11277,14 @@ msgstr "Název matice:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
-msgstr ""
+msgstr "Zavřít dialogové okno a importovat data."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:73
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
-msgstr ""
+msgstr "Import dat do tabulky nebo matice"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:75
 #, kde-format
@@ -11296,71 +11315,71 @@ msgstr "Zobrazit možnosti"
 #: src/frontend/datasources/ImportFileDialog.cpp:148
 #, kde-format
 msgid "Live data source created in %1 seconds."
-msgstr ""
+msgstr "Živý zdroj dat byl vytvořen za %1 sekund."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:175
 #, kde-format
 msgid "No target data container selected"
-msgstr ""
+msgstr "Není vybrán žádný kontejner s cílovými daty"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:323
 #, kde-format
 msgid "File %1 imported in %2 seconds."
-msgstr ""
+msgstr "Soubor %1 byl importován za %2 sekund."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:369
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
-msgstr ""
+msgstr "Nelze importovat do matice, protože data obsahují nečíselné hodnoty."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:381
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
-msgstr ""
+msgstr "Vyberte datový kontejner, do kterého mají být data importována."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:399
 #, kde-format
 msgid "No file provided for import."
-msgstr ""
+msgstr "Nebyly zadány žádné soubory k importu."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:424
 #, kde-format
 msgid "The provided file doesn't exist."
-msgstr ""
+msgstr "Zadaný soubor neexistuje."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:444
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
-msgstr ""
+msgstr "Nepodařilo se připojit k zadanému lokálnímu soketu. Chyba: %1."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:448
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
-msgstr ""
+msgstr "Nepodařilo se připojit k zadanému lokálnímu soketu. Soket neexistuje."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:463
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
-msgstr ""
+msgstr "Nepodařilo se připojit k zadanému TCP soketu. Chyba: %1."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:467
 #: src/frontend/datasources/ImportFileDialog.cpp:487
 #, kde-format
 msgid "Either the host name or the port number is missing."
-msgstr ""
+msgstr "Chybí buď název hostitele, nebo číslo portu."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
-msgstr ""
+msgstr "Nepodařilo se připojit k zadanému UDP soketu. Chyba: %1."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Serial port number is missing."
-msgstr ""
+msgstr "Chybí číslo sériového portu."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:527
 #, kde-format
@@ -11368,6 +11387,8 @@ msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
 "filter is not ASCII."
 msgstr ""
+"Buď není navázáno připojení, nebo nebyly provedeny žádné odběry, anebo filtr "
+"souborů není v kódování ASCII."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:110
 #, kde-format
@@ -11382,22 +11403,22 @@ msgstr "Binární data"
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
-msgstr ""
+msgstr "Excel 2007+ (XSLX)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr ""
+msgstr "OpenDocument Spreadsheet (ODS)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:120
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
-msgstr ""
+msgstr "Hierarchical Data Format 5 (HDF5)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:123
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
-msgstr ""
+msgstr "Network Common Data Format (NetCDF)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:126
 #, kde-format
@@ -11407,7 +11428,7 @@ msgstr "Vector Binary Logfile (BLF)"
 #: src/frontend/datasources/ImportFileWidget.cpp:129
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
-msgstr ""
+msgstr "Flexible Image Transport System Data Format (FITS)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
@@ -11418,7 +11439,7 @@ msgstr "Data JSON"
 #: src/frontend/datasources/ImportFileWidget.cpp:155
 #, kde-format
 msgid "ROOT (CERN)"
-msgstr ""
+msgstr "ROOT (CERN)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:135
 #: src/frontend/datasources/ImportFileWidget.cpp:157
@@ -11429,12 +11450,12 @@ msgstr "Spice"
 #: src/frontend/datasources/ImportFileWidget.cpp:137
 #, kde-format
 msgid "SAS, Stata or SPSS"
-msgstr ""
+msgstr "SAS, Stata nebo SPSS"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:140
 #, kde-format
 msgid "MATLAB MAT file"
-msgstr ""
+msgstr "Soubor MATLAB MAT"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:143
 #, kde-format
@@ -11457,6 +11478,8 @@ msgid ""
 "If this option is checked, only the link to the file is stored in the "
 "project file but not its content."
 msgstr ""
+"Je-li tato možnost zaškrtnuta, v souboru projektu se uloží pouze odkaz na "
+"soubor, nikoli však jeho obsah."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:166
 #, kde-format
@@ -11464,13 +11487,15 @@ msgid ""
 "If this option is checked, the relative path of the file (relative to "
 "project's folder) will be saved."
 msgstr ""
+"Je-li tato možnost zaškrtnuta, uloží se relativní cesta k souboru (vzhledem "
+"ke složce projektu)."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/datasources/ImportFileWidget.cpp:174
 #: src/frontend/ui/dockwidgets/livedatadock.ui:345
 #, kde-format
 msgid "Continuously Fixed"
-msgstr ""
+msgstr "Kontinuálně pevně"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/datasources/ImportFileWidget.cpp:175
@@ -11482,7 +11507,7 @@ msgstr "Od konce"
 #: src/frontend/datasources/ImportFileWidget.cpp:176
 #, kde-format
 msgid "Till End"
-msgstr ""
+msgstr "Do konce"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:177
 #, kde-format
@@ -11500,6 +11525,13 @@ msgid ""
 "li><li>Whole file - on every read the whole file is re-read completely and "
 "processed. Only available for \"File Or Named Pipe\" data sources.</li></ul>"
 msgstr ""
+"Určete, jak má být zdroj dat zpracován při každém načtení:"
+"<ul><li>Kontinuálně pevně – zpracovává se pevně stanovený počet vzorků "
+"počínaje od začátku nově přijatých dat.</li><li>Od konce – zpracovává se "
+"pevně stanovený počet vzorků počínaje od konce nově přijatých dat.</"
+"li><li>Do konce – zpracují se všechna nově přijatá data.</li><li>Celý soubor "
+"– při každém čtení se celý soubor znovu načte a zpracuje. K dispozici pouze "
+"pro zdroje dat typu \"Soubor nebo pojmenovaná pipe\".</li></ul>"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:223
 #, kde-format
@@ -11508,6 +11540,8 @@ msgid ""
 "Only needs to be specified for the reading mode \"Continuously Fixed\" and "
 "\"From End\"."
 msgstr ""
+"Počet vzorků (řádků), které se mají zpracovat při každém čtení.\n"
+"Je třeba zadat pouze v režimech čtení \"Kontinuálně pevně\" a \"Od konce\"."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:229
 #, kde-format
@@ -11517,11 +11551,15 @@ msgid ""
 "specified time interval.</li><li>On New Data - the data source is read when "
 "new data arrives.</li></ul>"
 msgstr ""
+"Určete, kdy a jak často má být zdroj dat načítán:<ul><li>Pravidelně – zdroj "
+"dat je načítán pravidelně v časových intervalech určených uživatelem.</"
+"li><li>Při příchodu nových dat – zdroj dat je načítán při příchodu nových "
+"dat.</li></ul>"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:237
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
-msgstr ""
+msgstr "Zadejte, jak často se má zdroj dat načítat."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:242
 #, kde-format
@@ -11529,6 +11567,8 @@ msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
 "Use \"All\" if all data has to be kept."
 msgstr ""
+"Zadejte, kolik vzorků má být po načtení uchováno v paměti.\n"
+"Pokud mají být uchována všechna data, zadejte \"Vše\"."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:247
 #, kde-format
@@ -11536,11 +11576,12 @@ msgid ""
 "Enable to use the first row of the selected data region for the column names "
 "of the spreadsheet."
 msgstr ""
+"Povolit použití prvního řádku vybrané oblasti dat jako názvů sloupců tabulky."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:262
 #, kde-format
 msgid "Manage MQTT connections"
-msgstr ""
+msgstr "Spravovat MQTT připojení"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:264
 #: src/frontend/dockwidgets/LiveDataDock.cpp:84
@@ -11549,18 +11590,20 @@ msgid ""
 "Specify the 'Last Will and Testament' message (LWT). At least one topic has "
 "to be subscribed."
 msgstr ""
+"Zadejte zprávu 'Poslední vůle a závěť' (LWT). Je nutné se přihlásit k odběru "
+"alespoň jednoho tématu."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:281
 #, kde-format
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
-msgstr ""
+msgstr "Počet řádků se vypočítává na základě hodnot v kartě s datovou částí"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1011
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
-msgstr ""
+msgstr "Vyberte zdroj dat souboru"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
@@ -11578,12 +11621,16 @@ msgstr "Soubor DBC (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
+"Soubory projektu Origin je třeba otevřít pomocí \"Importovat -> Origin "
+"Project\"!"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1131
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
+"Soubory projektu LabPlot je třeba otevřít pomocí \"Importovat -> Projekt "
+"LabPlot\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/frontend/datasources/ImportFileWidget.cpp:1279
@@ -11608,12 +11655,12 @@ msgstr "Náhled"
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
-msgstr ""
+msgstr "Část dat k přečtení"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1325
 #, kde-format
 msgid "Data format && preview"
-msgstr "Formát dat && náhled"
+msgstr "Formát dat a náhled"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1372
 #, kde-format
@@ -11623,7 +11670,7 @@ msgstr "Automaticky"
 #: src/frontend/datasources/ImportFileWidget.cpp:1621
 #, kde-format
 msgid "file command not found"
-msgstr ""
+msgstr "příkaz file nebyl nalezen"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
@@ -11672,12 +11719,12 @@ msgstr "Program: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:1648
 #, kde-format
 msgid "Birth time: %1"
-msgstr ""
+msgstr "Čas vytvoření: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1649
 #, kde-format
 msgid "Last metadata changed: %1"
-msgstr ""
+msgstr "Poslední změna metadat: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1650
 #, kde-format
@@ -11687,7 +11734,7 @@ msgstr "Poslední změna: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:1651
 #, kde-format
 msgid "Last read: %1"
-msgstr "Poslední přístup ke čtení: %1"
+msgstr "Poslední načtení: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1652
 #, kde-format
@@ -11720,7 +11767,7 @@ msgstr "Obsah:"
 #: src/frontend/datasources/ImportFileWidget.cpp:1716
 #, kde-format
 msgid "Could not open file %1 for reading."
-msgstr "Nelze otevřít soubor %1 pro čtení."
+msgstr "Soubor %1 nelze otevřít pro čtení."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1807
 #, kde-format
