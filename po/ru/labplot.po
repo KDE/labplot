@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-07 00:41+0000\n"
-"PO-Revision-Date: 2026-10-04 10:09+0200\n"
+"PO-Revision-Date: 2026-10-07 08:28+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -561,10 +561,9 @@ msgid "%1: set random values"
 msgstr "%1: задание случайных значений"
 
 #: src/backend/core/column/Column.cpp:1055
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgid "Path: %1"
-msgstr "Путь:"
+msgstr "Путь: %1"
 
 #: src/backend/core/column/Column.cpp:1056
 #: src/frontend/datasources/ImportFileWidget.cpp:1740
@@ -8037,17 +8036,17 @@ msgstr "Монотонного тренда не выявлено"
 #: src/backend/statistics/HypothesisTest.cpp:303
 #, kde-format
 msgid "A monotonic trend exists"
-msgstr "Существует монотонная тенденция"
+msgstr "Существует монотонный тренд"
 
 #: src/backend/statistics/HypothesisTest.cpp:304
 #, kde-format
 msgid "A negative monotonic trend exists"
-msgstr "Существует отрицательная монотонная тенденция"
+msgstr "Существует отрицательный монотонный тренд"
 
 #: src/backend/statistics/HypothesisTest.cpp:305
 #, kde-format
 msgid "A positive monotonic trend exists"
-msgstr "Обнаружена положительная монотонная тенденция"
+msgstr "Существует положительный монотонный тренд"
 
 #: src/backend/statistics/HypothesisTest.cpp:308
 #: src/backend/statistics/HypothesisTest.cpp:314
@@ -8695,7 +8694,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1742
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
-msgstr "Группа 1 требует не менее %1 выборок."
+msgstr "Группе 1 требуется не менее %1 выборок."
 
 #: src/backend/statistics/HypothesisTest.cpp:1747
 #, kde-format
@@ -8724,8 +8723,7 @@ msgid ""
 "At the significance level %1, there is a significant monotonic trend in the "
 "data. %2"
 msgstr ""
-"При уровне значимости %1 в данных обнаружена значимая монотонная тенденция. "
-"%2"
+"При уровне значимости %1 в данных выявлен значимый монотонный тренд. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1802
 #, kde-format
@@ -8733,8 +8731,7 @@ msgid ""
 "At the significance level %1, there is a significant positive monotonic "
 "trend. %2"
 msgstr ""
-"При уровне значимости %1 выявлен значительный положительный монотонный "
-"тренд. %2"
+"При уровне значимости %1 выявлен значимый положительный монотонный тренд. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1804
 #, kde-format
@@ -8742,14 +8739,13 @@ msgid ""
 "At the significance level %1, there is a significant negative monotonic "
 "trend. %2"
 msgstr ""
-"При уровне значимости %1 выявлена значимая отрицательная монотонная "
-"тенденция. %2"
+"При уровне значимости %1 выявлен значимый отрицательный монотонный тренд. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1806
 #, kde-format
 msgid ""
 "At the significance level %1, no significant monotonic trend detected. %2"
-msgstr "При уровне значимости %1 монотонный тренд не обнаружен. %2"
+msgstr "При уровне значимости %1 значимый монотонный тренд не выявлен. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1842
 #, kde-format
@@ -10785,7 +10781,7 @@ msgstr "%1: задание цвета границы подписей"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
-msgstr "Недостаточно предоставлено данных."
+msgstr "Предоставлено недостаточно данных."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
@@ -11280,6 +11276,8 @@ msgstr "%1: установка параметров базовой линии и
 #, kde-format
 msgid "Baseline correction requires at least 1 point, none provided."
 msgstr ""
+"Для коррекции базовой линии требуется хотя бы одна точка, а не передано ни "
+"одной."
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
@@ -11292,6 +11290,8 @@ msgid ""
 "Convolution requires at least 1 point per input. Signal has %1 points, "
 "response has %2 points."
 msgstr ""
+"Для свёртки требуется хотя бы одна точка в каждом входном наборе. Точек в "
+"сигнале: %1, в отклике: %2."
 
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
@@ -11304,6 +11304,8 @@ msgid ""
 "Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
 "signal 2 has %2 points."
 msgstr ""
+"Для корреляции требуется хотя бы одна точка в каждом сигнале. Точек в "
+"сигнале 1: %1, в сигнале 2: %2."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11358,7 +11360,7 @@ msgstr "%1: задание параметров и выполнение дифф
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:112
 #, kde-format
 msgid "Differentiation requires at least 3 points, only %1 provided."
-msgstr ""
+msgstr "Для дифференцирования требуется не менее 3 точек, передано: %1."
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
@@ -11523,6 +11525,7 @@ msgstr "У модели отсутствуют параметры."
 msgid ""
 "Insufficient weight data points. X has %1 points, y-error has %2 points."
 msgstr ""
+"Недостаточно точек данных для весов. Точек по X: %1, погрешностей по Y: %2."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -11531,16 +11534,13 @@ msgid "No X data available!"
 msgstr "Нет данных по оси X!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)!"
+#, kde-format
 msgid ""
 "Number of data points (%1) must be greater than or equal to the number of "
 "parameters (%2)."
 msgstr ""
 "Количество точек данных (%1) должно быть больше или равно количеству "
-"параметров (%2)!"
+"параметров (%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
@@ -11629,7 +11629,7 @@ msgstr "%1: задание параметров и выполнение инте
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:111
 #, kde-format
 msgid "Integration requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Для интегрирования требуется не менее 2 точек, передано: %1."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
@@ -11647,15 +11647,13 @@ msgid "Not enough data points available."
 msgstr "Недостаточно доступных точек данных."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
-#, fuzzy, kde-format
-#| msgid ""
-#| "interpolation failed since x data is not strictly monotonic increasing!"
+#, kde-format
 msgid ""
 "interpolation failed since x data is not strictly monotonic increasing at x_"
 "%1 = %2 (previous x_%3 = %4)."
 msgstr ""
-"Сбой интерполяции произошёл в связи с отсутствием строго монотонного "
-"увеличения данных по X!"
+"Сбой интерполяции: данные по X не возрастают строго монотонно в точке x_%1 = "
+"%2 (предыдущая x_%3 = %4)."
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:69
 #, kde-format
@@ -11665,7 +11663,7 @@ msgstr "%1: задание параметров и выполнение упро
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:119
 #, kde-format
 msgid "Line simplification requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Для упрощения линий требуется не менее 2 точек, передано: %1."
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, kde-format
@@ -11758,17 +11756,17 @@ msgid "%1: set options and perform the smooth"
 msgstr "%1: задание параметров и выполнение сглаживания"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid ""
 "Number of x and y data points must be equal. x has %1 points, y has %2 "
 "points."
-msgstr "Количество точек данных по X и Y должно быть равно."
+msgstr ""
+"Количество точек данных по X и Y должно быть равно. Точек по X: %1, по Y: %2."
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
 #, kde-format
 msgid "Smoothing requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Для сглаживания требуется не менее 2 точек, передано: %1."
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333
@@ -16632,7 +16630,7 @@ msgstr "Длина сезонного сглаживателя должна бы
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:200
 #, kde-format
 msgid "Length of the trend smoother, must be odd and at least 3."
-msgstr "Длина тренда сглаживания должна быть нечётной и не менее 3."
+msgstr "Длина окна сглаживания тренда (нечётное число, не менее 3)."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:203
 #, kde-format
@@ -17202,7 +17200,7 @@ msgstr "Автоматически (5x точек данных)"
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:570
 #, kde-format
 msgid "Multiple of data points"
-msgstr "Несколько точек данных"
+msgstr "Кратно числу точек данных"
 
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:573
 #, kde-format

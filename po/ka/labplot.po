@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-07 00:41+0000\n"
-"PO-Revision-Date: 2026-10-03 03:51+0200\n"
+"PO-Revision-Date: 2026-10-07 03:59+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -549,10 +549,9 @@ msgid "%1: set random values"
 msgstr "%1: შემთხვევითი მნიშვნელობების დაყენება"
 
 #: src/backend/core/column/Column.cpp:1055
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgid "Path: %1"
-msgstr "ბილიკი:"
+msgstr "ბილიკი: %1"
 
 #: src/backend/core/column/Column.cpp:1056
 #: src/frontend/datasources/ImportFileWidget.cpp:1740
@@ -11096,6 +11095,7 @@ msgstr "%1: საბაზისო ხაზის პარამეტრე
 #, kde-format
 msgid "Baseline correction requires at least 1 point, none provided."
 msgstr ""
+"საბაზისო ხაზის კორექცია, მინიმუმ, 1 წერტილს მოითხოვს. მიწოდებულია არცერთი."
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
@@ -11108,6 +11108,8 @@ msgid ""
 "Convolution requires at least 1 point per input. Signal has %1 points, "
 "response has %2 points."
 msgstr ""
+"კონვოლუციას თითოეული წერტილისთვის, სულ ცოტა, 1 წერტილი სჭირდება. სიგნალს "
+"აქვს %1 წერტილი, პასუხს კი - %2."
 
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
@@ -11120,6 +11122,8 @@ msgid ""
 "Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
 "signal 2 has %2 points."
 msgstr ""
+"კორელაციას თითო სიგნალისთვის, მინიმუმ, 1 წერტილი სჭირდება. სიგნალ 1-ს ჰქონდა "
+"%1 წერტილი, სიგნალ 2-ს კი %2."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11174,7 +11178,7 @@ msgstr "%1: დააყენეთ პარამეტრები და �
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:112
 #, kde-format
 msgid "Differentiation requires at least 3 points, only %1 provided."
-msgstr ""
+msgstr "განსხვავება მოითხოვს, სულ ცოტა, 3 წერტილს. მიწოდებულია, მხოლოდ, %1."
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
@@ -11338,6 +11342,8 @@ msgstr "მოდელს არ აქვს პარამეტრები
 msgid ""
 "Insufficient weight data points. X has %1 points, y-error has %2 points."
 msgstr ""
+"წონის არასაკმარისი მონაცემთა წერტილები. X-ს აქვს %1 წერტილი, y-error-ს აქვს "
+"%2 წერტილი."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -11346,16 +11352,13 @@ msgid "No X data available!"
 msgstr "X მონაცემები ხელმიუწვდომელია!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)!"
+#, kde-format
 msgid ""
 "Number of data points (%1) must be greater than or equal to the number of "
 "parameters (%2)."
 msgstr ""
-"მონაცემის წერტილების რაოდენობა (%1) პარამეტრების რაოდენობაზე (%2) მეტი ან "
-"ტოლი უნდა იყოს!"
+"მონაცემის წერტილების რაოდენობა (%1) პარამეტრების რაოდენობაზე (%2) მეტი, ან "
+"ტოლი უნდა იყოს."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
@@ -11443,7 +11446,7 @@ msgstr "%1: პარამეტრების დაყენება და
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:111
 #, kde-format
 msgid "Integration requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "ინტეგრაციისთვის საჭიროა, სულ ცოტა, 2 წერტილი. მოწოდებულია, მხოლოდ, %1."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
@@ -11461,14 +11464,13 @@ msgid "Not enough data points available."
 msgstr "ხელმისაწვდომი მონაცემის წერტილები საკმარისი არაა."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
-#, fuzzy, kde-format
-#| msgid ""
-#| "interpolation failed since x data is not strictly monotonic increasing!"
+#, kde-format
 msgid ""
 "interpolation failed since x data is not strictly monotonic increasing at x_"
 "%1 = %2 (previous x_%3 = %4)."
 msgstr ""
-"ინტერპოლაცია ჩავარდა, რადგან x მონაცემები ზუსტად მონოტონურად არ იზრდება!"
+"ინტერპოლაცია ჩავარდა, რადგან x მონაცემები ზუსტად მონოტონურად არ იზრდება "
+"მნიშვნელობასთან x_%1 = %2 (წინა x_%3 = %4)."
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:69
 #, kde-format
@@ -11479,6 +11481,7 @@ msgstr "%1 პარამეტრების დაყენება და 
 #, kde-format
 msgid "Line simplification requires at least 2 points, only %1 provided."
 msgstr ""
+"ხაზი გაფართოებას, სულ ცოტა, 2 წერტილი სჭირდება. მოწოდებულია, მხოლოდ, %1."
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, kde-format
@@ -11571,17 +11574,18 @@ msgid "%1: set options and perform the smooth"
 msgstr "%1: პარამეტრების დაყენება და მოგლუვების შესრულება"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid ""
 "Number of x and y data points must be equal. x has %1 points, y has %2 "
 "points."
-msgstr "რაოდენობა x და y მონაცემის წერტილებისთვის ტოლი უნდა იყოს."
+msgstr ""
+"რაოდენობა x და y მონაცემის წერტილებისთვის ტოლი უნდა იყოს. x-ს აქვს %1 "
+"წერტილი, y-ს კი - %2."
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
 #, kde-format
 msgid "Smoothing requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "მოგლუვებას, სულ ცოტა, 2 წერტილი სჭირდება. მოწოდებულია, მხოლოდ, %1."
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333

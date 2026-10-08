@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-07 00:41+0000\n"
-"PO-Revision-Date: 2026-10-03 13:33+0300\n"
+"PO-Revision-Date: 2026-10-07 20:33+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -556,10 +556,9 @@ msgid "%1: set random values"
 msgstr "%1: встановити випадкові значення"
 
 #: src/backend/core/column/Column.cpp:1055
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgid "Path: %1"
-msgstr "Шлях:"
+msgstr "Шлях: %1"
 
 #: src/backend/core/column/Column.cpp:1056
 #: src/frontend/datasources/ImportFileWidget.cpp:1740
@@ -11157,6 +11156,7 @@ msgstr "%1: встановити параметри базової лінії і
 #, kde-format
 msgid "Baseline correction requires at least 1 point, none provided."
 msgstr ""
+"Виправлення основної лінії потребує принаймні 1 точки; не задано жодної."
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
@@ -11169,6 +11169,8 @@ msgid ""
 "Convolution requires at least 1 point per input. Signal has %1 points, "
 "response has %2 points."
 msgstr ""
+"Згортка потребує принаймні 1 точки на вхід. У сигналі є %1 точок, у "
+"відповіді є %2 точок."
 
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
@@ -11181,6 +11183,8 @@ msgid ""
 "Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
 "signal 2 has %2 points."
 msgstr ""
+"Для кореляції потрібна принаймні 1 точка на сигнал. У сигналі 1 є %1 точок, "
+"а у сигналі 2 є %2 точок."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11235,7 +11239,7 @@ msgstr "%1: встановити параметри і виконати дифе
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:112
 #, kde-format
 msgid "Differentiation requires at least 3 points, only %1 provided."
-msgstr ""
+msgstr "Диференціювання потребує принаймні 3 точок, надано ж лише %1."
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
@@ -11399,6 +11403,7 @@ msgstr "Модель не має параметрів!"
 msgid ""
 "Insufficient weight data points. X has %1 points, y-error has %2 points."
 msgstr ""
+"Недостатньо точок даних ваги. X має %1 дочок, похибка за y має %2 точок."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -11407,16 +11412,13 @@ msgid "No X data available!"
 msgstr "Немає доступних даних X!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)!"
+#, kde-format
 msgid ""
 "Number of data points (%1) must be greater than or equal to the number of "
 "parameters (%2)."
 msgstr ""
 "Кількість точок даних (%1) має бути більшою або рівною кількості параметрів "
-"(%2)!"
+"(%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
@@ -11505,7 +11507,7 @@ msgstr "%1: встановити параметри і виконати інте
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:111
 #, kde-format
 msgid "Integration requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Інтегрування потребує принаймні 2 точок, надано ж лише %1."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
@@ -11523,15 +11525,13 @@ msgid "Not enough data points available."
 msgstr "Недостатньо точок даних."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
-#, fuzzy, kde-format
-#| msgid ""
-#| "interpolation failed since x data is not strictly monotonic increasing!"
+#, kde-format
 msgid ""
 "interpolation failed since x data is not strictly monotonic increasing at x_"
 "%1 = %2 (previous x_%3 = %4)."
 msgstr ""
 "не вдалося виконати наближення, оскільки дані x не зростають строго "
-"монотонно!"
+"монотонно при x_%1 = %2 (раніше x_%3 = %4)."
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:69
 #, kde-format
@@ -11541,7 +11541,7 @@ msgstr "%1: встановити параметри і виконати спро
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:119
 #, kde-format
 msgid "Line simplification requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Спрощення лінії потребує принаймні 2 точок, надано ж лише %1."
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, kde-format
@@ -11634,17 +11634,18 @@ msgid "%1: set options and perform the smooth"
 msgstr "%1: встановити параметри і виконати згладжування"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid ""
 "Number of x and y data points must be equal. x has %1 points, y has %2 "
 "points."
-msgstr "Кількість точок даних x та y має бути однаковою."
+msgstr ""
+"Кількість точок даних x та y має бути однаковою. x має %1 точок, а y має %2 "
+"точок."
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
 #, kde-format
 msgid "Smoothing requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Згладжування потребує принаймні 2 точок, надано ж лише %1."
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333

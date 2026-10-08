@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-07 00:41+0000\n"
-"PO-Revision-Date: 2026-10-06 16:57+0200\n"
-"Last-Translator: Libor Filipek <libor.filipek@gmail.com>\n"
+"PO-Revision-Date: 2026-10-08 02:25+0200\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Poedit 3.9\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -555,10 +555,9 @@ msgid "%1: set random values"
 msgstr "%1: nastavit náhodné hodnoty"
 
 #: src/backend/core/column/Column.cpp:1055
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgid "Path: %1"
-msgstr "Cesta:"
+msgstr "Cesta: %1"
 
 #: src/backend/core/column/Column.cpp:1056
 #: src/frontend/datasources/ImportFileWidget.cpp:1740
@@ -11108,7 +11107,7 @@ msgstr "%1: nastavit základní parametry a provést korekci"
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:94
 #, kde-format
 msgid "Baseline correction requires at least 1 point, none provided."
-msgstr ""
+msgstr "Korekce základního signálu vyžaduje alespoň 1 bod, žádný nebyl zadán."
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
@@ -11121,6 +11120,8 @@ msgid ""
 "Convolution requires at least 1 point per input. Signal has %1 points, "
 "response has %2 points."
 msgstr ""
+"Konvoluce vyžaduje alespoň 1 bod na jeden vstup. Signál má %1 bodů, odezva "
+"má %2 bodů."
 
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
@@ -11133,6 +11134,8 @@ msgid ""
 "Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
 "signal 2 has %2 points."
 msgstr ""
+"Pro výpočet korelace je zapotřebí alespoň 1 bod na signál. Signál 1 má %1 "
+"bodů, signál 2 má %2 bodů."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11187,7 +11190,7 @@ msgstr "%1: nastavit parametry a provést derivaci"
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:112
 #, kde-format
 msgid "Differentiation requires at least 3 points, only %1 provided."
-msgstr ""
+msgstr "K odlišení je zapotřebí alespoň 3 body, ale je uvedeno pouze %1."
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
@@ -11351,6 +11354,7 @@ msgstr "Model nemá žádné parametry!"
 msgid ""
 "Insufficient weight data points. X has %1 points, y-error has %2 points."
 msgstr ""
+"Nedostatečný počet datových bodů pro váhu. X má %1 bodů, chyba y má %2 bodů."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -11359,15 +11363,12 @@ msgid "No X data available!"
 msgstr "Nejsou dostupná žádná data X!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)!"
+#, kde-format
 msgid ""
 "Number of data points (%1) must be greater than or equal to the number of "
 "parameters (%2)."
 msgstr ""
-"Počet datových bodů (%1) musí být větší nebo roven počtu parametrů (%2)!"
+"Počet datových bodů (%1) musí být větší nebo roven počtu parametrů (%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
@@ -11456,6 +11457,7 @@ msgstr "%1: nastavit parametry a provést integraci"
 #, kde-format
 msgid "Integration requires at least 2 points, only %1 provided."
 msgstr ""
+"Pro integraci jsou zapotřebí alespoň 2 body, ale k dispozici je pouze %1."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
@@ -11473,14 +11475,13 @@ msgid "Not enough data points available."
 msgstr "Není k dispozici dostatek datových bodů."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
-#, fuzzy, kde-format
-#| msgid ""
-#| "interpolation failed since x data is not strictly monotonic increasing!"
+#, kde-format
 msgid ""
 "interpolation failed since x data is not strictly monotonic increasing at x_"
 "%1 = %2 (previous x_%3 = %4)."
 msgstr ""
-"Interpolace se nezdařila, protože data x nejsou striktně monotónně rostoucí!"
+"Interpolace selhala, protože data x nejsou striktně monotónně rostoucí v "
+"bodě x_%1 = %2 (předchozí x_%3 = %4)."
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:69
 #, kde-format
@@ -11491,6 +11492,7 @@ msgstr "%1: nastavit parametry a provést zjednodušení čáry"
 #, kde-format
 msgid "Line simplification requires at least 2 points, only %1 provided."
 msgstr ""
+"Zjednodušení čáry vyžaduje alespoň 2 body, k dispozici je však pouze %1."
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, kde-format
@@ -11583,17 +11585,19 @@ msgid "%1: set options and perform the smooth"
 msgstr "%1: nastavit parametry a provést vyhlazení"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid ""
 "Number of x and y data points must be equal. x has %1 points, y has %2 "
 "points."
-msgstr "Počet datových bodů na osách x a y musí být stejný."
+msgstr ""
+"Počet datových bodů na osách x a y musí být stejný. Osa x má %1 bodů, osa y "
+"má %2 bodů."
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
 #, kde-format
 msgid "Smoothing requires at least 2 points, only %1 provided."
 msgstr ""
+"K vyhlazení jsou zapotřebí alespoň 2 body, k dispozici je však pouze %1."
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333
@@ -14025,9 +14029,9 @@ msgstr "Skupina: %1"
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%1 cBajt"
+msgstr[1] "%1 cBajty"
+msgstr[2] "%1 cBajtů"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1743
 #: src/frontend/datasources/ImportFileWidget.cpp:1835
@@ -14049,12 +14053,12 @@ msgstr "Soubor %1 nelze otevřít pro čtení."
 #: src/frontend/datasources/ImportFileWidget.cpp:1837
 #, kde-format
 msgid "Number of sub-directories: %1"
-msgstr ""
+msgstr "Počet podadresářů: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1840
 #, kde-format
 msgid "Couldn't read the directory %1."
-msgstr ""
+msgstr "Nelze načíst adresář %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1929
 #, kde-format
@@ -14062,37 +14066,39 @@ msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
+"Neplatný počet řádků. Zkontrolujte prosím 'Konec řádku' a 'Začátek řádku'. "
+"Hodnota 'Konec řádku' musí být větší než hodnota 'Začátek řádku' nebo -1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
 msgid "Initialization failed: %1"
-msgstr ""
+msgstr "Inicializace se nezdařila: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1965
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr ""
+msgstr "Nepodařilo se připojit k místnímu soketu: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1982
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr ""
+msgstr "Nepodařilo se připojit k TCP soketu. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1988
 #: src/frontend/datasources/ImportFileWidget.cpp:2017
 #, kde-format
 msgid "Socket operation timed out."
-msgstr ""
+msgstr "Došlo k vypršení časového limitu operace se soketem."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2002
 #, kde-format
 msgid "Not ready for read after 2s:"
-msgstr ""
+msgstr "Není připraveno ke čtení po 2 sekundách:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2021
 #, kde-format
 msgid "Unable to bind: "
-msgstr ""
+msgstr "Nelze navázat: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2038
 #, kde-format
@@ -14102,17 +14108,17 @@ msgstr "Chyba analýzy: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:2040
 #, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr ""
+msgstr "Není připraveno ke čtení po 2 sekundách"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2044
 #, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr ""
+msgstr "Nepodařilo se otevřít sériový port. Chyba: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2063
 #, kde-format
 msgid "No data arrived yet for the selected topic"
-msgstr ""
+msgstr "K vybranému tématu zatím nejsou k dispozici žádné údaje"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2349
 #, kde-format
@@ -14122,17 +14128,17 @@ msgstr "Není to soubor HDF5: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:2407
 #, kde-format
 msgid "Parsing ODS file %1 failed."
-msgstr ""
+msgstr "Zpracování souboru ODS %1 se nezdařilo."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2819
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
-msgstr ""
+msgstr "Nepodařilo se přihlásit k odběru všech dostupných témat."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2827
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
-msgstr ""
+msgstr "Nepodařilo se připojit k '%1'. Chyba %2."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2849
 #, kde-format
@@ -14152,17 +14158,17 @@ msgstr "Špatné uživatelské jméno nebo heslo"
 #: src/frontend/datasources/ImportFileWidget.cpp:3022
 #, kde-format
 msgid "The client ID wasn't accepted"
-msgstr ""
+msgstr "ID klienta nebylo přijato"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:3026
 #, kde-format
 msgid "The broker %1 couldn't be reached."
-msgstr ""
+msgstr "Broker %1 nebyl k dispozici."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:3029
 #, kde-format
 msgid "The client is not authorized to connect."
-msgstr ""
+msgstr "Klient nemá oprávnění k připojení."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:3032
 #, kde-format
@@ -14178,7 +14184,7 @@ msgstr "Vyskytla se chyba."
 #: src/frontend/datasources/ImportFileWidget.cpp:3055
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
-msgstr ""
+msgstr "Došlo k vypršení časového limitu při připojování k '%1:%2'."
 
 #: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:36
 #, kde-format
@@ -14204,7 +14210,7 @@ msgstr "Zobrazit následující sady dat"
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr ""
+msgstr "Stáhnout aktuální datový soubor k náhledu a importu"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:131
@@ -14237,7 +14243,7 @@ msgstr "Nelze nalézt soubory .csv v %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Multi-Layer Graphs"
-msgstr ""
+msgstr "Import vícevrstvých grafů Origin"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:26
 #: src/frontend/datasources/ImportProjectDialog.cpp:169
@@ -14252,18 +14258,27 @@ msgid ""
 "a new coordinate system (data range) on the same plot area is created for "
 "every layer.</li></ul>"
 msgstr ""
+"V programu Origin se více vrstev používá buď k vytvoření více grafů, nebo k "
+"zobrazení více os na jednom grafu (další podrobnosti najdete v <a href="
+"\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">dokumentaci k "
+"programu Origin</a>).<br>Program LabPlot dokáže zpracovat pouze jeden typ "
+"najednou.<br><br>Určete, jakým způsobem se mají vícevrstvé grafy importovat "
+"do vybraného projektu:<ul><li>Jako oblast grafu – pro každou vrstvu se "
+"vytvoří nová oblast grafu.</li><li>Jako souřadnicový systém – pro každou "
+"vrstvu se vytvoří nový souřadnicový systém (rozsah dat) ve stejné oblasti "
+"grafu.</li></ul>"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:38
 #: src/frontend/datasources/ImportProjectDialog.cpp:159
 #, kde-format
 msgid "As Plot Area"
-msgstr ""
+msgstr "Jako oblast grafu"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:39
 #: src/frontend/datasources/ImportProjectDialog.cpp:160
 #, kde-format
 msgid "As Coordinate System"
-msgstr ""
+msgstr "Jako souřadnicový systém"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:83
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
@@ -14275,18 +14290,18 @@ msgstr "Přidat novou složku"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
-msgstr ""
+msgstr "Importovat projekt LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:111
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
-msgstr ""
+msgstr "Importovat projekt Origin"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:121
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
-msgstr ""
+msgstr "Zadejte soubor, ze kterého má být obsah projektu importován."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:125
 #, kde-format
@@ -14296,6 +14311,11 @@ msgid ""
 "objects will be automatically selected.\n"
 "To import the whole project, select the top-level project node."
 msgstr ""
+"Vyberte jeden nebo více objektů, které chcete importovat do aktuálního "
+"projektu.\n"
+"Upozornění: automaticky budou vybrány všechny podřízené objekty vybraných "
+"objektů i všechny závislé objekty.\n"
+"Chcete-li importovat celý projekt, vyberte uzel projektu na nejvyšší úrovni."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:130
 #, kde-format
@@ -14303,11 +14323,13 @@ msgid ""
 "Specify the target folder in the current project where the selected objects "
 "have to be imported into."
 msgstr ""
+"Zadejte cílovou složku v aktuálním projektu, do které mají být vybrané "
+"objekty importovány."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
-msgstr ""
+msgstr "Uveďte, jak importovat vícevrstvé grafy."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:271
 #, kde-format
@@ -14317,62 +14339,62 @@ msgid ""
 msgid_plural ""
 "The objects listed below already exist in target folder and will be "
 "overwritten:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Níže uvedený objekt již v cílové složce existuje a bude přepsán:"
+msgstr[1] "Níže uvedené objekty již v cílové složce existují a budou přepsány:"
+msgstr[2] "Níže uvedené objekty již v cílové složce existují a budou přepsány:"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:277
 #, kde-format
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Chcete pokračovat?"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:280
 #, kde-format
 msgid "Override existing objects?"
-msgstr ""
+msgstr "Přepsat stávající objekty?"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:312
 #, kde-format
 msgid "Project data imported in %1 seconds."
-msgstr ""
+msgstr "Data projektu byla naimportována za %1 sekund."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:406
 #, kde-format
 msgid "Close the dialog and import the selected objects."
-msgstr ""
+msgstr "Zavřít dialogové okno a importovat vybrané objekty."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:408
 #, kde-format
 msgid "Select object(s) to be imported."
-msgstr ""
+msgstr "Vyberte objekty, které chcete importovat."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:436
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
-msgstr ""
+msgstr "Otevřít projekt LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
 #: src/frontend/MainWin.cpp:725
 #, kde-format
 msgid "LabPlot Projects (%1)"
-msgstr ""
+msgstr "Projekty LabPlot (%1)"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:442
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr ""
+msgstr "Otevřít projekt Origin OPJ"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:444
 #, kde-format
 msgid "Origin OPJ Projects (%1)"
-msgstr ""
+msgstr "Projekty Origin OPJ (%1)"
 
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:118
 #, kde-format
 msgid "Data imported in %1 seconds."
-msgstr ""
+msgstr "Data byla importována za %1 sekund."
 
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:141
 #, kde-format
@@ -14380,6 +14402,8 @@ msgid ""
 "Select a valid database object (table or query result set) that has to be "
 "imported."
 msgstr ""
+"Vyberte platný databázový objekt (tabulku nebo sadu výsledků dotazu), který "
+"má být importován."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:35
 #, kde-format
@@ -14389,7 +14413,7 @@ msgstr "Tabulka"
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:36
 #, kde-format
 msgid "Custom Query"
-msgstr ""
+msgstr "Vlastní dotaz"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:39
 #, kde-format
@@ -14401,91 +14425,94 @@ msgstr "Spravovat připojení"
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
+"Nelze najít databázový soubor '%1'. Zkontrolujte prosím nastavení připojení."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:212
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
+"Nepodařilo se připojit k databázi '%1'. Zkontrolujte prosím nastavení "
+"připojení."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:267
 #, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr ""
+msgstr "Nepodařilo se provést dotaz pro náhled"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:340
 #, kde-format
 msgid "Refresh the data preview of the selected table"
-msgstr ""
+msgstr "Obnovit náhled dat vybrané tabulky"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:346
 #, kde-format
 msgid "Execute the query and preview its result"
-msgstr ""
+msgstr "Spustit dotaz a zobrazit náhled jeho výsledku"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:465
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:467
 #, kde-format
 msgid "Failed to execute the query"
-msgstr ""
+msgstr "Provedení dotazu se nezdařilo"
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
 #, kde-format
 msgctxt "@title:window"
 msgid "MQTT Connections"
-msgstr ""
+msgstr "Připojení MQTT"
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "MQTT Connections  [Changed]"
-msgstr ""
+msgstr "Připojení MQTT  [Změněno]"
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:39
 #, kde-format
 msgid "Add new MQTT connection"
-msgstr ""
+msgstr "Přidat nové připojení MQTT"
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:40
 #, kde-format
 msgid "Remove selected MQTT connection"
-msgstr ""
+msgstr "Odstranit vybrané připojení MQTT"
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:60
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:347
 #, kde-format
 msgid "Please set a password."
-msgstr ""
+msgstr "Zadejte prosím heslo."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:63
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:327
 #, kde-format
 msgid "Please set a username."
-msgstr ""
+msgstr "Zadejte prosím uživatelské jméno."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:66
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:367
 #, kde-format
 msgid "Please set a client ID."
-msgstr ""
+msgstr "Zadejte prosím ID klienta."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:67
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:169
 #, kde-format
 msgid "Please set a valid host name."
-msgstr ""
+msgstr "Zadejte prosím platný název hostitele."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:68
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:132
 #, kde-format
 msgid "Please set a valid name."
-msgstr ""
+msgstr "Zadejte prosím platný název."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:157
 #, kde-format
 msgid "Please provide a unique name."
-msgstr ""
+msgstr "Zadejte prosím jedinečný název."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:187
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:188
@@ -14493,48 +14520,50 @@ msgstr ""
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:227
 #, kde-format
 msgid "Host name and port must be unique."
-msgstr ""
+msgstr "Název hostitele a port musí být jedinečné."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:208
 #, kde-format
 msgid "Please set a valid port."
-msgstr ""
+msgstr "Zadejte prosím platný port."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:642
 #, kde-format
 msgid "Connection to the broker '%1:%2' was successful."
-msgstr ""
+msgstr "Připojení k brokerovi '%1:%2' proběhlo úspěšně."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:656
 #, kde-format
 msgid "Failed to connect to the broker '%1:%2'."
-msgstr ""
+msgstr "Nepodařilo se navázat připojení k brokerovi '%1:%2'."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:670
 #, kde-format
 msgid ""
 "Disconnected from the broker '%1:%2' before the connection was successful."
 msgstr ""
+"Došlo k odpojení od brokera '%1:%2' ještě předtím, než bylo připojení "
+"navázáno."
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:39
 #, kde-format
 msgid "Subscribe selected topics"
-msgstr ""
+msgstr "Odebírat vybraná témata"
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:41
 #, kde-format
 msgid "Unsubscribe selected topics"
-msgstr ""
+msgstr "Odhlásit odběr vybraných témat"
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:47
 #, kde-format
 msgid "Enter the name of the topic to navigate to it."
-msgstr ""
+msgstr "Zadejte název tématu, abyste se k němu dostali."
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:48
 #, kde-format
 msgid "Enter the name of the topic"
-msgstr ""
+msgstr "Zadejte název tématu"
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:57
 #, kde-format
@@ -14543,6 +14572,9 @@ msgid ""
 "guarantee of the message delivery:<ul><li>0 - deliver at most once</li><li>1 "
 "- deliver at least once</li><li>2 - deliver exactly once</li></ul>"
 msgstr ""
+"Nastavte kvalitu služby (QoS) pro odběr, abyste definovali záruku doručení "
+"zprávy:<ul><li>0 – doručit nanejvýš jednou</li><li>1 – doručit alespoň "
+"jednou</li><li>2 – doručit přesně jednou</li></ul>"
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
@@ -14554,12 +14586,12 @@ msgstr "Varování"
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
-msgstr ""
+msgstr "Toto téma již máte v odběru"
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #, kde-format
 msgid "You already subscribed to this topic"
-msgstr ""
+msgstr "Toto téma jste si již přihlásili k odběru"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:980
@@ -14583,32 +14615,32 @@ msgstr "Hodnoty"
 #: src/frontend/datasources/OdsOptionsWidget.cpp:19
 #, kde-format
 msgid "Data sheets"
-msgstr ""
+msgstr "Datové listy"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:22
 #, kde-format
 msgid "Histograms"
-msgstr ""
+msgstr "Histogramy"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
 msgid "Trees and Tuples"
-msgstr ""
+msgstr "Stromy a výskyty"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:89
 #, kde-format
 msgid "Histogram Data"
-msgstr ""
+msgstr "Data histogramu"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:91
 #, kde-format
 msgid "Bin Center"
-msgstr ""
+msgstr "Centrum seskupení"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:95
 #, kde-format
 msgid "Low Edge"
-msgstr "Dlouhá strana"
+msgstr "Dolní hrana"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:102
 #, kde-format
@@ -14618,7 +14650,7 @@ msgstr "Chyba"
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
 msgid "Branch/Leaf"
-msgstr ""
+msgstr "Větev/list"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
@@ -14628,7 +14660,7 @@ msgstr "Velikost pole"
 #: src/frontend/datasources/XLSXOptionsWidget.cpp:24
 #, kde-format
 msgid "Data regions"
-msgstr ""
+msgstr "Datové oblasti"
 
 #. i18n("Center") ); // must not updated
 #: src/frontend/dockwidgets/AxisDock.cpp:225
@@ -14672,12 +14704,12 @@ msgstr "Na střed"
 #: src/frontend/ui/datasources/matiooptionswidget.ui:57
 #, kde-format
 msgid "Logical"
-msgstr "Logické"
+msgstr "Logicky"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:233
 #, kde-format
 msgid "Auto Data"
-msgstr ""
+msgstr "Automatická data"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #, kde-format
@@ -14688,6 +14720,11 @@ msgid ""
 "points, respectively</li><li>Custom - manually specify the start and end "
 "points of the axis</li></ul>"
 msgstr ""
+"Rozsah osy:<ul><li>Automaticky – automatické nastavení počátečního a "
+"koncového bodu osy podle aktuálního rozsahu grafu</li><li>Automatická data – "
+"automatické nastavení počátečního a koncového bodu osy podle minimálního, "
+"resp. maximálního vykresleného datového bodu</li><li>Vlastní – ruční zadání "
+"počátečního a koncového bodu osy</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:246
 #, kde-format
@@ -14696,41 +14733,44 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Je-li zapnuto: Použije se číslo hlavní značky jako základ pro určení nového "
+"počtu značek, aby hodnoty vypadaly hezky. Počet značek se může lišit od "
+"dříve nastaveného počtu."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:259
 #, kde-format
 msgid "No arrow"
-msgstr ""
+msgstr "Žádná šipka"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:260
 #, kde-format
 msgid "Simple, Small"
-msgstr ""
+msgstr "Jednoduchá, malá"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:261
 #, kde-format
 msgid "Simple, Big"
-msgstr ""
+msgstr "Jednoduchá, velká"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
 msgid "Filled, Small"
-msgstr ""
+msgstr "Plná, malá"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:263
 #, kde-format
 msgid "Filled, Big"
-msgstr ""
+msgstr "Plná, velká"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:264
 #, kde-format
 msgid "Semi-filled, Small"
-msgstr ""
+msgstr "Poloplná, malá"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:265
 #, kde-format
 msgid "Semi-filled, Big"
-msgstr ""
+msgstr "Poloplná, velká"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:270
 #: src/frontend/dockwidgets/AxisDock.cpp:555
@@ -14787,7 +14827,7 @@ msgstr "Ven"
 #: src/frontend/dockwidgets/AxisDock.cpp:294
 #, kde-format
 msgid "In and Out"
-msgstr ""
+msgstr "Dovnitř a ven"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:281
 #: src/frontend/dockwidgets/AxisDock.cpp:297
@@ -14808,16 +14848,14 @@ msgstr "Rozestupy"
 #: src/frontend/dockwidgets/AxisDock.cpp:283
 #: src/frontend/dockwidgets/AxisDock.cpp:299
 #: src/frontend/dockwidgets/AxisDock.cpp:309
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Values"
-msgstr "Vlastní sloupec"
+msgstr "Vlastní hodnoty sloupců"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:284
-#, fuzzy, kde-format
-#| msgid "Custom Column"
+#, kde-format
 msgid "Custom Column Labels"
-msgstr "Vlastní sloupec"
+msgstr "Vlastní popisky sloupců"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:287
 #, kde-format
@@ -14835,25 +14873,24 @@ msgid "No labels"
 msgstr "Žádné popisky"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:308
-#, fuzzy, kde-format
-#| msgid "Const Values"
+#, kde-format
 msgid "Position Values"
-msgstr "Hodnoty konstant"
+msgstr "Hodnoty pozic"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:313
 #, kde-format
 msgid "Decimal notation"
-msgstr ""
+msgstr "Desítkový zápis"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:314
 #, kde-format
 msgid "Scientific notation"
-msgstr ""
+msgstr "Vědecký zápis"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:315
 #, kde-format
 msgid "Scientific E notation"
-msgstr ""
+msgstr "Vědecký E zápis"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:316
 #, kde-format
@@ -14873,12 +14910,12 @@ msgstr "Mocniny e"
 #: src/frontend/dockwidgets/AxisDock.cpp:319
 #, kde-format
 msgid "Multiples of π"
-msgstr ""
+msgstr "Násobky π"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:320
 #, kde-format
 msgid "Angle (DMS)"
-msgstr ""
+msgstr "Úhel (DMS)"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:323
 #, kde-format

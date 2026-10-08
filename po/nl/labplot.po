@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-07 00:41+0000\n"
-"PO-Revision-Date: 2026-10-03 11:44+0200\n"
+"PO-Revision-Date: 2026-10-07 13:42+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -548,10 +548,9 @@ msgid "%1: set random values"
 msgstr "%1: willekeurige waarden instellen"
 
 #: src/backend/core/column/Column.cpp:1055
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgid "Path: %1"
-msgstr "Pad:"
+msgstr "Pad: %1"
 
 #: src/backend/core/column/Column.cpp:1056
 #: src/frontend/datasources/ImportFileWidget.cpp:1740
@@ -8370,7 +8369,7 @@ msgstr "Statistische conclusie"
 #: src/backend/statistics/HypothesisTest.cpp:722
 #, kde-format
 msgid "No variable columns provided."
-msgstr "Geen variabele kolommen geleverd."
+msgstr "Geen variabele kolommen opgegeven."
 
 #: src/backend/statistics/HypothesisTest.cpp:1012
 #, kde-format
@@ -8870,7 +8869,7 @@ msgstr "%1: zet iteraties voor MSTL"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:488
 #, kde-format
 msgid "No valid data provided."
-msgstr "Geen geldige gegevens geleverd."
+msgstr "Geen geldige gegevens opgegeven."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:513
 #, kde-format
@@ -10624,7 +10623,7 @@ msgstr "%1: randkleur van labels zetten"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
-msgstr "Niet genoeg gegevens geleverd."
+msgstr "Niet genoeg gegevens opgegeven."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
@@ -11109,7 +11108,7 @@ msgstr "%1: stel opties voor basislijn in en pas de correctie toe"
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:94
 #, kde-format
 msgid "Baseline correction requires at least 1 point, none provided."
-msgstr ""
+msgstr "Basislijncorrectie vereist minstens 1 punt, geen opgegeven."
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
@@ -11122,6 +11121,8 @@ msgid ""
 "Convolution requires at least 1 point per input. Signal has %1 points, "
 "response has %2 points."
 msgstr ""
+"Voor convolutie is ten minste 1 punt per invoer vereist. Het signaal heeft "
+"%1 punten, de respons heeft %2 punten."
 
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
@@ -11134,6 +11135,8 @@ msgid ""
 "Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
 "signal 2 has %2 points."
 msgstr ""
+"Voor correlatie is ten minste 1 punt per signaal vereist. Signaal 1 heeft %1 "
+"punten, signaal 2 heeft %2 punten."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11189,6 +11192,8 @@ msgstr "%1: stel opties in en doe de differentiatie"
 #, kde-format
 msgid "Differentiation requires at least 3 points, only %1 provided."
 msgstr ""
+"Voor differentiatie zijn minstens 3 punten vereist; er is/zijn er slechts %1 "
+"opgegeven."
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
@@ -11352,6 +11357,8 @@ msgstr "Model heeft geen parameters!"
 msgid ""
 "Insufficient weight data points. X has %1 points, y-error has %2 points."
 msgstr ""
+"Onvoldoende gegevenspunten voor gewicht. X heeft %1 punten, y-fout heeft %2 "
+"punten."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -11360,15 +11367,12 @@ msgid "No X data available!"
 msgstr "Geen X-gegevens beschikbaar!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)!"
+#, kde-format
 msgid ""
 "Number of data points (%1) must be greater than or equal to the number of "
 "parameters (%2)."
 msgstr ""
-"Het aantal gegeven punten (%1) moet groter of gelijk zijn aan het aantal "
+"Aantal gegevenspunten (%1) moet groter of gelijk zijn aan het aantal "
 "parameters (%2)!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
@@ -11458,6 +11462,8 @@ msgstr "%1: stel opties in en doe de integratie"
 #, kde-format
 msgid "Integration requires at least 2 points, only %1 provided."
 msgstr ""
+"Voor integratie zijn ten minste 2 punten vereist; er is er slechts %1 "
+"opgegeven."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
@@ -11475,13 +11481,13 @@ msgid "Not enough data points available."
 msgstr "Niet genoeg waarden beschikbaar."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
-#, fuzzy, kde-format
-#| msgid ""
-#| "interpolation failed since x data is not strictly monotonic increasing!"
+#, kde-format
 msgid ""
 "interpolation failed since x data is not strictly monotonic increasing at x_"
 "%1 = %2 (previous x_%3 = %4)."
-msgstr "interpoleren niet gelukt omdat x-gegevens niet monotoon stijgend zijn!"
+msgstr ""
+"interpoleren niet gelukt omdat x-gegevens niet strict monotoon stijgend zijn "
+"bij x_%1 = %2 (eerder x_%3 = %4)."
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:69
 #, kde-format
@@ -11492,6 +11498,8 @@ msgstr "%1: stel opties in en doe de lijnvereenvoudiging"
 #, kde-format
 msgid "Line simplification requires at least 2 points, only %1 provided."
 msgstr ""
+"Voor lijnvereenvoudiging zijn ten minste 2 punten vereist; er is er slechts "
+"%1 opgegeven."
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, kde-format
@@ -11584,17 +11592,20 @@ msgid "%1: set options and perform the smooth"
 msgstr "%1: opties instellen en kromme glad maken"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid ""
 "Number of x and y data points must be equal. x has %1 points, y has %2 "
 "points."
-msgstr "Er moeten evenveel x- en y-waarden zijn."
+msgstr ""
+"Het aantal x- en y-gegevenspunten moet gelijk zijn. x heeft %1 punten, y "
+"heeft %2 punten."
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
 #, kde-format
 msgid "Smoothing requires at least 2 points, only %1 provided."
 msgstr ""
+"Voor afvlakking zijn ten minste 2 punten vereist; er is er slechts %1 "
+"opgegeven."
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333
@@ -13112,7 +13123,7 @@ msgid ""
 "converted to DateTime.</td></tr><tr><td>%7</td><td>A text.</td></tr></table>"
 msgstr ""
 "Indien niet leeg, moet het aantal kolommen overeenkomen met het aantal "
-"kolomnamen indien geleverd en het moet overeenkomen met het aantal kolommen "
+"kolomnamen indien opgegeven en het moet overeenkomen met het aantal kolommen "
 "in het geïmporteerde bestand. <br>Gegevenstypen:<table><tr><td>%1</"
 "td><td>Geheel getal met 32 bits grootte (−2.147.483.648 .. 2.147.483.647).</"
 "td></tr><tr><td>%2</td><td>Geheel getal met 64 bits grootte "
@@ -13591,7 +13602,7 @@ msgstr ""
 #: src/frontend/datasources/ImportFileDialog.cpp:428
 #, kde-format
 msgid "No file provided for import."
-msgstr "Geen te importeren bestand geleverd."
+msgstr "Geen te importeren bestand opgegeven."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:453
 #, kde-format
@@ -15775,7 +15786,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
 #, kde-format
 msgid "Invalid variable name provided"
-msgstr "Ongeldige variabelenaam geleverd"
+msgstr "Ongeldige variabelenaam opgegeven"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
@@ -16297,7 +16308,7 @@ msgid ""
 "percentiles of the provided data"
 msgstr ""
 "Distributie gebruikt om de percentages te berekenen om te vergelijken met de "
-"percentages van de geleverde gegevens"
+"percentages van de opgegeven gegevens"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:126
 #, kde-format
@@ -18908,7 +18919,7 @@ msgstr "Selecteer zoekpad voor sjablonen"
 #: src/frontend/PlotTemplateDialog.cpp:143
 #, kde-format
 msgid "No template path provided."
-msgstr "Geen sjabloonpad geleverd."
+msgstr "Geen sjabloonpad opgegeven."
 
 #: src/frontend/PlotTemplateDialog.cpp:150
 #, kde-format
@@ -19574,7 +19585,7 @@ msgstr "Verhouding: %1"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1058
 #, kde-format
 msgid "Wrong numeric value provided."
-msgstr "Verkeerde numerieke waarde geleverd."
+msgstr "Verkeerde numerieke waarde opgegeven."
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1243
 #, kde-format
@@ -22186,7 +22197,7 @@ msgstr "Geheel getal importeren als dubbel"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:97
 #, kde-format
 msgid "Base year when only 2 digits are provided for the year"
-msgstr "Basis jaar wanneer slechts 2 cijfers zijn geleverd voor het jaar"
+msgstr "Basis jaar wanneer slechts 2 cijfers zijn opgegeven voor het jaar"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
