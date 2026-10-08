@@ -159,19 +159,10 @@ void Script::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	const auto group = Settings::group(QStringLiteral("ScriptEditor"));
-	if (group.readEntry(QStringLiteral("SaveOutput"), true)) {
-		QString outputHtml;
-		if (m_view) {
-			if (!m_view->outputText().isEmpty())
-				outputHtml = m_view->outputHtml();
-		} else {
-			outputHtml = m_outputHtml;
-		}
-		if (!outputHtml.isEmpty()) {
-			writer->writeStartElement(QStringLiteral("output"));
-			writer->writeCharacters(outputHtml);
-			writer->writeEndElement();
-		}
+	if (group.readEntry(QStringLiteral("SaveOutput"), true) && !m_outputHtml.isEmpty()) {
+		writer->writeStartElement(QStringLiteral("output"));
+		writer->writeCharacters(m_outputHtml);
+		writer->writeEndElement();
 	}
 
 	writer->writeEndElement(); // close "script" section
@@ -234,10 +225,12 @@ void Script::runScript() {
 	m_kTextEditorDocument->clearMarks();
 	m_scriptRuntime->clearErrorLine();
 	scriptView->clearOutput();
+	m_outputHtml.clear();
 
 	// connect to the writeOutput signal from the script runtime
-	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [scriptView](bool isErr, const QString& msg) {
+	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [this, scriptView](bool isErr, const QString& msg) {
 		scriptView->writeOutput(isErr, msg); // write the output to the scripteditor output
+		m_outputHtml = scriptView->outputHtml(); // sync backend copy
 	});
 
 	// since we're potentially creating multiple new objects or modifying existing objects when executing the script,
