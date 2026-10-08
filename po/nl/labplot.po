@@ -1,22 +1,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2014, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2014, 2016, 2018-2026 Freek de Kruijf <freekdekruijf@kde.nl>
 # Jaap Woldringh <jjhwoldringh@kde.nl>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2025-07-23 12:22+0200\n"
+"PO-Revision-Date: 2026-10-07 13:42+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -9158,7 +9158,7 @@ msgstr "%1: randkleur van labels zetten"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:878
 #, kde-format
 msgid "Not enough data provided."
-msgstr "Niet genoeg gegevens geleverd."
+msgstr "Niet genoeg gegevens opgegeven."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:981
 #, kde-format
@@ -11325,7 +11325,7 @@ msgstr ""
 #: src/frontend/datasources/ImportFileDialog.cpp:399
 #, kde-format
 msgid "No file provided for import."
-msgstr "Geen te importeren bestand geleverd."
+msgstr "Geen te importeren bestand opgegeven."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:424
 #, kde-format
@@ -13687,7 +13687,7 @@ msgid ""
 "percentiles of the provided data"
 msgstr ""
 "Distributie gebruikt om de percentages te berekenen om te vergelijken met de "
-"percentages van de geleverde gegevens"
+"percentages van de opgegeven gegevens"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:226
 #, kde-format
@@ -16662,7 +16662,7 @@ msgstr "Verhouding: %1"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1064
 #, kde-format
 msgid "Wrong numeric value provided."
-msgstr "Verkeerde numerieke waarde geleverd."
+msgstr "Verkeerde numerieke waarde opgegeven."
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1251
 #, kde-format
@@ -19339,7 +19339,7 @@ msgstr "Geheel getal importeren als dubbel"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:97
 #, kde-format
 msgid "Base year when only 2 digits are provided for the year"
-msgstr "Basis jaar wanneer slechts 2 cijfers zijn geleverd voor het jaar"
+msgstr "Basis jaar wanneer slechts 2 cijfers zijn opgegeven voor het jaar"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116

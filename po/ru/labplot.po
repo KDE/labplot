@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-10-04 10:09+0200\n"
+"PO-Revision-Date: 2026-10-07 08:28+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -9216,7 +9216,7 @@ msgstr "%1: задание цвета границы подписей"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:878
 #, kde-format
 msgid "Not enough data provided."
-msgstr "Недостаточно предоставлено данных."
+msgstr "Предоставлено недостаточно данных."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:981
 #, kde-format
@@ -14280,7 +14280,7 @@ msgstr "Автоматически (5x точек данных)"
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:80
 #, kde-format
 msgid "Multiple of data points"
-msgstr "Несколько точек данных"
+msgstr "Кратно числу точек данных"
 
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:91
 #, kde-format
