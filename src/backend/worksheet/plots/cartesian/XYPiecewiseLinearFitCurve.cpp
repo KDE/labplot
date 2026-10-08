@@ -183,7 +183,7 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		validPoints++;
 	}
 
-	if (validPoints < 2 * fitData.minSegmentSize) {
+	if (validPoints < 0 || validPoints < 2 * fitData.minSegmentSize) {
 		fitResult.status = QStringLiteral("Not enough valid data points in range");
 		return false;
 	}
@@ -208,10 +208,8 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 
 	fitResult.numSegments = numChangepoints + 1;
 	fitResult.changepoints.resize(numChangepoints);
-	for (size_t i = 0; i < numChangepoints; ++i) {
-		qDebug() << "Changepoint" << i << ":" << changepoints[i] << "x =" << xData[changepoints[i]];
+	for (size_t i = 0; i < numChangepoints; ++i)
 		fitResult.changepoints[i] = xData[changepoints[i]]; // Store X-value, not index
-	}
 
 	fitResult.segmentResults.resize(fitResult.numSegments);
 

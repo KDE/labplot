@@ -702,19 +702,19 @@ double rsample(const std::string_view& variable, const std::weak_ptr<Payload> pa
 }
 
 void ExpressionParser::setSpecialFunctionValuePayload(const char* function_name, func_tValuePayload funct, std::shared_ptr<Payload> payload) {
-	Parser::set_specialfunctionValuePayload(function_name, funct, payload);
+	Parser::set_specialfunctionValuePayload(function_name, std::move(funct), std::move(payload));
 }
 
 void ExpressionParser::setSpecialFunction2ValuePayload(const char* function_name, func_t2ValuePayload funct, std::shared_ptr<Payload> payload) {
-	Parser::set_specialfunction2ValuePayload(function_name, funct, payload);
+	Parser::set_specialfunction2ValuePayload(function_name, std::move(funct), std::move(payload));
 }
 
 void ExpressionParser::setSpecialFunctionVariablePayload(const char* function_name, func_tVariablePayload funct, std::shared_ptr<Payload> payload) {
-	Parser::set_specialfunctionVariablePayload(function_name, funct, payload);
+	Parser::set_specialfunctionVariablePayload(function_name, std::move(funct), std::move(payload));
 }
 
 void ExpressionParser::setSpecialFunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload funct, std::shared_ptr<Payload> payload) {
-	Parser::set_specialfunctionValueVariablePayload(function_name, funct, payload);
+	Parser::set_specialfunctionValueVariablePayload(function_name, std::move(funct), std::move(payload));
 }
 
 /*!

@@ -1783,13 +1783,10 @@ void AxisPrivate::retransformTicks() {
 	// on the position relative to the center.
 	bool valid = true;
 	double center_other_dim = std::nan("0");
-	if (orientation == Axis::Orientation::Horizontal) {
+	if (orientation == Axis::Orientation::Horizontal)
 		center_other_dim = plot()->range(Dimension::Y, cs->index(Dimension::Y)).center();
-		valid = q->cSystem->mapYLogicalToScene(center_other_dim);
-	} else {
+	else
 		center_other_dim = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
-		valid = q->cSystem->mapXLogicalToScene(center_other_dim);
-	}
 
 	const bool dateTimeSpacing = !q->isNumeric() && q->scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
 	DateTime::DateTime dt;

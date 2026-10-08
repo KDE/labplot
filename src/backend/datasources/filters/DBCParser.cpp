@@ -91,7 +91,7 @@ void DbcParser::getSignals(const QVector<uint32_t>& ids, PrefixType p, SuffixTyp
 					for (const auto& svdescription : signal_.value_descriptions) {
 						vd.push_back({svdescription.value, QString::fromStdString(svdescription.description)});
 					}
-					out.value_descriptions.push_back({vd});
+					out.value_descriptions.push_back({std::move(vd)});
 				}
 				break;
 			}

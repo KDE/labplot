@@ -237,7 +237,7 @@ std::shared_ptr<arrow::Table> ParquetFilterPrivate::readArrowTable(const QString
 			q->setLastError(i18n("Failed to read Parquet table: %1", QString::fromStdString(status.ToString())));
 			return nullptr;
 		}
-		table = temp_table;
+		table = std::move(temp_table);
 #else
 		// Arrow >= 0.21: Result-based API
 		INFO("Using new Arrow API")

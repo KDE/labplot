@@ -73,7 +73,7 @@ private:
 class AutoRestore {
 public:
 	AutoRestore(bool startValue, std::function<void(bool)> func)
-		: m_function(func)
+		: m_function(std::move(func))
 		, m_startValue(startValue) {
 		m_function(m_startValue);
 	}

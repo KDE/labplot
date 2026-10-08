@@ -789,7 +789,7 @@ MstlResult<T> MstlParams::fit(const T* series, size_t series_size, const size_t*
     }
 
     if (swin_.has_value()) {
-        auto swin = swin_.value();
+        const auto& swin = swin_.value();
         if (swin.size() != periods_size) {
             throw std::invalid_argument("seasonal_lengths must have the same length as periods");
         }
@@ -807,9 +807,9 @@ MstlResult<T> MstlParams::fit(const T* series, size_t series_size, const size_t*
     );
 
     return MstlResult<T> {
-        seasonal,
-        trend,
-        remainder
+        std::move(seasonal),
+        std::move(trend),
+        std::move(remainder)
     };
 }
 
