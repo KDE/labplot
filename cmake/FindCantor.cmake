@@ -38,8 +38,6 @@ endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Cantor
-    FOUND_VAR
-        Cantor_FOUND
     REQUIRED_VARS
         Cantor_LIBRARIES
         Cantor_INCLUDE_DIR

@@ -32,8 +32,6 @@ set(netCDF_VERSION ${PC_netCDF_VERSION})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(netCDF
-    FOUND_VAR
-        netCDF_FOUND
     REQUIRED_VARS
         netCDF_LIBRARIES
         netCDF_INCLUDE_DIR

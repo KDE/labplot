@@ -10,8 +10,6 @@ find_path(MATIO_INCLUDE_DIR matio.h)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Matio
-    FOUND_VAR
-    	MATIO_FOUND
     REQUIRED_VARS
         MATIO_LIBRARIES
 	MATIO_INCLUDE_DIR

@@ -10,8 +10,6 @@ find_path(QXLSX_INCLUDE_DIR xlsxdocument.h PATH_SUFFIXES QXlsxQt6)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(QXlsx
-    FOUND_VAR
-    	QXLSX_FOUND
     REQUIRED_VARS
         QXLSX_LIBRARIES
 	QXLSX_INCLUDE_DIR
