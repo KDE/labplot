@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-07 00:41+0000\n"
+"POT-Creation-Date: 2026-10-09 00:42+0000\n"
 "PO-Revision-Date: 2026-10-07 07:38+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -7566,28 +7566,28 @@ msgstr "Trikubično"
 msgid "Python file (*.py)"
 msgstr "Pythonova datoteka (*.py)"
 
-#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:173 src/backend/script/Script.cpp:366
 #, kde-format
 msgid "no script element found"
 msgstr "ni najdenega elementa skripta"
 
-#: src/backend/script/Script.cpp:247
+#: src/backend/script/Script.cpp:240
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: poženi %2 skript"
 
-#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
+#: src/backend/script/Script.cpp:346 src/backend/script/Script.cpp:351
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:353
+#: src/backend/script/Script.cpp:346
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Skripta ni bilo mogoče zagnati."
 
-#: src/backend/script/Script.cpp:358
+#: src/backend/script/Script.cpp:351
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript se že izvaja."
@@ -11519,82 +11519,82 @@ msgstr "Za poenostavitev črte sta potrebni vsaj 2 točki, podana je le %1."
 msgid "%1: toggle changepoint lines"
 msgstr "%1: preklopi črte točk sprememb"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:295
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:755
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:293
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:753
 #, kde-format
 msgid "Fit Results"
 msgstr "Prilagodi rezultate"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:504
 #, kde-format
 msgid "Piecewise Linear Fit Results"
 msgstr "Rezultati odsekoma linearnega prilagajanja"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:510
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:508
 #, kde-format
 msgid "No results available yet"
 msgstr "Rezultat še niso na voljo"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:516
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:514
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:576
 #, kde-format
 msgid "Status: %1"
 msgstr "Stanje: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
 msgid "Number of Segments: %1"
 msgstr "Število odsekov: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Number of Changepoints: %1"
 msgstr "število prehodnih točk: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:525
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
 #, kde-format
 msgid "Overall R²: %1"
 msgstr "Celotni R²: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
 #, kde-format
 msgid "Overall SSE: %1"
 msgstr "Celotni SSE: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:530
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:528
 #, kde-format
 msgid "Changepoint Positions (X-values)"
 msgstr "Položaji točk spremembe (vrednosti X)"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:538
 #, kde-format
 msgid "Segment %1"
 msgstr "Segment %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:542
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:705
 #, kde-format
 msgid "Parameters:"
 msgstr "Parametri:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:550
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:548
 #, kde-format
 msgid "Parameter Statistics (Slope):"
 msgstr "Statistika parametrov (naklon):"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:556
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:554
 #, kde-format
 msgid "Goodness of Fit:"
 msgstr "Uspešnost prileganja:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:566
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:564
 #, kde-format
 msgid "Statistical Tests:"
 msgstr "Statistični testi:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:573
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:571
 #, kde-format
 msgid "Information Criteria:"
 msgstr "Iinformacijski kriterij:"

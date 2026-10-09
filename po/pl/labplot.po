@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-07 00:41+0000\n"
+"POT-Creation-Date: 2026-10-09 00:42+0000\n"
 "PO-Revision-Date: 2025-02-09 08:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -7604,31 +7604,31 @@ msgstr "Trójsześciennie"
 msgid "Python file (*.py)"
 msgstr "Plik tekstowy (*.txt)"
 
-#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:173 src/backend/script/Script.cpp:366
 #, fuzzy, kde-format
 #| msgid "no matrix element found"
 msgid "no script element found"
 msgstr "nie znaleziono elementu macierzy"
 
-#: src/backend/script/Script.cpp:247
+#: src/backend/script/Script.cpp:240
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
+#: src/backend/script/Script.cpp:346 src/backend/script/Script.cpp:351
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&Skrypt"
 
-#: src/backend/script/Script.cpp:353
+#: src/backend/script/Script.cpp:346
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to run the script."
 msgstr "Nie udało się otworzyć pliku."
 
-#: src/backend/script/Script.cpp:358
+#: src/backend/script/Script.cpp:351
 #, kde-format
 msgid "A script is already running."
 msgstr ""
@@ -11635,91 +11635,91 @@ msgstr ""
 msgid "%1: toggle changepoint lines"
 msgstr "%1: ustaw indeks punktu sklejania"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:295
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:755
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:293
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:753
 #, fuzzy, kde-format
 #| msgctxt "Curve fitting"
 #| msgid "Fit Results"
 msgid "Fit Results"
 msgstr "Dopasuj wyniki"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:504
 #, kde-format
 msgid "Piecewise Linear Fit Results"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:510
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:508
 #, fuzzy, kde-format
 #| msgid "Device not available."
 msgid "No results available yet"
 msgstr "Urządzenie nie jest dostępne."
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:516
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:514
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:576
 #, fuzzy, kde-format
 #| msgid "status: %1"
 msgid "Status: %1"
 msgstr "stan: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, fuzzy, kde-format
 #| msgid "Number of Objects: %1"
 msgid "Number of Segments: %1"
 msgstr "Liczba obiektów: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, fuzzy, kde-format
 #| msgid "number of points: %1"
 msgid "Number of Changepoints: %1"
 msgstr "liczba punktów: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:525
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
 #, kde-format
 msgid "Overall R²: %1"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
 #, kde-format
 msgid "Overall SSE: %1"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:530
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:528
 #, kde-format
 msgid "Changepoint Positions (X-values)"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:538
 #, fuzzy, kde-format
 #| msgid "Segments"
 msgid "Segment %1"
 msgstr "Segmenty"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:542
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:705
 #, kde-format
 msgid "Parameters:"
 msgstr "Parametry:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:550
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:548
 #, kde-format
 msgid "Parameter Statistics (Slope):"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:556
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:554
 #, fuzzy, kde-format
 #| msgid "Goodness of fit:"
 msgid "Goodness of Fit:"
 msgstr "Dobroć dopasowania:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:566
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:564
 #, fuzzy, kde-format
 #| msgid "Statistical Plots"
 msgid "Statistical Tests:"
 msgstr "Wykresy statystyczne"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:573
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:571
 #, fuzzy, kde-format
 #| msgid "Akaike information criterion"
 msgid "Information Criteria:"

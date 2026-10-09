@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-07 00:41+0000\n"
+"POT-Creation-Date: 2026-10-09 00:42+0000\n"
 "PO-Revision-Date: 2026-10-07 20:33+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -7602,28 +7602,28 @@ msgstr "Трикубічна"
 msgid "Python file (*.py)"
 msgstr "файл Python (*.py)"
 
-#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:173 src/backend/script/Script.cpp:366
 #, kde-format
 msgid "no script element found"
 msgstr "не знайдено елемента скрипту"
 
-#: src/backend/script/Script.cpp:247
+#: src/backend/script/Script.cpp:240
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: запустити скрипт %2"
 
-#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
+#: src/backend/script/Script.cpp:346 src/backend/script/Script.cpp:351
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Скрипт"
 
-#: src/backend/script/Script.cpp:353
+#: src/backend/script/Script.cpp:346
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Не вдалося запустити скрипт."
 
-#: src/backend/script/Script.cpp:358
+#: src/backend/script/Script.cpp:351
 #, kde-format
 msgid "A script is already running."
 msgstr "Скрипт вже запущено."
@@ -11548,82 +11548,82 @@ msgstr "Спрощення лінії потребує принаймні 2 то
 msgid "%1: toggle changepoint lines"
 msgstr "%1: перемкнути лінії точок зміни"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:295
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:755
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:293
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:753
 #, kde-format
 msgid "Fit Results"
 msgstr "Результати апроксимації"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:504
 #, kde-format
 msgid "Piecewise Linear Fit Results"
 msgstr "Кусково-лінійне наближення результатів"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:510
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:508
 #, kde-format
 msgid "No results available yet"
 msgstr "Доступних результатів немає"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:516
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:514
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:576
 #, kde-format
 msgid "Status: %1"
 msgstr "Стан: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
 msgid "Number of Segments: %1"
 msgstr "Кількість сегментів: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Number of Changepoints: %1"
 msgstr "Кількість точок зміни: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:525
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
 #, kde-format
 msgid "Overall R²: %1"
 msgstr "Загальний R²: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
 #, kde-format
 msgid "Overall SSE: %1"
 msgstr "Загальна СКП: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:530
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:528
 #, kde-format
 msgid "Changepoint Positions (X-values)"
 msgstr "Розташування точки зміни (X-значення)"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:538
 #, kde-format
 msgid "Segment %1"
 msgstr "Сегмент %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:542
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:705
 #, kde-format
 msgid "Parameters:"
 msgstr "Параметри:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:550
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:548
 #, kde-format
 msgid "Parameter Statistics (Slope):"
 msgstr "Статистика параметра (нахил):"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:556
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:554
 #, kde-format
 msgid "Goodness of Fit:"
 msgstr "Якість апроксимації:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:566
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:564
 #, kde-format
 msgid "Statistical Tests:"
 msgstr "Статистичні перевірки:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:573
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:571
 #, kde-format
 msgid "Information Criteria:"
 msgstr "Інформаційні критерії:"

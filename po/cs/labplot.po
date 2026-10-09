@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-07 00:41+0000\n"
-"PO-Revision-Date: 2026-10-08 02:25+0200\n"
+"POT-Creation-Date: 2026-10-09 00:42+0000\n"
+"PO-Revision-Date: 2026-10-09 00:04+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -7565,28 +7565,28 @@ msgstr "Trikubické"
 msgid "Python file (*.py)"
 msgstr "Soubor Pythonu (*.py)"
 
-#: src/backend/script/Script.cpp:182 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:173 src/backend/script/Script.cpp:366
 #, kde-format
 msgid "no script element found"
 msgstr "skriptový element nenalezen"
 
-#: src/backend/script/Script.cpp:247
+#: src/backend/script/Script.cpp:240
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: spustit skript %2"
 
-#: src/backend/script/Script.cpp:353 src/backend/script/Script.cpp:358
+#: src/backend/script/Script.cpp:346 src/backend/script/Script.cpp:351
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:353
+#: src/backend/script/Script.cpp:346
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Spuštění skriptu selhalo."
 
-#: src/backend/script/Script.cpp:358
+#: src/backend/script/Script.cpp:351
 #, kde-format
 msgid "A script is already running."
 msgstr "Skript již běží."
@@ -9289,79 +9289,79 @@ msgstr "%1: nastavit velikost šipky"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:743
 #, kde-format
 msgid "%1: set major ticks direction"
-msgstr "%1: nastavit směr hlavní stupnice"
+msgstr "%1: nastavit směr značek hlavní stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:750
 #, kde-format
 msgid "%1: set major ticks type"
-msgstr "%1: nastavit typ hlavní stupnice"
+msgstr "%1: nastavit typ značek hlavní stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:758
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
-msgstr "%1: zapnout/vypnout automatické číslování hlavní stupnice"
+msgstr "%1: zapnout/vypnout automatické číslování značek hlavní stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:761
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:776
 #, kde-format
 msgid "%1: set the total number of the major ticks"
-msgstr "%1: nastavit celkový počet hlavní stupnice"
+msgstr "%1: nastavit celkový počet značek hlavní stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:799
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
-msgstr "%1: nastavit rozestupy hlavní stupnice"
+msgstr "%1: nastavit rozestupy značek hlavní stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:806
 #, kde-format
 msgid "%1: assign major ticks' values"
-msgstr "%1: přiřadit hodnoty hlavní stupnice"
+msgstr "%1: přiřadit hodnoty značek hlavní stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:820
 #, kde-format
 msgid "%1: set major ticks length"
-msgstr "%1: nastavit délku hlavní stupnice"
+msgstr "%1: nastavit délku značek hlavní stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:828
 #, kde-format
 msgid "%1: set minor ticks direction"
-msgstr "%1: nastavit směr vedlejší stupnice"
+msgstr "%1: nastavit směr značek vedlejší stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: set minor ticks type"
-msgstr "%1: nastavit typ vedlejší stupnice"
+msgstr "%1: nastavit typ značek vedlejší stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:843
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
-msgstr "%1: zapnout/vypnout automatické číslování vedlejší stupnice"
+msgstr "%1: zapnout/vypnout automatické číslování značek vedlejší stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:846
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:857
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
-msgstr "%1: nastavit celkový počet vedlejší stupnice"
+msgstr "%1: nastavit celkový počet značek vedlejší stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:858
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
-msgstr "%1: vypnout automatické číslování hlavní stupnice"
+msgstr "%1: vypnout automatické číslování značek hlavní stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:890
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
-msgstr "%1: nastavit rozestup vedlejší stupnice"
+msgstr "%1: nastavit rozestup značek vedlejší stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:897
 #, kde-format
 msgid "%1: assign minor ticks' values"
-msgstr "%1: přiřadit hodnoty vedlejší stupnice"
+msgstr "%1: přiřadit hodnoty značek vedlejší stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:911
 #, kde-format
 msgid "%1: set minor ticks length"
-msgstr "%1: nastavit délku vedlejší stupnice"
+msgstr "%1: nastavit délku značek vedlejší stupnice"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:920
 #, kde-format
@@ -10400,12 +10400,12 @@ msgstr "%1: nastavit maximální velikost chybového pruhu"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:168
 #, kde-format
 msgid "bin positions"
-msgstr "polohy seskupení"
+msgstr "polohy intervalu"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
 #, kde-format
 msgid "bin values"
-msgstr "hodnoty v seskupení"
+msgstr "hodnoty intervalu"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:191
 #, kde-format
@@ -10471,32 +10471,32 @@ msgstr "%1: nastavit normalizaci histogramu"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:454
 #, kde-format
 msgid "%1: set binning method"
-msgstr "%1: nastavit metodu seskupování"
+msgstr "%1: nastavit metodu intervalů"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:461
 #, kde-format
 msgid "%1: set bin count"
-msgstr "%1: nastavit počet seskupení"
+msgstr "%1: nastavit počet intervalů"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:468
 #, kde-format
 msgid "%1: set bin width"
-msgstr "%1: nastavit šířku seskupení"
+msgstr "%1: nastavit šířku intervalů"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:476
 #, kde-format
 msgid "%1: change auto bin ranges"
-msgstr "%1: změnit rozsahy automatického seskupení"
+msgstr "%1: změnit rozsahy automatických intervalů"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:524
 #, kde-format
 msgid "%1: set bin ranges start"
-msgstr "%1: nastavit počátek rozsahů seskupení"
+msgstr "%1: nastavit počátek rozsahů intervalů"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:531
 #, kde-format
 msgid "%1: set bin ranges end"
-msgstr "%1: nastavit konec rozsahů seskupení"
+msgstr "%1: nastavit konec rozsahů intervalů"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:864
 #, kde-format
@@ -11499,82 +11499,82 @@ msgstr ""
 msgid "%1: toggle changepoint lines"
 msgstr "%1: přepnout zobrazení čar změn"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:295
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:755
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:293
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:753
 #, kde-format
 msgid "Fit Results"
 msgstr "Výsledky přizpůsobení"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:506
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:504
 #, kde-format
 msgid "Piecewise Linear Fit Results"
 msgstr "Výsledky úsekově lineární aproximace"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:510
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:508
 #, kde-format
 msgid "No results available yet"
 msgstr "Zatím nejsou k dispozici žádné výsledky"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:516
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:514
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:520
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:576
 #, kde-format
 msgid "Status: %1"
 msgstr "Stav: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:521
 #, kde-format
 msgid "Number of Segments: %1"
 msgstr "Počet segmentů: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Number of Changepoints: %1"
 msgstr "Počet bodů změny: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:525
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
 #, kde-format
 msgid "Overall R²: %1"
 msgstr "Celkové R²: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:526
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:524
 #, kde-format
 msgid "Overall SSE: %1"
 msgstr "Celkové SSE: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:530
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:528
 #, kde-format
 msgid "Changepoint Positions (X-values)"
 msgstr "Polohy bodů změny (hodnoty X)"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:540
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:538
 #, kde-format
 msgid "Segment %1"
 msgstr "Segment %1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:544
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:542
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:705
 #, kde-format
 msgid "Parameters:"
 msgstr "Parametry:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:550
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:548
 #, kde-format
 msgid "Parameter Statistics (Slope):"
 msgstr "Statistika parametrů (sklon):"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:556
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:554
 #, kde-format
 msgid "Goodness of Fit:"
 msgstr "Optimální přizpůsobení:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:566
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:564
 #, kde-format
 msgid "Statistical Tests:"
 msgstr "Statistické testy:"
 
-#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:573
+#: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:571
 #, kde-format
 msgid "Information Criteria:"
 msgstr "Informační kritéria:"
@@ -14635,7 +14635,7 @@ msgstr "Data histogramu"
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:91
 #, kde-format
 msgid "Bin Center"
-msgstr "Centrum seskupení"
+msgstr "Střed intervalu"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:95
 #, kde-format
@@ -14920,7 +14920,7 @@ msgstr "Úhel (DMS)"
 #: src/frontend/dockwidgets/AxisDock.cpp:323
 #, kde-format
 msgid "Transparent"
-msgstr "Průhledný"
+msgstr "Průhledné"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:335
 #, kde-format
@@ -14933,6 +14933,14 @@ msgid ""
 "provided below.</li><li>Custom Column Labels - positions are determined by "
 "the value labels in the custom column provided below.</li></ul></ul>"
 msgstr ""
+"Určuje, jak a kde se mají na ose umístit značky hlavní stupnice:"
+"<ul><li>Počet – značky stupnice jsou rozmístěny v rovnoměrných "
+"vzdálenostech, přičemž vzdálenost mezi nimi je dána zadaným pevným počtem "
+"stupnic.</li><li>Rozestup – značky stupnice jsou rozmístěny v rovnoměrných "
+"vzdálenostech s zadaným rozestupem mezi nimi.</li><li>Hodnoty vlastního "
+"sloupce – polohy jsou určeny hodnotami ve vlastním sloupci uvedeném níže.</"
+"li><li>Popisky vlastního sloupce – polohy jsou určeny popisky hodnot ve "
+"vlastním sloupci uvedeném níže.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:347
 #, kde-format
@@ -14942,6 +14950,10 @@ msgid ""
 "li><li>Offset - the first tick is positioned at the offset relatively to the "
 "beginning of the axis range.</li></ul></ul>"
 msgstr ""
+"Určuje, kam umístit první hlavní značku stupnice:<ul><li>Absolutní hodnota – "
+"první značka je umístěna na absolutní hodnotu uvedenou níže.</li><li>Posun – "
+"první značka je umístěna v posunu vzhledem k začátku rozsahu osy.</li></ul></"
+"ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:356
 #, kde-format
@@ -14949,6 +14961,8 @@ msgid ""
 "Column with the values that should be used as the positions of the major "
 "ticks."
 msgstr ""
+"Sloupec s hodnotami, které by měly být použity jako polohy hlavních značek "
+"stupnice."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:360
 #, kde-format
@@ -14958,6 +14972,10 @@ msgid ""
 "Column Values - values in the custom column provided below are used as text "
 "labels.</li></ul></ul>"
 msgstr ""
+"Určuje, jaké textové popisky se mají zobrazit u značek hlavní stupnice:"
+"<ul><li>Hodnoty pozic – jako textové popisky se použijí pozice značek. </"
+"li><li>Hodnoty vlastního sloupce – jako textové popisky se použijí hodnoty z "
+"vlastního sloupce uvedeného níže. </li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:369
 #, kde-format
@@ -14965,6 +14983,8 @@ msgid ""
 "Column with the values that should be used as the text labels for the major "
 "ticks."
 msgstr ""
+"Sloupec s hodnotami, které by měly být použity jako textové popisky pro "
+"značky hlavní stupnice."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:375
 #, kde-format
@@ -14976,6 +14996,12 @@ msgid ""
 "Values - positions are determined by the values in the custom column "
 "provided below.</li></ul></ul>"
 msgstr ""
+"Určuje, jak a kde se mají na ose umístit značky vedlejší stupnice:"
+"<ul><li>Počet – značky jsou rozmístěny v rovnoměrných vzdálenostech, přičemž "
+"vzdálenost mezi nimi je dána zadaným pevným počtem značek stupnice. </"
+"li><li>Rozestup – značky jsou rozmístěny v rovnoměrných vzdálenostech s "
+"zadaným rozestupem mezi nimi.</li><li>Hodnoty vlastního sloupce – polohy "
+"jsou určeny hodnotami ve vlastním sloupci uvedeném níže.</li></ul></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:385
 #, kde-format
@@ -14983,31 +15009,33 @@ msgid ""
 "Column with the values that should be used as the positions of the minor "
 "ticks."
 msgstr ""
+"Sloupec s hodnotami, které by měly být použity jako polohy značek vedlejší "
+"stupnice."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:635
 #, kde-format
 msgid "%1: set axis color"
-msgstr ""
+msgstr "%1: nastavit barvu osy"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:637
 #, kde-format
 msgid "%1 axes: set color"
-msgstr ""
+msgstr "%1 osy: nastavit barvu"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:1659
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr ""
+msgstr "Měřítko je synchronní s grafem"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:1662
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr ""
+msgstr "Měřítko je asynchronní s grafem"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:2116
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 osy: šablona \"%2\" načtena"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:2118
 #: src/frontend/dockwidgets/BarPlotDock.cpp:410
@@ -15030,14 +15058,14 @@ msgstr ""
 #: src/frontend/dockwidgets/XYCurveDock.cpp:684
 #, kde-format
 msgid "%1: template \"%2\" loaded"
-msgstr ""
+msgstr "%1: šablona \"%2\" načtena"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:61
 #: src/frontend/dockwidgets/HistogramDock.cpp:76
 #: src/frontend/dockwidgets/XYCurveDock.cpp:73
 #, kde-format
 msgid "Uncertainty Bars"
-msgstr ""
+msgstr "Pruhy nejistoty"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:178
 #, kde-format
@@ -15061,6 +15089,7 @@ msgstr "Skládaný 100%"
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
+"Vyberte sloupec s daty, u kterého se mají zobrazit a upravit vlastnosti"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:198
 #, kde-format
@@ -15068,16 +15097,18 @@ msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
+"Zadejte procentuální hodnotu, která určuje šířku sloupce vzhledem k jeho "
+"výchozí hodnotě; nastavení se vztahuje na všechny sloupce"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:408
 #, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 sloupcové grafy: načtena šablona \"%2\""
 
 #: src/frontend/dockwidgets/BaseDock.cpp:206
 #, kde-format
 msgid "Please choose another name, because this is already in use."
-msgstr ""
+msgstr "Zvolte prosím jiný název, protože tento je již obsazen."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:206
 #, kde-format
@@ -15120,6 +15151,8 @@ msgid ""
 "If multiple data sets are provided, define how they should be ordered or use "
 "'None' to keep the original order."
 msgstr ""
+"Pokud je zadáno více datových sad, určete, v jakém pořadí mají být seřazeny, "
+"nebo použijte hodnotu 'Nic', aby bylo zachováno původní pořadí."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:232
 #, kde-format
@@ -15127,11 +15160,13 @@ msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
+"Je-li zaškrtnuto, šířka pole se nastaví úměrně k druhé odmocnině počtu "
+"datových bodů."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:236
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
-msgstr ""
+msgstr "Parametr určující rozsah vnitřních ohraničujících čar grafu."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:245
 #, kde-format
@@ -15139,27 +15174,29 @@ msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr ""
+"Zadejte procentuální hodnotu, která určuje šířku rámečku vzhledem k jeho "
+"výchozí hodnotě."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:249
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
-msgstr "Otevřít dialog k úpravě vlastností symbolu pro střední hodnotu."
+msgstr "Tímto výběrem upravíte vlastnosti symbolu pro střední hodnotu."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:252
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
-msgstr "Otevřít dialog k úpravě vlastností symbolu pro hodnotu mediánu."
+msgstr "Tímto výběrem upravíte vlastnosti symbolu pro hodnotu mediánu."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:255
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
-msgstr ""
+msgstr "Tímto výběrem upravíte vlastnosti symbolu pro odlehlé hodnoty."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:258
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
-msgstr ""
+msgstr "Tímto výběrem upravíte vlastnosti symbolu pro \"extrémní\" hodnoty."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:261
 #, kde-format
@@ -15167,12 +15204,14 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Tímto výběrem upravíte vlastnosti symbolu pro všechny hodnoty dat s výjimkou "
+"odlehlých a \"extrémních\" hodnot."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:264
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr ""
+msgstr "Tímto výběrem upravíte vlastnosti symbolu pro konce vousů grafu."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:267
 #, kde-format
@@ -15180,6 +15219,9 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Zaškrtněte toto políčko, chcete-li náhodně rozložit polohy symbolů "
+"(\"jittering\"); tato funkce je užitečná v případě hustých a překrývajících "
+"se datových bodů."
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #. i18n: ectx: property (text), widget (QLabel, lVariables)
@@ -15212,7 +15254,7 @@ msgstr "Sloupec:"
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:639
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 grafy: načtena šablona \"%2\""
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:142
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:570
@@ -15231,7 +15273,7 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:1019
 #, kde-format
 msgid "%v cm"
-msgstr ""
+msgstr "%v cm"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:144
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:583
@@ -15250,12 +15292,12 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:1021
 #, kde-format
 msgid "%v in"
-msgstr ""
+msgstr "%v in"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:255
 #, kde-format
 msgid "Save current plot area definition as template"
-msgstr ""
+msgstr "Uložit aktuální definici oblasti grafu jako šablonu"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:641
 #, kde-format
@@ -15278,7 +15320,7 @@ msgstr "Číslo"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:813
 #, kde-format
 msgid "Plot Ranges:"
-msgstr ""
+msgstr "Rozsahy grafů:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #. i18n: ectx: property (text), widget (QLabel, lPlotRanges)
@@ -15309,7 +15351,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:158
 #, kde-format
 msgid "Plot Range:"
-msgstr "Rozsah zákresu:"
+msgstr "Rozsah grafu:"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:914
 #, kde-format
@@ -15319,12 +15361,12 @@ msgstr "Volné"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:915
 #, kde-format
 msgid "Last Points"
-msgstr ""
+msgstr "Poslední body"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:916
 #, kde-format
 msgid "First Points"
-msgstr ""
+msgstr "První body"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:920
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:924
@@ -15336,7 +15378,7 @@ msgstr "Jednoduchý"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:926
 #, kde-format
 msgid "Sloped"
-msgstr ""
+msgstr "Skloněný"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:930
 #, kde-format
@@ -15350,11 +15392,14 @@ msgid ""
 "specified number of last points is plotted</li><li>First Points - specified "
 "number of first points is plotted</li></ul>"
 msgstr ""
+"Rozsah dat:<ul><li>Volné – vykreslí se celý rozsah dat</li><li>Poslední body "
+"– vykreslí se zadaný počet posledních bodů</li><li>První body – vykreslí se "
+"zadaný počet prvních bodů</li></ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:945
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
-msgstr ""
+msgstr "Je-li zaškrtnuto, rozsah grafu se automaticky rozšíří na hezké hodnoty"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:950
 #, kde-format
@@ -15363,22 +15408,25 @@ msgid ""
 "the current theme apply to plot area</li><li>Color Map - colors are taken "
 "from the specified color map</li></ul>"
 msgstr ""
+"Určuje, jaké barvy se mají použít pro grafy:<ul><li>Motiv – barvy se "
+"přebírají z aktuálního tématu a použijí se v oblasti grafu</li><li>Barevná "
+"mapa – barvy se přebírají ze zadané barevné mapy</li></ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1227
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
-msgstr ""
+msgstr "%1 rozsah %2 se používá v rozsahu grafu %3. "
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1228
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1281
 #, kde-format
 msgid "Really remove it?"
-msgstr ""
+msgstr "Opravdu to odstranit?"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1281
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
-msgstr ""
+msgstr "Rozsah křivky %1 je použit prvkem \"%2\". "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
@@ -15424,29 +15472,29 @@ msgstr "Nahoře:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
-msgstr ""
+msgstr "Vybrat šablonu pro uložení souboru"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1726
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
-msgstr ""
+msgstr "Šablony grafů Labplot (*%1)"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1930
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 kartézské grafy: načtena šablona \"%2\""
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:262
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Column Major"
-msgstr ""
+msgstr "Hlavní sloupec"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:248
 #, kde-format
 msgid "Row Major"
-msgstr ""
+msgstr "Hlavní řádek"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:268
@@ -15477,7 +15525,7 @@ msgstr "Střed"
 #: src/frontend/widgets/LabelWidget.cpp:496
 #, kde-format
 msgid "Relative to plot"
-msgstr ""
+msgstr "Relativně ke grafu"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:293
 #, kde-format
@@ -15485,6 +15533,7 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
+"Jako barvu názvu v legendě použijte hlavní barvu grafu (čáry, symbolu atd.)."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:369
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:624
@@ -15511,7 +15560,7 @@ msgstr "%v%"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:812
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 popisy v kartézském grafu: načtena šablona \"%2\""
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:362
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
@@ -15525,26 +15574,26 @@ msgstr "Desítková"
 #: src/frontend/widgets/ValueWidget.cpp:144
 #, kde-format
 msgid "Scientific (e)"
-msgstr ""
+msgstr "Vědecká (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:364
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
 #: src/frontend/widgets/ValueWidget.cpp:145
 #, kde-format
 msgid "Scientific (E)"
-msgstr ""
+msgstr "Vědecká (E)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:365
 #: src/frontend/widgets/ValueWidget.cpp:146
 #, kde-format
 msgid "Automatic (e)"
-msgstr ""
+msgstr "Automatická (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:366
 #: src/frontend/widgets/ValueWidget.cpp:147
 #, kde-format
 msgid "Automatic (E)"
-msgstr ""
+msgstr "Automatická (E)"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/ColumnDock.cpp:368
@@ -15566,6 +15615,13 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Určuje, jak se v tabulce formátují číselné hodnoty:<ul><li>Desítková – "
+"formát [-]9,9</li><li>Vědecká (e) – formátovat jako [-]9,9e[+|-]999</"
+"li><li>Vědecká (E) – formátovat jako [-]9,9E[+|-]999</li><li>Automatická (e) "
+"– volí mezi formáty 'Desítková' a 'Vědecká (e)', aby se dosáhlo co "
+"nejstručnějšího formátu</li><li>Automatická (E) – volí mezi formáty "
+"'Desítková' a 'Vědecká (E)', aby se dosáhlo co nejstručnějšího formátu</li></"
+"ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:384
 #, kde-format
@@ -15576,21 +15632,25 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"U formátů 'Desítková', 'Vědecká (e)' a 'Vědecká (E)' představuje přesnost "
+"počet číslic za desetinnou čárkou.\n"
+"U formátů 'Automatická (e)' a 'Automatická (E)' představuje přesnost "
+"maximální počet platných číslic (koncové nuly se vynechávají)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:389
 #, kde-format
 msgid "Add a new value label"
-msgstr ""
+msgstr "Přidat nový popisek hodnoty"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:390
 #, kde-format
 msgid "Remove the selected value label"
-msgstr ""
+msgstr "Odstranit popisek vybrané hodnoty"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:391
 #, kde-format
 msgid "Modify multiple values labels in a batch mode"
-msgstr ""
+msgstr "Hromadná úprava popisků více hodnot"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:393
 #, kde-format
@@ -15603,6 +15663,8 @@ msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
 msgstr ""
+"Při změnách ve sloupcích s proměnnými automaticky aktualizovat vypočítané "
+"hodnoty v cílovém sloupci"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:395
 #, kde-format
@@ -15610,6 +15672,8 @@ msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
 msgstr ""
+"Automaticky přizpůsobit velikost cílového sloupce tak, aby odpovídala "
+"velikosti proměnných sloupců"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:567
 #, kde-format
@@ -15618,6 +15682,8 @@ msgid ""
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
+"Sloupec \"%1\"\n"
+"již není k dispozici. Jakmile bude znovu vytvořen, bude automaticky použit."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:585
 #, kde-format
@@ -15625,6 +15691,8 @@ msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
+"Propojení tabulek je aktivní. Velikost cílové tabulky se řídí velikostí "
+"propojené tabulky."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:600
 #, kde-format
@@ -15632,6 +15700,8 @@ msgid ""
 "The variable name '%1' is already reserved for the constant '%1' (%2). "
 "Please use another name."
 msgstr ""
+"Název proměnné '%1' je již vyhrazen pro konstantu '%1' (%2). Použijte prosím "
+"jiný název."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:605
 #, kde-format
@@ -15639,6 +15709,8 @@ msgid ""
 "The variable name '%1' is already reserved for the function '%1' (%2). "
 "Please use another name."
 msgstr ""
+"Název proměnné '%1' je již vyhrazen pro funkci '%1' (%2). Použijte prosím "
+"jiný název."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:610
 #, kde-format
@@ -15646,12 +15718,16 @@ msgid ""
 "The variable name 'i' is reserved for the index of the column row. Please "
 "use another name."
 msgstr ""
+"Název proměnné 'i' je vyhrazen pro index řádku sloupce. Použijte prosím jiný "
+"název."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:613
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr ""
+"Předpokládá se, že název proměnné začíná číslicí nebo obsahuje speciální "
+"znak."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:616
 #: src/frontend/dockwidgets/ColumnDock.cpp:766
@@ -15661,32 +15737,33 @@ msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
 "a letter"
 msgstr ""
+"Název proměnné může obsahovat pouze písmena, číslice a znak '_' a měl by "
+"začínat písmenem"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:636
 #, kde-format
 msgid "Invalid variable name provided"
-msgstr ""
+msgstr "Byl zadán neplatný název proměnné"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:642
 #, kde-format
 msgid "Empty formula expression"
-msgstr ""
+msgstr "Prázdný matematický výraz"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:649
 #, kde-format
 msgid "Incorrect formula syntax: "
-msgstr ""
+msgstr "Nesprávná syntaxe vzorce: "
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:668
 #, kde-format
 msgid "Select a valid column"
-msgstr ""
+msgstr "Vyberte platný sloupec"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:675
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Apply Formula"
-msgstr "Vzorec:"
+msgstr "Použít vzorec"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:812
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:214
@@ -15695,38 +15772,37 @@ msgid "Delete variable"
 msgstr "Smazat proměnnou"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:889
-#, fuzzy, kde-format
-#| msgid "%1: set data column"
+#, kde-format
 msgid "%1: apply column formula"
 msgid_plural "%1: apply column formula"
-msgstr[0] "%1: nastavit sloupec dat"
-msgstr[1] "%1: nastavit sloupec dat"
-msgstr[2] "%1: nastavit sloupec dat"
+msgstr[0] "%1: použít vzorec ve sloupci"
+msgstr[1] "%1: použít vzorce ve sloupci"
+msgstr[2] "%1: použít vzorce ve sloupci"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
 msgid "Collapse all curves"
-msgstr ""
+msgstr "Sbalit všechny křivky"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:33
 #, kde-format
 msgid "Expand all curves"
-msgstr ""
+msgstr "Rozbalit všechny křivky"
 
 #: src/frontend/dockwidgets/CustomPointDock.cpp:393
 #, kde-format
 msgid "%1 custom points: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 vlastní body: načtena šablona \"%2\""
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:245
 #, kde-format
 msgid "By Number"
-msgstr ""
+msgstr "Podle čísla"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:246
 #, kde-format
 msgid "By Width"
-msgstr ""
+msgstr "Podle šířky"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:247
 #, kde-format
@@ -15757,12 +15833,12 @@ msgstr "Scott"
 #: src/frontend/dockwidgets/HistogramDock.cpp:255
 #, kde-format
 msgid "Ordinary Histogram"
-msgstr ""
+msgstr "Běžný histogram"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:256
 #, kde-format
 msgid "Cumulative Histogram"
-msgstr ""
+msgstr "Kumulativní histogram"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:267
 #, kde-format
@@ -15772,12 +15848,12 @@ msgstr "Pravděpodobnost"
 #: src/frontend/dockwidgets/HistogramDock.cpp:268
 #, kde-format
 msgid "Count Density"
-msgstr ""
+msgstr "Početní hustota"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:269
 #, kde-format
 msgid "Probability Density"
-msgstr ""
+msgstr "Hustota pravděpodobnosti"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:277
 #, kde-format
@@ -15793,6 +15869,16 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Metoda použitá pro určení počtu intervalů <i>k</i> a jejich šířky <i>h</i> "
+"pro <i>n</i> hodnot:<ul><li>Podle počtu – počet intervalů se zadává ručně</"
+"li><li>Podle šířky – počet intervalů se vypočítá na základě zadané šířky "
+"intervalu pomocí vzorce <i>k = (max(x) - min(x) / h</i>)</li><li>Druhá "
+"odmocnina – <i>k = sqrt(n)</i></li><li>Rice –  <i>k = 2 * pow(n, 3/2)</i>, "
+"jednodušší alternativa k Sturgesově metodě</li><li>Sturges – <i>k = log2(n) "
+"+ 1</i>, předpokládá přibližně normální rozdělení</li><li>Doane – upravená "
+"verze Sturgesovy metody, více podrobností najdete v dokumentaci</"
+"li><li>Scott – <i>h = 3,49 * sigma / pow(n, 3/2)</i>, optimální metoda pro "
+"normálně rozdělená data</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:290
 #, kde-format
@@ -15803,11 +15889,17 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Použijte možnost 'Automaticky' k automatickému určení minimální a maximální "
+"hodnoty dat, která se mají použít pro výpočet histogramu. V opačném případě "
+"zadejte hodnoty ručně.<br><br><b>Poznámka:</b> všechny vzorky, které spadají "
+"do horní části histogramu, jsou vyloučeny. Pokud chcete tyto hodnoty "
+"zahrnout do posledního intervalu, budete muset do histogramu přidat další "
+"interval."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:574
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 histogramy: načtena šablona \"%2\""
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:114
 #, kde-format
@@ -15822,6 +15914,15 @@ msgid ""
 "li><li><b>%7</b> - tests differences in medians between two independent "
 "groups</li>"
 msgstr ""
+"<ul><li><b>%1</b> – testuje, zda se průměr vzorku významně liší od známého "
+"populačního průměru</li><li><b>%2</b> – testuje, zda mají dva nezávislé "
+"vzorky stejný průměr</li><li><b>%3</b> – testuje, zda je průměrný rozdíl "
+"mezi dvěma souvisejícími výběry roven nule</li><li><b>%4</b> – testuje, zda "
+"mají dva nezávislé výběry s nerovnými rozptyly stejný průměr</li><li><b>%5</"
+"b> – testuje, zda mají tři nebo více nezávislých výběrů stejný průměr</"
+"li><li><b>%6</b> – testuje, zda tři nebo více souvisejících/opakovaných "
+"měření mají stejný průměr</li><li><b>%7</b> – testuje rozdíly v mediánech "
+"mezi dvěma nezávislými skupinami</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:130
 #, kde-format
@@ -15838,32 +15939,44 @@ msgid ""
 "each other</li><li><b>%9</b> - tests if observed data follows a specified "
 "theoretical distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> – testuje, zda je mediánový rozdíl mezi dvěma souvisejícími "
+"vzorky roven nule</li><li><b>%2</b> – testuje rozdíly v mediánech mezi třemi "
+"nebo více nezávislými skupinami</li><li><b>%3</b> – testuje rozdíly v "
+"mediánech mezi třemi nebo více souvisejícími/opakovanými měřeními</li><li><b>"
+"%4</b> – testuje rozdíly v rozděleních přežití mezi dvěma nebo více "
+"skupinami</li><li><b>%5</b> – testuje trend v datech v čase</li><li><b>%6</"
+"b> – testuje náhodnost v posloupnosti pozorování</li><li><b>%7</b> – testuje "
+"nenáhodné vzorce v datech řízení procesů pomocí sérií nad/pod mediánem</"
+"li><li><b>%8</b> – testuje, zda jsou dvě kategorické proměnné navzájem "
+"nezávislé</li><li><b>%9</b> – testuje, zda pozorovaná data odpovídají "
+"zadanému teoretickému rozdělení</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:307
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
+"Vybraný test vyžaduje minimálně %1 a maximálně %2 neprázdných proměnných."
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:230
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr ""
+msgstr "%1 informační prvky: křivka \"%2\" byla odstraněna"
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:232
 #, kde-format
 msgid "%1: curve \"%2\" removed"
-msgstr ""
+msgstr "%1: křivka \"%2\" byla odstraněna"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:168
 #, kde-format
 msgid "Silverman"
-msgstr ""
+msgstr "Silverman"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:176
 #, kde-format
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
-msgstr ""
+msgstr "Okenní funkce (\"jádro\") používaná k odhadu hustoty pravděpodobnosti"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:183
 #, kde-format
@@ -15872,11 +15985,14 @@ msgid ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
+"Metoda výběru šířky pásma jádra:<ul><li>Silverman –  0,9 * min(sigma, IQR / "
+"1,34) * n^(-0,2)</li><li>Scott –  1,059 * sigma * n^(-0,2)</li><li>Vlastní – "
+"vlastní hodnota šířky pásma jádra</li></ul>"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:192
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
-msgstr ""
+msgstr "Vlastní hodnota šířky pásma jádra"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:374
 #: src/frontend/dockwidgets/ParetoChartDock.cpp:206
@@ -15886,27 +16002,27 @@ msgstr ""
 #: src/frontend/dockwidgets/XYCurveDock.cpp:682
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 xy-křivky: šablona \"%2\" načtena"
 
 #: src/frontend/dockwidgets/LiveDataDock.cpp:82
 #, kde-format
 msgid "Manage MQTT connection's will settings"
-msgstr ""
+msgstr "Správa nastavení připojení MQTT"
 
 #: src/frontend/dockwidgets/LiveDataDock.cpp:666
 #, kde-format
 msgid "Couldn't subscribe"
-msgstr ""
+msgstr "Nepodařilo se přihlásit k odběru"
 
 #: src/frontend/dockwidgets/LiveDataDock.cpp:666
 #, kde-format
 msgid "Couldn't subscribe to all available topics. Something went wrong"
-msgstr ""
+msgstr "Nepodařilo se přihlásit k odběru všech dostupných témat. Došlo k chybě"
 
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:335
 #, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 lollipop grafy: šablona \"%2\" načtena"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:84
 #, kde-format
