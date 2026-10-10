@@ -13,7 +13,7 @@
 
 #include "../../CommonTest.h"
 
-class XYFunctionCurveTest : public CommonTest {
+class XYFunctionCurveTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

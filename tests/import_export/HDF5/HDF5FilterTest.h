@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class HDF5FilterTest : public CommonTest {
+class HDF5FilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -15,7 +15,7 @@
 
 #include "../../CommonTest.h"
 
-class ColumnTest : public CommonTest {
+class ColumnTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -13,7 +13,7 @@
 
 #include "../CommonTest.h"
 
-class CartesianPlotTest : public CommonTest {
+class CartesianPlotTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

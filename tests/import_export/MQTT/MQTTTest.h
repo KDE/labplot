@@ -13,7 +13,7 @@
 
 #include "../../CommonTest.h"
 
-class MQTTTest : public CommonTest {
+class MQTTTest : public CommonMetaTest {
 #ifdef HAVE_MQTT
 	Q_OBJECT
 

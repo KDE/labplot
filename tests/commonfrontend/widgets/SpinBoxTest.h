@@ -13,7 +13,7 @@
 
 #include "tests/CommonTest.h"
 
-class SpinBoxTest : public CommonTest {
+class SpinBoxTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class PiecewiseLinearFitTest : public CommonTest {
+class PiecewiseLinearFitTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

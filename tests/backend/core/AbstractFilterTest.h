@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class AbstractFilterTest : public CommonTest {
+class AbstractFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

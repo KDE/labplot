@@ -13,7 +13,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "../../CommonTest.h"
 
-class WorksheetTest : public CommonTest {
+class WorksheetTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -9,8 +9,6 @@
 */
 
 #include "CommonTest.h"
-#include "backend/core/AbstractAspect.h"
-#include "backend/core/AbstractColumn.h"
 
 #include "backend/lib/UndoStack.h"
 
@@ -18,15 +16,24 @@
 #include <windows.h>
 #endif
 
+/**
+ * @brief Base class for all LabPlot tests
+ *
+ * Provides common utilities for testing:
+ * - FuzzyCompare: floating-point comparison with tolerance
+ * - wait: event loop delay
+ * - Timer tracking for test performance
+ *
+ * Use this lightweight base class for tests that don't need the backend library
+ * (e.g., NSL, parser, GSL tests). For tests requiring AbstractAspect/AbstractColumn
+ * or other backend functionality, use CommonMetaTest instead.
+ */
+
 void CommonTest::initTestCase() {
 	// always enable debugging
 	enableDebugTrace(true);
 	enableInfoTrace(true);
 	KLocalizedString::setApplicationDomain("labplot");
-
-	// Register metatypes for Qt signals with pointer arguments
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
 #ifdef _WIN32
 //	if (AttachConsole(ATTACH_PARENT_PROCESS)) {

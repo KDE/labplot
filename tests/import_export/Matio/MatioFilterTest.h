@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class MatioFilterTest : public CommonTest {
+class MatioFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class NetCDFFilterTest : public CommonTest {
+class NetCDFFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -14,7 +14,7 @@
 
 #include "../CommonTest.h"
 
-class SpreadsheetFormulaTest : public CommonTest {
+class SpreadsheetFormulaTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -11,7 +11,7 @@
 
 #include "../../CommonTest.h"
 
-class ParquetFilterTest : public CommonTest {
+class ParquetFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

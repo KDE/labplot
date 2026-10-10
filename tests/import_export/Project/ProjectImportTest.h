@@ -13,7 +13,7 @@
 
 #include "tests/CommonTest.h"
 
-class ProjectImportTest : public CommonTest {
+class ProjectImportTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

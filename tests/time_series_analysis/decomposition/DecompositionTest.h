@@ -12,7 +12,7 @@
 
 #include "CommonTest.h"
 
-class DecompositionTest : public CommonTest {
+class DecompositionTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

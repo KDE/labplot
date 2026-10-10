@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class SerialPortTest : public CommonTest {
+class SerialPortTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

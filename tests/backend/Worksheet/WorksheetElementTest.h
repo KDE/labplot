@@ -33,7 +33,7 @@
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, MOUSE_MOVE_DATETIME);                                                                               \
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, DOCK_CHANGE_DATETIME);
 
-class WorksheetElementTest : public CommonTest {
+class WorksheetElementTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

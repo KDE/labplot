@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class XLSXFilterTest : public CommonTest {
+class XLSXFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

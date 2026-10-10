@@ -13,7 +13,7 @@
 
 #include "../../CommonTest.h"
 
-class MCAPFilterTest : public CommonTest {
+class MCAPFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

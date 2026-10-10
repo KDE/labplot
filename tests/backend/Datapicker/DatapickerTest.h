@@ -14,7 +14,7 @@
 
 #include "../../CommonTest.h"
 
-class DatapickerTest : public CommonTest {
+class DatapickerTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

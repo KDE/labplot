@@ -18,7 +18,7 @@ struct CanMessage2;
 } // namespace BLF
 } // namespace Vector
 
-class BLFFilterTest : public CommonTest {
+class BLFFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

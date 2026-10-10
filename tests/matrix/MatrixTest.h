@@ -13,7 +13,7 @@
 
 #include "../CommonTest.h"
 
-class MatrixTest : public CommonTest {
+class MatrixTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

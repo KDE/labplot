@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class IntervalTest : public CommonTest {
+class IntervalTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

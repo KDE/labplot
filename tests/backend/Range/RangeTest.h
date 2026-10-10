@@ -13,7 +13,7 @@
 
 #include "../../CommonTest.h"
 
-class RangeTest : public CommonTest {
+class RangeTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -13,7 +13,7 @@
 
 #include "../../CommonTest.h"
 
-class RetransformTest : public CommonTest {
+class RetransformTest : public CommonMetaTest {
 	Q_OBJECT
 
 	// Tests

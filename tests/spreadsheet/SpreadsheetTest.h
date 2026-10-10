@@ -16,7 +16,7 @@
 
 class Spreadsheet;
 
-class SpreadsheetTest : public CommonTest {
+class SpreadsheetTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

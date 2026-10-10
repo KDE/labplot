@@ -12,7 +12,7 @@
 
 #include "../CommonTest.h"
 
-class AnalysisTest : public CommonTest {
+class AnalysisTest : public CommonMetaTest {
 	Q_OBJECT
 };
 #endif

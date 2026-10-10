@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class DatasetsTest : public CommonTest {
+class DatasetsTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

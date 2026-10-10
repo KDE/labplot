@@ -12,7 +12,7 @@
 
 #include "../../CommonTest.h"
 
-class ReadStatFilterTest : public CommonTest {
+class ReadStatFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

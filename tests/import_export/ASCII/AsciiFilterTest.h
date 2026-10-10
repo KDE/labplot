@@ -13,7 +13,7 @@
 
 #include "../../CommonTest.h"
 
-class AsciiFilterTest : public CommonTest {
+class AsciiFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

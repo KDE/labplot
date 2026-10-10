@@ -13,7 +13,7 @@
 
 #include "../../CommonTest.h"
 
-class SpiceFilterTest : public CommonTest {
+class SpiceFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

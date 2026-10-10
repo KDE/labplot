@@ -15,7 +15,7 @@
 class QTcpServer;
 class QUdpSocket;
 
-class LiveDataTest : public CommonTest {
+class LiveDataTest : public CommonMetaTest {
 	Q_OBJECT
 
 private:

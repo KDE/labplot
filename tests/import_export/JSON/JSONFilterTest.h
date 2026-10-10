@@ -14,7 +14,7 @@
 
 #include "../../CommonTest.h"
 
-class JSONFilterTest : public CommonTest {
+class JSONFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
