@@ -9,7 +9,7 @@
 #ifndef PARQUETFILTERTEST_H
 #define PARQUETFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class ParquetFilterTest : public CommonMetaTest {
 	Q_OBJECT

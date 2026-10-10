@@ -10,7 +10,7 @@
 #ifndef DATASETSTEST_H
 #define DATASETSTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class DatasetsTest : public CommonMetaTest {
 	Q_OBJECT

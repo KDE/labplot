@@ -10,7 +10,7 @@
 #ifndef BINARYFILTERTEST_H
 #define BINARYFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class BinaryFilterTest : public CommonMetaTest {
 	Q_OBJECT

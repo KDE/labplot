@@ -10,7 +10,7 @@
 #ifndef DECOMPOSITIONTEST_H
 #define DECOMPOSITIONTEST_H
 
-#include "CommonTest.h"
+#include "CommonMetaTest.h"
 
 class DecompositionTest : public CommonMetaTest {
 	Q_OBJECT

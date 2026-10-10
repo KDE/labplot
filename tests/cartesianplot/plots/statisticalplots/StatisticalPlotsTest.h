@@ -11,7 +11,7 @@
 #ifndef STATISTICALPLOTSTEST_H
 #define STATISTICALPLOTSTEST_H
 
-#include "CommonTest.h"
+#include "CommonMetaTest.h"
 
 class StatisticalPlotsTest : public CommonMetaTest {
 	Q_OBJECT

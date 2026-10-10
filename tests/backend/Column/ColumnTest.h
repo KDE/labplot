@@ -13,7 +13,7 @@
 #ifndef COLUMNTEST_H
 #define COLUMNTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class ColumnTest : public CommonMetaTest {
 	Q_OBJECT

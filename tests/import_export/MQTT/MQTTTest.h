@@ -11,7 +11,7 @@
 #ifndef MQTTTEST_H
 #define MQTTTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class MQTTTest : public CommonMetaTest {
 #ifdef HAVE_MQTT

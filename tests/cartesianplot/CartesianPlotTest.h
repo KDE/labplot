@@ -11,7 +11,7 @@
 #ifndef CARTESIANPLOTTEST_H
 #define CARTESIANPLOTTEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class CartesianPlotTest : public CommonMetaTest {
 	Q_OBJECT

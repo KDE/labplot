@@ -11,7 +11,7 @@
 #ifndef NOTEBOOKTEST_H
 #define NOTEBOOKTEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class NotebookTest : public CommonMetaTest {
 	Q_OBJECT

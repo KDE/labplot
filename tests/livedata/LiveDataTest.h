@@ -10,7 +10,7 @@
 #ifndef LIVEDATATEST_H
 #define LIVEDATATEST_H
 
-#include "tests/CommonTest.h"
+#include "tests/CommonMetaTest.h"
 
 class QTcpServer;
 class QUdpSocket;

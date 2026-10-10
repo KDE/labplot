@@ -12,7 +12,7 @@
 #ifndef ABSTRACTASPECTTEST_H
 #define ABSTRACTASPECTTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class AbstractAspectTest : public CommonMetaTest {
 	Q_OBJECT

@@ -11,7 +11,7 @@
 #ifndef RANGETEST_H
 #define RANGETEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class RangeTest : public CommonMetaTest {
 	Q_OBJECT

@@ -11,7 +11,7 @@
 #ifndef BARPLOTTEST_H
 #define BARPLOTTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class BarPlotTest : public CommonMetaTest {
 	Q_OBJECT

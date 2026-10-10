@@ -10,7 +10,7 @@
 #ifndef XLSXFILTERTEST_H
 #define XLSXFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class XLSXFilterTest : public CommonMetaTest {
 	Q_OBJECT

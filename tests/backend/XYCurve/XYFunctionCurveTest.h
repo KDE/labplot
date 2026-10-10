@@ -11,7 +11,7 @@
 #ifndef XYFUNCTIONCURVETEST_H
 #define XYFUNCTIONCURVETEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class XYFunctionCurveTest : public CommonMetaTest {
 	Q_OBJECT

@@ -11,7 +11,7 @@
 #ifndef TEXTLABELTEST_H
 #define TEXTLABELTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class TextLabelTest : public CommonMetaTest {
 	Q_OBJECT

@@ -1,5 +1,5 @@
 add_executable(InterpolationTest InterpolationTest.cpp)
 
-target_link_libraries(InterpolationTest labplotbackendlib labplotlib labplottest)
+target_link_libraries(InterpolationTest labplotbackendlib labplotlib labplotmetatest)
 
 add_test(NAME InterpolationTest COMMAND InterpolationTest)

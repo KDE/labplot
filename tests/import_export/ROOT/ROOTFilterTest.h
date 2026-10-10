@@ -10,7 +10,7 @@
 #ifndef ROOTFILTERTEST_H
 #define ROOTFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class ROOTFilterTest : public CommonMetaTest {
 	Q_OBJECT

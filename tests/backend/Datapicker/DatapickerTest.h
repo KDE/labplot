@@ -12,7 +12,7 @@
 #ifndef DATAPICKERTEST_H
 #define DATAPICKERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class DatapickerTest : public CommonMetaTest {
 	Q_OBJECT

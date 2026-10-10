@@ -10,7 +10,7 @@
 #ifndef SERIALPORTTEST_H
 #define SERIALPORTTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class SerialPortTest : public CommonMetaTest {
 	Q_OBJECT

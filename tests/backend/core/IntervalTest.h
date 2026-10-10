@@ -10,7 +10,7 @@
 #ifndef INTERVALTEST_H
 #define INTERVALTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class IntervalTest : public CommonMetaTest {
 	Q_OBJECT

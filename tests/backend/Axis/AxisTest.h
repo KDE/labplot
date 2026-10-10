@@ -12,7 +12,7 @@
 #ifndef AXISTEST_H
 #define AXISTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class AxisTest : public CommonMetaTest {
 	Q_OBJECT

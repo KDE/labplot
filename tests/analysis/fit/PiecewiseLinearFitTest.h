@@ -10,7 +10,7 @@
 #ifndef PIECEWISELINEARFITTEST_H
 #define PIECEWISELINEARFITTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class PiecewiseLinearFitTest : public CommonMetaTest {
 	Q_OBJECT

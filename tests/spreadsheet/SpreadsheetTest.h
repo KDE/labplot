@@ -12,7 +12,7 @@
 #ifndef SPREADSHEETTEST_H
 #define SPREADSHEETTEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class Spreadsheet;
 

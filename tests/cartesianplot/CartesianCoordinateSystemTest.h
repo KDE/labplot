@@ -11,7 +11,7 @@
 #ifndef CARTESIANCOORDINATESYSTEMTEST_H
 #define CARTESIANCOORDINATESYSTEMTEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class CartesianCoordinateSystemTest : public CommonMetaTest {
 	Q_OBJECT

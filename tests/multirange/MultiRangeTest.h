@@ -11,7 +11,7 @@
 #ifndef MULTIRANGETEST_H
 #define MULTIRANGETEST_H
 
-#include "tests/CommonTest.h"
+#include "tests/CommonMetaTest.h"
 
 class MultiRangeTest : public CommonMetaTest {
 	Q_OBJECT

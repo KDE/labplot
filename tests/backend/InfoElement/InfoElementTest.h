@@ -11,7 +11,7 @@
 #ifndef INFOELEMENTTEST_H
 #define INFOELEMENTTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class InfoElementTest : public CommonMetaTest {
 	Q_OBJECT

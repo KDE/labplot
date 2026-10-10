@@ -12,7 +12,7 @@
 #ifndef SPREADSHEETFORMULATEST_H
 #define SPREADSHEETFORMULATEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class SpreadsheetFormulaTest : public CommonMetaTest {
 	Q_OBJECT

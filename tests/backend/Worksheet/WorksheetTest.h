@@ -11,7 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef WORKSHEETTEST_H
 #define WORKSHEETTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class WorksheetTest : public CommonMetaTest {
 	Q_OBJECT

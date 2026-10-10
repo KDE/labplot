@@ -10,7 +10,7 @@
 #ifndef ABSTRACTFILTERTEST_H
 #define ABSTRACTFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class AbstractFilterTest : public CommonMetaTest {
 	Q_OBJECT

@@ -11,7 +11,7 @@
 #ifndef SPINBOXTEST_H
 #define SPINBOXTEST_H
 
-#include "tests/CommonTest.h"
+#include "tests/CommonMetaTest.h"
 
 class SpinBoxTest : public CommonMetaTest {
 	Q_OBJECT

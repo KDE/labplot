@@ -11,7 +11,7 @@
 #ifndef WORKSHEETELEMENTTEST_H
 #define WORKSHEETELEMENTTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 #include "helperMacros.h"
 
 #define ALL_WORKSHEET_TESTS_DEFINITION(WorksheetElementType)                                                                                                   \

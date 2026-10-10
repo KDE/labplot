@@ -10,7 +10,7 @@
 #ifndef READSTATFILTERTEST_H
 #define READSTATFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class ReadStatFilterTest : public CommonMetaTest {
 	Q_OBJECT

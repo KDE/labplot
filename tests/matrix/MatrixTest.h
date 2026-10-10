@@ -11,7 +11,7 @@
 #ifndef MATRIXTEST_H
 #define MATRIXTEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class MatrixTest : public CommonMetaTest {
 	Q_OBJECT

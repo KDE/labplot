@@ -1,5 +1,5 @@
 add_executable(FourierTransformTest FourierTransformTest.cpp)
 
-target_link_libraries(FourierTransformTest labplotbackendlib labplotlib labplottest)
+target_link_libraries(FourierTransformTest labplotbackendlib labplotlib labplotmetatest)
 
 add_test(NAME FourierTransformTest COMMAND FourierTransformTest)

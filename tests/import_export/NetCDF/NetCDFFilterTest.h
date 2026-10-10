@@ -10,7 +10,7 @@
 #ifndef NETCDFFILTERTEST_H
 #define NETCDFFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 class NetCDFFilterTest : public CommonMetaTest {
 	Q_OBJECT

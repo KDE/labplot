@@ -1,5 +1,5 @@
 add_executable(IntegrationTest IntegrationTest.cpp)
 
-target_link_libraries(IntegrationTest labplotbackendlib labplotlib labplottest)
+target_link_libraries(IntegrationTest labplotbackendlib labplotlib labplotmetatest)
 
 add_test(NAME IntegrationTest COMMAND IntegrationTest)

@@ -10,7 +10,7 @@
 #ifndef ANALYSISTEST_H
 #define ANALYSISTEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class AnalysisTest : public CommonMetaTest {
 	Q_OBJECT

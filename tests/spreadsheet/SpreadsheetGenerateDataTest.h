@@ -11,7 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SPREADSHEETGENERATEDATATEST_H
 #define SPREADSHEETGENERATEDATATEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class SpreadsheetGenerateDataTest : public CommonMetaTest {
 	Q_OBJECT
