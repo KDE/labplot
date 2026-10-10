@@ -64,7 +64,7 @@ list(APPEND GCC_CLANG_COMPILE_FLAGS
 
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-	add_compile_options(/W4 /WX)
+	add_compile_options(/W4 /WX /EHsc)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	# Clang shadow warnings aren't as sensitive as gcc
 	add_compile_options(${GCC_CLANG_COMPILE_FLAGS} -Wshadow)

@@ -165,6 +165,11 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
+    # If ASan is in compile flags (from CI environment), propagate to linker
+    if(CMAKE_C_FLAGS MATCHES "-fsanitize=address")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+    endif()
     if(CMAKE_C_COMPILER_VERSION VERSION_GREATER 10.99 AND CMAKE_C_COMPILER_VERSION VERSION_LESS 12)	# GCC 11 fails building readstat 1.1.8
         message(STATUS "Building ReadStat disabled due to GNU C compiler version 11")
         set(DONT_BUILD_READSTAT TRUE)
@@ -179,6 +184,11 @@ elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     # TRY: -flto=thin -flto-jobs=2
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
+    # If ASan is in compile flags (from CI environment), propagate to linker
+    if(CMAKE_C_FLAGS MATCHES "-fsanitize=address")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+    endif()
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Intel")
     message(STATUS "Intel C compiler detected, adding compile flags")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -O3 ${GENERIC_C_FLAGS}")
@@ -209,6 +219,11 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
         message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant")
 	# see linker flags of gcc
+        # If ASan is in compile flags (from CI environment), propagate to linker
+        if(CMAKE_CXX_FLAGS MATCHES "-fsanitize=address")
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+            set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+        endif()
     endif()
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=hardened -gdwarf-5 -gsplit-dwarf")
@@ -217,6 +232,11 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant")
     # see linker flags of clang
+    # If ASan is in compile flags (from CI environment), propagate to linker
+    if(CMAKE_CXX_FLAGS MATCHES "-fsanitize=address")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
+    endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
     message(STATUS "Intel C++ compiler detected, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")

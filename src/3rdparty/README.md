@@ -79,6 +79,7 @@ cd ..
 - `CMakeLists.txt`:
   - Changed `option(DBC_ENABLE_TESTS ...)` from `ON` to `OFF` (tests require Catch2 via FetchContent)
   - Replaced FetchContent for FastFloat with `add_subdirectory(../fast_float ...)` to use local copy
+  - Added `/EHsc` to MSVC compile flags (line 67) — upstream builds with `/W4 /WX` but missing exception handling flag causes C4530 warning-as-error with MSVC 2022
 
 ## FastFloat
 
