@@ -29,7 +29,7 @@
 #include <QVector>
 
 void DatasetsTest::initTestCase() {
-	CommonTest::initTestCase();
+	CommonMetaTest::initTestCase();
 
 	const QString currentDir = QStringLiteral(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();

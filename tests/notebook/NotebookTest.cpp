@@ -15,7 +15,7 @@
 #include <gsl/gsl_math.h>
 
 void NotebookTest::initTestCase() {
-	CommonTest::initTestCase();
+	CommonMetaTest::initTestCase();
 
 	QLocale::setDefault(QLocale(QLocale::C));
 }

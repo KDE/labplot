@@ -51,7 +51,7 @@ const int mqttPort = PORT;
 // }
 
 void MQTTTest::initTestCase() {
-	CommonTest::initTestCase();
+	CommonMetaTest::initTestCase();
 
 	const QString currentDir = QLatin1String(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();

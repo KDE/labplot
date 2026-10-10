@@ -16,7 +16,7 @@
 #include <cmath>
 
 void SpreadsheetGenerateDataTest::initTestCase() {
-	CommonTest::initTestCase();
+	CommonMetaTest::initTestCase();
 	QLocale::setDefault(QLocale(QLocale::C));
 }
 

@@ -16,7 +16,7 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 
 void SerialPortTest::initTestCase() {
-	CommonTest::initTestCase();
+	CommonMetaTest::initTestCase();
 
 #ifndef _WIN32
 	QProcess p;

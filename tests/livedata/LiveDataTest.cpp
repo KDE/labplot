@@ -28,7 +28,7 @@ constexpr QLatin1String hostname = QLatin1String(HOSTNAME);
 } // anonymous namespace
 
 void LiveDataTest::initTestCase() {
-	CommonTest::initTestCase();
+	CommonMetaTest::initTestCase();
 
 	// initialize the TCP socket/server
 	m_tcpServer = new QTcpServer(this);
