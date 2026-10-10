@@ -883,9 +883,9 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 			return false;
 		}
 
-		//if (std::isnan(x))
+		// if (std::isnan(x))
 		//	WARN(Q_FUNC_INFO << ", WARNING: X expression " << STDSTRING(xexpr) << " evaluated @ " << range.start() + step * i << " is NAN")
-		//if (std::isnan(y))
+		// if (std::isnan(y))
 		//	WARN(Q_FUNC_INFO << ", WARNING: Y expression " << STDSTRING(yexpr) << " evaluated @ " << range.start() + step * i << " is NAN")
 
 		(*xVector)[i] = x;
