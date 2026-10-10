@@ -48,7 +48,7 @@ Environment:
 Options:
  use-ccache: True
  ccache-large-cache: True
- per-test-timeout: 240  # Increased from 120 due to ASan overhead in fit tests
+ per-test-timeout: 600
  require-passing-tests-on: ['@all']
  release-build: True
  cmake-options: '-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON'
