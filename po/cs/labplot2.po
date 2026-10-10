@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2026-10-09 00:04+0200\n"
+"PO-Revision-Date: 2026-10-10 00:48+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -7388,38 +7388,38 @@ msgstr "%1: nastavit index spojovacího bodu"
 #: src/backend/worksheet/InfoElement.cpp:864
 #, kde-format
 msgid "%1: set connectionline curve name"
-msgstr "%1: nastavit název křivky spojovací čáry"
+msgstr "%1: nastavit název křivky spojovací přímky"
 
 #: src/backend/worksheet/Line.cpp:100
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:438
 #, kde-format
 msgid "%1: line type changed"
-msgstr "%1: typ čáry změněn"
+msgstr "%1: typ přímky změněn"
 
 #: src/backend/worksheet/Line.cpp:107
 #, kde-format
 msgid "%1: drop line type changed"
-msgstr "%1: typ vodicí čáry změněn"
+msgstr "%1: typ vodicí přímky změněn"
 
 #: src/backend/worksheet/Line.cpp:114
 #, kde-format
 msgid "%1: set line style"
-msgstr "%1: nastavit styl čáry"
+msgstr "%1: nastavit styl přímky"
 
 #: src/backend/worksheet/Line.cpp:121
 #, kde-format
 msgid "%1: set line width"
-msgstr "%1: nastavit šířku čáry"
+msgstr "%1: nastavit šířku přímky"
 
 #: src/backend/worksheet/Line.cpp:128
 #, kde-format
 msgid "%1: set line color"
-msgstr "%1: nastavit barvu čáry"
+msgstr "%1: nastavit barvu přímky"
 
 #: src/backend/worksheet/Line.cpp:135
 #, kde-format
 msgid "%1: set line opacity"
-msgstr "%1: nastavit průhlednost čáry"
+msgstr "%1: nastavit průhlednost přímky"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
@@ -7513,7 +7513,7 @@ msgstr "Orientace"
 #: src/kdefrontend/widgets/SymbolWidget.cpp:137
 #, kde-format
 msgid "Line"
-msgstr "Čára"
+msgstr "přímka"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:130
@@ -8153,7 +8153,7 @@ msgstr "Vlastní bod"
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:176
 #, kde-format
 msgid "Reference Line"
-msgstr "Referenční čára"
+msgstr "Referenční přímka"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:465
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2073
@@ -8995,7 +8995,7 @@ msgstr "trojúhelník tečka"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:376
 #, kde-format
 msgid "triangle line"
-msgstr "trojúhelník čára"
+msgstr "trojúhelník přímka"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:378
 #, kde-format
@@ -10125,7 +10125,7 @@ msgstr "xy-hodnoty"
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:39
 #, kde-format
 msgid "Rows, Columns and xy-Values"
-msgstr ""
+msgstr "Řádky, sloupce a xy-hodnoty"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:178
 #, kde-format
@@ -13929,17 +13929,17 @@ msgstr "%1 lollipop grafy: šablona \"%2\" načtena"
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:34
 #, kde-format
 msgid "Automatic (g)"
-msgstr ""
+msgstr "Automatická (g)"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
 msgid "Automatic (G)"
-msgstr ""
+msgstr "Automatická (G)"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:264
 #, kde-format
 msgid "%1 matrices: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 matice: šablona \"%2\" načtena"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -13947,6 +13947,8 @@ msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
+"Je-li zaškrtnuto, stav výchozích doků aplikací se uloží do souboru projektu "
+"a při načtení projektu se obnoví."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
@@ -13956,27 +13958,31 @@ msgid ""
 "Uncheck this option to reduce the size of the project file at costs of the "
 "longer project load times."
 msgstr ""
+"Je-li zaškrtnuto, výsledky výpočtů v analytických křivkách se uloží do "
+"souboru projektu.\n"
+"Tuto možnost odškrtněte, chcete-li zmenšit velikost souboru projektu, což "
+"však bude mít za následek delší dobu načítání projektu."
 
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:227
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 referenční přímky: šablona \"%2\" načtena"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:53
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
-msgstr ""
+msgstr "Povolit propojení pro synchronizaci počtu řádků s jinou tabulkou"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Tabulka pro synchronizaci počtu řádků s"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:231
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 tabulky: šablona \"%2\" načtena"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:44
 #, kde-format
@@ -13984,6 +13990,8 @@ msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
 "resize the canvas only."
 msgstr ""
+"Je-li zaškrtnuto, při změně velikosti se upraví měřítko obsahu listu. V "
+"opačném případě se změní pouze velikost pracovní plochy."
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:256
 #, kde-format
@@ -14008,7 +14016,7 @@ msgstr "Standardní stránka"
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:604
 #, kde-format
 msgid "%1 worksheets: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 listů: šablona \"%2\" načtena"
 
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:20
 #, kde-format
@@ -14018,71 +14026,71 @@ msgstr "stav: %1"
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:29
 #, kde-format
 msgid "calculation time: %1 s"
-msgstr ""
+msgstr "doba výpočtu: %1 s"
 
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:31
 #, kde-format
 msgid "calculation time: %1 ms"
-msgstr ""
+msgstr "doba výpočtu: %1 ms"
 
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:58
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:76
 #, kde-format
 msgid "XY-Curve"
-msgstr ""
+msgstr "xy-křivka"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:189
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:20
 #, kde-format
 msgid "or Kernel/Size:"
-msgstr ""
+msgstr "nebo jádra/velikosti:"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:203
 #, kde-format
 msgid "with Kernel/Size:"
-msgstr ""
+msgstr "s jádrem/velikostí:"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:343
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:346
 #, kde-format
 msgid "Deconvolution"
-msgstr ""
+msgstr "Dekonvoluce"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, kde-format
 msgid "Convolution status: %1"
-msgstr ""
+msgstr "Stav konvoluce: %1"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:385
 #, kde-format
 msgid "Deconvolution status: %1"
-msgstr ""
+msgstr "Stav dekonvoluce: %1"
 
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:282
 #, kde-format
 msgid "Correlation status: %1"
-msgstr ""
+msgstr "Stav korelace: %1"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:197
 #, kde-format
 msgid "Horiz. Start"
-msgstr ""
+msgstr "Horiz. start"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:198
 #, kde-format
 msgid "Vert. Start"
-msgstr ""
+msgstr "Vert. start"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:199
 #, kde-format
 msgid "Horiz. Midpoint"
-msgstr ""
+msgstr "Horiz. střed"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:200
 #, kde-format
 msgid "Vert. Midpoint"
-msgstr ""
+msgstr "Vert. střed"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:201
 #, kde-format
@@ -14097,12 +14105,12 @@ msgstr "3-segmenty"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:205
 #, kde-format
 msgid "Akima-spline (Natural)"
-msgstr ""
+msgstr "Akima-spline (přirozená)"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:206
 #, kde-format
 msgid "Akima-spline (Periodic)"
-msgstr ""
+msgstr "Akima-spline (periodická)"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:331
 #: src/kdefrontend/widgets/ValueWidget.cpp:31
@@ -14137,6 +14145,8 @@ msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
+"Je-li zaškrtnuto, propojit sousední body čarami, i když mezi nimi jsou "
+"mezery (neplatné nebo maskované hodnoty)"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:519
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:520
@@ -14144,18 +14154,20 @@ msgstr ""
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
+"Je-li zaškrtnuto, propojit datové body pouze v případě striktně rostoucích "
+"hodnot proměnné X"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:65
 #, kde-format
 msgid "This method is much slower than any other"
-msgstr ""
+msgstr "Tato metoda je mnohem pomalejší než jakákoli jiná"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:357
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:389
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:434
 #, kde-format
 msgid "Tolerance (distance):"
-msgstr ""
+msgstr "Tolerance (vzdálenost):"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:368
 #, kde-format
@@ -14170,22 +14182,22 @@ msgstr "Velikost kroku:"
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:396
 #, kde-format
 msgid "Repeats:"
-msgstr "Opakuje se:"
+msgstr "Opakování:"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:406
 #, kde-format
 msgid "Tolerance (area):"
-msgstr ""
+msgstr "Tolerance (plocha):"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:417
 #, kde-format
 msgid "Minimum tolerance:"
-msgstr ""
+msgstr "Minimální tolerance:"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:421
 #, kde-format
 msgid "Maximum tolerance:"
-msgstr ""
+msgstr "Maximální tolerance:"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:438
 #, kde-format
@@ -14195,7 +14207,7 @@ msgstr "Hledat oblast:"
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:504
 #, kde-format
 msgid "Data reduction status: %1"
-msgstr ""
+msgstr "Stav redukce dat: %1"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
@@ -14205,17 +14217,17 @@ msgstr "počet bodů: %1"
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "positional squared error: %1"
-msgstr ""
+msgstr "polohová kvadratická chyba: %1"
 
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:521
 #, kde-format
 msgid "area error: %1"
-msgstr ""
+msgstr "chyba oblasti: %1"
 
 #: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
 #, kde-format
 msgid "Differentiation status: %1"
-msgstr ""
+msgstr "Stav diferenciace: %1"
 
 #: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
@@ -14274,22 +14286,22 @@ msgstr "Nepřesnost, %"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
 msgid "t statistic"
-msgstr ""
+msgstr "t statistika"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X and Y column specified!"
-msgstr ""
+msgstr "Nebyly zadány sloupce X a Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X column specified!"
-msgstr ""
+msgstr "Nebyl zadán sloupec X!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
 #, kde-format
 msgid "No Y column specified!"
-msgstr ""
+msgstr "Nebyl zadán sloupec Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format
@@ -14326,27 +14338,27 @@ msgstr "Stupeň:"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:895
 #, kde-format
 msgid "Number of peaks:"
-msgstr ""
+msgstr "Počet vrcholů:"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1224
 #, kde-format
 msgid "Fit status: %1"
-msgstr ""
+msgstr "Stav přizpůsobení: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
 #, kde-format
 msgid "No data source available!"
-msgstr ""
+msgstr "Žádný zdroj dat není k dispozici!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
 msgid "%1 % lower confidence level"
-msgstr ""
+msgstr "%1 % dolní hranice intervalu spolehlivosti"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1411
 #, kde-format
 msgid "%1 % upper confidence level"
-msgstr ""
+msgstr "%1 % horní hranice intervalu spolehlivosti"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:289
@@ -14355,15 +14367,16 @@ msgstr ""
 msgid "Cutoff:"
 msgstr "Bod zkrácení:"
 
+# turn the computer off
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:297
 #, kde-format
 msgid "Lower cutoff:"
-msgstr ""
+msgstr "Dolní bod zkrácení:"
 
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:298
 #, kde-format
 msgid "Upper cutoff:"
-msgstr ""
+msgstr "Horní bod zkrácení"
 
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:432
 #, kde-format
@@ -14371,31 +14384,33 @@ msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
 "cutoff value. Please fix this."
 msgstr ""
+"Šířka pásma je <= 0, protože dolní hraniční hodnota není menší než horní "
+"hraniční hodnota. Prosím, opravte to."
 
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:433
 #, kde-format
 msgid "band width <= 0"
-msgstr ""
+msgstr "šířka pásma <= 0"
 
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
 #, kde-format
 msgid "Fourier-Filter status: %1"
-msgstr ""
+msgstr "Stav Fourierova filtru: %1"
 
 #: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
 #, kde-format
 msgid "Fourier transformation status: %1"
-msgstr ""
+msgstr "Stav Fourierovy transformace: %1"
 
 #: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
 #, kde-format
 msgid "Hilbert transformation status: %1"
-msgstr ""
+msgstr "Stav Hilbertovy transformace: %1"
 
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:321
 #, kde-format
 msgid "Integration status: %1"
-msgstr ""
+msgstr "Stav integrace: %1"
 
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:334
 #, kde-format
@@ -14405,12 +14420,12 @@ msgstr "hodnota: %1"
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:79
 #, kde-format
 msgid "Auto (5x data points)"
-msgstr ""
+msgstr "Automaticky (5 datových bodů)"
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:80
 #, kde-format
 msgid "Multiple of data points"
-msgstr ""
+msgstr "Násobek datových bodů"
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:91
 #, kde-format
@@ -14418,16 +14433,18 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
+"Počet interpolačních bodů by měl být větší než celkový počet bodů ve zdroji "
+"dat."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:540
 #, kde-format
 msgid "Interpolation status: %1"
-msgstr ""
+msgstr "Stav interpolace: %1"
 
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:412
 #, kde-format
 msgid "Smoothing status: %1"
-msgstr ""
+msgstr "Stav vyhlazování: %1"
 
 #: src/kdefrontend/examples/ExamplesDialog.cpp:42
 #, kde-format
@@ -14453,13 +14470,13 @@ msgstr "Vlastnosti"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr ""
+msgstr "Vlastnosti: Tabulka"
 
 #: src/kdefrontend/GuiObserver.cpp:231
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr ""
+msgstr "Vlastnosti: Statistiky sloupců"
 
 #: src/kdefrontend/GuiObserver.cpp:241
 #, kde-format
@@ -14471,25 +14488,25 @@ msgstr "%1 list"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr ""
+msgstr "Vlastnosti: Sloupec"
 
 #: src/kdefrontend/GuiObserver.cpp:253
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr ""
+msgstr "Vlastnosti: Matice"
 
 #: src/kdefrontend/GuiObserver.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr ""
+msgstr "Vlastnosti: List"
 
 #: src/kdefrontend/GuiObserver.cpp:264
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr ""
+msgstr "Vlastnosti: Oblast grafu"
 
 #: src/kdefrontend/GuiObserver.cpp:270
 #, kde-format
@@ -14722,27 +14739,27 @@ msgstr ""
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
 msgid "Solid Line"
-msgstr "Plná čára"
+msgstr "Plná přímka"
 
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
 msgid "Dash Line"
-msgstr "Čárkovaná čára"
+msgstr "Čárkovaná přímka"
 
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
 msgid "Dot Line"
-msgstr "Tečkovaná čára"
+msgstr "Tečkovaná přímka"
 
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
 msgid "Dash-dot Line"
-msgstr "Tečko čárkovaná čára"
+msgstr "Tečko čárkovaná přímka"
 
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
 msgid "Dash-dot-dot Line"
-msgstr "Čára s pomlčkami a dvěma tečkami"
+msgstr "přímka s pomlčkami a dvěma tečkami"
 
 #: src/kdefrontend/GuiTools.cpp:157
 #, kde-format
@@ -16275,7 +16292,7 @@ msgstr ""
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
 "background."
-msgstr ""
+msgstr "Parametr vyhlazení – čím vyšší hodnota, tím hladší je výsledné pozadí."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:172
 #, kde-format
@@ -16283,6 +16300,8 @@ msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
+"Poměr výpočtu váhy – hodnota v rozmezí 0 až 1; čím menší hodnota, tím menší "
+"jsou povolené záporné hodnoty."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:176
 #, kde-format
@@ -20462,7 +20481,7 @@ msgstr "Kotva:"
 #: src/kdefrontend/worksheet/GridDialog.cpp:45
 #, kde-format
 msgid "Lines"
-msgstr "Čáry"
+msgstr "přímky"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLine)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:246
@@ -21905,13 +21924,13 @@ msgstr "Počet úrovní:"
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:314
 #, kde-format
 msgid "Line width:"
-msgstr "Šířka čáry:"
+msgstr "Šířka přímky:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsLineColor)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:331
 #, kde-format
 msgid "Line color:"
-msgstr "Barva čáry:"
+msgstr "Barva přímky:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLevelsMultiColoring)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:341
@@ -22340,7 +22359,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:162
 #, kde-format
 msgid "Grid lines:"
-msgstr "Čáry mřížky:"
+msgstr "přímky mřížky:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCaptions)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:179
@@ -23212,27 +23231,27 @@ msgstr "Elipsa"
 #: src/kdefrontend/widgets/LabelWidget.cpp:183
 #, kde-format
 msgid "Round sided rectangle"
-msgstr ""
+msgstr "Obdélník se zaoblenými stranami"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:184
 #, kde-format
 msgid "Round corner rectangle"
-msgstr ""
+msgstr "Obdélník se zaoblenými rohy"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:185
 #, kde-format
 msgid "Inwards round corner rectangle"
-msgstr ""
+msgstr "Obdélník s zaoblenými vnitřními rohy"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:186
 #, kde-format
 msgid "Dented border rectangle"
-msgstr ""
+msgstr "Obdélník s prohnutým okrajem"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:187
 #, kde-format
 msgid "Cuboid"
-msgstr ""
+msgstr "Kvádr"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:188
 #, kde-format
@@ -23262,27 +23281,27 @@ msgstr ""
 #: src/kdefrontend/widgets/LabelWidget.cpp:194
 #, kde-format
 msgid "Solid line"
-msgstr "Plná čára"
+msgstr "Plná přímka"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format
 msgid "Dash line"
-msgstr "Čárkovaná čára"
+msgstr "Čárkovaná přímka"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:196
 #, kde-format
 msgid "Dot line"
-msgstr "Tečkovaná čára"
+msgstr "Tečkovaná přímka"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:197
 #, kde-format
 msgid "Dash dot line"
-msgstr "Tečko čárkovaná čára"
+msgstr "Tečko čárkovaná přímka"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:198
 #, kde-format
 msgid "Dash dot dot line"
-msgstr "Čára s pomlčkami a dvěma tečkami"
+msgstr "přímka s pomlčkami a dvěma tečkami"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:216
 #, kde-format
