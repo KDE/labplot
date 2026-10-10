@@ -1,5 +1,5 @@
 add_executable(DatasetsTest DatasetsTest.cpp)
 
-target_link_libraries(DatasetsTest labplotbackendlib labplotlib labplottest)
+target_link_libraries(DatasetsTest labplotbackendlib labplotlib labplotmetatest)
 
 add_test(NAME DatasetsTest COMMAND DatasetsTest)
