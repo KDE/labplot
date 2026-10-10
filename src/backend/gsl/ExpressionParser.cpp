@@ -421,8 +421,8 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 		if (parser.parseErrors() > 0)
 			return false;
 
-		if (std::isnan(y))
-			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << x << " is NAN")
+		// if (std::isnan(y))
+		//	WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << x << " is NAN")
 
 		(*xVector)[i] = x;
 		(*yVector)[i] = y;

@@ -12,11 +12,11 @@
 #ifndef SPREADSHEETTEST_H
 #define SPREADSHEETTEST_H
 
-#include "../CommonMetaTest.h"
+#include "../CommonTest.h"
 
 class Spreadsheet;
 
-class SpreadsheetTest : public CommonMetaTest {
+class SpreadsheetTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

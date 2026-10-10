@@ -10,9 +10,9 @@
 #ifndef FITSFILTERTEST_H
 #define FITSFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class FITSFilterTest : public CommonMetaTest {
+class FITSFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

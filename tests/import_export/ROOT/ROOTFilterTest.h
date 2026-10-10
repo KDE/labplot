@@ -10,9 +10,9 @@
 #ifndef ROOTFILTERTEST_H
 #define ROOTFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class ROOTFilterTest : public CommonMetaTest {
+class ROOTFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

@@ -10,9 +10,9 @@
 #ifndef ODSFILTERTEST_H
 #define ODSFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class OdsFilterTest : public CommonMetaTest {
+class OdsFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

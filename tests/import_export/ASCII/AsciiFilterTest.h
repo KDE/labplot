@@ -11,9 +11,9 @@
 #ifndef ASCIIFILTERTEST_H
 #define ASCIIFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class AsciiFilterTest : public CommonMetaTest {
+class AsciiFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

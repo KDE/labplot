@@ -1,5 +1,5 @@
 add_executable(ParquetFilterTest ParquetFilterTest.cpp)
 
-target_link_libraries(ParquetFilterTest labplotmetatest)
+target_link_libraries(ParquetFilterTest labplottest)
 
 add_test(NAME ParquetFilterTest COMMAND ParquetFilterTest)

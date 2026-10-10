@@ -1,5 +1,5 @@
 add_executable(MCAPFilterTest MCAPFilterTest.cpp)
 
-target_link_libraries(MCAPFilterTest labplotmetatest)
+target_link_libraries(MCAPFilterTest labplottest)
 
 add_test(NAME MCAPFilterTest COMMAND MCAPFilterTest)

@@ -20,7 +20,7 @@
 #include <QSqlRecord>
 
 void ImportSqlDatabaseTest::initTestCase() {
-	CommonMetaTest::initTestCase();
+	CommonTest::initTestCase();
 
 	// prepare the database connection
 	QString m_configPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("sql_connections"));

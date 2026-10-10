@@ -3,7 +3,7 @@ option(ENABLE_TEST_BACKEND_COLUMN "Enable Column Tests" ON)
 if(ENABLE_TEST_BACKEND_COLUMN)
 	add_executable (ColumnTest ColumnTest.cpp)
 
-	target_link_libraries(ColumnTest labplotmetatest)
+	target_link_libraries(ColumnTest labplottest)
 
 	add_test(NAME ColumnTest COMMAND ColumnTest)
 endif()

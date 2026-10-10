@@ -9,9 +9,9 @@
 #ifndef PARQUETFILTERTEST_H
 #define PARQUETFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class ParquetFilterTest : public CommonMetaTest {
+class ParquetFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

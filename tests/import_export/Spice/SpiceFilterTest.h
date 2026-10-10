@@ -11,9 +11,9 @@
 #ifndef SPICEFILTERTEST_H
 #define SPICEFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class SpiceFilterTest : public CommonMetaTest {
+class SpiceFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

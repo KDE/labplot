@@ -10,9 +10,9 @@
 #ifndef XLSXFILTERTEST_H
 #define XLSXFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class XLSXFilterTest : public CommonMetaTest {
+class XLSXFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

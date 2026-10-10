@@ -20,7 +20,7 @@ Dependencies:
     'frameworks/purpose': '@stable'
     'education/cantor': '@latest'
 
- - 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6', 'macOS/Qt6']
+ - 'on': ['Linux/Qt6', 'Windows/Qt6', 'macOS/Qt6']  # FreeBSD/Qt6 disabled: ASan runtime not available
    'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
     'frameworks/kcrash': '@latest-kf6'
@@ -48,7 +48,7 @@ Environment:
 Options:
  use-ccache: True
  ccache-large-cache: True
- per-test-timeout: 120
+ per-test-timeout: 240  # Increased from 120 due to ASan overhead in fit tests
  require-passing-tests-on: ['@all']
  release-build: True
  cmake-options: '-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON'

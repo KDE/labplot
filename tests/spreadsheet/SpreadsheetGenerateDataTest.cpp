@@ -17,8 +17,6 @@
 
 void SpreadsheetGenerateDataTest::initTestCase() {
 	CommonTest::initTestCase();
-
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 	QLocale::setDefault(QLocale(QLocale::C));
 }
 

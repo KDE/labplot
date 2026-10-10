@@ -9,7 +9,8 @@
 */
 
 #include "CommonTest.h"
-#include "src/backend/core/AbstractColumn.h"
+#include "backend/core/AbstractAspect.h"
+#include "backend/core/AbstractColumn.h"
 
 #include "backend/lib/UndoStack.h"
 
@@ -22,6 +23,10 @@ void CommonTest::initTestCase() {
 	enableDebugTrace(true);
 	enableInfoTrace(true);
 	KLocalizedString::setApplicationDomain("labplot");
+
+	// Register metatypes for Qt signals with pointer arguments
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
 #ifdef _WIN32
 //	if (AttachConsole(ATTACH_PARENT_PROCESS)) {

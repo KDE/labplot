@@ -10,9 +10,9 @@
 #ifndef NETCDFFILTERTEST_H
 #define NETCDFFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class NetCDFFilterTest : public CommonMetaTest {
+class NetCDFFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

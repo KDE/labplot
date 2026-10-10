@@ -9,6 +9,6 @@ if(ENABLE_LIBORIGIN)
     endif()
 endif()
 
-target_link_libraries(ProjectImportTest labplotmetatest)
+target_link_libraries(ProjectImportTest labplottest)
 
 add_test(NAME ProjectImportTest COMMAND ProjectImportTest)

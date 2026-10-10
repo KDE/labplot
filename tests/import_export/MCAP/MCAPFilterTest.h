@@ -11,9 +11,9 @@
 #ifndef MCAPFILTERTEST_H
 #define MCAPFILTERTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class MCAPFilterTest : public CommonMetaTest {
+class MCAPFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

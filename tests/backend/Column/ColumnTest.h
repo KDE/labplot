@@ -13,9 +13,9 @@
 #ifndef COLUMNTEST_H
 #define COLUMNTEST_H
 
-#include "../../CommonMetaTest.h"
+#include "../../CommonTest.h"
 
-class ColumnTest : public CommonMetaTest {
+class ColumnTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
