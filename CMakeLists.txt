@@ -87,7 +87,6 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     Crash
     I18n
     IconThemes
-    KIO
     TextWidgets
     WidgetsAddons
     XmlGui
@@ -97,8 +96,6 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     SyntaxHighlighting
 OPTIONAL_COMPONENTS
     DocTools
-    # Service
-    # Parts
     Purpose
 )
 
