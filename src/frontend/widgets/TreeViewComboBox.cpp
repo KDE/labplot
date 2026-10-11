@@ -21,6 +21,7 @@
 #include <QHeaderView>
 #include <QLineEdit>
 #include <QStylePainter>
+#include <QToolButton>
 #include <QTreeView>
 #include <QVBoxLayout>
 
@@ -34,7 +35,8 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent)
 	: QComboBox(parent)
 	, m_treeView(new QTreeView)
 	, m_groupBox(new QGroupBox)
-	, m_lineEdit(new QLineEdit) {
+	, m_lineEdit(new QLineEdit)
+	, m_clearButton(new QToolButton(this)) {
 	auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
@@ -54,6 +56,13 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent)
 	m_lineEdit->setPlaceholderText(i18n("Search/Filter text"));
 	m_lineEdit->setClearButtonEnabled(true);
 	m_lineEdit->setFocus();
+
+	m_clearButton->setIcon(QIcon::fromTheme(QLatin1String("edit-clear-locationbar-rtl")));
+	m_clearButton->setCursor(Qt::ArrowCursor);
+	m_clearButton->setToolTip(i18n("Clear selection"));
+	m_clearButton->setStyleSheet(QStringLiteral("QToolButton { border: none; padding: 0px; }"));
+	m_clearButton->setVisible(false); // hidden until selection is made
+	connect(m_clearButton, &QToolButton::clicked, this, &TreeViewComboBox::clear);
 
 	addItem(QString());
 	setCurrentIndex(0);
@@ -108,7 +117,11 @@ void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index) {
 	if (index.isValid()) {
 		setToolTip(m_model->data(index, Qt::ToolTipRole).toString());
 		QComboBox::setItemText(0, index.data().toString());
+	} else {
+		setToolTip(QString());
+		QComboBox::setItemText(0, QString());
 	}
+	updateClearButtonVisibility();
 }
 
 /*!
@@ -157,6 +170,49 @@ void TreeViewComboBox::paintEvent(QPaintEvent*) {
 
 void TreeViewComboBox::hidePopup() {
 	m_groupBox->hide();
+}
+
+void TreeViewComboBox::setClearButtonEnabled(bool enable) {
+	m_clearButtonEnabled = enable;
+	updateClearButtonVisibility();
+}
+
+void TreeViewComboBox::updateClearButtonVisibility() {
+	if (m_clearButton) {
+		bool visible = m_clearButtonEnabled && currentModelIndex().isValid() && underMouse();
+		m_clearButton->setVisible(visible);
+		if (visible) {
+			const int frameWidth = style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth);
+			const int arrowWidth = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+			const int buttonSize = height() - 2 * frameWidth - 4;
+			m_clearButton->setFixedSize(buttonSize, buttonSize);
+			m_clearButton->move(width() - arrowWidth - buttonSize - frameWidth - 2, (height() - buttonSize) / 2);
+		}
+	}
+}
+
+void TreeViewComboBox::clear() {
+	m_treeView->setCurrentIndex(QModelIndex());
+	QComboBox::setItemText(0, QString());
+	m_currentText.clear();
+	setToolTip(QString());
+	updateClearButtonVisibility();
+	Q_EMIT currentModelIndexChanged(QModelIndex());
+}
+
+void TreeViewComboBox::resizeEvent(QResizeEvent* event) {
+	QComboBox::resizeEvent(event);
+	updateClearButtonVisibility();
+}
+
+void TreeViewComboBox::enterEvent(QEnterEvent* event) {
+	QComboBox::enterEvent(event);
+	updateClearButtonVisibility();
+}
+
+void TreeViewComboBox::leaveEvent(QEvent* event) {
+	QComboBox::leaveEvent(event);
+	updateClearButtonVisibility();
 }
 
 /*!
@@ -252,6 +308,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 		QComboBox::setCurrentIndex(0);
 		QComboBox::setItemText(0, index.data().toString());
 		setToolTip(m_model->data(index, Qt::ToolTipRole).toString());
+		updateClearButtonVisibility();
 		Q_EMIT currentModelIndexChanged(index);
 		m_groupBox->hide();
 		return;
@@ -260,6 +317,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	m_treeView->setCurrentIndex(QModelIndex());
 	setCurrentIndex(0);
 	QComboBox::setItemText(0, QString());
+	updateClearButtonVisibility();
 	Q_EMIT currentModelIndexChanged(QModelIndex());
 	m_groupBox->hide();
 }

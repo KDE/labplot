@@ -13,6 +13,7 @@
 #include <QComboBox>
 
 class AbstractAspect;
+class QToolButton;
 class AbstractColumn;
 class AspectTreeModel;
 class QGroupBox;
@@ -41,6 +42,7 @@ public:
 	void showPopup() override;
 	void hidePopup() override;
 	void setInvalid(bool invalid, const QString& tooltip = QString());
+	void setClearButtonEnabled(bool);
 
 	QString currentText() const;
 	void setText(const QString& text);
@@ -53,6 +55,8 @@ private:
 	QGroupBox* m_groupBox;
 	QLineEdit* m_lineEdit;
 	QString m_currentText{QLatin1String("")};
+	QToolButton* m_clearButton{nullptr};
+	bool m_clearButtonEnabled{true};
 
 	QList<AspectType> m_topLevelClasses;
 	QList<const char*> m_selectableClasses;
@@ -63,12 +67,17 @@ private:
 	bool filter(const QModelIndex&, const QString&);
 	bool isTopLevel(const AbstractAspect*) const;
 	bool isHidden(const AbstractAspect*) const;
+	void updateClearButtonVisibility();
 
 	void paintEvent(QPaintEvent*) override;
+	void resizeEvent(QResizeEvent*) override;
+	void enterEvent(QEnterEvent*) override;
+	void leaveEvent(QEvent*) override;
 
 private Q_SLOTS:
 	void treeViewIndexActivated(const QModelIndex&);
 	void filterChanged(const QString&);
+	void clear();
 
 Q_SIGNALS:
 	void currentModelIndexChanged(const QModelIndex&);

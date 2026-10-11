@@ -8,6 +8,7 @@ New features:
 		* New column "Changed" in the project explorer to inform about which objects were changed since the last save
 		* Markdown support in Notes
 		* CLI parameters to create and export plots in a batch mode
+		* Clear button in TreeViewComboBox to allow to reset the current selection of aspects in this combobox (BUG: 526418)
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 		* Add option to enable/disable parameter error scaling (relative vs. absolute sigma)

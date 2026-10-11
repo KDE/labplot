@@ -163,12 +163,11 @@ void SpreadsheetDock::linkedSpreadsheetChanged(const QModelIndex& index) {
 		auto* cb{dynamic_cast<TreeViewComboBox*>(QObject::sender())};
 		if (cb)
 			cb->setStyleSheet(QString());
-		auto* sh = dynamic_cast<Spreadsheet*>(aspect);
-		if (sh) {
-			for (auto* spreadsheet : m_spreadsheets)
-				spreadsheet->setLinkedSpreadsheet(sh);
-		}
 	}
+
+	auto* sh = dynamic_cast<Spreadsheet*>(aspect);
+	for (auto* spreadsheet : m_spreadsheets)
+		spreadsheet->setLinkedSpreadsheet(sh);
 }
 
 void SpreadsheetDock::toggleStatisticsSpreadsheet(bool on) {
