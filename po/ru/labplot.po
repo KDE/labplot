@@ -215,7 +215,7 @@ msgstr "Погрешности по X +"
 #: src/backend/core/AbstractColumn.cpp:188
 #, kde-format
 msgid "X-Uncertainty -"
-msgstr "Недостоверности по Y -"
+msgstr "Недостоверности по X -"
 
 #: src/backend/core/AbstractColumn.cpp:190
 #, kde-format
@@ -8345,7 +8345,7 @@ msgid ""
 "shifted, etc.)"
 msgstr ""
 "Добавление новой XY-кривой, определённой как функция других XY-кривых "
-"(масштабированную, сдвинутую и т. д.)."
+"(масштабированную, сдвинутую и т.д.)."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:501
@@ -13244,7 +13244,7 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
-"Применить основной цвет графика (линии, символа и т. д.) к цвету названия в "
+"Применить основной цвет графика (линии, символа и т.д.) к цвету названия в "
 "легенде."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:801
@@ -15683,7 +15683,7 @@ msgstr "Сня&ть выделение"
 #: src/frontend/worksheet/WorksheetView.cpp:136
 #, kde-format
 msgid "Select All"
-msgstr "Выбрать всё"
+msgstr "Выбрать все"
 
 #: src/frontend/matrix/MatrixView.cpp:137
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:317
