@@ -241,7 +241,7 @@ msgstr "Погрешности по X +"
 #: src/backend/core/AbstractColumn.cpp:184
 #, kde-format
 msgid "X-Uncertainty -"
-msgstr "Недостоверности по Y -"
+msgstr "Недостоверности по X -"
 
 #: src/backend/core/AbstractColumn.cpp:186
 #, kde-format
