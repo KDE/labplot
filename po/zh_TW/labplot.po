@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-09 00:42+0000\n"
+"POT-Creation-Date: 2026-10-11 00:41+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -361,23 +361,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "於："
 
-#: src/backend/core/AbstractPart.cpp:129
+#: src/backend/core/AbstractPart.cpp:138
 #, fuzzy, kde-format
 msgid "Import Data"
 msgstr "匯入"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:289
+#: src/backend/core/AbstractPart.cpp:139 src/frontend/ActionsManager.cpp:289
 #, fuzzy, kde-format
 msgid "From File..."
 msgstr "image"
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:309
+#: src/backend/core/AbstractPart.cpp:141 src/frontend/ActionsManager.cpp:309
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:141
+#: src/backend/core/AbstractPart.cpp:150
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -386,22 +386,22 @@ msgstr ""
 msgid "Export"
 msgstr "匯出"
 
-#: src/backend/core/AbstractPart.cpp:142
+#: src/backend/core/AbstractPart.cpp:151
 #, fuzzy, kde-format
 msgid "Print"
 msgstr "列印"
 
-#: src/backend/core/AbstractPart.cpp:143
+#: src/backend/core/AbstractPart.cpp:152
 #, fuzzy, kde-format
 msgid "Print Preview"
 msgstr "預覽列印"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:412
+#: src/backend/core/AbstractPart.cpp:160 src/frontend/ActionsManager.cpp:412
 #, fuzzy, kde-format
 msgid "&Close"
 msgstr "全部關閉"
 
-#: src/backend/core/AbstractPart.cpp:156 src/backend/core/AbstractPart.cpp:169
+#: src/backend/core/AbstractPart.cpp:165 src/backend/core/AbstractPart.cpp:178
 #, kde-format
 msgid "Show"
 msgstr "顯示"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-09 00:42+0000\n"
+"POT-Creation-Date: 2026-10-11 00:41+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -351,23 +351,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "输入%1"
 
-#: src/backend/core/AbstractPart.cpp:129
+#: src/backend/core/AbstractPart.cpp:138
 #, kde-format
 msgid "Import Data"
 msgstr "导入数据"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:289
+#: src/backend/core/AbstractPart.cpp:139 src/frontend/ActionsManager.cpp:289
 #, kde-format
 msgid "From File..."
 msgstr "来自文件..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:309
+#: src/backend/core/AbstractPart.cpp:141 src/frontend/ActionsManager.cpp:309
 #, kde-format
 msgid "From SQL Database..."
 msgstr "来自 SQL 数据库..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:141
+#: src/backend/core/AbstractPart.cpp:150
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -376,22 +376,22 @@ msgstr "来自 SQL 数据库..."
 msgid "Export"
 msgstr "导出"
 
-#: src/backend/core/AbstractPart.cpp:142
+#: src/backend/core/AbstractPart.cpp:151
 #, kde-format
 msgid "Print"
 msgstr "打印"
 
-#: src/backend/core/AbstractPart.cpp:143
+#: src/backend/core/AbstractPart.cpp:152
 #, kde-format
 msgid "Print Preview"
 msgstr "打印预览"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:412
+#: src/backend/core/AbstractPart.cpp:160 src/frontend/ActionsManager.cpp:412
 #, kde-format
 msgid "&Close"
 msgstr "关闭(&C)"
 
-#: src/backend/core/AbstractPart.cpp:156 src/backend/core/AbstractPart.cpp:169
+#: src/backend/core/AbstractPart.cpp:165 src/backend/core/AbstractPart.cpp:178
 #, kde-format
 msgid "Show"
 msgstr "显示"

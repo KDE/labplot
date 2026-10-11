@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-09 00:42+0000\n"
+"POT-Creation-Date: 2026-10-11 00:41+0000\n"
 "PO-Revision-Date: 2026-10-07 07:38+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -363,23 +363,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "Vh%1"
 
-#: src/backend/core/AbstractPart.cpp:129
+#: src/backend/core/AbstractPart.cpp:138
 #, kde-format
 msgid "Import Data"
 msgstr "Uvoz podatkov"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:289
+#: src/backend/core/AbstractPart.cpp:139 src/frontend/ActionsManager.cpp:289
 #, kde-format
 msgid "From File..."
 msgstr "Iz datoteke..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:309
+#: src/backend/core/AbstractPart.cpp:141 src/frontend/ActionsManager.cpp:309
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Iz zbirke podatkov SQL..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:141
+#: src/backend/core/AbstractPart.cpp:150
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -388,22 +388,22 @@ msgstr "Iz zbirke podatkov SQL..."
 msgid "Export"
 msgstr "Izvozi"
 
-#: src/backend/core/AbstractPart.cpp:142
+#: src/backend/core/AbstractPart.cpp:151
 #, kde-format
 msgid "Print"
 msgstr "Natisni"
 
-#: src/backend/core/AbstractPart.cpp:143
+#: src/backend/core/AbstractPart.cpp:152
 #, kde-format
 msgid "Print Preview"
 msgstr "Predogled tiskanja"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:412
+#: src/backend/core/AbstractPart.cpp:160 src/frontend/ActionsManager.cpp:412
 #, kde-format
 msgid "&Close"
 msgstr "Zapri"
 
-#: src/backend/core/AbstractPart.cpp:156 src/backend/core/AbstractPart.cpp:169
+#: src/backend/core/AbstractPart.cpp:165 src/backend/core/AbstractPart.cpp:178
 #, kde-format
 msgid "Show"
 msgstr "Pokaži"

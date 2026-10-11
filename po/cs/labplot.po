@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-09 00:42+0000\n"
-"PO-Revision-Date: 2026-10-10 00:48+0200\n"
+"POT-Creation-Date: 2026-10-11 00:41+0000\n"
+"PO-Revision-Date: 2026-10-10 23:47+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -361,23 +361,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "V%1"
 
-#: src/backend/core/AbstractPart.cpp:129
+#: src/backend/core/AbstractPart.cpp:138
 #, kde-format
 msgid "Import Data"
 msgstr "Importovat data"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:289
+#: src/backend/core/AbstractPart.cpp:139 src/frontend/ActionsManager.cpp:289
 #, kde-format
 msgid "From File..."
 msgstr "Ze souboru..."
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:309
+#: src/backend/core/AbstractPart.cpp:141 src/frontend/ActionsManager.cpp:309
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Z databáze SQL..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:141
+#: src/backend/core/AbstractPart.cpp:150
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -386,22 +386,22 @@ msgstr "Z databáze SQL..."
 msgid "Export"
 msgstr "Exportovat"
 
-#: src/backend/core/AbstractPart.cpp:142
+#: src/backend/core/AbstractPart.cpp:151
 #, kde-format
 msgid "Print"
 msgstr "Vytisknout"
 
-#: src/backend/core/AbstractPart.cpp:143
+#: src/backend/core/AbstractPart.cpp:152
 #, kde-format
 msgid "Print Preview"
 msgstr "Náhled před tiskem"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:412
+#: src/backend/core/AbstractPart.cpp:160 src/frontend/ActionsManager.cpp:412
 #, kde-format
 msgid "&Close"
 msgstr "&Zavřít"
 
-#: src/backend/core/AbstractPart.cpp:156 src/backend/core/AbstractPart.cpp:169
+#: src/backend/core/AbstractPart.cpp:165 src/backend/core/AbstractPart.cpp:178
 #, kde-format
 msgid "Show"
 msgstr "Zobrazit"
@@ -9175,7 +9175,7 @@ msgstr "Orientace"
 #: src/frontend/widgets/SymbolWidget.cpp:137
 #, kde-format
 msgid "Line"
-msgstr "přímka"
+msgstr "Přímka"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:319
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
@@ -9733,7 +9733,7 @@ msgstr "Analytické grafy"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
-msgstr "Přizpůsobit"
+msgstr "Aproximace"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:188
@@ -9799,7 +9799,7 @@ msgstr "Čárové a symbolové grafy"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:628
 #, kde-format
 msgid "Line + Symbol"
-msgstr "přímka + symbol"
+msgstr "Přímka + symbol"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:632
 #, kde-format
@@ -9850,7 +9850,7 @@ msgstr "Histogram"
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:152
 #, kde-format
 msgid "Box Plot"
-msgstr "Box graf"
+msgstr "Krabicový graf"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:666
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2021
@@ -10125,12 +10125,12 @@ msgstr "Konvoluce"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2189
 #, kde-format
 msgid "%1: distribution fit to '%2'"
-msgstr "%1: rozdělení přizpůsobené '%2'"
+msgstr "%1: aproximace rozdělení '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2190
 #, kde-format
 msgid "Distribution Fit to '%1'"
-msgstr "Přizpůsobit rozdělení '%1'"
+msgstr "Aproximace rozdělení '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2237
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:871
@@ -10194,7 +10194,7 @@ msgstr "Korekce základní přímky"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
-msgstr "Přizpůsobit '%1'"
+msgstr "Aproximace '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2361
 #, kde-format
@@ -10410,37 +10410,37 @@ msgstr "hodnoty intervalu"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:191
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
-msgstr "Přizpůsobit gaussovské (normální) rozdělení"
+msgstr "Aproximace gaussovského (normálního) rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:197
 #, kde-format
 msgid "Fit Exponential Distribution"
-msgstr "Přizpůsobit exponenciální rozdělení"
+msgstr "Aproximace exponenciálního rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:203
 #, kde-format
 msgid "Fit Laplace Distribution"
-msgstr "Přizpůsobit Laplaceovo rozdělení"
+msgstr "Aproximace Laplaceova rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:209
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
-msgstr "Přizpůsobit Cauchy-Lorentzovo rozdělení"
+msgstr "Aproximace Cauchy-Lorentzova rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:215
 #, kde-format
 msgid "Fit Log-normal Distribution"
-msgstr "Přizpůsobit log-normální rozdělení"
+msgstr "Aproximace log-normálního rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:221
 #, kde-format
 msgid "Fit Poisson Distribution"
-msgstr "Přizpůsobit Poissonovo rozdělení"
+msgstr "Aproximace Poissonova rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:227
 #, kde-format
 msgid "Fit Binomial Distribution"
-msgstr "Přizpůsobit binomické rozdělení"
+msgstr "Aproximace binomického rozdělení"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:421
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:258
@@ -11216,18 +11216,18 @@ msgstr "%1: přiřadit chybu y"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:113
 #, kde-format
 msgid "%1: set fit options and perform the fit"
-msgstr "%1: nastavit parametry přizpůsobení a provést přizpůsobení"
+msgstr "%1: nastavit parametry aproximace a provést ji"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1830
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
-msgstr "Výsledky přizpůsobení"
+msgstr "Výsledky aproximace"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr "Nelineární přizpůsobení dat X/Y"
+msgstr "Nelineární aproximace dat X/Y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
 #, kde-format
@@ -11281,7 +11281,7 @@ msgstr "Horní"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
 #, kde-format
 msgid "GOODNESS OF FIT"
-msgstr "OPTIMÁLNÍ PŘIZPŮSOBENÍ"
+msgstr "OPTIMÁLNÍ APROXIMACE"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
@@ -11373,13 +11373,13 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
 msgid "Fit model not specified!"
-msgstr "Není zadán model přizpůsobení!"
+msgstr "Není zadán model aproximace!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3205
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
-msgstr "Výsledky přizpůsobení"
+msgstr "Výsledky aproximace"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:77
 #, kde-format
@@ -11503,7 +11503,7 @@ msgstr "%1: přepnout zobrazení čar změn"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:753
 #, kde-format
 msgid "Fit Results"
-msgstr "Výsledky přizpůsobení"
+msgstr "Výsledky aproximace"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:504
 #, kde-format
@@ -11567,7 +11567,7 @@ msgstr "Statistika parametrů (sklon):"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:554
 #, kde-format
 msgid "Goodness of Fit:"
-msgstr "Optimální přizpůsobení:"
+msgstr "Optimální aproximace:"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:564
 #, kde-format
@@ -15166,7 +15166,8 @@ msgstr ""
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:236
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
-msgstr "Parametr určující rozsah vnitřních ohraničujících čar grafu."
+msgstr ""
+"Parametr určující rozsah vnitřních ohraničujících čar krabicového grafu."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:245
 #, kde-format
@@ -15254,7 +15255,7 @@ msgstr "Sloupec:"
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:639
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "%1 grafy: načtena šablona \"%2\""
+msgstr "%1 krabicové grafy: načtena šablona \"%2\""
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:142
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:570
@@ -16394,17 +16395,17 @@ msgstr "1 – Kostanta a trend"
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:225
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the seasonal component."
-msgstr "Stupeň lokálně přizpůsobeného polynomu pro sezónní složku."
+msgstr "Stupeň lokálně aproximovaného polynomu pro sezónní složku."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:229
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the trend component."
-msgstr "Stupeň lokálně přizpůsobeného polynomu pro trendovou složku."
+msgstr "Stupeň lokálně aproximovaného polynomu pro trendovou složku."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:233
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the low-pass component."
-msgstr "Stupeň lokálně přizpůsobeného polynomu pro dolnopásmovou složku."
+msgstr "Stupeň lokálně aproximovaného polynomu pro dolnopásmovou složku."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:238
 #, kde-format
@@ -16818,7 +16819,7 @@ msgstr "Počet vrcholů:"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
-msgstr "Stav přizpůsobení: %1"
+msgstr "Stav aproximace: %1"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1342
 #, kde-format
@@ -16851,7 +16852,7 @@ msgstr "Dolní bod zkrácení:"
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:286
 #, kde-format
 msgid "Upper cutoff:"
-msgstr "Horní bod zkrácení"
+msgstr "Horní bod zkrácení:"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:355
 #, kde-format
@@ -17131,7 +17132,7 @@ msgid ""
 "~0.01-0.1 for small values."
 msgstr ""
 "Náklady na přidání bodu změny. Aby bylo rozdělení odůvodněné, musí být "
-"překonány zlepšením přizpůsobení (snížením SSE).\n"
+"překonány zlepšením aproximace (snížením SSE).\n"
 "Nižší hodnoty detekují více bodů změny, vyšší hodnoty detekují méně bodů.\n"
 "Upravte hodnotu podle svých dat: ~1 pro hodnoty Y blížící se 1, ~10–100 pro "
 "velké hodnoty, ~0,01–0,1 pro malé hodnoty."
@@ -17320,115 +17321,109 @@ msgstr "Vlastnosti: Oblast grafu"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr ""
+msgstr "Vlastnosti: Legenda"
 
 #: src/frontend/GuiObserver.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr ""
+msgstr "Vlastnosti: Osa"
 
 #: src/frontend/GuiObserver.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr ""
+msgstr "Vlastnosti: Křivka XY"
 
 #: src/frontend/GuiObserver.cpp:290
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr ""
+msgstr "Vlastnosti: Rovnice XY"
 
 #: src/frontend/GuiObserver.cpp:295
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr ""
+msgstr "Vlastnosti: Funkční křivka"
 
 #: src/frontend/GuiObserver.cpp:300
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Live Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
-msgstr "Vlastnosti: Zdroj měnících se dat"
+msgstr "Vlastnosti: Zjednodušení přímky"
 
 #: src/frontend/GuiObserver.cpp:305
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr ""
+msgstr "Vlastnosti: Diferenciace"
 
 #: src/frontend/GuiObserver.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr ""
+msgstr "Vlastnosti: Integrace"
 
 #: src/frontend/GuiObserver.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr ""
+msgstr "Vlastnosti: Interpolace"
 
 #: src/frontend/GuiObserver.cpp:320
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr ""
+msgstr "Vlastnosti: Vyhlazování"
 
 #: src/frontend/GuiObserver.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr ""
+msgstr "Vlastnosti: Aproximace"
 
 #: src/frontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Piecewise Linear Fit"
-msgstr "Vlastnosti: Referenční přímka"
+msgstr "Vlastnosti: Částečně lineární aproximace"
 
 #: src/frontend/GuiObserver.cpp:335
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr ""
+msgstr "Vlastnosti: Fourierova transformace"
 
 #: src/frontend/GuiObserver.cpp:340
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr ""
+msgstr "Vlastnosti: Hilbertova transformace"
 
 #: src/frontend/GuiObserver.cpp:345
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr ""
+msgstr "Vlastnosti: Fourierův filtr"
 
 #: src/frontend/GuiObserver.cpp:350
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
-msgstr ""
+msgstr "Vlastnosti: Konvoluce/dekonvoluce"
 
 #: src/frontend/GuiObserver.cpp:355
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Baseline Correction"
-msgstr "Vlastnosti: Referenční přímka"
+msgstr "Vlastnosti: Korekce základní přímky"
 
 #: src/frontend/GuiObserver.cpp:360
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr ""
+msgstr "Vlastnosti: Automatická a křížová korelace"
 
 #: src/frontend/GuiObserver.cpp:365
 #, kde-format
@@ -17440,55 +17435,55 @@ msgstr "Vlastnosti: Histogram"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr ""
+msgstr "Vlastnosti: Sloupcový graf"
 
 #: src/frontend/GuiObserver.cpp:376
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr ""
+msgstr "Vlastnosti: Lízátkový graf"
 
 #: src/frontend/GuiObserver.cpp:382
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr ""
+msgstr "Vlastnosti: Krabicový graf"
 
 #: src/frontend/GuiObserver.cpp:387
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
-msgstr ""
+msgstr "KDE graf"
 
 #: src/frontend/GuiObserver.cpp:392
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr ""
+msgstr "Q-Q graf"
 
 #: src/frontend/GuiObserver.cpp:398
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Graf chování procesu"
 
 #: src/frontend/GuiObserver.cpp:403
 #, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr ""
+msgstr "Graf průběhu"
 
 #: src/frontend/GuiObserver.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Pareto Chart"
-msgstr ""
+msgstr "Paretův diagram"
 
 #: src/frontend/GuiObserver.cpp:413
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr ""
+msgstr "Vlastnosti: Textový popisek"
 
 #: src/frontend/GuiObserver.cpp:418
 #, kde-format
@@ -17518,7 +17513,7 @@ msgstr "Referenční rozsah"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr ""
+msgstr "Vlastnosti: Křivka výběru dat"
 
 #: src/frontend/GuiObserver.cpp:443
 #, kde-format
@@ -17530,15 +17525,13 @@ msgstr "Vlastnosti: Extraktor dat"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
-msgstr ""
+msgstr "Vlastnosti: Testování hypotéz"
 
 #: src/frontend/GuiObserver.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Custom Point"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Seasonal Decomposition"
-msgstr "Vlastnosti: Vlastní bod"
+msgstr "Vlastnosti: Sezónní dekompozice"
 
 #: src/frontend/GuiObserver.cpp:468
 #, kde-format
@@ -17568,7 +17561,7 @@ msgstr "Vlastnosti: Poznámky"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr ""
+msgstr "Vlastnosti: Informační prvek"
 
 #: src/frontend/GuiObserver.cpp:498 src/frontend/GuiObserver.cpp:505
 #: src/frontend/GuiObserver.cpp:512
@@ -17593,18 +17586,18 @@ msgstr "Vlastnosti: Složka"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr ""
+msgstr "Vlastnosti: Sešit"
 
 #: src/frontend/GuiObserver.cpp:545
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
-msgstr ""
+msgstr "Vlastnosti: Skript"
 
 #: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "No Line"
-msgstr ""
+msgstr "Žádná přímka"
 
 #: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
@@ -17629,7 +17622,7 @@ msgstr "Tečko čárkovaná přímka"
 #: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
 #, kde-format
 msgid "Dash-dot-dot Line"
-msgstr "přímka s pomlčkami a dvěma tečkami"
+msgstr "Přímka s pomlčkami a dvěma tečkami"
 
 #: src/frontend/GuiTools.cpp:163
 #, kde-format
@@ -17639,67 +17632,67 @@ msgstr "Uniformní"
 #: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Extremely Dense"
-msgstr ""
+msgstr "Mimořádně hustá"
 
 #: src/frontend/GuiTools.cpp:165
 #, kde-format
 msgid "Very Dense"
-msgstr ""
+msgstr "Velmi hustá"
 
 #: src/frontend/GuiTools.cpp:166
 #, kde-format
 msgid "Somewhat Dense"
-msgstr ""
+msgstr "Trochu hustá"
 
 #: src/frontend/GuiTools.cpp:167
 #, kde-format
 msgid "Half Dense"
-msgstr ""
+msgstr "Polohustá"
 
 #: src/frontend/GuiTools.cpp:168
 #, kde-format
 msgid "Somewhat Sparse"
-msgstr ""
+msgstr "Trochu řídká"
 
 #: src/frontend/GuiTools.cpp:169
 #, kde-format
 msgid "Very Sparse"
-msgstr ""
+msgstr "Velmi řídká"
 
 #: src/frontend/GuiTools.cpp:170
 #, kde-format
 msgid "Extremely Sparse"
-msgstr ""
+msgstr "Mimořádně řídká"
 
 #: src/frontend/GuiTools.cpp:171
 #, kde-format
 msgid "Horiz. Lines"
-msgstr ""
+msgstr "Horiz. přímky"
 
 #: src/frontend/GuiTools.cpp:172
 #, kde-format
 msgid "Vert. Lines"
-msgstr ""
+msgstr "Vert. přímky"
 
 #: src/frontend/GuiTools.cpp:173
 #, kde-format
 msgid "Crossing Lines"
-msgstr ""
+msgstr "Křížící se přímky"
 
 #: src/frontend/GuiTools.cpp:174
 #, kde-format
 msgid "Backward Diag. Lines"
-msgstr ""
+msgstr "Zpětné diag. přímky"
 
 #: src/frontend/GuiTools.cpp:175
 #, kde-format
 msgid "Forward Diag. Lines"
-msgstr ""
+msgstr "Dopředné diag. přímky"
 
 #: src/frontend/GuiTools.cpp:176
 #, kde-format
 msgid "Crossing Diag. Lines"
-msgstr ""
+msgstr "Křížící diag. přímky"
 
 #: src/frontend/GuiTools.cpp:199
 #, kde-format
@@ -17830,17 +17823,17 @@ msgstr "Obrázky (%1)"
 #: src/frontend/GuiTools.cpp:515
 #, kde-format
 msgid "Select file to load function definition"
-msgstr ""
+msgstr "Vyberte soubor, ze kterého se má načíst definice funkce"
 
 #: src/frontend/GuiTools.cpp:532 src/frontend/GuiTools.cpp:622
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr ""
+msgstr "Definice funkce LabPlot"
 
 #: src/frontend/GuiTools.cpp:606
 #, kde-format
 msgid "Select file to save function definition"
-msgstr ""
+msgstr "Vyberte soubor, do kterého chcete uložit definici funkce"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -17903,6 +17896,8 @@ msgid ""
 "List of all performed steps/actions.\n"
 "Select an item in the list to navigate to the corresponding step."
 msgstr ""
+"Seznam všech provedených kroků/akcí.\n"
+"Vyberte položku v seznamu a přejděte na příslušný krok."
 
 #: src/frontend/HistoryDialog.cpp:43
 #, kde-format
@@ -17921,6 +17916,8 @@ msgid ""
 "Clears the undo history. Commands are not undone or redone; the state of the "
 "project remains unchanged."
 msgstr ""
+"Vymaže historii zpětných kroků. Příkazy se nezruší ani neopakují; stav "
+"projektu zůstane beze změny."
 
 #: src/frontend/HistoryDialog.cpp:91
 #, kde-format
@@ -17944,7 +17941,7 @@ msgstr ""
 #: src/frontend/LabPlot.cpp:67
 #, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
-msgstr ""
+msgstr "(c) 2007–%1 Tým LabPlot"
 
 #: src/frontend/LabPlot.cpp:68
 #, kde-format
@@ -17966,7 +17963,7 @@ msgstr "Alexander Semke"
 #: src/frontend/LabPlot.cpp:70
 #, kde-format
 msgid "Martin Marmsoler"
-msgstr ""
+msgstr "Martin Marmsoler"
 
 #: src/frontend/LabPlot.cpp:71
 #, kde-format
@@ -17977,12 +17974,12 @@ msgstr "Dariusz Laska"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
-msgstr ""
+msgstr "Koncepční práce, dokumentace, ukázkové projekty"
 
 #: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgid "Andreas Kainz"
-msgstr ""
+msgstr "Andreas Kainz"
 
 #: src/frontend/LabPlot.cpp:78
 #, kde-format
@@ -18002,17 +17999,19 @@ msgid ""
 "Help on many questions about the KDE-infrastructure and translation related "
 "topics"
 msgstr ""
+"Pomoc s mnoha dotazy týkajícími se infrastruktury KDE a témat souvisejících "
+"s překlady"
 
 #: src/frontend/LabPlot.cpp:83
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
-msgstr ""
+msgstr "Fábián Kristóf-Szabolcs"
 
 #: src/frontend/LabPlot.cpp:83
 #, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr ""
+msgstr "Filtr FITS"
 
 #: src/frontend/LabPlot.cpp:84
 #, kde-format
@@ -18023,7 +18022,7 @@ msgstr "Garvit Khatri"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
-msgstr ""
+msgstr "Portování programu LabPlot na KF5 a integrace s Cantorem"
 
 #: src/frontend/LabPlot.cpp:88
 #, kde-format
@@ -18034,7 +18033,7 @@ msgstr "Christoph Roick"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
-msgstr ""
+msgstr "Podpora importu histogramů ROOT (CERN) TH1"
 
 #: src/frontend/LabPlot.cpp:142
 #, kde-format
@@ -18042,6 +18041,8 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
+"Nelze otevřít soubor '%1'. Kliknutím na tlačítko 'Pokračovat' spustíte "
+"aplikaci, kliknutím na tlačítko 'Zrušit' ji ukončíte."
 
 #: src/frontend/LabPlot.cpp:143
 #, kde-format
@@ -18058,44 +18059,43 @@ msgstr "Panel nástrojů projektu"
 #: src/frontend/labplotui.rc:26
 #, kde-format
 msgid "Worksheet Toolbar"
-msgstr ""
+msgstr "Panel nástrojů listu"
 
 #. i18n: ectx: ToolBar (data_extractor_toolbar)
 #: src/frontend/labplotui.rc:45
 #, kde-format
 msgid "Data Extractor Toolbar"
-msgstr ""
+msgstr "Panel nástrojů extraktoru dat"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/frontend/labplotui.rc:64
 #, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr ""
+msgstr "Panel nástrojů tabulky"
 
 #. i18n: ectx: ToolBar (live_data_toolbar)
 #: src/frontend/labplotui.rc:79
-#, fuzzy, kde-format
-#| msgid "Live Data Source..."
+#, kde-format
 msgid "Live Data Source Toolbar"
-msgstr "Zdroj měnících se dat..."
+msgstr "Panel nástrojů pro živé zdroje dat"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/frontend/labplotui.rc:85
 #, kde-format
 msgid "Notebook Toolbar"
-msgstr ""
+msgstr "Panel nástrojů poznámkového bloku"
 
 #. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:95
 #, kde-format
 msgid "Script Toolbar"
-msgstr ""
+msgstr "Panel nástrojů skriptů"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/frontend/labplotui.rc:100
 #, kde-format
 msgid "Plot Area Toolbar"
-msgstr ""
+msgstr "Panel nástrojů oblasti grafu"
 
 #. i18n: ectx: Menu (file)
 #: src/frontend/labplotui.rc:128
@@ -18182,7 +18182,7 @@ msgstr "O&kna"
 #: src/frontend/worksheet/WorksheetView.cpp:291
 #, kde-format
 msgid "Presenter Mode"
-msgstr ""
+msgstr "Režim prezentace"
 
 #: src/frontend/MainWin.cpp:185
 #, kde-format
@@ -18190,12 +18190,13 @@ msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr ""
+"V projektu nejsou k dispozici žádné sešity. Režim prezentace se nespustí."
 
 #: src/frontend/MainWin.cpp:199
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
-msgstr ""
+msgstr "Vítejte v LabPlotu %1"
 
 #: src/frontend/MainWin.cpp:488
 #, kde-format
@@ -18222,7 +18223,7 @@ msgstr "Prohlížeč projektu"
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr ""
+msgstr "Náhled listu"
 
 #: src/frontend/MainWin.cpp:653
 #, kde-format
@@ -18233,23 +18234,22 @@ msgstr "Obsah"
 #: src/frontend/MainWin.cpp:730
 #, kde-format
 msgid "Origin Projects (%1)"
-msgstr ""
+msgstr "Projekty Origin (%1)"
 
 #: src/frontend/MainWin.cpp:736
 #, kde-format
 msgid "Cantor Projects (*.cws)"
-msgstr ""
+msgstr "Projekty Cantor (*.cws)"
 
 #: src/frontend/MainWin.cpp:737
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
-msgstr ""
+msgstr "Jupyter Notebooks (*.ipynb)"
 
 #: src/frontend/MainWin.cpp:743
-#, fuzzy, kde-format
-#| msgid "Python file (*.py)"
+#, kde-format
 msgid "Python Scripts (*.py)"
-msgstr "Soubor Pythonu (*.py)"
+msgstr "Skripty Python (*.py)"
 
 #: src/frontend/MainWin.cpp:750
 #, kde-format
@@ -18265,7 +18265,7 @@ msgstr "Otevřít projekt"
 #: src/frontend/MainWin.cpp:774
 #, kde-format
 msgid "The project file %1 is already opened."
-msgstr ""
+msgstr "Soubor projektu %1 je již otevřen."
 
 #: src/frontend/MainWin.cpp:774 src/frontend/MainWin.cpp:782
 #: src/frontend/MainWin.cpp:787
@@ -18276,12 +18276,12 @@ msgstr "Otevřít projekt"
 #: src/frontend/MainWin.cpp:782
 #, kde-format
 msgid "The project file %1 doesn't exist."
-msgstr ""
+msgstr "Soubor projektu %1 neexistuje."
 
 #: src/frontend/MainWin.cpp:787
 #, kde-format
 msgid "Couldn't read the project file %1."
-msgstr ""
+msgstr "Nepodařilo se načíst soubor projektu %1."
 
 #: src/frontend/MainWin.cpp:795
 #, kde-format
@@ -18296,7 +18296,7 @@ msgstr "%1: otevřeno"
 #: src/frontend/MainWin.cpp:895
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
-msgstr ""
+msgstr "Projekt byl úspěšně spuštěn (za %1 sekund)."
 
 #: src/frontend/MainWin.cpp:991
 #, kde-format
@@ -18310,11 +18310,13 @@ msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
+"Projekty LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
+"*.LML.XZ)"
 
 #: src/frontend/MainWin.cpp:1020
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
-msgstr ""
+msgstr "Nepodařilo se otevřít dočasný soubor pro zápis."
 
 #: src/frontend/MainWin.cpp:1025
 #, kde-format
@@ -18329,22 +18331,22 @@ msgstr "Projekt byl uložen"
 #: src/frontend/MainWin.cpp:1118
 #, kde-format
 msgid "Couldn't save the file '%1'."
-msgstr ""
+msgstr "Soubor '%1' se nepodařilo uložit."
 
 #: src/frontend/MainWin.cpp:1122
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
-msgstr ""
+msgstr "Soubor '%1' se nepodařilo otevřít pro zápis."
 
 #: src/frontend/MainWin.cpp:1133
 #, kde-format
 msgid "Project successfully saved (in %1 seconds)."
-msgstr ""
+msgstr "Projekt byl úspěšně uložen (za %1 sekund)."
 
 #: src/frontend/MainWin.cpp:1187 src/frontend/MainWin.cpp:1199
 #, kde-format
 msgid "Preparing printing of %1"
-msgstr ""
+msgstr "Příprava tisku %1"
 
 #: src/frontend/MainWin.cpp:1189 src/frontend/MainWin.cpp:1201
 #, kde-format
@@ -18354,7 +18356,7 @@ msgstr "%1 vytisknuto"
 #: src/frontend/MainWin.cpp:1996
 #, kde-format
 msgid "Kaggle CLI tool not found"
-msgstr ""
+msgstr "Nástroj Kaggle CLI nebyl nalezen"
 
 #: src/frontend/MainWin.cpp:1997
 #, kde-format
@@ -18362,6 +18364,7 @@ msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
+"V nastavení aplikace zadejte cestu k nástroji Kaggle CLI a zkuste to znovu."
 
 #: src/frontend/MainWin.cpp:2063
 #, kde-format
@@ -18371,17 +18374,17 @@ msgstr "%1 exportováno"
 #: src/frontend/MainWin.cpp:2070
 #, kde-format
 msgid "FITS files saved"
-msgstr ""
+msgstr "Soubory FITS uloženy"
 
 #: src/frontend/MainWin.cpp:2082
 #, kde-format
 msgid "MQTT Client%1"
-msgstr ""
+msgstr "MQTT klient%1"
 
 #: src/frontend/MainWin.cpp:2100
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
-msgstr ""
+msgstr "S tímto hostitelem již běží MQTTClient!"
 
 #: src/frontend/MainWin.cpp:2104
 #, kde-format
@@ -18392,7 +18395,7 @@ msgstr "Zdroj měnících se dat %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Function Values"
-msgstr ""
+msgstr "Hodnoty funkcí"
 
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:60
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:63
@@ -18401,7 +18404,7 @@ msgid "%1 value"
 msgid_plural "%1 values"
 msgstr[0] "%1 hodnota"
 msgstr[1] "%1 hodnoty"
-msgstr[2] "%1 hodnoty7"
+msgstr[2] "%1 hodnot"
 
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:76
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:47
@@ -24525,7 +24528,7 @@ msgstr "Kotva:"
 #: src/frontend/worksheet/GridDialog.cpp:45
 #, kde-format
 msgid "Lines"
-msgstr "přímky"
+msgstr "Přímky"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLine)
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:249
@@ -25445,7 +25448,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:588
 #, kde-format
 msgid "Fit:"
-msgstr "Přizpůsobit:"
+msgstr "Aproximace:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:672
@@ -26806,7 +26809,7 @@ msgstr "Exportovat do:"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:253
 #, kde-format
 msgid "Grid lines:"
-msgstr "přímky mřížky:"
+msgstr "Přímky mřížky:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:270
@@ -27959,7 +27962,7 @@ msgstr "Doplnit do výběru"
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit"
-msgstr "Přizpůsobit"
+msgstr "Aproximace"
 
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format

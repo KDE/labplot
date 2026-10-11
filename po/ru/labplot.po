@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-09 00:42+0000\n"
+"POT-Creation-Date: 2026-10-11 00:41+0000\n"
 "PO-Revision-Date: 2026-10-07 08:28+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -209,7 +209,7 @@ msgstr "Погрешности по X +"
 #: src/backend/core/AbstractColumn.cpp:185
 #, kde-format
 msgid "X-Uncertainty -"
-msgstr "Недостоверности по Y -"
+msgstr "Недостоверности по X -"
 
 #: src/backend/core/AbstractColumn.cpp:187
 #, kde-format
@@ -363,24 +363,24 @@ msgid "In%1"
 msgstr "In%1"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/backend/core/AbstractPart.cpp:129
+#: src/backend/core/AbstractPart.cpp:138
 #, kde-format
 msgid "Import Data"
 msgstr "Импорт данных"
 
-#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:289
+#: src/backend/core/AbstractPart.cpp:139 src/frontend/ActionsManager.cpp:289
 #, kde-format
 msgid "From File..."
 msgstr "Из файла…"
 
-#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:309
+#: src/backend/core/AbstractPart.cpp:141 src/frontend/ActionsManager.cpp:309
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Из базы данных SQL…"
 
 # BUGME: please split strings --aspotashev
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:141
+#: src/backend/core/AbstractPart.cpp:150
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -389,22 +389,22 @@ msgstr "Из базы данных SQL…"
 msgid "Export"
 msgstr "Экспорт"
 
-#: src/backend/core/AbstractPart.cpp:142
+#: src/backend/core/AbstractPart.cpp:151
 #, kde-format
 msgid "Print"
 msgstr "Печать"
 
-#: src/backend/core/AbstractPart.cpp:143
+#: src/backend/core/AbstractPart.cpp:152
 #, kde-format
 msgid "Print Preview"
 msgstr "Предварительный просмотр"
 
-#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:412
+#: src/backend/core/AbstractPart.cpp:160 src/frontend/ActionsManager.cpp:412
 #, kde-format
 msgid "&Close"
 msgstr "&Закрыть"
 
-#: src/backend/core/AbstractPart.cpp:156 src/backend/core/AbstractPart.cpp:169
+#: src/backend/core/AbstractPart.cpp:165 src/backend/core/AbstractPart.cpp:178
 #, kde-format
 msgid "Show"
 msgstr "Показать"
@@ -12941,7 +12941,7 @@ msgstr ""
 #: src/frontend/CLIProcessor.cpp:266
 #, kde-format
 msgid "Input data file (CSV, HDF5, etc.) or project file (.lml)."
-msgstr "Входной файл данных (CSV, HDF5 и т. д.) или файл проекта (.lml)."
+msgstr "Входной файл данных (CSV, HDF5 и т.д.) или файл проекта (.lml)."
 
 #: src/frontend/CLIProcessor.cpp:266 src/frontend/CLIProcessor.cpp:267
 #: src/frontend/CLIProcessor.cpp:274
@@ -15790,7 +15790,7 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
-"Применить основной цвет графика (линии, символа и т. д.) к цвету названия в "
+"Применить основной цвет графика (линии, символа и т.д.) к цвету названия в "
 "легенде."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:369
@@ -18760,7 +18760,7 @@ msgstr "Сня&ть выделение"
 #: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
 msgid "Select All"
-msgstr "Выбрать всё"
+msgstr "Выбрать все"
 
 # BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/matrix/MatrixView.cpp:137
