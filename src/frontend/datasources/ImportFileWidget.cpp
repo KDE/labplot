@@ -37,6 +37,7 @@
 #include <KUrlComboBox>
 
 #include <QCompleter>
+#include <QCryptographicHash>
 #include <QDir>
 #include <QFileDialog>
 #include <QFileSystemModel>
@@ -1738,6 +1739,12 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		infoStrings << i18n("Owner: %1", fileInfo.owner());
 		infoStrings << i18n("Group: %1", fileInfo.group());
 		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
+
+		// Checksum (SHA-256)
+		file->reset();
+		QCryptographicHash hash(QCryptographicHash::Sha256);
+		if (hash.addData(file))
+			infoStrings << i18n("SHA-256: %1", QString::fromLatin1(hash.result().toHex()));
 
 		// Summary:
 		infoStrings << QStringLiteral("<b>") << i18n("Summary:") << QStringLiteral("</b>");
