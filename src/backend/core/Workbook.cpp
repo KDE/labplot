@@ -45,17 +45,24 @@ QMenu* Workbook::createContextMenu() {
 QWidget* Workbook::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		m_view = new WorkbookView(const_cast<Workbook*>(this));
-		m_partView = m_view;
-		connect(this, &Workbook::viewAboutToBeDeleted, [this]() {
-			m_view = nullptr;
-		});
+		auto* newView = new WorkbookView(const_cast<Workbook*>(this));
+		m_partView = newView;
 	}
 	return m_partView;
 #else
 	return nullptr;
 #endif
 }
+
+#ifndef SDK
+/*!
+ * returns the WorkbookView if the view was already created, nullptr otherwise.
+ * Doesn't create the view.
+ */
+WorkbookView* Workbook::view_specific() const {
+	return static_cast<WorkbookView*>(m_partView);
+}
+#endif
 
 bool Workbook::exportView() const {
 	auto* s = currentSpreadsheet();
@@ -98,10 +105,10 @@ bool Workbook::printPreview() const {
 
 Spreadsheet* Workbook::currentSpreadsheet() const {
 #ifndef SDK
-	if (!m_view)
+	if (!view_specific())
 		return nullptr;
 
-	int index = m_view->currentIndex();
+	int index = view_specific()->currentIndex();
 	if (index != -1) {
 		auto* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Spreadsheet*>(aspect);
@@ -112,10 +119,10 @@ Spreadsheet* Workbook::currentSpreadsheet() const {
 
 Matrix* Workbook::currentMatrix() const {
 #ifndef SDK
-	if (!m_view)
+	if (!view_specific())
 		return nullptr;
 
-	int index = reinterpret_cast<const WorkbookView*>(m_view)->currentIndex();
+	int index = view_specific()->currentIndex();
 	if (index != -1) {
 		auto* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Matrix*>(aspect);

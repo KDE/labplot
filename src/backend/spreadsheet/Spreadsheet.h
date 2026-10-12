@@ -134,7 +134,7 @@ private:
 	SpreadsheetModel* m_model{nullptr};
 
 protected:
-	mutable SpreadsheetView* m_view{nullptr};
+	SpreadsheetView* view_specific() const;
 	void setSuppressSetCommentFinalizeImport(bool);
 
 private Q_SLOTS:

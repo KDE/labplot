@@ -104,7 +104,7 @@ private:
 	HypothesisTestPrivate* const d_ptr;
 
 protected:
-	mutable HypothesisTestView* m_view{nullptr};
+	HypothesisTestView* view_specific() const;
 };
 
 #endif // HYPOTHESISTEST_H

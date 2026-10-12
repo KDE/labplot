@@ -159,7 +159,7 @@ private:
 
 	mutable MatrixModel* m_model{nullptr};
 #ifndef SDK
-	mutable MatrixView* m_view{nullptr};
+	MatrixView* view_specific() const;
 #endif
 	friend class MatrixPrivate;
 };

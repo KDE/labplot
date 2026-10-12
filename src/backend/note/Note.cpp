@@ -71,11 +71,11 @@ QIcon Note::icon() const {
 bool Note::printView() {
 #ifndef SDK
 	QPrinter printer;
-	auto* dlg = new QPrintDialog(&printer, m_view);
+	auto* dlg = new QPrintDialog(&printer, view_specific());
 	dlg->setWindowTitle(i18nc("@title:window", "Print Note"));
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
-		m_view->print(&printer);
+		view_specific()->print(&printer);
 
 	delete dlg;
 	return ret;
@@ -86,8 +86,8 @@ bool Note::printView() {
 
 bool Note::printPreview() const {
 #ifndef SDK
-	auto* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &NoteView::print);
+	auto* dlg = new QPrintPreviewDialog(view_specific());
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view_specific(), &NoteView::print);
 	return dlg->exec();
 #else
 	return false;
@@ -171,14 +171,24 @@ void Note::setMode(const Note::Mode& mode) {
 QWidget* Note::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		m_view = new NoteView(const_cast<Note*>(this));
-		m_partView = m_view;
+		auto* newView = new NoteView(const_cast<Note*>(this));
+		m_partView = newView;
 	}
 	return m_partView;
 #else
 	return nullptr;
 #endif
 }
+
+#ifndef SDK
+/*!
+ * returns the NoteView if the view was already created, nullptr otherwise.
+ * Doesn't create the view.
+ */
+NoteView* Note::view_specific() const {
+	return static_cast<NoteView*>(m_partView);
+}
+#endif
 
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
