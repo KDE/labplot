@@ -333,7 +333,9 @@
             "config-opts": [
                 "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
                 "-DENABLE_TESTS=OFF",
-                "-DENABLE_COMPILER_OPTIMIZATION=ON"
+                "-DENABLE_COMPILER_OPTIMIZATION=ON",
+                "-DLOCAL_VECTOR_BLF=ON",
+                "-DLOCAL_DBC_PARSER=ON"
             ],
             "build-options": {
                 "env": {
