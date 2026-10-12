@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-11 00:41+0000\n"
+"POT-Creation-Date: 2026-10-12 00:45+0000\n"
 "PO-Revision-Date: 2026-10-07 20:33+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -15125,7 +15125,7 @@ msgstr "Вісі %1: завантажено шаблон «%2»"
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:684
 #, kde-format
@@ -16561,7 +16561,7 @@ msgstr "Електронна таблиця, з якою слід синхрон
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Показати електронну таблицю статистики щодо стовпчиків"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "Електронні таблиці %1: завантажено шаблон «%2»"
@@ -27974,12 +27974,18 @@ msgstr "Непридатна до обробки помилка"
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Введено некоректне значення. Коректне значення: %1"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:54
+#: src/frontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
 msgid "Search/Filter text"
 msgstr "Пошук або фільтрування тексту"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:363
+#: src/frontend/widgets/TreeViewComboBox.cpp:62
+#, fuzzy, kde-format
+#| msgid "Clea&r Selection"
+msgid "Clear selection"
+msgstr "Зн&яти позначення"
+
+#: src/frontend/widgets/TreeViewComboBox.cpp:421
 #, kde-format
 msgid ""
 "The aspect \"%1\"\n"

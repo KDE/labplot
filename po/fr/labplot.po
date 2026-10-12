@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-11 00:41+0000\n"
+"POT-Creation-Date: 2026-10-12 00:45+0000\n"
 "PO-Revision-Date: 2026-10-04 10:49+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -15335,7 +15335,7 @@ msgstr "%1 axes : modèle « %2 » chargé"
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:684
 #, kde-format
@@ -16828,7 +16828,7 @@ msgstr "Feuille de calcul avec laquelle synchroniser le nombre de lignes"
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Feuille de calcul de statistiques de colonne"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 feuilles de calcul : modèle « %2 » chargé"
@@ -28280,12 +28280,18 @@ msgstr "Erreur non gérée"
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Saisie d'une valeur non valable. Valeur valable : %1"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:54
+#: src/frontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
 msgid "Search/Filter text"
 msgstr "Chercher/filtrer un texte"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:363
+#: src/frontend/widgets/TreeViewComboBox.cpp:62
+#, fuzzy, kde-format
+#| msgid "Clea&r Selection"
+msgid "Clear selection"
+msgstr "Efface&r la sélection"
+
+#: src/frontend/widgets/TreeViewComboBox.cpp:421
 #, kde-format
 msgid ""
 "The aspect \"%1\"\n"

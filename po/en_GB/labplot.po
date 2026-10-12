@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-11 00:41+0000\n"
+"POT-Creation-Date: 2026-10-12 00:45+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -15225,7 +15225,7 @@ msgstr "%1 axes: template \"%2\" loaded"
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:684
 #, kde-format
@@ -16598,7 +16598,7 @@ msgstr "Spreadsheet to synchronise the number of rows with"
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Column Statistics Spreadsheet"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 spreadsheets: template \"%2\" loaded"
@@ -28037,12 +28037,18 @@ msgstr "Unhandled error"
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Invalid value entered. Valid value: %1"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:54
+#: src/frontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
 msgid "Search/Filter text"
 msgstr "Search/Filter text"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:363
+#: src/frontend/widgets/TreeViewComboBox.cpp:62
+#, fuzzy, kde-format
+#| msgid "Clea&r Selection"
+msgid "Clear selection"
+msgstr "Clea&r Selection"
+
+#: src/frontend/widgets/TreeViewComboBox.cpp:421
 #, fuzzy, kde-format
 #| msgid ""
 #| "The curve \"%1\"\n"

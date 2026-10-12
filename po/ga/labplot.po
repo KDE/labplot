@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-11 00:41+0000\n"
+"POT-Creation-Date: 2026-10-12 00:45+0000\n"
 "PO-Revision-Date: 2026-03-15 15:36+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@yahoo.com>\n"
 "Language-Team: Irish <http://weblate.amgelocalnet.duckdns.org/projects/kde-"
@@ -15218,7 +15218,7 @@ msgstr "%1 ais: luchtaíodh teimpléad \"%2\""
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:250
 #: src/frontend/dockwidgets/RunChartDock.cpp:232
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:648
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:684
 #, kde-format
@@ -16674,7 +16674,7 @@ msgstr "Scarbhileog chun líon na sraitheanna a shioncrónú le"
 msgid "Show Columns Statistics Spreadsheet"
 msgstr "Taispeáin Scarbhileog Staitisticí Colúin"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 scarbhileog: luchtaíodh teimpléad \"%2\""
@@ -28101,12 +28101,18 @@ msgstr "Earráid neamhláimhseáilte"
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Luach neamhbhailí curtha isteach. Luach bailí: %1"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:54
+#: src/frontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
 msgid "Search/Filter text"
 msgstr "Téacs cuardaigh/scagaire"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:363
+#: src/frontend/widgets/TreeViewComboBox.cpp:62
+#, fuzzy, kde-format
+#| msgid "Clea&r Selection"
+msgid "Clear selection"
+msgstr "Glan an Rogha"
+
+#: src/frontend/widgets/TreeViewComboBox.cpp:421
 #, kde-format
 msgid ""
 "The aspect \"%1\"\n"
