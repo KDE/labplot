@@ -50,7 +50,7 @@ public Q_SLOTS:
 
 private:
 #ifndef SDK
-	mutable WorkbookView* m_view{nullptr};
+	WorkbookView* view_specific() const;
 #endif
 
 private Q_SLOTS:

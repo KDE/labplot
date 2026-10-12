@@ -67,7 +67,7 @@ public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
-	mutable DatapickerView* m_view{nullptr};
+	DatapickerView* view_specific() const;
 	DatapickerCurve* m_activeCurve{nullptr};
 	Transform* m_transform;
 	DatapickerImage* m_image{nullptr};

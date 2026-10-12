@@ -152,7 +152,7 @@ private:
 
 	Q_DECLARE_PRIVATE(Worksheet)
 	WorksheetPrivate* const d_ptr;
-	mutable WorksheetView* m_view{nullptr};
+	WorksheetView* view_specific() const;
 	friend class WorksheetPrivate;
 
 private Q_SLOTS:

@@ -72,13 +72,18 @@ QMenu* Datapicker::createContextMenu() {
 
 QWidget* Datapicker::view() const {
 	if (!m_partView) {
-		m_view = new DatapickerView(const_cast<Datapicker*>(this));
-		m_partView = m_view;
-		connect(this, &Datapicker::viewAboutToBeDeleted, [this]() {
-			m_view = nullptr;
-		});
+		auto* newView = new DatapickerView(const_cast<Datapicker*>(this));
+		m_partView = newView;
 	}
 	return m_partView;
+}
+
+/*!
+ * returns the DatapickerView if the view was already created, nullptr otherwise.
+ * Doesn't create the view.
+ */
+DatapickerView* Datapicker::view_specific() const {
+	return static_cast<DatapickerView*>(m_partView);
 }
 
 bool Datapicker::exportView() const {
@@ -110,10 +115,10 @@ DatapickerCurve* Datapicker::activeCurve() {
 }
 
 Spreadsheet* Datapicker::currentSpreadsheet() const {
-	if (!m_view)
+	if (!view_specific())
 		return nullptr;
 
-	const int index = m_view->currentIndex();
+	const int index = view_specific()->currentIndex();
 	if (index > 0) {
 		auto* curve = child<DatapickerCurve>(index - 1);
 		return curve->child<Spreadsheet>(0);

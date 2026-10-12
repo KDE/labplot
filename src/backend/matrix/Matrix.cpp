@@ -106,19 +106,16 @@ void Matrix::updateLocale() {
 	// the width of the cells might change with the new locale,
 	// resize the headers to fit the new content which will also trigger the redraw of the table using the new locale
 #ifndef SDK
-	m_view->resizeHeaders();
+	view_specific()->resizeHeaders();
 #endif
 }
 
 QWidget* Matrix::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		m_view = new MatrixView(const_cast<Matrix*>(this));
-		m_partView = m_view;
-		m_model = m_view->model();
-		connect(this, &Matrix::viewAboutToBeDeleted, [this]() {
-			m_view = nullptr;
-		});
+		auto* newView = new MatrixView(const_cast<Matrix*>(this));
+		m_partView = newView;
+		m_model = newView->model();
 	}
 	return m_partView;
 #else
@@ -126,15 +123,25 @@ QWidget* Matrix::view() const {
 #endif
 }
 
+#ifndef SDK
+/*!
+ * returns the MatrixView if the view was already created, nullptr otherwise.
+ * Doesn't create the view.
+ */
+MatrixView* Matrix::view_specific() const {
+	return static_cast<MatrixView*>(m_partView);
+}
+#endif
+
 bool Matrix::exportView() const {
 #ifndef SDK
-	auto* dlg = new ExportSpreadsheetDialog(m_view);
+	auto* dlg = new ExportSpreadsheetDialog(view_specific());
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
 
 	// TODO FITS filter to decide if it can be exported to both
 	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
-	if (m_view->selectedColumnCount() == 0)
+	if (view_specific()->selectedColumnCount() == 0)
 		dlg->setExportSelection(false);
 
 	bool ret;
@@ -150,14 +157,14 @@ bool Matrix::exportView() const {
 			const bool gridLines = dlg->gridLines();
 			const bool entire = dlg->entireSpreadheet();
 			const bool captions = dlg->captions();
-			m_view->exportToLaTeX(path, verticalHeader, horizontalHeader, latexHeader, gridLines, entire, captions);
+			view_specific()->exportToLaTeX(path, verticalHeader, horizontalHeader, latexHeader, gridLines, entire, captions);
 		} else if (dlg->format() == ExportSpreadsheetDialog::Format::FITS) {
 			const int exportTo = dlg->exportToFits();
-			m_view->exportToFits(path, exportTo);
+			view_specific()->exportToFits(path, exportTo);
 		} else {
 			const QString separator = dlg->separator();
 			const QLocale::Language format = dlg->numberFormat();
-			m_view->exportToFile(path, separator, format);
+			view_specific()->exportToFile(path, separator, format);
 		}
 	}
 	delete dlg;
@@ -171,11 +178,11 @@ bool Matrix::exportView() const {
 bool Matrix::printView() {
 #ifndef SDK
 	QPrinter printer;
-	auto* dlg = new QPrintDialog(&printer, m_view);
+	auto* dlg = new QPrintDialog(&printer, view_specific());
 	bool ret;
 	dlg->setWindowTitle(i18nc("@title:window", "Print Matrix"));
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
-		m_view->print(&printer);
+		view_specific()->print(&printer);
 
 	delete dlg;
 
@@ -187,8 +194,8 @@ bool Matrix::printView() {
 
 bool Matrix::printPreview() const {
 #ifndef SDK
-	auto* dlg = new QPrintPreviewDialog(m_view);
-	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &MatrixView::print);
+	auto* dlg = new QPrintPreviewDialog(view_specific());
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view_specific(), &MatrixView::print);
 	return dlg->exec();
 #else
 	return false;
@@ -311,8 +318,8 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	m_model->updateHeader();
 
 #ifndef SDK
-	if (m_view)
-		m_view->resizeHeaders();
+	if (view_specific())
+		view_specific()->resizeHeaders();
 #endif
 
 	Q_EMIT headerFormatChanged(format);
@@ -542,10 +549,10 @@ void Matrix::setDimensions(int rows, int cols) {
 void Matrix::addRows() {
 #ifndef SDK
 	Q_D(Matrix);
-	if (!m_view)
+	if (!view_specific())
 		return;
 	WAIT_CURSOR_AUTO_RESET;
-	int count = m_view->selectedRowCount(false);
+	int count = view_specific()->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 row", "%1: add %2 rows", name(), count));
 	exec(new MatrixInsertRowsCmd(d, rowCount(), count));
 	endMacro();
@@ -555,10 +562,10 @@ void Matrix::addRows() {
 void Matrix::addColumns() {
 #ifndef SDK
 	Q_D(Matrix);
-	if (!m_view)
+	if (!view_specific())
 		return;
 	WAIT_CURSOR_AUTO_RESET;
-	int count = m_view->selectedRowCount(false);
+	int count = view_specific()->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 column", "%1: add %2 columns", name(), count));
 	exec(new MatrixInsertColumnsCmd(d, columnCount(), count));
 	endMacro();
@@ -835,7 +842,7 @@ MatrixPrivate::~MatrixPrivate() {
 
 void MatrixPrivate::updateViewHeader() {
 #ifndef SDK
-	q->m_view->model()->updateHeader();
+	q->view_specific()->model()->updateHeader();
 #endif
 }
 

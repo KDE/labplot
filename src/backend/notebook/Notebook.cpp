@@ -332,13 +332,10 @@ QIcon Notebook::icon() const {
 QWidget* Notebook::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		m_view = new NotebookView(const_cast<Notebook*>(this));
-		m_view->setBaseSize(1500, 1500);
-		m_partView = m_view;
-		connect(this, &Notebook::viewAboutToBeDeleted, [this]() {
-			m_view = nullptr;
-		});
-		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+		auto* newView = new NotebookView(const_cast<Notebook*>(this));
+		newView->setBaseSize(1500, 1500);
+		m_partView = newView;
+		// 	connect(newView, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
 		// set the current path in the session to the path of the project file
 		if (m_session) {
@@ -353,6 +350,16 @@ QWidget* Notebook::view() const {
 #endif
 	return m_partView;
 }
+
+#ifndef SDK
+/*!
+ * returns the NotebookView if the view was already created, nullptr otherwise.
+ * Doesn't create the view.
+ */
+NotebookView* Notebook::view_specific() const {
+	return static_cast<NotebookView*>(m_partView);
+}
+#endif
 
 //! Return a new context menu.
 /**
@@ -371,8 +378,8 @@ void Notebook::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 void Notebook::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& columns) {
 #ifndef SDK
-	if (m_view)
-		m_view->fillColumnsContextMenu(menu, columns);
+	if (view_specific())
+		view_specific()->fillColumnsContextMenu(menu, columns);
 #else
 	Q_UNUSED(menu)
 	Q_UNUSED(columns)

@@ -60,7 +60,7 @@ private:
 	Q_DECLARE_PRIVATE(Note)
 	NotePrivate* const d_ptr;
 #ifndef SDK
-	mutable NoteView* m_view{nullptr};
+	NoteView* view_specific() const;
 #endif
 };
 
