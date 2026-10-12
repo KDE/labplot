@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,12 +17,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QMessageBox>
 #include <QStandardPaths>
 #include <QXmlStreamReader>
 
 #include <KCompressionDevice>
-#include <KLocalizedString>
 
 ExamplesManager* ExamplesManager::m_instance{nullptr};
 
@@ -187,8 +185,6 @@ void ExamplesManager::loadCollections() {
 			const QString& desc = collection[QLatin1String("description")].toString();
 			m_collections[name] = desc;
 		}
-	} else
-		QMessageBox::critical(nullptr,
-							  i18n("File not found"),
-							  i18n("Couldn't open the examples collections file %1. Please check your installation.", fileName));
+	}
+		QDEBUG("Couldn't open the examples collections file " << fileName);
 }
