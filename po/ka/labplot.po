@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-12 00:45+0000\n"
-"PO-Revision-Date: 2026-10-07 03:59+0200\n"
+"POT-Creation-Date: 2026-10-13 00:41+0000\n"
+"PO-Revision-Date: 2026-10-12 07:15+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -554,7 +554,7 @@ msgid "Path: %1"
 msgstr "ბილიკი: %1"
 
 #: src/backend/core/column/Column.cpp:1056
-#: src/frontend/datasources/ImportFileWidget.cpp:1740
+#: src/frontend/datasources/ImportFileWidget.cpp:1741
 #, kde-format
 msgid "Size: %1"
 msgstr "ზომა: %1"
@@ -1424,7 +1424,7 @@ msgid "Free space: %1 bytes"
 msgstr "თავისუფალი ადგილი: %1 ბაიტი"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:201
-#: src/frontend/datasources/ImportFileWidget.cpp:1836
+#: src/frontend/datasources/ImportFileWidget.cpp:1843
 #, kde-format
 msgid "Number of files: %1"
 msgstr "ფაილების რაოდენობა: %1"
@@ -1628,7 +1628,7 @@ msgstr "h5dump ვერ ვიპოვე."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:360
 #: src/backend/datasources/filters/NetCDFFilter.cpp:270
-#: src/frontend/datasources/ImportFileWidget.cpp:1715
+#: src/frontend/datasources/ImportFileWidget.cpp:1716
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "ფაილიდან (%1) წაკითხვის შეცდომა."
@@ -6988,7 +6988,7 @@ msgstr "სტატისტიკა (გადანაწილებებ�
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:745
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
-#: src/frontend/datasources/ImportFileWidget.cpp:1446
+#: src/frontend/datasources/ImportFileWidget.cpp:1447
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -9639,7 +9639,7 @@ msgstr "ვერტიკალური ღერძი"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2442
 #: src/frontend/ActionsManager.cpp:559
-#: src/frontend/datasources/ImportFileWidget.cpp:114
+#: src/frontend/datasources/ImportFileWidget.cpp:115
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
 #: src/frontend/widgets/BackgroundWidget.cpp:133
@@ -13343,7 +13343,6 @@ msgid "All"
 msgstr "ყველა"
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:173
-#: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:177
 #, kde-format
 msgid "File not found"
@@ -13629,104 +13628,104 @@ msgstr ""
 "რადგან მიერთება არ არსებობს, გამოწერა არ შექმნილა ან ფაილის ფილტრი ASCII "
 "არაა."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:112
+#: src/frontend/datasources/ImportFileWidget.cpp:113
 #, kde-format
 msgid "ASCII data"
 msgstr "ASCII მონაცემები"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:113
+#: src/frontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
 msgid "Binary data"
 msgstr "ბინარული მონაცემები"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:116
+#: src/frontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:119
+#: src/frontend/datasources/ImportFileWidget.cpp:120
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "OpenDocument ელცხრილი (ODS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:122
+#: src/frontend/datasources/ImportFileWidget.cpp:123
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "იერარქიული მონაცემების ფორმატი 5 (HDF5)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:125
+#: src/frontend/datasources/ImportFileWidget.cpp:126
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "ქსელური ზოგადი მონაცემების ფორმატი (NetCDF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:128
+#: src/frontend/datasources/ImportFileWidget.cpp:129
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr "ვექტორული ბინარული ჟურნალის ფაილი (BLF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:131
+#: src/frontend/datasources/ImportFileWidget.cpp:132
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "მოქნილი გამოსახულების ტრანსპორტის სისტემის მონაცემთა ფორმატი (FITS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:133
+#: src/frontend/datasources/ImportFileWidget.cpp:134
 #, kde-format
 msgid "JSON Data"
 msgstr "JSON მონაცემები"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:135
-#: src/frontend/datasources/ImportFileWidget.cpp:164
+#: src/frontend/datasources/ImportFileWidget.cpp:136
+#: src/frontend/datasources/ImportFileWidget.cpp:165
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:137
-#: src/frontend/datasources/ImportFileWidget.cpp:166
+#: src/frontend/datasources/ImportFileWidget.cpp:138
+#: src/frontend/datasources/ImportFileWidget.cpp:167
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:139
+#: src/frontend/datasources/ImportFileWidget.cpp:140
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata ან SPSS"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:142
+#: src/frontend/datasources/ImportFileWidget.cpp:143
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "MATLAB MAT ფაილი"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:145
+#: src/frontend/datasources/ImportFileWidget.cpp:146
 #, kde-format
 msgid "MCAP Data"
 msgstr "MCAP მონაცემები"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:148
+#: src/frontend/datasources/ImportFileWidget.cpp:149
 #, kde-format
 msgid "Apache Parquet"
 msgstr "Apache Parquet"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:149
+#: src/frontend/datasources/ImportFileWidget.cpp:150
 #, kde-format
 msgid "Arrow IPC (Feather)"
 msgstr "Arrow IPC (Feather)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:151
+#: src/frontend/datasources/ImportFileWidget.cpp:152
 #, kde-format
 msgid "Apache ORC"
 msgstr "Apache ORC"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:161
+#: src/frontend/datasources/ImportFileWidget.cpp:162
 #, kde-format
 msgid "ASCII Data"
 msgstr "ASCII მონაცემები"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:162
+#: src/frontend/datasources/ImportFileWidget.cpp:163
 #, kde-format
 msgid "Binary Data"
 msgstr "ბინარული მონაცემები"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:174
+#: src/frontend/datasources/ImportFileWidget.cpp:175
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
@@ -13735,7 +13734,7 @@ msgstr ""
 "თუ ეს პარამეტრი ჩართულია, პროექტის ფაილში შენახული იქნება ბმული ფაილამდე, "
 "მაგრამ არა მისი შემცველობა."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:175
+#: src/frontend/datasources/ImportFileWidget.cpp:176
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -13745,30 +13744,30 @@ msgstr ""
 "ფარდობით) ბილიკის შენახვა."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:183
+#: src/frontend/datasources/ImportFileWidget.cpp:184
 #: src/frontend/ui/dockwidgets/livedatadock.ui:361
 #, kde-format
 msgid "Continuously Fixed"
 msgstr "განუწყვეტლივ დაფიქსირებული"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:184
+#: src/frontend/datasources/ImportFileWidget.cpp:185
 #: src/frontend/ui/dockwidgets/livedatadock.ui:366
 #, kde-format
 msgid "From End"
 msgstr "ბოლოდან"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:185
+#: src/frontend/datasources/ImportFileWidget.cpp:186
 #, kde-format
 msgid "Till End"
 msgstr "ბოლომდე"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:186
+#: src/frontend/datasources/ImportFileWidget.cpp:187
 #, kde-format
 msgid "Whole File"
 msgstr "მთლიანი ფაილი"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:221
+#: src/frontend/datasources/ImportFileWidget.cpp:222
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -13788,7 +13787,7 @@ msgstr ""
 "დამუშავებულია. ხელმისაწვდომია მხოლოდ \"ფაილი ან დასახელებული მილის\" "
 "მონაცემთა წყაროებისთვის.</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:232
+#: src/frontend/datasources/ImportFileWidget.cpp:233
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -13799,7 +13798,7 @@ msgstr ""
 "მითითება აუცილებელია, მხოლოდ, წაკითხვის რეჟიმში \"უწყვეტად დაფიქსირებული\" "
 "და \"ბოლოდან\"."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:238
+#: src/frontend/datasources/ImportFileWidget.cpp:239
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -13813,12 +13812,12 @@ msgstr ""
 "მონაცემების წყაროს წაკითხვა, მხოლოდ, ახალი მონაცემების გამოჩენისას მოხდება.</"
 "li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:246
+#: src/frontend/datasources/ImportFileWidget.cpp:247
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "მიუთითეთ რამდენად ხშირად უნდა წავიკითხო მონაცემთა წყარო."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:251
+#: src/frontend/datasources/ImportFileWidget.cpp:252
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -13827,7 +13826,7 @@ msgstr ""
 "მიუთითეთ, რამდენი სემპლი გნებავთ, მეხსიერებაში დაიტოვოთ წაკითხვის შემდეგ.\n"
 "გამოიყენეთ \"ყველა\", თუ მონაცემები სრულად გნებავთ."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:256
+#: src/frontend/datasources/ImportFileWidget.cpp:257
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -13836,12 +13835,12 @@ msgstr ""
 "ჩართეთ, რომ მონიშნული მონაცემების რეგიონის პირველი მწკრივი ელცხრილის სვეტის "
 "სახელებად იქნეს გამოყენებული."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:271
+#: src/frontend/datasources/ImportFileWidget.cpp:272
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "MQTT კავშირების მართვა"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:273
+#: src/frontend/datasources/ImportFileWidget.cpp:274
 #: src/frontend/dockwidgets/LiveDataDock.cpp:84
 #, kde-format
 msgid ""
@@ -13851,7 +13850,7 @@ msgstr ""
 "მიუთითეთ 'ბოლო სურვილისა და აღსარების' შეტყობინება (LWT). საჭიროა, ერთი თემა "
 "მაინც გქონდეთ გამოწერილი."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:290
+#: src/frontend/datasources/ImportFileWidget.cpp:291
 #, kde-format
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
@@ -13859,30 +13858,30 @@ msgstr ""
 "მწკრივების რაოდენობა გამოითვლება მონაცემების ნაწილის ჩანართის "
 "მნიშვნელობებიდან"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1079
+#: src/frontend/datasources/ImportFileWidget.cpp:1080
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
 msgstr "აირჩიეთ საქაღალდის მონაცემთა წყარო"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1081
+#: src/frontend/datasources/ImportFileWidget.cpp:1082
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "აირჩიეთ ფაილის მონაცემთა წყარო"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1111
+#: src/frontend/datasources/ImportFileWidget.cpp:1112
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "აირჩიეთ DBC ფაილი"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1111
+#: src/frontend/datasources/ImportFileWidget.cpp:1112
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC ფაილი (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1198
+#: src/frontend/datasources/ImportFileWidget.cpp:1199
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
@@ -13890,7 +13889,7 @@ msgstr ""
 "Origin-ის პროექტის ფაილების გახსნა შეგიძლიათ მენიუდან \"შემოტანა -> Origin-"
 "ის პროექტი\"!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1201
+#: src/frontend/datasources/ImportFileWidget.cpp:1202
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -13899,7 +13898,7 @@ msgstr ""
 "ის პროექტი\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1349
+#: src/frontend/datasources/ImportFileWidget.cpp:1350
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -13907,7 +13906,7 @@ msgstr "მონაცემების ფორმატი"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1350
+#: src/frontend/datasources/ImportFileWidget.cpp:1351
 #: src/frontend/note/NoteView.cpp:103
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
@@ -13917,153 +13916,158 @@ msgid "Preview"
 msgstr "გადახედვა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1352
+#: src/frontend/datasources/ImportFileWidget.cpp:1353
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "მონაცემების ნაწილი წასაკითხად"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1398
+#: src/frontend/datasources/ImportFileWidget.cpp:1399
 #, kde-format
 msgid "Data format && preview"
 msgstr "მონაცემთა ფორმატი და მინიატურა"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1445
+#: src/frontend/datasources/ImportFileWidget.cpp:1446
 #, kde-format
 msgid "Automatic"
 msgstr "ავტომატური"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1707
+#: src/frontend/datasources/ImportFileWidget.cpp:1708
 #, kde-format
 msgid "file command not found"
 msgstr "ფაილის ბრძანება ვერ მოიძებნა"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1718
+#: src/frontend/datasources/ImportFileWidget.cpp:1719
 #, kde-format
 msgid "cannot open"
 msgstr "გახსნის შეცდომა"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1723
+#: src/frontend/datasources/ImportFileWidget.cpp:1724
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>ფაილის ტიპი:</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1728
-#: src/frontend/datasources/ImportFileWidget.cpp:1821
+#: src/frontend/datasources/ImportFileWidget.cpp:1729
+#: src/frontend/datasources/ImportFileWidget.cpp:1828
 #, kde-format
 msgid "General:"
 msgstr "ზოგადი:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1730
 #: src/frontend/datasources/ImportFileWidget.cpp:1731
 #: src/frontend/datasources/ImportFileWidget.cpp:1732
-#: src/frontend/datasources/ImportFileWidget.cpp:1823
-#: src/frontend/datasources/ImportFileWidget.cpp:1824
-#: src/frontend/datasources/ImportFileWidget.cpp:1825
+#: src/frontend/datasources/ImportFileWidget.cpp:1733
+#: src/frontend/datasources/ImportFileWidget.cpp:1830
+#: src/frontend/datasources/ImportFileWidget.cpp:1831
+#: src/frontend/datasources/ImportFileWidget.cpp:1832
 #, kde-format
 msgid "yes"
 msgstr "დიახ"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1730
 #: src/frontend/datasources/ImportFileWidget.cpp:1731
 #: src/frontend/datasources/ImportFileWidget.cpp:1732
-#: src/frontend/datasources/ImportFileWidget.cpp:1823
-#: src/frontend/datasources/ImportFileWidget.cpp:1824
-#: src/frontend/datasources/ImportFileWidget.cpp:1825
+#: src/frontend/datasources/ImportFileWidget.cpp:1733
+#: src/frontend/datasources/ImportFileWidget.cpp:1830
+#: src/frontend/datasources/ImportFileWidget.cpp:1831
+#: src/frontend/datasources/ImportFileWidget.cpp:1832
 #, kde-format
 msgid "no"
 msgstr "არა"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1730
-#: src/frontend/datasources/ImportFileWidget.cpp:1823
+#: src/frontend/datasources/ImportFileWidget.cpp:1731
+#: src/frontend/datasources/ImportFileWidget.cpp:1830
 #, kde-format
 msgid "Readable: %1"
 msgstr "წაკითხვადი: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1731
-#: src/frontend/datasources/ImportFileWidget.cpp:1824
+#: src/frontend/datasources/ImportFileWidget.cpp:1732
+#: src/frontend/datasources/ImportFileWidget.cpp:1831
 #, kde-format
 msgid "Writable: %1"
 msgstr "ჩაწერადი: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1732
-#: src/frontend/datasources/ImportFileWidget.cpp:1825
+#: src/frontend/datasources/ImportFileWidget.cpp:1733
+#: src/frontend/datasources/ImportFileWidget.cpp:1832
 #, kde-format
 msgid "Executable: %1"
 msgstr "გაშვებადი: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1734
-#: src/frontend/datasources/ImportFileWidget.cpp:1827
+#: src/frontend/datasources/ImportFileWidget.cpp:1735
+#: src/frontend/datasources/ImportFileWidget.cpp:1834
 #, kde-format
 msgid "Birth time: %1"
 msgstr "დაბადების დრო: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1735
-#: src/frontend/datasources/ImportFileWidget.cpp:1828
+#: src/frontend/datasources/ImportFileWidget.cpp:1736
+#: src/frontend/datasources/ImportFileWidget.cpp:1835
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "მეტამონაცემების ბოლო ცვლილება: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1736
-#: src/frontend/datasources/ImportFileWidget.cpp:1829
+#: src/frontend/datasources/ImportFileWidget.cpp:1737
+#: src/frontend/datasources/ImportFileWidget.cpp:1836
 #, kde-format
 msgid "Last modified: %1"
 msgstr "ბოლო ცვლილება: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1737
-#: src/frontend/datasources/ImportFileWidget.cpp:1830
+#: src/frontend/datasources/ImportFileWidget.cpp:1738
+#: src/frontend/datasources/ImportFileWidget.cpp:1837
 #, kde-format
 msgid "Last read: %1"
 msgstr "ბოლოს წაიკითხა: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1738
-#: src/frontend/datasources/ImportFileWidget.cpp:1831
+#: src/frontend/datasources/ImportFileWidget.cpp:1739
+#: src/frontend/datasources/ImportFileWidget.cpp:1838
 #, kde-format
 msgid "Owner: %1"
 msgstr "მფლობელი: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1739
-#: src/frontend/datasources/ImportFileWidget.cpp:1832
+#: src/frontend/datasources/ImportFileWidget.cpp:1740
+#: src/frontend/datasources/ImportFileWidget.cpp:1839
 #, kde-format
 msgid "Group: %1"
 msgstr "ჯგუფი: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1740
+#: src/frontend/datasources/ImportFileWidget.cpp:1741
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cბაიტი"
 msgstr[1] "%1 cბაიტი"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1743
-#: src/frontend/datasources/ImportFileWidget.cpp:1835
+#: src/frontend/datasources/ImportFileWidget.cpp:1747
+#, kde-format
+msgid "SHA-256: %1"
+msgstr ""
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1750
+#: src/frontend/datasources/ImportFileWidget.cpp:1842
 #, kde-format
 msgid "Summary:"
 msgstr "შეჯამება:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1766
-#: src/frontend/datasources/ImportFileWidget.cpp:1771
+#: src/frontend/datasources/ImportFileWidget.cpp:1773
+#: src/frontend/datasources/ImportFileWidget.cpp:1778
 #, kde-format
 msgid "Content:"
 msgstr "შემცველობა:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1807
+#: src/frontend/datasources/ImportFileWidget.cpp:1814
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "ფაილის (\"%1\") წასაკითხად გახსნის შეცდომა."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1837
+#: src/frontend/datasources/ImportFileWidget.cpp:1844
 #, kde-format
 msgid "Number of sub-directories: %1"
 msgstr "ქვესაქაღალდეების რაოდენობა: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1840
+#: src/frontend/datasources/ImportFileWidget.cpp:1847
 #, kde-format
 msgid "Couldn't read the directory %1."
 msgstr "საქაღალდის %1 წაკითხვა შეუძლებელია."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1929
+#: src/frontend/datasources/ImportFileWidget.cpp:1936
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -14072,119 +14076,119 @@ msgstr ""
 "მწკრივების არასწორი რაოდენობა. შეამოწმეთ 'დასასრულის მწკრივი' და 'დასაწყისი "
 "მწკრივი'. 'დასასრულის მწკრივი' 'დასასრულის მწკრივზე' დიდი უნდა იყოს, ან -1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1940
+#: src/frontend/datasources/ImportFileWidget.cpp:1947
 #, kde-format
 msgid "Initialization failed: %1"
 msgstr "ინიციალიზაცია ჩავარდა: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1965
+#: src/frontend/datasources/ImportFileWidget.cpp:1972
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
 msgstr "ჩავარდა მიერთება ლოკალურ სოკეტთან: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1982
+#: src/frontend/datasources/ImportFileWidget.cpp:1989
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "ჩავარდა მიერთება TCP სოკეტთან. %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1988
-#: src/frontend/datasources/ImportFileWidget.cpp:2017
+#: src/frontend/datasources/ImportFileWidget.cpp:1995
+#: src/frontend/datasources/ImportFileWidget.cpp:2024
 #, kde-format
 msgid "Socket operation timed out."
 msgstr "სოკეტის ოპერაციის დრო ამოიწურა."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2002
+#: src/frontend/datasources/ImportFileWidget.cpp:2009
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr "არ არის მზად წასაკითხად 2 წამში:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2021
+#: src/frontend/datasources/ImportFileWidget.cpp:2028
 #, kde-format
 msgid "Unable to bind: "
 msgstr "მიბმა შეუძლებელია: "
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2038
+#: src/frontend/datasources/ImportFileWidget.cpp:2045
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "დამუშავების შეცდომა: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2040
+#: src/frontend/datasources/ImportFileWidget.cpp:2047
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr "არ არის მზად წასაკითხად 2 წამში"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2044
+#: src/frontend/datasources/ImportFileWidget.cpp:2051
 #, kde-format
 msgid "Failed to open serial port. error: %1"
 msgstr "ვერ მოხერხდა სერიული პორტის გახსნა. შეცდომა: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2063
+#: src/frontend/datasources/ImportFileWidget.cpp:2070
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "არჩეული თემისთვის მონაცემები ჯერ არ ჩამოვიდა"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2349
+#: src/frontend/datasources/ImportFileWidget.cpp:2356
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "არ წარმოადგენს HDF5 ფაილს: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2407
+#: src/frontend/datasources/ImportFileWidget.cpp:2414
 #, kde-format
 msgid "Parsing ODS file %1 failed."
 msgstr "ODS ფაილის - %1 დამუშავება ჩავარდა."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2819
+#: src/frontend/datasources/ImportFileWidget.cpp:2826
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "ყველა ხელმისაწვდომი თემის გამოწერა შეუძლებელია."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2827
+#: src/frontend/datasources/ImportFileWidget.cpp:2834
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "ჩავარდა მიერთება '%1'-თან. შეცდომა %2."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2849
+#: src/frontend/datasources/ImportFileWidget.cpp:2856
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "გაითიშა '%1'-დან ."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2915
+#: src/frontend/datasources/ImportFileWidget.cpp:2922
 #, kde-format
 msgid "Available (%1)"
 msgstr "ხელმისაწვდომია (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:3019
+#: src/frontend/datasources/ImportFileWidget.cpp:3026
 #, kde-format
 msgid "Wrong username or password"
 msgstr "მომხმარებლის სახელი ან პაროლი არასწორია"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:3022
+#: src/frontend/datasources/ImportFileWidget.cpp:3029
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "კლიენტის ID მიღებული არ ყოფილა"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:3026
+#: src/frontend/datasources/ImportFileWidget.cpp:3033
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "ბროკერი %1 ხელმისაწვდომიარაა."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:3029
+#: src/frontend/datasources/ImportFileWidget.cpp:3036
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "კლიენტს არ აქვს დაკავშირების უფლება."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:3032
+#: src/frontend/datasources/ImportFileWidget.cpp:3039
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "უცნობი შეცდომა."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:3038
-#: src/frontend/datasources/ImportFileWidget.cpp:3041
+#: src/frontend/datasources/ImportFileWidget.cpp:3045
+#: src/frontend/datasources/ImportFileWidget.cpp:3048
 #, kde-format
 msgid "An error occurred."
 msgstr "შეცდომა."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:3055
+#: src/frontend/datasources/ImportFileWidget.cpp:3062
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "'%1:%2'-ისთან დაკავშირების მოლოდინის ვადა ამოიწურა."
@@ -17271,14 +17275,6 @@ msgstr "მოგლუვების სტატუსი: %1"
 msgctxt "@title:window"
 msgid "Example Projects"
 msgstr "მაგალითი პროექტები"
-
-#: src/frontend/examples/ExamplesManager.cpp:193
-#, kde-format
-msgid ""
-"Couldn't open the examples collections file %1. Please check your "
-"installation."
-msgstr ""
-"ვერ გავხსენი მაგალითი კოლექციის ფაილი %1. შეამოწმეთ თქვენი პროგრამის ფაილები."
 
 #: src/frontend/GuiObserver.cpp:195 src/frontend/MainWin.cpp:632
 #, kde-format
@@ -27854,10 +27850,9 @@ msgid "Search/Filter text"
 msgstr "ტექსტის ძებნა/ფილტრი"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:62
-#, fuzzy, kde-format
-#| msgid "Clea&r Selection"
+#, kde-format
 msgid "Clear selection"
-msgstr "&მონიშნულის გასუფთავება"
+msgstr "მონიშნულის გასუფთავება"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:421
 #, kde-format
@@ -28252,6 +28247,13 @@ msgstr "გადაყვანის პროცესი ჩავარდ�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid ""
+#~ "Couldn't open the examples collections file %1. Please check your "
+#~ "installation."
+#~ msgstr ""
+#~ "ვერ გავხსენი მაგალითი კოლექციის ფაილი %1. შეამოწმეთ თქვენი პროგრამის "
+#~ "ფაილები."
 
 #~ msgid "Not sufficient weight data points provided!"
 #~ msgstr "მითითებული წონის მონაცემის წერტილები საკმარისი არაა!"
