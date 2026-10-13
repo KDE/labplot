@@ -190,6 +190,11 @@ extern const char* specialfun_sma;
 extern const char* specialfun_smr;
 extern const char* specialfun_psample;
 extern const char* specialfun_rsample;
+extern const char* specialfun_unwrap;
+extern const char* specialfun_unwrap_period;
+extern const char* specialfun_diff;
+extern const char* specialfun_cumsum;
+extern const char* specialfun_cumprod;
 
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);
@@ -213,6 +218,20 @@ double greaterThan(const double v1, const double v2);
 double greaterEqualThan(const double v1, const double v2);
 double lessThan(const double v1, const double v2);
 double lessEqualThan(const double v1, const double v2);
+
+// NumPy-like utility functions
+double deg2rad(double degrees);
+double rad2deg(double radians);
+double clipFunction(double value, double min, double max);
+double floorFunction(double x);
+double exp2Function(double x);
+double fmodFunction(double x, double y);
+double remainderFunction(double x, double y);
+double squareFunction(double x);
+double reciprocalFunction(double x);
+double heavisideFunction(double x, double h0);
+double gcdFunction(double a, double b);
+double lcmFunction(double a, double b);
 
 } // namespace Parsing
 

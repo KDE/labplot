@@ -19,6 +19,7 @@
 #include <QDateTime>
 
 #include <cmath>
+#include <numeric>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
@@ -205,6 +206,11 @@ const char* specialfun_sma = "sma";
 const char* specialfun_smr = "smr";
 const char* specialfun_psample = "psample";
 const char* specialfun_rsample = "rsample";
+const char* specialfun_unwrap = "unwrap";
+const char* specialfun_unwrap_period = "unwrapp";
+const char* specialfun_diff = "diff";
+const char* specialfun_cumsum = "cumsum";
+const char* specialfun_cumprod = "cumprod";
 
 const char* colfun_size = "size";
 const char* colfun_sum = "sum";
@@ -255,6 +261,11 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		{[]() { return i18n("Simple Moving Range"); }, specialfun_smr, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Period sample"); }, specialfun_psample, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Random sample"); }, specialfun_rsample, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Unwrap phase angles"); }, specialfun_unwrap, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Unwrap with custom period"); }, specialfun_unwrap_period, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Difference from previous row"); }, specialfun_diff, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Cumulative sum"); }, specialfun_cumsum, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Cumulative product"); }, specialfun_cumprod, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
 
 		{[]() { return i18n("Current column cell (index)"); }, cell_curr_column, func_tValuePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Current column cell (index; default_value)"); }, cell_curr_column_default, func_t2ValuePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
@@ -670,6 +681,20 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		{[]() { return i18n("Three component hypotenuse function"); }, "hypot3", gsl_hypot3, 3, nullptr, FunctionGroups::TrigonometricFunctions},
 		{[]() { return i18n("restrict to [-pi, pi]"); }, "anglesymm", gsl_sf_angle_restrict_symm, 1, nullptr, FunctionGroups::TrigonometricFunctions},
 		{[]() { return i18n("restrict to [0, 2 pi]"); }, "anglepos", gsl_sf_angle_restrict_pos, 1, nullptr, FunctionGroups::TrigonometricFunctions},
+		{[]() { return i18n("Degrees to radians"); }, "deg2rad", deg2rad, 1, nullptr, FunctionGroups::TrigonometricFunctions},
+		{[]() { return i18n("Radians to degrees"); }, "rad2deg", rad2deg, 1, nullptr, FunctionGroups::TrigonometricFunctions},
+
+		// Standard Mathematical Functions - additional NumPy-like utilities
+		{[]() { return i18n("Clip value to range [min, max]"); }, "clip", clipFunction, 3, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("Floor (largest integer <= x)"); }, "floor", floorFunction, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("2^x"); }, "exp2", exp2Function, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("Floating-point remainder of x/y"); }, "fmod", fmodFunction, 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("IEEE remainder of x/y"); }, "remainder", remainderFunction, 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("Square (x^2)"); }, "square", squareFunction, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("Reciprocal (1/x)"); }, "reciprocal", reciprocalFunction, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("Heaviside step function"); }, "heaviside", heavisideFunction, 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("Greatest common divisor"); }, "gcd", gcdFunction, 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
+		{[]() { return i18n("Least common multiple"); }, "lcm", lcmFunction, 2, nullptr, FunctionGroups::StandardMathematicalFunctions},
 
 		// Zeta Functions
 		{[]() { return i18n("Riemann zeta function for integer n"); }, "zetaint", nsl_sf_zetaint, 1, nullptr, FunctionGroups::ZetaFunctions},
@@ -1243,4 +1268,68 @@ QString equalEpsilonParameterNames(int parameterIndex) {
 	}
 	return i18n("Invalid");
 }
+
+// NumPy-like utility functions
+double deg2rad(double degrees) {
+	return degrees * M_PI_180;
+}
+
+double rad2deg(double radians) {
+	return radians * M_180_PI;
+}
+
+double clipFunction(double value, double min, double max) {
+	if (value < min)
+		return min;
+	if (value > max)
+		return max;
+	return value;
+}
+
+double floorFunction(double x) {
+	return std::floor(x);
+}
+
+double exp2Function(double x) {
+	return std::exp2(x);
+}
+
+double fmodFunction(double x, double y) {
+	return std::fmod(x, y);
+}
+
+double remainderFunction(double x, double y) {
+	return std::remainder(x, y);
+}
+
+double squareFunction(double x) {
+	return x * x;
+}
+
+double reciprocalFunction(double x) {
+	return 1.0 / x;
+}
+
+double heavisideFunction(double x, double h0) {
+	if (x < 0)
+		return 0.0;
+	if (x == 0)
+		return h0;
+	return 1.0;
+}
+
+double gcdFunction(double a, double b) {
+	auto ia = static_cast<long long>(std::abs(a));
+	auto ib = static_cast<long long>(std::abs(b));
+	return static_cast<double>(std::gcd(ia, ib));
+}
+
+double lcmFunction(double a, double b) {
+	auto ia = static_cast<long long>(std::abs(a));
+	auto ib = static_cast<long long>(std::abs(b));
+	if (ia == 0 || ib == 0)
+		return 0.0;
+	return static_cast<double>(std::lcm(ia, ib));
+}
+
 } // namespace Parsing
