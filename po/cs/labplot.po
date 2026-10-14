@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-10-13 01:00+0200\n"
+"PO-Revision-Date: 2026-10-13 23:33+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -8285,7 +8285,7 @@ msgstr "Hilbertova transformace"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:314
 #, kde-format
 msgid "(De-)Convolution"
-msgstr ""
+msgstr "(De-)konvoluce"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:421
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
@@ -9735,7 +9735,7 @@ msgstr "Chyba: %1"
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:66
 #, kde-format
 msgid "%1: set options and perform the data reduction"
-msgstr ""
+msgstr "%1: nastavit parametry a provést redukci dat"
 
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:65
 #, kde-format
@@ -10026,7 +10026,7 @@ msgstr "%1: nastavit parametry a provést vyhlazení"
 #: src/backend/worksheet/plots/PlotArea.cpp:141
 #, kde-format
 msgid "%1: toggle clipping"
-msgstr ""
+msgstr "%1: přepnout ořezávání"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:157
 #, kde-format
@@ -10036,7 +10036,7 @@ msgstr "%1: změněn typ okraje"
 #: src/backend/worksheet/plots/PlotArea.cpp:164
 #, kde-format
 msgid "%1: set plot area corner radius"
-msgstr ""
+msgstr "%1: nastavit poloměr rohu vykreslovací oblasti"
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333
@@ -16545,7 +16545,7 @@ msgstr "&Odečíst"
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Baseline"
-msgstr "Odečíst základní přímku"
+msgstr "Odečíst základní hodnotu"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:115
 #, kde-format
@@ -16589,7 +16589,7 @@ msgstr "Rozdíl"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:156
 #, kde-format
 msgid "Baseline (arPLS Algorithm)"
-msgstr "Základní přímka (algoritmus arPLS)"
+msgstr "Základní hodnota (algoritmus arPLS)"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:163
 #, kde-format
@@ -16620,7 +16620,7 @@ msgstr "nezpracovaná data"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:571
 #, kde-format
 msgid "baseline"
-msgstr "základní řada"
+msgstr "základní hodnota"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:579
 #, kde-format
@@ -16657,7 +16657,7 @@ msgstr "%1: odečíst %2 od hodnot ve sloupci"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1257
 #, kde-format
 msgid "%1: subtract baseline from column values"
-msgstr "%1: odečíst základní přímku od hodnot ve sloupci"
+msgstr "%1: odečíst základní hodnotu od hodnot ve sloupci"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1260
 #, kde-format
@@ -17144,6 +17144,8 @@ msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr ""
+"Zadaný název proměnné je již vyhrazen jako název konstanty. Použijte prosím "
+"jiný název."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:174
 #, kde-format
@@ -17151,11 +17153,13 @@ msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr ""
+"Zadaný název proměnné je již vyhrazen jako název funkce. Použijte prosím "
+"jiný název."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:177
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr ""
+msgstr "Název proměnné 'i' je vyhrazen pro index řádku sloupce."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:180
 #, kde-format
@@ -17184,8 +17188,9 @@ msgstr "Vyberte platný sloupec"
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: vyplnit sloupec hodnotami funkce"
+msgstr[1] "%1: vyplnit sloupce hodnotami funkcí"
+msgstr[2] "%1: vyplnit sloupce hodnotami funkcí"
 
 #: src/frontend/spreadsheet/GoToDialog.cpp:35
 #, kde-format
@@ -17806,7 +17811,7 @@ msgstr "Opačně"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:396
 #, kde-format
 msgid "Subtract Baseline"
-msgstr "Odečíst základní přímku"
+msgstr "Odečíst základní hodnotu"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:402
 #, kde-format
@@ -18351,7 +18356,7 @@ msgstr "Rozptyl měření"
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:185
 #, kde-format
 msgid "Mean absolute deviation around mean"
-msgstr ""
+msgstr "Průměrná absolutní odchylka od průměru"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:88
@@ -21534,7 +21539,7 @@ msgstr "Svislé zarov.:"
 #: src/frontend/ui/dockwidgets/imagedock.ui:421
 #, kde-format
 msgid "Specify the name of the image file"
-msgstr ""
+msgstr "Zadejte název souboru s obrázkem"
 
 #. i18n: ectx: property (text), widget (QLabel, lRatio)
 #: src/frontend/ui/dockwidgets/imagedock.ui:449
@@ -21577,7 +21582,7 @@ msgstr "Svislý oddělovač"
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:267
 #, kde-format
 msgid "Connection Line"
-msgstr ""
+msgstr "Čára připojení"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:90
@@ -21589,7 +21594,7 @@ msgstr "Jádro:"
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:110
 #, kde-format
 msgid "Bandwidth:"
-msgstr "Šířka vlnového pásma:"
+msgstr "Šířka pásma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:163
@@ -21605,7 +21610,7 @@ msgstr "Rozsah grafu:"
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:214
 #, kde-format
 msgid "Estimation Line"
-msgstr ""
+msgstr "Čára odhadu"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:67
@@ -21637,19 +21642,19 @@ msgstr "Aktualizovat"
 #: src/frontend/ui/dockwidgets/livedatadock.ui:296
 #, kde-format
 msgid "Update Will Message"
-msgstr ""
+msgstr "Zpráva o aktualizaci"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:355
 #, kde-format
 msgid "Till the End"
-msgstr ""
+msgstr "Až do konce"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:360
 #, kde-format
 msgid "Read Whole File"
-msgstr ""
+msgstr "Načíst celý soubor"
 
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:94
@@ -21669,25 +21674,25 @@ msgstr "Mapování"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:168
 #, kde-format
 msgid "X-Start:"
-msgstr ""
+msgstr "X-Start:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:182
 #, kde-format
 msgid "X-End:"
-msgstr ""
+msgstr "X-Konec:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYStart)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:212
 #, kde-format
 msgid "Y-Start:"
-msgstr ""
+msgstr "Y-Start:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYEnd)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:226
 #, kde-format
 msgid "Y-End:"
-msgstr ""
+msgstr "Y-Konec:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:305
@@ -21723,44 +21728,44 @@ msgstr "Barva textu:"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:37
 #, kde-format
 msgid "Exact Limits:"
-msgstr ""
+msgstr "Přesné limity:"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:77
 #, kde-format
 msgid "Sample Sizes:"
-msgstr ""
+msgstr "Velikosti vzorků:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
 #, kde-format
 msgid "Min. Lower Limit:"
-msgstr ""
+msgstr "Min. spodní limit:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
 #, kde-format
 msgid "Limits based on:"
-msgstr ""
+msgstr "Limity založené na:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:236
 #, kde-format
 msgid "Max. Upper Limit:"
-msgstr ""
+msgstr "Max. horní limit:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:247
 #: src/frontend/ui/dockwidgets/runchartdock.ui:163
 #, kde-format
 msgid "Data Line"
-msgstr ""
+msgstr "Datová čára"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:311
 #, kde-format
 msgid "Center/Limits Lines"
-msgstr ""
+msgstr "Střed/Čáry limitu"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:366
@@ -21780,7 +21785,7 @@ msgstr "Dolní limit"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:447
 #, kde-format
 msgid "Center/Limit Values"
-msgstr ""
+msgstr "Střed/Hodnoty limitu"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
@@ -21815,7 +21820,7 @@ msgstr "Vytvořeno:"
 #: src/frontend/ui/settingsgeneralpage.ui:432
 #, kde-format
 msgid "Save Dock States:"
-msgstr ""
+msgstr "Uložit stavy doku:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/frontend/ui/dockwidgets/projectdock.ui:100
@@ -21874,7 +21879,7 @@ msgstr "Percentily"
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:104
 #, kde-format
 msgid "End x:"
-msgstr ""
+msgstr "Konec x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
@@ -21882,7 +21887,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:313
 #, kde-format
 msgid "Start x:"
-msgstr ""
+msgstr "Start x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:152
@@ -21894,7 +21899,7 @@ msgstr "Střed:"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:227
 #, kde-format
 msgid "Center Line"
-msgstr ""
+msgstr "Středová čára"
 
 #. i18n: ectx: property (text), widget (QLabel, lRuntime)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:86
@@ -21936,7 +21941,7 @@ msgstr "Komentáře:"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:235
 #, kde-format
 msgid "Linking"
-msgstr ""
+msgstr "Propojení"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
@@ -21978,20 +21983,20 @@ msgstr "Strana:"
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:166
 #, kde-format
 msgid "Scale content:"
-msgstr ""
+msgstr "Měřítko obsahu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSamplingInterval)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:62
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:313
 #, kde-format
 msgid "Sampling Interval:"
-msgstr ""
+msgstr "Interval vzorkování:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWrap)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:117
 #, kde-format
 msgid "Wrap Response:"
-msgstr ""
+msgstr "Souhrnná odpověď:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:131
@@ -22009,7 +22014,7 @@ msgstr ""
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
 msgid "X-Data:"
-msgstr ""
+msgstr "X-Data:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:138
@@ -22030,7 +22035,7 @@ msgstr "X-rozsah:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:145
 #, kde-format
 msgid "Y-Data Response:"
-msgstr ""
+msgstr "Odpověď Y-Dat:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:241
@@ -22053,7 +22058,7 @@ msgstr "Přepočítat"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:248
 #, kde-format
 msgid "Y-Data Signal:"
-msgstr ""
+msgstr "Signál Y-Data:"
 
 #. i18n: ectx: property (text), widget (QLabel, lResults)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -22077,7 +22082,7 @@ msgstr "Výsledky:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:425
 #, kde-format
 msgid "Norm. Response:"
-msgstr ""
+msgstr "Norm. odpověď:"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
@@ -22091,13 +22096,13 @@ msgstr "Korelace"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:151
 #, kde-format
 msgid "Y-Data Signal 2:"
-msgstr ""
+msgstr "Odpověď Y-Dat Signal 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:203
 #, kde-format
 msgid "Y-Data Signal 1:"
-msgstr ""
+msgstr "Y-Data Signal 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalize)
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:210
@@ -22109,25 +22114,25 @@ msgstr "Normalizovat:"
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:78
 #, kde-format
 msgid "intermediate points to evaluate between each two points"
-msgstr ""
+msgstr "mezilehlé body, které je třeba vyhodnotit mezi každými dvěma body"
 
 #. i18n: ectx: property (text), widget (QLabel, lDropLines)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:123
 #, kde-format
 msgid "Drop lines"
-msgstr ""
+msgstr "Vynechat řádky"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineInterpolationPointsCount)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:133
 #, kde-format
 msgid "Interm. points:"
-msgstr ""
+msgstr "Mezileh. body"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSkipGaps)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:140
 #, kde-format
 msgid "Ignore Gaps:"
-msgstr ""
+msgstr "Ignorovat mezery:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral_2)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:153
@@ -22139,7 +22144,7 @@ msgstr "Připojení"
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:160
 #, kde-format
 msgid "Monoton incr. X:"
-msgstr ""
+msgstr "Monotónní přír. X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:110
@@ -22155,7 +22160,7 @@ msgstr ""
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
 #, kde-format
 msgid "Y-Data:"
-msgstr ""
+msgstr "Y-Data:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSimplification)
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:29
@@ -22175,13 +22180,13 @@ msgstr "Možnost:"
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:291
 #, kde-format
 msgid "Derivative:"
-msgstr ""
+msgstr "Derivát:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAccuracyOrder)
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:385
 #, kde-format
 msgid "Accuracy Order:"
-msgstr ""
+msgstr "Pořadí přesnosti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation1)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:111
@@ -22231,13 +22236,13 @@ msgstr "y=g(t)"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:67
 #, kde-format
 msgid "Advanced fit options"
-msgstr ""
+msgstr "Rozšířené možnosti aproximace"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:70
 #, kde-format
 msgid "Opens a dialog to change advanced fit options"
-msgstr ""
+msgstr "Otevře dialogové okno pro změnu pokročilých nastavení přizpůsobení"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbOptions)
 #. i18n: ectx: property (text), widget (QLabel, lOptions)
@@ -22255,7 +22260,7 @@ msgstr "Možnosti"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:89
 #, kde-format
 msgid "Name of the fit curve"
-msgstr ""
+msgstr "Název aproximující křivky"
 
 #. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
 #. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
@@ -22269,31 +22274,31 @@ msgstr "sloupec ="
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:151
 #, kde-format
 msgid "Weight for y data"
-msgstr ""
+msgstr "Váha pro data y"
 
 #. i18n: ectx: property (text), widget (QLabel, lYWeight)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:154
 #, kde-format
 msgid "Y-Weight:"
-msgstr ""
+msgstr "Y-váha:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:161
 #, kde-format
 msgid "Weight for x data"
-msgstr ""
+msgstr "Váha pro data x"
 
 #. i18n: ectx: property (text), widget (QLabel, lXWeight)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:164
 #, kde-format
 msgid "X-Weight:"
-msgstr ""
+msgstr "X-váha:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:194
 #, kde-format
 msgid "Fit model category"
-msgstr ""
+msgstr "Kategorie modelů aproximace"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:197
@@ -22305,7 +22310,7 @@ msgstr "Kategorie:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:215
 #, kde-format
 msgid "Data to fit"
-msgstr ""
+msgstr "Data k aproximaci"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lComment)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:259
@@ -22323,25 +22328,25 @@ msgstr "Algoritmus:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:295
 #, kde-format
 msgid "Type of data source"
-msgstr ""
+msgstr "Typ zdroje dat"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:337
 #, kde-format
 msgid "Source curve"
-msgstr ""
+msgstr "Zdrojová křivka"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:347
 #, kde-format
 msgid "Source of y data"
-msgstr ""
+msgstr "Zdroj dat y"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbWeights)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:394
 #, kde-format
 msgid "How to weight the data points"
-msgstr ""
+msgstr "Jak vážit datové body"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbWeights)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:400
@@ -22353,37 +22358,37 @@ msgstr "Váhy:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:422
 #, kde-format
 msgid "Show fit curve"
-msgstr ""
+msgstr "Zobrazit aproximační křivku"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbResults)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:466
 #, kde-format
 msgid "Fit results"
-msgstr ""
+msgstr "Výsledek aproximace"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:507
 #, kde-format
 msgid "Degree of fit model"
-msgstr ""
+msgstr "Model stupně aproximace"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:585
 #, kde-format
 msgid "Select predefined function"
-msgstr ""
+msgstr "Vybrat předdefinovanou funkci"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:598
 #, kde-format
 msgid "Select predefined constants"
-msgstr ""
+msgstr "Vybrat předdefinovanou konstantu"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFit)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:632
 #, kde-format
 msgid "Function to fit and options"
-msgstr ""
+msgstr "Funkce aproximace a možnosti"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbFit)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:641
@@ -22395,7 +22400,7 @@ msgstr "Aproximace:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:725
 #, kde-format
 msgid "Run fit"
-msgstr ""
+msgstr "Spustit aproximaci"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:728
@@ -22407,7 +22412,7 @@ msgstr "Spustit"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:755
 #, kde-format
 msgid "Specify parameters and their properties"
-msgstr ""
+msgstr "Zadat parametry a jejich vlastnosti"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:758
@@ -22419,7 +22424,7 @@ msgstr "Parametry:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:780
 #, kde-format
 msgid "Fit model type"
-msgstr ""
+msgstr "Typ modelu aproximace"
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:783
@@ -22431,7 +22436,7 @@ msgstr "Model:"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:839
 #, kde-format
 msgid "Function of fit model"
-msgstr ""
+msgstr "Funkce modelu aproximace"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:842
@@ -22443,13 +22448,13 @@ msgstr "f(x) ="
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:859
 #, kde-format
 msgid "Source of x data"
-msgstr ""
+msgstr "Zdroj dat x"
 
 #. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:869
 #, kde-format
 msgid "Resulting fit parameter and properties"
-msgstr ""
+msgstr "Výsledný parametr aproximace a vlastnosti"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
@@ -22463,49 +22468,49 @@ msgstr "Parametry"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:916
 #, kde-format
 msgid "Goodness of fit"
-msgstr ""
+msgstr "Optimální aproximace"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:970
 #, kde-format
 msgid "Residual mean square"
-msgstr ""
+msgstr "Zbytková střední kvadratická hodnota"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:980
 #, kde-format
 msgid "Root mean square deviation (RMSD, SD)"
-msgstr ""
+msgstr "Střední kvadratická odchylka (RMSD, SD)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1020
 #, kde-format
 msgid "F test"
-msgstr ""
+msgstr "F test"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1030
 #, kde-format
 msgid "P > F"
-msgstr ""
+msgstr "P > F"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1040
 #, kde-format
 msgid "Mean absolute error (MAE)"
-msgstr ""
+msgstr "Průměrná absolutní chyba (MAE)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1050
 #, kde-format
 msgid "Akaike information criterion (AIC)"
-msgstr ""
+msgstr "Akaikeho informační kritérium (AIC)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1060
 #, kde-format
 msgid "Bayesian information criterion (BIC)"
-msgstr ""
+msgstr "Bayesovo informační kritérium (BIC)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1074
@@ -22536,7 +22541,7 @@ msgstr "Tolerance"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1146
 #, kde-format
 msgid "Calculation time"
-msgstr ""
+msgstr "Doba výpočtu"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1156
@@ -22585,13 +22590,13 @@ msgstr "Oboustranný"
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:77
 #, kde-format
 msgid "Shifted"
-msgstr ""
+msgstr "Posunutý"
 
 #. i18n: ectx: property (text), widget (QLabel, lXScale)
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:129
 #, kde-format
 msgid "X-Axis Scale:"
-msgstr ""
+msgstr "Měřítko osy X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWindow)
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:194
@@ -22617,7 +22622,7 @@ msgstr "f(x) = "
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:173
 #, kde-format
 msgid "Absolute area"
-msgstr ""
+msgstr "Absolutní plocha"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariant)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:93
@@ -22641,13 +22646,13 @@ msgstr "Vyhodnotit:"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:442
 #, kde-format
 msgid "Tension:"
-msgstr ""
+msgstr "Napětí:"
 
 #. i18n: ectx: property (text), widget (QLabel, lContinuity)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:471
 #, kde-format
 msgid "Continuity:"
-msgstr ""
+msgstr "Kontinuita:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBias)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:500
@@ -22665,19 +22670,19 @@ msgstr "Percentil:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:50
 #, kde-format
 msgid "Padding Mode:"
-msgstr ""
+msgstr "Režim vyplnění:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftValue)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:179
 #, kde-format
 msgid "Left value:"
-msgstr ""
+msgstr "Hodnota vlevo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightValue)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:186
 #, kde-format
 msgid "Right value:"
-msgstr ""
+msgstr "Hodnota vpravo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:236
@@ -22709,19 +22714,19 @@ msgstr "Použít"
 #: src/frontend/ui/fitoptionswidget.ui:53
 #, kde-format
 msgid "show the fit function with the given start parameters"
-msgstr ""
+msgstr "Zobrazit funkci aproximace se zadanými počátečními parametry"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPreview)
 #: src/frontend/ui/fitoptionswidget.ui:56
 #, kde-format
 msgid "Preview fit function"
-msgstr ""
+msgstr "Náhled funkce aproximace"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEps)
 #: src/frontend/ui/fitoptionswidget.ui:66
 #, kde-format
 msgid "Specify the tolerance for the fit algorithm convergence"
-msgstr ""
+msgstr "Zadat toleranci pro konvergenci algoritmu aproximace"
 
 #. i18n: ectx: property (text), widget (QLabel, lEps)
 #: src/frontend/ui/fitoptionswidget.ui:69
@@ -22736,24 +22741,26 @@ msgid ""
 "This option can be used to turn on and off the usage of given data "
 "uncertainties when fitting."
 msgstr ""
+"Tuto volbu lze použít k zapnutí a vypnutí zohlednění daných nejistot dat při "
+"aproximaci."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseDataErrors)
 #: src/frontend/ui/fitoptionswidget.ui:79
 #, kde-format
 msgid "Use given data uncertainties"
-msgstr ""
+msgstr "Zohlednit uvedené nejistoty dat"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEvaluatedPoints)
 #: src/frontend/ui/fitoptionswidget.ui:95
 #, kde-format
 msgid "Number of points to use when evaluating the final fit function"
-msgstr ""
+msgstr "Počet bodů, které se použijí při vyhodnocení konečné funkce aproximace"
 
 #. i18n: ectx: property (text), widget (QLabel, lEvaluatedPoints)
 #: src/frontend/ui/fitoptionswidget.ui:98
 #, kde-format
 msgid "Evaluated points:"
-msgstr ""
+msgstr "Vyhodnocené body:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEvalRange)
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
@@ -22771,7 +22778,7 @@ msgstr ".."
 #: src/frontend/ui/fitoptionswidget.ui:112
 #, kde-format
 msgid "Specify maximum number of iterations for the fit algorithm"
-msgstr ""
+msgstr "Zadejte maximální počet iterací pro algoritmus aproximace"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxIterations)
 #: src/frontend/ui/fitoptionswidget.ui:115
@@ -22783,49 +22790,51 @@ msgstr "Max. iterací:"
 #: src/frontend/ui/fitoptionswidget.ui:141
 #, kde-format
 msgid "Select range of data to use for fitting"
-msgstr ""
+msgstr "Vybrat rozsah dat, která se mají použít pro aproximaci"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
 #: src/frontend/ui/fitoptionswidget.ui:144
 #, kde-format
 msgid "Auto fit range"
-msgstr ""
+msgstr "Automatický rozsah aproximace"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
 #: src/frontend/ui/fitoptionswidget.ui:154
 #, kde-format
 msgid "Select the range to evaluate the resulting fit function"
-msgstr ""
+msgstr "Vyberte rozsah, ve kterém se má vyhodnotit výsledná funkce aproximace"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoEvalRange)
 #: src/frontend/ui/fitoptionswidget.ui:157
 #, kde-format
 msgid "Auto evaluation range"
-msgstr ""
+msgstr "Rozsah automatického vyhodnocení"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseResults)
 #: src/frontend/ui/fitoptionswidget.ui:167
 #, kde-format
 msgid "If selected, the resulting fit parameter are set as new start values."
 msgstr ""
+"Pokud je vybráno, nastaví se výsledné parametry aproximace jako nové "
+"počáteční hodnoty."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseResults)
 #: src/frontend/ui/fitoptionswidget.ui:170
 #, kde-format
 msgid "Use results as new start values"
-msgstr ""
+msgstr "Použít výsledky jako nové počáteční hodnoty"
 
 #. i18n: ectx: property (text), widget (QLabel, lRobust)
 #: src/frontend/ui/fitoptionswidget.ui:183
 #, kde-format
 msgid "Robust fit:"
-msgstr ""
+msgstr "Robustní aproximace:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/fitoptionswidget.ui:235
 #, kde-format
 msgid "Confidence Interval"
-msgstr ""
+msgstr "Interval spolehlivosti"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
 #: src/frontend/ui/fitsheadereditaddunitwidget.ui:17
@@ -22862,7 +22871,7 @@ msgstr "Svislé zarovnání:"
 #: src/frontend/ui/labelwidget.ui:236 src/frontend/ui/labelwidget.ui:712
 #, kde-format
 msgid "Distance to the axis tick labels"
-msgstr ""
+msgstr "Vzdálenost od popisků stupnice osy"
 
 #. i18n: ectx: property (text), widget (QLabel, lOffsetX)
 #: src/frontend/ui/labelwidget.ui:239
@@ -22894,6 +22903,19 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 "\"><br /></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+"\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
+"\"><br /></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lFontTeX)
 #: src/frontend/ui/labelwidget.ui:368
@@ -22905,7 +22927,7 @@ msgstr "Hlavní písmo:"
 #: src/frontend/ui/labelwidget.ui:411
 #, kde-format
 msgid "Show Placeholder Text (editable)"
-msgstr ""
+msgstr "Zobrazit zástupný text (upravitelný)"
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/frontend/ui/labelwidget.ui:593
@@ -22947,25 +22969,25 @@ msgstr "f(x,y) = "
 #: src/frontend/ui/mqttwillsettingswidget.ui:23
 #, kde-format
 msgid "QoS"
-msgstr ""
+msgstr "QoS"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/frontend/ui/mqttwillsettingswidget.ui:130
 #, kde-format
 msgid "Mean deviation"
-msgstr ""
+msgstr "Průměrná odchylka"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/frontend/ui/mqttwillsettingswidget.ui:141
 #, kde-format
 msgid "Mean deviation around median"
-msgstr ""
+msgstr "Průměrná odchylka od mediánu"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/frontend/ui/mqttwillsettingswidget.ui:152
 #, kde-format
 msgid "Median deviation"
-msgstr ""
+msgstr "Mediánová odchylka"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #: src/frontend/ui/mqttwillsettingswidget.ui:206
@@ -22983,7 +23005,7 @@ msgstr "2"
 #: src/frontend/ui/mqttwillsettingswidget.ui:224
 #, kde-format
 msgid "Own message:"
-msgstr ""
+msgstr "Vlastní zpráva:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillMessageType)
 #: src/frontend/ui/mqttwillsettingswidget.ui:231
@@ -23019,7 +23041,7 @@ msgstr "10000"
 #: src/frontend/ui/mqttwillsettingswidget.ui:276
 #, kde-format
 msgid "Own Message"
-msgstr ""
+msgstr "Vlastní zpráva"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillMessageType)
 #: src/frontend/ui/mqttwillsettingswidget.ui:281
@@ -23031,7 +23053,7 @@ msgstr "Statistika"
 #: src/frontend/ui/mqttwillsettingswidget.ui:286
 #, kde-format
 msgid "Last Message Received"
-msgstr ""
+msgstr "Poslední přijatá zpráva"
 
 #. i18n: ectx: property (text), widget (QLabel, lUseRetainMessage)
 #: src/frontend/ui/mqttwillsettingswidget.ui:301
@@ -23043,7 +23065,7 @@ msgstr "Zachovat:"
 #: src/frontend/ui/mqttwillsettingswidget.ui:308
 #, kde-format
 msgid "Will statistics:"
-msgstr ""
+msgstr "Willova statistika:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillUpdateType)
 #: src/frontend/ui/mqttwillsettingswidget.ui:315
@@ -23107,7 +23129,7 @@ msgstr "Mesh"
 #: src/frontend/ui/plotsurfacestylewidget.ui:248
 #, kde-format
 msgid "Relative scale"
-msgstr ""
+msgstr "Relativní měřítko"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsTop)
 #. i18n: ectx: property (text), widget (QLabel, lLevels)
@@ -23127,19 +23149,19 @@ msgstr "Počet úrovní:"
 #: src/frontend/ui/plotsurfacestylewidget.ui:314
 #, kde-format
 msgid "Line width:"
-msgstr "Šířka přímky:"
+msgstr "Šířka čáry:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsLineColor)
 #: src/frontend/ui/plotsurfacestylewidget.ui:331
 #, kde-format
 msgid "Line color:"
-msgstr "Barva přímky:"
+msgstr "Barva čáry:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLevelsMultiColoring)
 #: src/frontend/ui/plotsurfacestylewidget.ui:341
 #, kde-format
 msgid "Multicoloring"
-msgstr ""
+msgstr "Vícebarevnost"
 
 #. i18n: ectx: property (text), widget (QLabel, lInstalledTemplates)
 #: src/frontend/ui/PlotTemplateDialog.ui:33
@@ -23177,7 +23199,7 @@ msgstr "Kaggle"
 #: src/frontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "Cesta k CLI:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/frontend/ui/settingsdatasetspage.ui:66
@@ -23207,7 +23229,7 @@ msgstr "Automatické ukládání:"
 #: src/frontend/ui/settingsgeneralpage.ui:46
 #, kde-format
 msgid "Dock Widget Placement:"
-msgstr ""
+msgstr "Umístění widgetu v doku:"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:67
@@ -23224,12 +23246,16 @@ msgid ""
 "decoration: underline; color:#2980b9;\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
+"<html><head/><body><p>Používejte termíny v souladu s <a href=\"http://www."
+"bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf \"><span style=\" "
+"text-decoration: underline; color:#2980b9;\">Příručkou pro vyjadřování "
+"nejistoty měření (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
 #: src/frontend/ui/settingsgeneralpage.ui:87
 #, kde-format
 msgid "GUM compliant"
-msgstr ""
+msgstr "V souladu s GUM"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:97
@@ -23238,12 +23264,14 @@ msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
 "opened in LabPlot versions older than 2.9.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Ukládejte projekty v kompatibilním formátu, který lze "
+"otevřít ve verzích programu LabPlot starších než 2.9.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
 #, kde-format
 msgid "Save in compatible format"
-msgstr ""
+msgstr "Uložit v kompatibilním formátu"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
@@ -23267,7 +23295,7 @@ msgstr "Nový projekt:"
 #: src/frontend/ui/settingsgeneralpage.ui:128
 #, kde-format
 msgid "Include trailing zeroes after dot"
-msgstr ""
+msgstr "Zahrnout koncové nuly za desetinnou čárkou"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/frontend/ui/settingsgeneralpage.ui:135
@@ -23285,13 +23313,13 @@ msgstr "Kompatibilita:"
 #: src/frontend/ui/settingsgeneralpage.ui:197
 #, kde-format
 msgid "Omit group separator"
-msgstr ""
+msgstr "Vynechat oddělovač skupin"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/frontend/ui/settingsgeneralpage.ui:214
 #, kde-format
 msgid "Tracing:"
-msgstr ""
+msgstr "Trasování:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
 #: src/frontend/ui/settingsgeneralpage.ui:245
@@ -23317,7 +23345,7 @@ msgstr "Ladění"
 #: src/frontend/ui/settingsgeneralpage.ui:311
 #, kde-format
 msgid "Omit leading zero in exponent"
-msgstr ""
+msgstr "Vynechat úvodní nulu v exponentu"
 
 #. i18n: ectx: property (text), widget (QLabel, lTitleBar)
 #: src/frontend/ui/settingsgeneralpage.ui:318
@@ -23341,7 +23369,7 @@ msgstr "Položka:"
 #: src/frontend/ui/settingsgeneralpage.ui:439
 #, kde-format
 msgid "Use Hyphen '-' instead of Minus '–'"
-msgstr ""
+msgstr "Používat pomlčku '-' místo znaménka minus '–'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -23361,7 +23389,7 @@ msgstr "Zvýrazňování syntaxe"
 #: src/frontend/ui/settingsnotebookpage.ui:40
 #, kde-format
 msgid "Syntax Completion"
-msgstr ""
+msgstr "Doplňování syntaxe"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLineNumbers)
 #: src/frontend/ui/settingsnotebookpage.ui:47
@@ -23391,13 +23419,13 @@ msgstr "Analýza"
 #: src/frontend/ui/settingsnotebookpage.ui:97
 #, kde-format
 msgid "Re-evaluate entries automatically"
-msgstr ""
+msgstr "Automaticky přepočítat položky"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAskConfirmation)
 #: src/frontend/ui/settingsnotebookpage.ui:104
 #, kde-format
 msgid "Ask for confirmation when restarting"
-msgstr ""
+msgstr "Při restartu požádat o potvrzení"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/frontend/ui/settingsprintingpage.ui:16
@@ -23421,13 +23449,13 @@ msgstr "Záhlaví"
 #: src/frontend/ui/settingsspreadsheetpage.ui:30
 #, kde-format
 msgid "Show column type"
-msgstr ""
+msgstr "Zobrazit typ sloupce"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowPlotDesignation)
 #: src/frontend/ui/settingsspreadsheetpage.ui:37
 #, kde-format
 msgid "Show plot designation"
-msgstr ""
+msgstr "Zobrazit označení grafu"
 
 #. i18n: ectx: property (text), widget (QPushButton, bResetLayout)
 #: src/frontend/ui/settingswelcomepage.ui:17
@@ -23487,13 +23515,13 @@ msgstr "Konečná hodnota:"
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
 #, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Jemnost (Násobek 10):"
+msgstr "Plynulost (násobek 10):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
 #, kde-format
 msgid "Termination Ratio:"
-msgstr ""
+msgstr "Poměr ukončení:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:175
@@ -23543,13 +23571,13 @@ msgstr "max."
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:144
 #, kde-format
 msgid "Text Values"
-msgstr ""
+msgstr "Textové hodnoty"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:203
 #, kde-format
 msgid "DateTime Values"
-msgstr ""
+msgstr "Hodnoty data a času"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -23574,19 +23602,19 @@ msgstr "Oblast k exportu:"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:142
 #, kde-format
 msgid "Export horizontal header:"
-msgstr ""
+msgstr "Exportovat vodorovné záhlaví:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmptyRows)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:149
 #, kde-format
 msgid "Skip empty rows:"
-msgstr ""
+msgstr "Přeskočit prázdné řádky:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixVHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:156
 #, kde-format
 msgid "Export vertical header:"
-msgstr ""
+msgstr "Exportovat svislé záhlaví:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
@@ -23604,7 +23632,7 @@ msgstr "LZ4"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
 #, kde-format
 msgid "ZSTD"
-msgstr ""
+msgstr "ZSTD"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
@@ -23634,7 +23662,7 @@ msgstr "Hlavičky:"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:277
 #, kde-format
 msgid "Table captions:"
-msgstr ""
+msgstr "Popisky tabulek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:284
@@ -23646,13 +23674,13 @@ msgstr "Exportovat hlavičku:"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:307
 #, kde-format
 msgid "Comments as column units:"
-msgstr ""
+msgstr "Komentáře jako jednotky sloupců:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:26
 #, kde-format
 msgid "Flatten selected columns relative to:"
-msgstr ""
+msgstr "Sloučit vybrané sloupce relativně k:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHightlight)
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:31
@@ -23676,13 +23704,13 @@ msgstr "Barvy"
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:152
 #, kde-format
 msgid "auto update the values"
-msgstr ""
+msgstr "automaticky aktualizovat hodnoty"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
 #, kde-format
 msgid "auto resize the column"
-msgstr ""
+msgstr "automaticky přizpůsobit šířku sloupce"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -23694,37 +23722,37 @@ msgstr "Umístění"
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:160
 #, kde-format
 msgid "All Plots in one Plot Area"
-msgstr ""
+msgstr "Všechny grafy v jedné oblasti"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:170
 #, kde-format
 msgid "One Plot Area per Plot"
-msgstr ""
+msgstr "Jeden graf na oblast"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:186
 #, kde-format
 msgid "Existing Plot Area"
-msgstr ""
+msgstr "Existující oblast grafu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:196
 #, kde-format
 msgid "&New Plot Area in an existing Worksheet"
-msgstr ""
+msgstr "&Nová oblast grafu v existujícím listu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:203
 #, kde-format
 msgid "New Plot Area in a new Worksheet"
-msgstr ""
+msgstr "Nová oblast grafu v novém listu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:226
 #, kde-format
 msgid "Create Plot for original Data"
-msgstr ""
+msgstr "Vytvořit graf pro originální data"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:41
@@ -23802,7 +23830,7 @@ msgstr "Najít:"
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:134
 #, kde-format
 msgid "Search order"
-msgstr ""
+msgstr "Pořadí vyhledávání"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:147
@@ -23923,7 +23951,7 @@ msgstr "Oblast k exportu:"
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:126
 #, kde-format
 msgid "Check this option if the worksheet background should be exported."
-msgstr ""
+msgstr "Tuto možnost zaškrtněte, pokud má být exportováno pozadí listu."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:119
@@ -23940,7 +23968,7 @@ msgstr "Rozlišení:"
 #: src/frontend/widgets/BackgroundWidget.cpp:117
 #, kde-format
 msgid "Zero Baseline"
-msgstr ""
+msgstr "Nulová základní hodnota"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:124
 #, kde-format
@@ -23965,12 +23993,12 @@ msgstr "Svislý přechod"
 #: src/frontend/widgets/BackgroundWidget.cpp:130
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
-msgstr ""
+msgstr "Diag. gradient (zleva nahoře)"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
-msgstr ""
+msgstr "Diag. gradient (zleva dole)"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
@@ -24005,7 +24033,7 @@ msgstr "Vydlážděná na střed"
 #: src/frontend/widgets/BackgroundWidget.cpp:266
 #, kde-format
 msgid "%1 elements: background color style changed"
-msgstr ""
+msgstr "%1 prvků: změněn styl barvy pozadí"
 
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:94
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:99
@@ -24023,7 +24051,7 @@ msgstr "Symetrické"
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:101
 #, kde-format
 msgid "Asymmetric"
-msgstr "Nesouměrně"
+msgstr "Asymetrické"
 
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:104
 #, kde-format
@@ -24031,6 +24059,9 @@ msgid ""
 "Specify whether the data points have errors and of which type.\n"
 "Note, changing this type is not possible once at least one point was read."
 msgstr ""
+"Uveďte, zda datové body obsahují chyby a jakého typu.\n"
+"Upozornění: Jakmile byl načten alespoň jeden bod, není možné tento typ "
+"změnit."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:333
 #, kde-format
@@ -24080,7 +24111,7 @@ msgstr "Logaritmický (x, log(y))"
 #: src/frontend/widgets/DatapickerImageWidget.cpp:342
 #, kde-format
 msgid "Ternary (x, y, z)"
-msgstr ""
+msgstr "Terciární (x, y, z)"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:345
 #, kde-format
@@ -24095,7 +24126,7 @@ msgstr "Původní obrázek"
 #: src/frontend/widgets/DatapickerImageWidget.cpp:347
 #, kde-format
 msgid "Processed Image"
-msgstr ""
+msgstr "Zpracovaný obrázek"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:350
 #: src/frontend/widgets/DatapickerImageWidget.cpp:358
@@ -24104,6 +24135,8 @@ msgid ""
 "Select the range for the value, the degree of lightness of the color.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
+"Vyberte rozsah hodnoty, tedy stupeň světlosti barvy.\n"
+"Všechno mimo tento rozsah bude nastaveno na bílou."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:351
 #: src/frontend/widgets/DatapickerImageWidget.cpp:359
@@ -24112,6 +24145,8 @@ msgid ""
 "Select the range for the intensity.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
+"Vyberte rozsah intenzity.\n"
+"Všechno mimo tento rozsah bude nastaveno na bílou barvu."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:353
 #: src/frontend/widgets/DatapickerImageWidget.cpp:360
@@ -24120,6 +24155,8 @@ msgid ""
 "Select the range for the colors that are not part of the background color.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
+"Vyberte rozsah barev, které nejsou součástí barvy pozadí.\n"
+"Všechno mimo tento rozsah bude nastaveno na bílou."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:354
 #: src/frontend/widgets/DatapickerImageWidget.cpp:356
@@ -24128,6 +24165,8 @@ msgid ""
 "Select the range for the hue.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
+"Vyberte rozsah odstínu.\n"
+"Všechno mimo tento rozsah bude nastaveno na bílou."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:355
 #: src/frontend/widgets/DatapickerImageWidget.cpp:357
@@ -24136,6 +24175,8 @@ msgid ""
 "Select the range for the saturation.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
+"Vyberte rozsah sytosti.\n"
+"Všechno mimo tento rozsah bude nastaveno na bílou."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:367
 #, kde-format
@@ -24150,13 +24191,13 @@ msgstr "Neplatný obrázek"
 #: src/frontend/widgets/ErrorBarWidget.cpp:46
 #, kde-format
 msgid "X Uncertainty"
-msgstr "Nepřesnost X"
+msgstr "Nejistota X"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:47
 #: src/frontend/widgets/ErrorBarWidget.cpp:55
 #, kde-format
 msgid "No Uncertainties"
-msgstr ""
+msgstr "Žádná nejistota"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:49
 #: src/frontend/widgets/ErrorBarWidget.cpp:57
@@ -24164,24 +24205,24 @@ msgstr ""
 #: src/frontend/widgets/ErrorBarWidget.cpp:71
 #, kde-format
 msgid "Poisson variance, sqrt(N)"
-msgstr ""
+msgstr "Poissonův rozptyl, sqrt(N)"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:50
 #: src/frontend/widgets/ErrorBarWidget.cpp:58
 #, kde-format
 msgid "Custom Uncertainty Values, symmetric"
-msgstr ""
+msgstr "Vlastní hodnoty nejistoty, symetrické"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:51
 #: src/frontend/widgets/ErrorBarWidget.cpp:59
 #, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
-msgstr ""
+msgstr "Vlastní hodnoty nejistoty, asymetrické"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:54
 #, kde-format
 msgid "Y Uncertainty"
-msgstr "Nepřesnost Y"
+msgstr "Nejistota Y"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:62
 #: src/frontend/widgets/ErrorBarWidget.cpp:69
@@ -24193,18 +24234,18 @@ msgstr "Žádná chyba"
 #: src/frontend/widgets/ErrorBarWidget.cpp:72
 #, kde-format
 msgid "Custom Error Values, symmetric"
-msgstr ""
+msgstr "Vlastní hodnoty chyb, symetrické"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:66
 #: src/frontend/widgets/ErrorBarWidget.cpp:73
 #, kde-format
 msgid "Custom Error Values, asymmetric"
-msgstr ""
+msgstr "Vlastní hodnoty chyb, asymetrické"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:100
 #, kde-format
 msgid "Bars with Ends"
-msgstr ""
+msgstr "Sloupce s koncovkami"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:254
 #: src/frontend/widgets/ErrorBarWidget.cpp:310
@@ -24231,7 +24272,7 @@ msgstr "Přidat novou jednotku"
 #: src/frontend/widgets/FITSHeaderEditAddUnitDialog.cpp:36
 #, kde-format
 msgid "Enter unit name here"
-msgstr ""
+msgstr "Zde zadejte název jednotky"
 
 #: src/frontend/widgets/FITSHeaderEditDialog.cpp:39
 #, kde-format
@@ -24249,7 +24290,7 @@ msgstr "Editor metadat FITS"
 #, kde-format
 msgctxt "@title:window"
 msgid "FITS Metadata Editor  [Changed]"
-msgstr ""
+msgstr "Editor metadat FITS  [změněno]"
 
 #: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:43
 #, kde-format
@@ -24260,7 +24301,7 @@ msgstr "Přid&at klíčové slovo"
 #, kde-format
 msgctxt "@title:window"
 msgid "Specify the New Keyword"
-msgstr ""
+msgstr "Zadejte nové klíčové slovo"
 
 #: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:54
 #, kde-format
@@ -24275,17 +24316,17 @@ msgstr "Zadejte hodnotu"
 #: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:56
 #, kde-format
 msgid "Specify the comment"
-msgstr ""
+msgstr "Zadejte komentář"
 
 #: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:87
 #, kde-format
 msgid "Cannot add new keyword without key, would you like to try again?"
-msgstr ""
+msgstr "Bez klíče nelze přidat nové klíčové slovo. Chcete to zkusit znovu?"
 
 #: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:88
 #, kde-format
 msgid "Cannot add empty key"
-msgstr ""
+msgstr "Nelze přidat prázdný klíč"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:47
 #, kde-format
@@ -24295,12 +24336,12 @@ msgstr "Přidat nové klíčové slovo"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:51
 #, kde-format
 msgid "Remove selected keyword"
-msgstr ""
+msgstr "Odstranit vybrané klíčové slovo"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:55
 #, kde-format
 msgid "Add unit to keyword"
-msgstr ""
+msgstr "Přidat jednotku ke klíčovému slovu"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:59
 #, kde-format
@@ -24316,12 +24357,12 @@ msgstr "Otevřít soubor FITS"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:209
 #, kde-format
 msgid "Cannot open file, file already opened."
-msgstr ""
+msgstr "Soubor nelze otevřít, je již otevřený."
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:209
 #, kde-format
 msgid "File already opened"
-msgstr ""
+msgstr "Soubor je již otevřený"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
@@ -24342,7 +24383,7 @@ msgstr "Přidat jednotku"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
-msgstr ""
+msgstr "Nelze přidat klíčové slovo, klíčové slovo již bylo přidáno"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
@@ -24354,12 +24395,12 @@ msgstr "Nelze přidat klíčové slovo"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
-msgstr ""
+msgstr "Nelze přidat povinná klíčová slova, protože již existují"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:380
 #, kde-format
 msgid "Are you sure you want to delete the keyword '%1'?"
-msgstr ""
+msgstr "Opravdu chcete smazat klíčové slovo '%1'?"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:381
 #, kde-format
@@ -24369,7 +24410,7 @@ msgstr "Potvrdit smazání"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
 #, kde-format
 msgid "Cannot remove mandatory keyword."
-msgstr ""
+msgstr "Nelze odstranit povinné klíčové slovo."
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
 #, kde-format
@@ -24381,7 +24422,7 @@ msgstr "Odstraňování klíčového slova"
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
-msgstr ""
+msgstr "K určení polohy na grafu použít logické souřadnice namísto absolutních"
 
 #: src/frontend/widgets/LabelWidget.cpp:527
 #, kde-format
@@ -24390,6 +24431,9 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
+"Režim sazby textu:<ul><li>Text – sazba textu s využitím formátování RTF</"
+"li><li>LaTeX – sazba textu pomocí LaTeXu, vyžaduje instalaci LaTeXu</"
+"li><li>Markdown – sazba textu pomocí značkovacího jazyka Markdown</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:535
 #, kde-format
@@ -24398,6 +24442,8 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li></ul>"
 msgstr ""
+"Režim sazby textu:<ul><li>Text – sazba textu s využitím formátování RTF</"
+"li><li>LaTeX – sazba textu pomocí LaTeXu, vyžaduje instalaci LaTeXu</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:543
 #, kde-format
@@ -24422,12 +24468,12 @@ msgstr "Přeškrtnuté"
 #: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid "Super Script"
-msgstr ""
+msgstr "Horní index"
 
 #: src/frontend/widgets/LabelWidget.cpp:548
 #, kde-format
 msgid "Sub-Script"
-msgstr ""
+msgstr "Dolní index"
 
 #: src/frontend/widgets/LabelWidget.cpp:549
 #, kde-format
@@ -24447,12 +24493,12 @@ msgstr "Do bloku"
 #: src/frontend/widgets/LabelWidget.cpp:553
 #, kde-format
 msgid "Insert Symbol"
-msgstr ""
+msgstr "Vložit symbol"
 
 #: src/frontend/widgets/LabelWidget.cpp:554
 #, kde-format
 msgid "Insert Date/Time"
-msgstr ""
+msgstr "Vložit datum a čas"
 
 #: src/frontend/widgets/LabelWidget.cpp:899
 #: src/frontend/widgets/LabelWidget.cpp:925
@@ -24469,82 +24515,82 @@ msgstr "Datum a čas"
 #: src/frontend/widgets/LineWidget.cpp:50
 #, kde-format
 msgid "Drop Lines"
-msgstr ""
+msgstr "Lomená čára"
 
 #: src/frontend/widgets/LineWidget.cpp:51
 #, kde-format
 msgid "Half-Bars"
-msgstr ""
+msgstr "Poloviční sloupce"
 
 #: src/frontend/widgets/LineWidget.cpp:58
 #, kde-format
 msgid "No Drop Lines"
-msgstr ""
+msgstr "Žádné lomené čáry"
 
 #: src/frontend/widgets/LineWidget.cpp:59
 #, kde-format
 msgid "Drop Lines, X"
-msgstr ""
+msgstr "Lomené čáry, X"
 
 #: src/frontend/widgets/LineWidget.cpp:60
 #, kde-format
 msgid "Drop Lines, Y"
-msgstr ""
+msgstr "Lomené čáry, Y"
 
 #: src/frontend/widgets/LineWidget.cpp:61
 #, kde-format
 msgid "Drop Lines, XY"
-msgstr ""
+msgstr "Lomené čáry, XY"
 
 #: src/frontend/widgets/LineWidget.cpp:62
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
-msgstr ""
+msgstr "Lomené čáry, X, nulová základní hodnota"
 
 #: src/frontend/widgets/LineWidget.cpp:63
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
-msgstr ""
+msgstr "Lomené čáry, X, min. základní hodnota"
 
 #: src/frontend/widgets/LineWidget.cpp:64
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
-msgstr ""
+msgstr "Lomené čáry, X, max. základní hodnota"
 
 #: src/frontend/widgets/MemoryWidget.cpp:26
 #, kde-format
 msgid "Memory used %1 MB, peak %2 MB"
-msgstr ""
+msgstr "Využitá paměť: %1 MB, maximálně: %2 MB"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:53
 #, kde-format
 msgid "Minimum allowed value: %1"
-msgstr ""
+msgstr "Minimální povolená hodnota: %1"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:55
 #, kde-format
 msgid "Maximum allowed value: %1"
-msgstr ""
+msgstr "Maximální povolená hodnota: %1"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:57
 #, kde-format
 msgid "The value does not represent a valid number"
-msgstr ""
+msgstr "Tato hodnota nepředstavuje platné číslo"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:59
 #, kde-format
 msgid "No number entered"
-msgstr ""
+msgstr "Nebylo zadáno žádné číslo"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:63
 #, kde-format
 msgid "Unhandled error"
-msgstr ""
+msgstr "Nezpracovaná chyba"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:440
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr ""
+msgstr "Zadána neplatná hodnota. Platná hodnota: %1"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:54
 #, kde-format
@@ -24558,11 +24604,13 @@ msgid ""
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
+"Funkce \"%1\"\n"
+"již není k dispozici. Jakmile bude znovu vytvořena, bude automaticky použita."
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:52
 #, kde-format
 msgid "Close this dialog without exporting."
-msgstr ""
+msgstr "Zavřít toto dialogové okno bez exportu."
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:60
 #, kde-format
@@ -24617,7 +24665,7 @@ msgstr "Schránka"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
 #, kde-format
 msgid "Bounding Box"
-msgstr "Ohraničení"
+msgstr "Ohraničující obdélník"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24627,6 +24675,10 @@ msgid ""
 "currently selected objects is exported</li><li>Worksheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Určuje oblast, která se má exportovat:<ul><li>Ohraničující obdélník – "
+"exportuje se ohraničující obdélník všech objektů na listu</li><li>Výběr – "
+"exportuje se oblast aktuálně vybraných objektů</li><li>List – exportuje se "
+"celá plocha listu</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format
@@ -24673,22 +24725,22 @@ msgstr "Portable Pixmap (*.ppm *.PPM)"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:247
 #, kde-format
 msgid "X11 Bitmap (*.xbm *.XBM)"
-msgstr "Bitmapa X11 (*.xbm *.XBM)"
+msgstr "X11 Bitmap (*.xbm *.XBM)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:249
 #, kde-format
 msgid "X11 Bitmap (*.xpm *.XPM)"
-msgstr "Bitmapa X11 (*.xpm *.XPM)"
+msgstr "X11 Bitmap (*.xpm *.XPM)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:354
 #, kde-format
 msgid "Export to file and close the dialog."
-msgstr ""
+msgstr "Exportovat do souboru a zavřít dialogové okno."
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:357
 #, kde-format
 msgid "Export to clipboard and close the dialog."
-msgstr ""
+msgstr "Exportovat do schránky a zavřít dialogové okno."
 
 #: src/frontend/worksheet/GridDialog.cpp:36
 #, kde-format
@@ -24719,19 +24771,19 @@ msgstr "Ukončit prezentaci"
 #: src/frontend/worksheet/SlidingPanel.cpp:131
 #, kde-format
 msgid "Pin the navigation panel"
-msgstr ""
+msgstr "Připnout navigační panel"
 
 #: src/frontend/worksheet/WorksheetView.cpp:169
 #, kde-format
 msgctxt "Zoom"
 msgid "No fit"
-msgstr ""
+msgstr "Žádná aproximace"
 
 #: src/frontend/worksheet/WorksheetView.cpp:179
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
-msgstr "Doplnit do výběru"
+msgstr "Aproximace výběru"
 
 #: src/frontend/worksheet/WorksheetView.cpp:182
 #, kde-format
@@ -24751,52 +24803,52 @@ msgstr "Vybrat a upravit"
 #: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "Four Axes"
-msgstr ""
+msgstr "Čtyři osy"
 
 #: src/frontend/worksheet/WorksheetView.cpp:219
 #, kde-format
 msgid "Two Axes"
-msgstr ""
+msgstr "Dvě osy"
 
 #: src/frontend/worksheet/WorksheetView.cpp:220
 #, kde-format
 msgid "Two Axes, Centered"
-msgstr ""
+msgstr "Dvě osy, vycentrované"
 
 #: src/frontend/worksheet/WorksheetView.cpp:222
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
-msgstr ""
+msgstr "Dvě osy, které se protínají v počátku souřadnic"
 
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Load from Template"
-msgstr ""
+msgstr "Načíst ze šablony"
 
 #: src/frontend/worksheet/WorksheetView.cpp:246
 #, kde-format
 msgid "No Grid"
-msgstr ""
+msgstr "Žádná mřížka"
 
 #: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Dense Line Grid"
-msgstr ""
+msgstr "Hustá čárová mřížka"
 
 #: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Sparse Line Grid"
-msgstr ""
+msgstr "Řídká čárová mřížka"
 
 #: src/frontend/worksheet/WorksheetView.cpp:257
 #, kde-format
 msgid "Dense Dot Grid"
-msgstr ""
+msgstr "Hustá tečková mřížka"
 
 #: src/frontend/worksheet/WorksheetView.cpp:260
 #, kde-format
 msgid "Sparse Dot Grid"
-msgstr ""
+msgstr "Řídká tečková mřížka"
 
 #: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
@@ -24811,7 +24863,7 @@ msgstr "Přichytávat k mřížce"
 #: src/frontend/worksheet/WorksheetView.cpp:286
 #, kde-format
 msgid "Interactive Plots"
-msgstr ""
+msgstr "Interaktivní grafy"
 
 #: src/frontend/worksheet/WorksheetView.cpp:287
 #, kde-format
@@ -24819,28 +24871,30 @@ msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
+"Pokud není aktivováno, grafy v listu nereagují na přetahování ani na pohyby "
+"kolečkem myši."
 
 #: src/frontend/worksheet/WorksheetView.cpp:304
 #: src/frontend/worksheet/WorksheetView.cpp:318
 #, kde-format
 msgid "Selected Plot Areas"
-msgstr ""
+msgstr "Vybrané oblasti grafů"
 
 #: src/frontend/worksheet/WorksheetView.cpp:306
 #: src/frontend/worksheet/WorksheetView.cpp:320
 #, kde-format
 msgid "All Plot Areas"
-msgstr ""
+msgstr "Všechny oblasti grafů"
 
 #: src/frontend/worksheet/WorksheetView.cpp:308
 #, kde-format
 msgid "All Plot Areas X"
-msgstr ""
+msgstr "Všechny oblasti grafů X"
 
 #: src/frontend/worksheet/WorksheetView.cpp:310
 #, kde-format
 msgid "All Plot Areas Y"
-msgstr ""
+msgstr "Všechny oblasti grafů Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:343
 #, kde-format
@@ -24930,29 +24984,30 @@ msgstr "Oblast grafu"
 #: src/frontend/worksheet/WorksheetView.cpp:502
 #, kde-format
 msgid "Zoom/Navigate"
-msgstr ""
+msgstr "Přiblížení/Navigace"
 
 #: src/frontend/worksheet/WorksheetView.cpp:523
 #, kde-format
 msgid "Apply Actions to"
-msgstr ""
+msgstr "Použít akce na"
 
 #: src/frontend/worksheet/WorksheetView.cpp:530
 #, kde-format
 msgid "Apply Cursor to"
-msgstr ""
+msgstr "Použít kurzor na"
 
 #: src/frontend/worksheet/WorksheetView.cpp:1433
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Opravdu chcete smazat vybraný objekt?"
+msgstr[1] "Opravdu chcete smazat %1 vybrané objekty?"
+msgstr[2] "Opravdu chcete smazat %1 vybraných objektů?"
 
 #: src/frontend/worksheet/WorksheetView.cpp:1441
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
-msgstr ""
+msgstr "%1: Odstranit vybrané prvky listu."
 
 #: src/tools/ColorMapsManager.cpp:153
 #, kde-format
@@ -24960,11 +25015,13 @@ msgid ""
 "Couldn't open the color map collections file %1. Please check your "
 "installation."
 msgstr ""
+"Nepodařilo se otevřít soubor sbírek barevných map %1. Zkontrolujte prosím "
+"svou instalaci."
 
 #: src/tools/TeXRenderer.cpp:65
 #, kde-format
 msgid "Couldn't find preview.sty."
-msgstr ""
+msgstr "Nepodařilo se najít preview.sty."
 
 #: src/tools/TeXRenderer.cpp:82
 #, kde-format
@@ -24979,12 +25036,12 @@ msgstr "%1 nenalezen"
 #: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr ""
+msgstr "Časový limit vypršel: Nelze vygenerovat soubor LaTeX"
 
 #: src/tools/TeXRenderer.cpp:204
 #, kde-format
 msgid "process failed, exit code ="
-msgstr ""
+msgstr "proces selhal, kód ukončení ="
 
 #: src/tools/TeXRenderer.cpp:266
 #, kde-format
@@ -24994,7 +25051,7 @@ msgstr "dvips nebyl nalezen"
 #: src/tools/TeXRenderer.cpp:273
 #, kde-format
 msgid "dvips process failed, exit code ="
-msgstr ""
+msgstr "proces dvips selhal, kód ukončení ="
 
 #: src/tools/TeXRenderer.cpp:295
 #, kde-format
@@ -25004,7 +25061,7 @@ msgstr "convert nenalezen"
 #: src/tools/TeXRenderer.cpp:303
 #, kde-format
 msgid "convert process failed, exit code ="
-msgstr ""
+msgstr "proces convert selhal, kód ukončení ="
 
 #: src/tools/TeXRenderer.cpp:325
 #, kde-format
