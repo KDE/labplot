@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-13 00:41+0000\n"
-"PO-Revision-Date: 2026-10-12 11:35+0100\n"
+"PO-Revision-Date: 2026-10-13 23:44+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -14082,7 +14082,7 @@ msgstr[1] "%1 cBytes"
 #: src/frontend/datasources/ImportFileWidget.cpp:1747
 #, kde-format
 msgid "SHA-256: %1"
-msgstr ""
+msgstr "SHA-256: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1750
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
@@ -28355,10 +28355,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid ""
-#~ "Couldn't open the examples collections file %1. Please check your "
-#~ "installation."
-#~ msgstr ""
-#~ "No se ha podido abrir el archivo de colecciones de ejemplo %1. Compruebe "
-#~ "su instalación."

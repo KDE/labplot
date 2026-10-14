@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-13 00:41+0000\n"
-"PO-Revision-Date: 2026-10-12 07:12+0200\n"
+"PO-Revision-Date: 2026-10-13 07:30+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -11550,7 +11550,7 @@ msgstr "Število odsekov: %1"
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:522
 #, kde-format
 msgid "Number of Changepoints: %1"
-msgstr "število prehodnih točk: %1"
+msgstr "Število točk spremembe: %1"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:523
 #, kde-format
@@ -14064,7 +14064,7 @@ msgstr[3] "%1 cbytov"
 #: src/frontend/datasources/ImportFileWidget.cpp:1747
 #, kde-format
 msgid "SHA-256: %1"
-msgstr ""
+msgstr "SHA-256: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1750
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
@@ -19116,7 +19116,7 @@ msgstr "Nastavitve [spremenjeno]"
 #: src/frontend/SettingsEditorPage.cpp:24
 #, kde-format
 msgid "Automatically show output when a script produces output"
-msgstr "Samodejno prikaži izpis, ko skript ustvari izpis."
+msgstr "Samodejno prikaži izpis, ko skript ustvari izpis"
 
 #: src/frontend/SettingsEditorPage.cpp:28
 #, kde-format

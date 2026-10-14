@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-13 00:41+0000\n"
-"PO-Revision-Date: 2026-10-12 15:43+0200\n"
+"PO-Revision-Date: 2026-10-13 15:53+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -14059,7 +14059,7 @@ msgstr[1] "%1 cBytes"
 #: src/frontend/datasources/ImportFileWidget.cpp:1747
 #, kde-format
 msgid "SHA-256: %1"
-msgstr ""
+msgstr "SHA-256: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1750
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
