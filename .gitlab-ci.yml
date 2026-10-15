@@ -99,11 +99,11 @@ snap_snapcraft_lxd:
       when: manual
       allow_failure: true
 
-snap_snapcraft_lxd_arm64:
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
-      when: manual
-      allow_failure: true
+# snap_snapcraft_lxd_arm64:
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
+#      when: manual
+#      allow_failure: true
 
 clang_format:
   stage: validate
