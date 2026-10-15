@@ -580,6 +580,17 @@ double ma(const std::string_view& variable, const std::weak_ptr<Payload> payload
 	return (cell(p->rowIndex - 1, variable, payload) + cell(p->rowIndex, variable, payload)) / 2.;
 }
 
+/**
+ * \brief Unwrap phase angles by changing deltas greater than period/2 to their period complement.
+ *
+ * Implements the NumPy unwrap algorithm. Discontinuities larger than period/2 are corrected
+ * by adding multiples of period to restore continuity.
+ *
+ * \param period The wrapping period (e.g., 2π for radians, 360 for degrees, or any custom value)
+ * \param variable Column name containing the wrapped phase data
+ * \param payload Parser context with row index and column data
+ * \return Unwrapped value at the current row
+ */
 double unwrapWithPeriod(double period, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
@@ -626,11 +637,21 @@ double unwrapWithPeriod(double period, const std::string_view& variable, const s
 	return NAN;
 }
 
+/**
+ * \brief Unwrap phase angles with default period of 2π.
+ * \sa unwrapWithPeriod
+ */
 double unwrap(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	// Default period = 2*pi
 	return unwrapWithPeriod(2.0 * M_PI, variable, payload);
 }
 
+/**
+ * \brief Calculate the difference between consecutive elements.
+ *
+ * Returns current_value - previous_value. First row returns NaN (no previous value).
+ * Equivalent to NumPy's diff() with prepend=NaN.
+ */
 double diff(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
@@ -642,6 +663,11 @@ double diff(const std::string_view& variable, const std::weak_ptr<Payload> paylo
 	return cell(p->rowIndex, variable, payload) - cell(p->rowIndex - 1, variable, payload);
 }
 
+/**
+ * \brief Calculate the cumulative sum of elements up to and including the current row.
+ *
+ * Returns sum(data[0:current_row+1]). Equivalent to NumPy's cumsum().
+ */
 double cumsum(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
@@ -661,6 +687,11 @@ double cumsum(const std::string_view& variable, const std::weak_ptr<Payload> pay
 	return NAN;
 }
 
+/**
+ * \brief Calculate the cumulative product of elements up to and including the current row.
+ *
+ * Returns prod(data[0:current_row+1]). Equivalent to NumPy's cumprod().
+ */
 double cumprod(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
