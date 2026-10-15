@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : definition of functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2014-2026 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,7 +19,6 @@
 #include <QDateTime>
 
 #include <cmath>
-#include <numeric>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
