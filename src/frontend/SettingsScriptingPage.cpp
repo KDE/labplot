@@ -34,9 +34,9 @@ SettingsScriptingPage::SettingsScriptingPage(QWidget* parent)
 	: SettingsPage(parent) {
 	ui.setupUi(this);
 
-	// show information about the current python runtime
+	// show information about the current Python runtime
 #ifdef HAVE_PYTHON_SCRIPTING
-	ui.tbAddPythonEnvironment->setToolTip(i18n("Select the path to a python virtual environment."));
+	ui.tbAddPythonEnvironment->setToolTip(i18n("Select the path to a Python virtual environment."));
 
 	ui.tbAddPythonEnvironment->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 	ui.lPythonVersion->setText(QString::fromUtf8(Py_GetVersion()).section(QLatin1Char(' '), 0, 0));
@@ -48,7 +48,7 @@ SettingsScriptingPage::SettingsScriptingPage(QWidget* parent)
 		ui.lPythonPath->setVisible(false);
 	}
 
-	// populate available python environments
+	// populate available Python environments
 	ui.cbPythonEnvironment->addItem(i18n("System Default"), QString());
 	discoverEnvironments();
 
@@ -86,8 +86,8 @@ QList<Settings::Type> SettingsScriptingPage::applySettings() {
 	}
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
-	group.writeEntry(QLatin1String("PythonExecutable"), executablePath); // save the python path for the currently selected environment
-	group.writeEntry(QLatin1String("PythonExecutables"), executablePaths); // save the python paths for all discovered and user-provided environments
+	group.writeEntry(QLatin1String("PythonExecutable"), executablePath); // save the Python path for the currently selected environment
+	group.writeEntry(QLatin1String("PythonExecutables"), executablePaths); // save the Python paths for all discovered and user-provided environments
 	return changes;
 }
 
@@ -227,7 +227,7 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 
 	if (!QFile(executablePath).exists()) {
 		if (isUserSelected)
-			showErrorMessage(i18n("The selected virtual environment does not contain a python executable."));
+			showErrorMessage(i18n("The selected virtual environment does not contain a Python executable."));
 		return;
 	}
 
@@ -261,7 +261,7 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 						ui.cbPythonEnvironment->setCurrentText(envPath);
 				} else {
 					if (isUserSelected)
-						showErrorMessage(i18n("The selected virtual environment python version does not match the application python version."));
+						showErrorMessage(i18n("The selected virtual environment Python version does not match the application Python version."));
 				}
 				return;
 			}
@@ -292,7 +292,7 @@ void SettingsScriptingPage::addEnvironment(const QString& rawEnvPath, bool selec
 				}
 			} else {
 				if (isUserSelected)
-					showErrorMessage(i18n("The selected virtual environment python version does not match the application python version."));
+					showErrorMessage(i18n("The selected virtual environment Python version does not match the application Python version."));
 			}
 		}
 		process->deleteLater();
