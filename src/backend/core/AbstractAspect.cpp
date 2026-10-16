@@ -553,6 +553,11 @@ QString AbstractAspect::path() const {
 bool AbstractAspect::addChild(AbstractAspect* child) {
 	Q_ASSERT(child);
 
+	if (child->parentAspect()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: child '" << STDSTRING(child->name()) << "' already has a parent ('" << STDSTRING(child->parentAspect()->name()) << "'). Remove from current parent first.")
+		return false;
+	}
+
 	const QString new_name = uniqueNameFor(child->name());
 	beginMacro(i18n("%1: add %2", name(), new_name));
 	if (new_name != child->name()) {
@@ -569,6 +574,11 @@ bool AbstractAspect::addChild(AbstractAspect* child) {
  * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
+	if (child->parentAspect()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: child '" << STDSTRING(child->name()) << "' already has a parent ('" << STDSTRING(child->parentAspect()->name()) << "'). Remove from current parent first.")
+		return;
+	}
+
 	Q_EMIT childAspectAboutToBeAdded(this, nullptr, child); // TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
 	child->finalizeAdd();
