@@ -580,6 +580,137 @@ double ma(const std::string_view& variable, const std::weak_ptr<Payload> payload
 	return (cell(p->rowIndex - 1, variable, payload) + cell(p->rowIndex, variable, payload)) / 2.;
 }
 
+/**
+ * \brief Unwrap phase angles by changing deltas greater than period/2 to their period complement.
+ *
+ * Implements the NumPy unwrap algorithm. Discontinuities larger than period/2 are corrected
+ * by adding multiples of period to restore continuity.
+ *
+ * \param period The wrapping period (e.g., 2π for radians, 360 for degrees, or any custom value)
+ * \param variable Column name containing the wrapped phase data
+ * \param payload Parser context with row index and column data
+ * \return Unwrapped value at the current row
+ */
+double unwrapWithPeriod(double period, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		Q_ASSERT(p);
+		return NAN;
+	}
+
+	// Find the variable's data vector
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			const auto& data = *p->xVectors->at(i);
+			const auto currentRow = p->rowIndex;
+
+			if (currentRow < 0 || currentRow >= data.size())
+				return NAN;
+
+			// First row: return as-is
+			if (currentRow == 0)
+				return data[0];
+
+			// NumPy unwrap algorithm with custom period
+			// discont = period/2 (default behavior)
+			const double discont = period / 2.0;
+			const double halfPeriod = period / 2.0;
+			double cumsum = 0.0;
+
+			for (qsizetype row = 1; row <= currentRow; row++) {
+				double diff = data[row] - data[row - 1];
+				// Only correct if |diff| > discont
+				if (fabs(diff) > discont) {
+					// Wrap diff to [-period/2, period/2]
+					double diff_wrapped = fmod(diff + halfPeriod, period);
+					if (diff_wrapped < 0)
+						diff_wrapped += period;
+					diff_wrapped -= halfPeriod;
+					// Correction is the difference between wrapped and original
+					cumsum += diff_wrapped - diff;
+				}
+			}
+
+			return data[currentRow] + cumsum;
+		}
+	}
+	return NAN;
+}
+
+/**
+ * \brief Unwrap phase angles with default period of 2π.
+ * \sa unwrapWithPeriod
+ */
+double unwrap(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	// Default period = 2*pi
+	return unwrapWithPeriod(2.0 * M_PI, variable, payload);
+}
+
+/**
+ * \brief Calculate the difference between consecutive elements.
+ *
+ * Returns current_value - previous_value. First row returns NaN (no previous value).
+ * Equivalent to NumPy's diff() with prepend=NaN.
+ */
+double diff(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		Q_ASSERT(p);
+		return NAN;
+	}
+	if (p->rowIndex == 0)
+		return NAN; // No previous value for first row
+	return cell(p->rowIndex, variable, payload) - cell(p->rowIndex - 1, variable, payload);
+}
+
+/**
+ * \brief Calculate the cumulative sum of elements up to and including the current row.
+ *
+ * Returns sum(data[0:current_row+1]). Equivalent to NumPy's cumsum().
+ */
+double cumsum(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		Q_ASSERT(p);
+		return NAN;
+	}
+
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			const auto& data = *p->xVectors->at(i);
+			double sum = 0.0;
+			for (qsizetype row = 0; row <= p->rowIndex && row < data.size(); row++)
+				sum += data[row];
+			return sum;
+		}
+	}
+	return NAN;
+}
+
+/**
+ * \brief Calculate the cumulative product of elements up to and including the current row.
+ *
+ * Returns prod(data[0:current_row+1]). Equivalent to NumPy's cumprod().
+ */
+double cumprod(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		Q_ASSERT(p);
+		return NAN;
+	}
+
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			const auto& data = *p->xVectors->at(i);
+			double prod = 1.0;
+			for (qsizetype row = 0; row <= p->rowIndex && row < data.size(); row++)
+				prod *= data[row];
+			return prod;
+		}
+	}
+	return NAN;
+}
+
 double mr(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
@@ -762,6 +893,11 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	parser.set_specialfunctionValueVariablePayload(specialfun_smr, smr, payload);
 	parser.set_specialfunctionValueVariablePayload(specialfun_psample, psample, payload);
 	parser.set_specialfunctionVariablePayload(specialfun_rsample, rsample, payload);
+	parser.set_specialfunctionVariablePayload(specialfun_unwrap, unwrap, payload);
+	parser.set_specialfunctionValueVariablePayload(specialfun_unwrap_period, unwrapWithPeriod, payload);
+	parser.set_specialfunctionVariablePayload(specialfun_diff, diff, payload);
+	parser.set_specialfunctionVariablePayload(specialfun_cumsum, cumsum, payload);
+	parser.set_specialfunctionVariablePayload(specialfun_cumprod, cumprod, payload);
 
 	bool constExpression = false;
 	for (qsizetype i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {

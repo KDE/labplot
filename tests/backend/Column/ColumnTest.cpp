@@ -1689,6 +1689,108 @@ void ColumnTest::testFormularsample() {
 	QVERIFY(c2.valueAt(4) == 1. || c2.valueAt(4) == 2.);
 }
 
+void ColumnTest::testFormulaUnwrap() {
+	// Test unwrap with default period (2*pi)
+	// Input: wrapped phase angles with a discontinuity
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	// Simulated wrapped phase: 0, 1, 2, 3, -2.28 (jump from ~3.14 to ~-3.14), -1.28, -0.28
+	c1.replaceValues(-1, {0., 1., 2., 3., -2.28318530718, -1.28318530718, -0.28318530718});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {0., 0., 0., 0., 0., 0., 0.});
+
+	c2.setFormula(QStringLiteral("unwrap(x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+
+	// After unwrap, values should be continuous (approximately 0, 1, 2, 3, 4, 5, 6)
+	VALUES_EQUAL(c2.valueAt(0), 0.);
+	VALUES_EQUAL(c2.valueAt(1), 1.);
+	VALUES_EQUAL(c2.valueAt(2), 2.);
+	VALUES_EQUAL(c2.valueAt(3), 3.);
+	QVERIFY(qAbs(c2.valueAt(4) - 4.0) < 0.01);
+	QVERIFY(qAbs(c2.valueAt(5) - 5.0) < 0.01);
+	QVERIFY(qAbs(c2.valueAt(6) - 6.0) < 0.01);
+}
+
+void ColumnTest::testFormulaUnwrapPeriod() {
+	// Test unwrap with custom period (2.0)
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	// Values that wrap at period 2: 0, 0.5, 1.0, -0.8 (jump), -0.3, 0.2
+	c1.replaceValues(-1, {0., 0.5, 1.0, -0.8, -0.3, 0.2});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {0., 0., 0., 0., 0., 0.});
+
+	c2.setFormula(QStringLiteral("unwrapp(2; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 6);
+
+	// After unwrap with period 2, discontinuity at row 3 should be corrected
+	VALUES_EQUAL(c2.valueAt(0), 0.);
+	VALUES_EQUAL(c2.valueAt(1), 0.5);
+	VALUES_EQUAL(c2.valueAt(2), 1.0);
+	QVERIFY(qAbs(c2.valueAt(3) - 1.2) < 0.01); // -0.8 + 2 = 1.2
+	QVERIFY(qAbs(c2.valueAt(4) - 1.7) < 0.01); // -0.3 + 2 = 1.7
+	QVERIFY(qAbs(c2.valueAt(5) - 2.2) < 0.01); // 0.2 + 2 = 2.2
+}
+
+void ColumnTest::testFormulaDiff() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 3., 6., 10., 15.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {0., 0., 0., 0., 0.});
+
+	c2.setFormula(QStringLiteral("diff(x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5);
+
+	// First row is NaN (no previous value)
+	QVERIFY(std::isnan(c2.valueAt(0)));
+	// Subsequent rows: difference from previous
+	VALUES_EQUAL(c2.valueAt(1), 2.); // 3 - 1
+	VALUES_EQUAL(c2.valueAt(2), 3.); // 6 - 3
+	VALUES_EQUAL(c2.valueAt(3), 4.); // 10 - 6
+	VALUES_EQUAL(c2.valueAt(4), 5.); // 15 - 10
+}
+
+void ColumnTest::testFormulaCumsum() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 2., 3., 4., 5.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {0., 0., 0., 0., 0.});
+
+	c2.setFormula(QStringLiteral("cumsum(x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5);
+
+	VALUES_EQUAL(c2.valueAt(0), 1.); // 1
+	VALUES_EQUAL(c2.valueAt(1), 3.); // 1 + 2
+	VALUES_EQUAL(c2.valueAt(2), 6.); // 1 + 2 + 3
+	VALUES_EQUAL(c2.valueAt(3), 10.); // 1 + 2 + 3 + 4
+	VALUES_EQUAL(c2.valueAt(4), 15.); // 1 + 2 + 3 + 4 + 5
+}
+
+void ColumnTest::testFormulaCumprod() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 2., 3., 4., 5.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {0., 0., 0., 0., 0.});
+
+	c2.setFormula(QStringLiteral("cumprod(x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5);
+
+	VALUES_EQUAL(c2.valueAt(0), 1.); // 1
+	VALUES_EQUAL(c2.valueAt(1), 2.); // 1 * 2
+	VALUES_EQUAL(c2.valueAt(2), 6.); // 1 * 2 * 3
+	VALUES_EQUAL(c2.valueAt(3), 24.); // 1 * 2 * 3 * 4
+	VALUES_EQUAL(c2.valueAt(4), 120.); // 1 * 2 * 3 * 4 * 5
+}
+
 /////////////////////////////////////////////////////
 
 void ColumnTest::testFormulasMinColumnInvalid() {

@@ -87,6 +87,11 @@ private Q_SLOTS:
 	void testFormulasma();
 	void testFormulapsample();
 	void testFormularsample();
+	void testFormulaUnwrap();
+	void testFormulaUnwrapPeriod();
+	void testFormulaDiff();
+	void testFormulaCumsum();
+	void testFormulaCumprod();
 
 	void testFormulasMinColumnInvalid();
 
