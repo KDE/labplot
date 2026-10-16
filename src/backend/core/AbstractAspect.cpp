@@ -554,7 +554,8 @@ bool AbstractAspect::addChild(AbstractAspect* child) {
 	Q_ASSERT(child);
 
 	if (child->parentAspect()) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: child '" << STDSTRING(child->name()) << "' already has a parent ('" << STDSTRING(child->parentAspect()->name()) << "'). Remove from current parent first.")
+		DEBUG(Q_FUNC_INFO << ", child '" << STDSTRING(child->name()) << "' already has a parent ('" << STDSTRING(child->parentAspect()->name())
+						  << "'). Remove from current parent first.")
 		return false;
 	}
 
@@ -575,7 +576,8 @@ bool AbstractAspect::addChild(AbstractAspect* child) {
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
 	if (child->parentAspect()) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: child '" << STDSTRING(child->name()) << "' already has a parent ('" << STDSTRING(child->parentAspect()->name()) << "'). Remove from current parent first.")
+		DEBUG(Q_FUNC_INFO << ", child '" << STDSTRING(child->name()) << "' already has a parent ('" << STDSTRING(child->parentAspect()->name())
+						  << "'). Remove from current parent first.")
 		return;
 	}
 
