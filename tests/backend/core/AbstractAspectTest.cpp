@@ -178,6 +178,40 @@ void AbstractAspectTest::testAddChildUndoRedoTwice() {
 	QVERIFY(plot->isVisible());
 }
 
+/*!
+ * \brief Test that adding a child that already has a parent fails gracefully
+ * instead of crashing. This can happen in Python scripts where the user
+ * accidentally tries to add the same object to multiple parents.
+ */
+void AbstractAspectTest::testAddChildAlreadyHasParent() {
+	Project project;
+
+	auto* folder1 = new Folder(QStringLiteral("Folder1"));
+	auto* folder2 = new Folder(QStringLiteral("Folder2"));
+	project.addChild(folder1);
+	project.addChild(folder2);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+
+	// First add should succeed
+	bool result1 = folder1->addChild(spreadsheet);
+	QVERIFY(result1);
+	QCOMPARE(spreadsheet->parentAspect(), folder1);
+
+	// Second add to a different parent should fail (not crash)
+	bool result2 = folder2->addChild(spreadsheet);
+	QVERIFY(!result2);
+
+	// Parent should still be the original
+	QCOMPARE(spreadsheet->parentAspect(), folder1);
+
+	// folder2 should have no children
+	QCOMPARE(folder2->childCount<Spreadsheet>(), 0);
+
+	// folder1 should still have the spreadsheet
+	QCOMPARE(folder1->childCount<Spreadsheet>(), 1);
+}
+
 void AbstractAspectTest::testDuplicateChildUndoRedo() {
 	Project project;
 

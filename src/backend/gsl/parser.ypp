@@ -66,6 +66,14 @@ namespace {
                 return 1;
         }
 
+        static int variableRequiredErrorMessage(Parsing::param* p, const std::string_view& function_name) {
+                std::stringstream ss;
+                ss << "Parsing Error: '" << function_name << "' requires a column name, not an expression. Use a helper column for complex expressions.";
+                p->errorCount++;
+                p->parser->setLastErrorMessage(ss.str());
+                return 1;
+        }
+
         static int notImplementedError(Parsing::param* p, const std::string_view& function_name) {
                 std::stringstream ss;
                 ss << "Parsing Error: '" << function_name << "' not implemented.";
@@ -109,6 +117,13 @@ namespace {
                 } else
                         out = std::nan("0");
         } catch (const std::bad_variant_access& ex) {
+                // Check if this function requires a variable (column name) but got an expression
+                if (std::holds_alternative<Parsing::func_tVariablePayload>(special_function.funsptr->fnct) ||
+                    std::holds_alternative<Parsing::func_tValueVariablePayload>(special_function.funsptr->fnct) ||
+                    std::holds_alternative<Parsing::func_t2ValueVariablePayload>(special_function.funsptr->fnct) ||
+                    std::holds_alternative<Parsing::func_t3ValueVariablePayload>(special_function.funsptr->fnct)) {
+                        return variableRequiredErrorMessage(p, s->name);
+                }
                 return wrongArgumentInternalErrorMessage(p, s->name, numArguments);
         }
         return 0;

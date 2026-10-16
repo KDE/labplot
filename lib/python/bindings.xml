@@ -270,6 +270,25 @@
                 <replace-default-expression with="AbstractColumn::ColumnMode::Double"/>
             </modify-argument>
         </declare-function>
+        <declare-function signature="setFormula(const QString&amp;,const QStringList&amp;,const QVector&lt;Column*&gt;&amp;,bool,bool)" return-type="void">
+            <modify-argument index="4">
+                <replace-default-expression with="false"/>
+            </modify-argument>
+            <modify-argument index="5">
+                <replace-default-expression with="true"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="setFormula(const QString&amp;,bool,bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="false"/>
+            </modify-argument>
+            <modify-argument index="3">
+                <replace-default-expression with="true"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="formula()const" return-type="QString"/>
+        <declare-function signature="clearFormula()" return-type="void"/>
+        <declare-function signature="updateFormula()" return-type="void"/>
     </object-type>
 
     <!-- Data Containers -->

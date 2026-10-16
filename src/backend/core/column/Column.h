@@ -81,6 +81,7 @@ public:
 
 	// functions related to the formula used to generate column values
 	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate = false, bool autoResize = true);
+	void setFormula(const QString& formula, bool autoUpdate = false, bool autoResize = true);
 	QString formula() const;
 	void clearFormula();
 	struct FormulaData {
