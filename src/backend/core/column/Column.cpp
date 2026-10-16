@@ -20,6 +20,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
@@ -515,10 +516,62 @@ bool Column::formulaAutoResize() const {
 }
 
 /**
- * \brief Sets the formula used to generate column values
+ * \brief Sets the formula used to generate column values with explicit variable mapping.
+ *
+ * Use this overload when you need full control over variable-to-column mapping,
+ * such as when referencing columns from different spreadsheets or when variable
+ * names in the formula don't match the actual column names.
+ *
+ * \param formula The formula expression (e.g., "x + y * 2")
+ * \param variableNames List of variable names used in the formula (e.g., ["x", "y"])
+ * \param columns List of Column pointers corresponding to each variable name
+ * \param autoUpdate If true, the formula recalculates when source columns change
+ * \param autoResize If true, the column resizes to match source column sizes
+ *
+ * \note Call updateFormula() after this to evaluate the formula.
+ * \sa setFormula(const QString&, bool, bool) for auto-discovery of columns
  */
 void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate, bool autoResize) {
 	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate, autoResize));
+}
+
+/**
+ * \brief Sets the formula with auto-discovery of variable columns from the parent spreadsheet.
+ *
+ * This convenience overload parses the formula to find variable names and automatically
+ * looks them up as columns in the parent spreadsheet. Use this for simple cases where
+ * variable names in the formula match column names in the same spreadsheet.
+ *
+ * \param formula The formula expression (e.g., "x + y * 2")
+ * \param autoUpdate If true, the formula recalculates when source columns change
+ * \param autoResize If true, the column resizes to match source column sizes
+ *
+ * \note Variables that don't match any column name are ignored.
+ * \note Call updateFormula() after this to evaluate the formula.
+ * \sa setFormula(const QString&, const QStringList&, const QVector<Column*>&, bool, bool) for explicit mapping
+ */
+void Column::setFormula(const QString& formula, bool autoUpdate, bool autoResize) {
+	auto* spreadsheet = parentAspect()->castTo<Spreadsheet>();
+	if (!spreadsheet) {
+		setFormula(formula, QStringList(), QVector<Column*>(), autoUpdate, autoResize);
+		return;
+	}
+
+	// Extract potential variable names from the formula
+	const QStringList parameters = ExpressionParser::getInstance()->getParameter(formula, QStringList());
+
+	// Match parameters to columns in the spreadsheet
+	QStringList variableNames;
+	QVector<Column*> columns;
+	for (const QString& param : parameters) {
+		Column* col = spreadsheet->column(param);
+		if (col && col != this) { // Don't reference self
+			variableNames << param;
+			columns << col;
+		}
+	}
+
+	setFormula(formula, variableNames, columns, autoUpdate, autoResize);
 }
 
 /**
