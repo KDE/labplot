@@ -210,6 +210,8 @@ const char* specialfun_unwrap_period = "unwrapp";
 const char* specialfun_diff = "diff";
 const char* specialfun_cumsum = "cumsum";
 const char* specialfun_cumprod = "cumprod";
+const char* specialfun_lag = "lag";
+const char* specialfun_lead = "lead";
 
 const char* colfun_size = "size";
 const char* colfun_sum = "sum";
@@ -265,6 +267,8 @@ const char* cell_curr_column_default = "cell_curr_column_with_default";
 		{[]() { return i18n("Difference from previous row"); }, specialfun_diff, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Cumulative sum"); }, specialfun_cumsum, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Cumulative product"); }, specialfun_cumprod, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Value from n rows before"); }, specialfun_lag, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Value from n rows after"); }, specialfun_lead, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
 
 		{[]() { return i18n("Current column cell (index)"); }, cell_curr_column, func_tValuePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Current column cell (index; default_value)"); }, cell_curr_column_default, func_t2ValuePayload(), 2, nullptr, FunctionGroups::MovingStatistics},

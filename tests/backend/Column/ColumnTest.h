@@ -92,6 +92,8 @@ private Q_SLOTS:
 	void testFormulaDiff();
 	void testFormulaCumsum();
 	void testFormulaCumprod();
+	void testFormulaLag();
+	void testFormulaLead();
 
 	void testFormulasMinColumnInvalid();
 

@@ -195,6 +195,8 @@ extern const char* specialfun_unwrap_period;
 extern const char* specialfun_diff;
 extern const char* specialfun_cumsum;
 extern const char* specialfun_cumprod;
+extern const char* specialfun_lag;
+extern const char* specialfun_lead;
 
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);
