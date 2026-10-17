@@ -8,3 +8,10 @@ add_subdirectory(themes)
 add_subdirectory(datasets)
 add_subdirectory(examples)
 add_subdirectory(whats-new)
+
+# Function metadata for tooltips
+if(APPLE)
+    install(FILES functions.json DESTINATION ${KDE_INSTALL_DATADIR})
+else()
+    install(FILES functions.json DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME})
+endif()

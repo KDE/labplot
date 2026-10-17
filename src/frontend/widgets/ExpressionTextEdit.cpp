@@ -237,10 +237,9 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 		// text token was not found in the list of constants -> check functions as next
 		static const QStringList& functions = ExpressionParser::getInstance()->functions();
 		index = functions.indexOf(token);
-		if (index != -1) {
-			static const QStringList& names = ExpressionParser::getInstance()->functionsDescriptions();
-			setToolTip(functions.at(index) + QStringLiteral(" - ") + names.at(index));
-		} else // no constant or function under the cursor, fall back to the reason for the invalid expression
+		if (index != -1)
+			setToolTip(ExpressionParser::getInstance()->functionTooltip(token));
+		else // no constant or function under the cursor, fall back to the reason for the invalid expression
 			setToolTip(m_errorMessage);
 	}
 
