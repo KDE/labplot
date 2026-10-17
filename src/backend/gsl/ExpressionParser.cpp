@@ -711,6 +711,44 @@ double cumprod(const std::string_view& variable, const std::weak_ptr<Payload> pa
 	return NAN;
 }
 
+/**
+ * \brief Get the value from n rows before the current row.
+ *
+ * Returns the value of the column at (current_row - n). Returns NaN if the
+ * resulting index is out of bounds. Equivalent to SQL's LAG() window function.
+ *
+ * \param n Number of rows to look back (must be positive)
+ * \param variable Column name
+ * \param payload Parser context with row index and column data
+ */
+double lag(double n, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		Q_ASSERT(p);
+		return NAN;
+	}
+	return cell(p->rowIndex - static_cast<qsizetype>(n), variable, payload);
+}
+
+/**
+ * \brief Get the value from n rows after the current row.
+ *
+ * Returns the value of the column at (current_row + n). Returns NaN if the
+ * resulting index is out of bounds. Equivalent to SQL's LEAD() window function.
+ *
+ * \param n Number of rows to look ahead (must be positive)
+ * \param variable Column name
+ * \param payload Parser context with row index and column data
+ */
+double lead(double n, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		Q_ASSERT(p);
+		return NAN;
+	}
+	return cell(p->rowIndex + static_cast<qsizetype>(n), variable, payload);
+}
+
 double mr(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
@@ -898,6 +936,8 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	parser.set_specialfunctionVariablePayload(specialfun_diff, diff, payload);
 	parser.set_specialfunctionVariablePayload(specialfun_cumsum, cumsum, payload);
 	parser.set_specialfunctionVariablePayload(specialfun_cumprod, cumprod, payload);
+	parser.set_specialfunctionValueVariablePayload(specialfun_lag, lag, payload);
+	parser.set_specialfunctionValueVariablePayload(specialfun_lead, lead, payload);
 
 	bool constExpression = false;
 	for (qsizetype i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {

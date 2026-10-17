@@ -1791,6 +1791,44 @@ void ColumnTest::testFormulaCumprod() {
 	VALUES_EQUAL(c2.valueAt(4), 120.); // 1 * 2 * 3 * 4 * 5
 }
 
+void ColumnTest::testFormulaLag() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {10., 20., 30., 40., 50.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {0., 0., 0., 0., 0.});
+
+	c2.setFormula(QStringLiteral("lag(1; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5);
+
+	// lag(1; x) returns value from 1 row before
+	QVERIFY(std::isnan(c2.valueAt(0))); // No previous row
+	VALUES_EQUAL(c2.valueAt(1), 10.); // Row 0 value
+	VALUES_EQUAL(c2.valueAt(2), 20.); // Row 1 value
+	VALUES_EQUAL(c2.valueAt(3), 30.); // Row 2 value
+	VALUES_EQUAL(c2.valueAt(4), 40.); // Row 3 value
+}
+
+void ColumnTest::testFormulaLead() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {10., 20., 30., 40., 50.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {0., 0., 0., 0., 0.});
+
+	c2.setFormula(QStringLiteral("lead(1; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5);
+
+	// lead(1; x) returns value from 1 row ahead
+	VALUES_EQUAL(c2.valueAt(0), 20.); // Row 1 value
+	VALUES_EQUAL(c2.valueAt(1), 30.); // Row 2 value
+	VALUES_EQUAL(c2.valueAt(2), 40.); // Row 3 value
+	VALUES_EQUAL(c2.valueAt(3), 50.); // Row 4 value
+	QVERIFY(std::isnan(c2.valueAt(4))); // No next row
+}
+
 /////////////////////////////////////////////////////
 
 void ColumnTest::testFormulasMinColumnInvalid() {
