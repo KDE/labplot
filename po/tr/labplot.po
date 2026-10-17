@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-10-12 11:50+0300\n"
+"PO-Revision-Date: 2026-10-16 20:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -265,12 +265,12 @@ msgstr "Ondalıklı"
 #: src/backend/core/AbstractColumn.cpp:229
 #, kde-format
 msgid "Integer"
-msgstr "Tamsayı"
+msgstr "Tam Sayı"
 
 #: src/backend/core/AbstractColumn.cpp:231
 #, kde-format
 msgid "Big Integer"
-msgstr "Büyük Tamsayı"
+msgstr "Büyük Tam Sayı"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
