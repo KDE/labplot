@@ -6,7 +6,7 @@
 
 find_library(QXLSX_LIBRARIES NAMES QXlsxQt6)
 
-find_path(QXLSX_INCLUDE_DIR xlsxdocument.h PATH_SUFFIXES QXlsxQt6)
+find_path(QXLSX_INCLUDE_DIR xlsxdocument.h PATH_SUFFIXES QXlsx QXlsxQt6)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(QXlsx
