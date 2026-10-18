@@ -1873,7 +1873,8 @@ void XYCurvePrivate::updateValues() {
 			}
 		}
 	}
-	case Value::Type::BinEntries: {
+	case Value::Type::BinEntries:
+	case Value::Type::Values: {
 		break;
 	}
 	}

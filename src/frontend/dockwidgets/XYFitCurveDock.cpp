@@ -1438,9 +1438,9 @@ void XYFitCurveDock::resultCopy(bool copyAll) {
 				rowStr += QLatin1Char('\t');
 
 			// use the full numerical precision of double for the export if available (table shows a rounded/truncated text)
-			const auto& data = tw->item(i, j)->data(Qt::UserRole);
-			if (data.isValid())
-				rowStr += QLocale().toString(data.toDouble(), 'g', std::numeric_limits<double>::max_digits10);
+			const auto& itemData = tw->item(i, j)->data(Qt::UserRole);
+			if (itemData.isValid())
+				rowStr += QLocale().toString(itemData.toDouble(), 'g', std::numeric_limits<double>::max_digits10);
 			else
 				rowStr += tw->item(i, j)->text();
 		}
