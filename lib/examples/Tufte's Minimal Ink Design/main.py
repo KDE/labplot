@@ -271,8 +271,8 @@ config61.whiskersCapLine().setColor("black")
 config61.setJitteringEnabled(True)
 
 for i in range(spreadsheet.columnCount()):
-    config61.medianLineAt(i).setStyle(Qt.PenStyle.NoPen)
-    config61.borderLineAt(i).setStyle(Qt.PenStyle.NoPen)
+    config61.medianLineAt(i).setStyle(Line.Style.NoPen)
+    config61.borderLineAt(i).setStyle(Line.Style.NoPen)
     config61.backgroundAt(i).setEnabled(False)
 
 ###################################################################################################################################################################

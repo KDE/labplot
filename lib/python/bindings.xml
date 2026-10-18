@@ -504,12 +504,13 @@
     <rejection class="Line" field-name="*"/>
     <rejection class="Line" function-name="*"/>
     <object-type name="Line" disable-wrapper="yes">
+        <enum-type name="Style"/>
         <declare-function signature="histogramLineType()const" return-type="Histogram::LineType"/>
         <declare-function signature="setHistogramLineType(Histogram::LineType)" return-type="void"/>
         <declare-function signature="dropLineType()const" return-type="XYCurve::DropLineType"/>
         <declare-function signature="setDropLineType(XYCurve::DropLineType)" return-type="void"/>
-        <declare-function signature="style()const" return-type="Qt::PenStyle"/>
-        <declare-function signature="setStyle(Qt::PenStyle)" return-type="void"/>
+        <declare-function signature="style()const" return-type="Line::Style"/>
+        <declare-function signature="setStyle(Line::Style)" return-type="void"/>
         <declare-function signature="color()const" return-type="QColor"/>
         <declare-function signature="setColor(const QColor&amp;)" return-type="void"/>
         <declare-function signature="width()const" return-type="double"/>

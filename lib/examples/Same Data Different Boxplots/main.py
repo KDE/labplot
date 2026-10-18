@@ -89,7 +89,7 @@ for axis in plotArea1.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
 
@@ -116,8 +116,8 @@ boxPlot1.symbolData().setStyle(Symbol.Style.NoSymbols)
 boxPlot1.symbolWhiskerEnd().setStyle(Symbol.Style.NoSymbols)
 boxPlot1.setJitteringEnabled(True)
 boxPlot1.setRugEnabled(False)
-boxPlot1.whiskersLine().setStyle(Qt.PenStyle.DashLine)
-boxPlot1.whiskersCapLine().setStyle(Qt.PenStyle.NoPen)
+boxPlot1.whiskersLine().setStyle(Line.Style.DashLine)
+boxPlot1.whiskersCapLine().setStyle(Line.Style.NoPen)
 boxPlot1.backgroundAt(0).setEnabled(False)
 boxPlot1.backgroundAt(1).setEnabled(False)
 boxPlot1.recalc()
@@ -139,7 +139,7 @@ for axis in plotArea2.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
 
@@ -171,8 +171,8 @@ boxPlot2.symbolData().setStyle(Symbol.Style.NoSymbols)
 boxPlot2.symbolWhiskerEnd().setStyle(Symbol.Style.NoSymbols)
 boxPlot2.setJitteringEnabled(True)
 boxPlot2.setRugEnabled(False)
-boxPlot2.whiskersLine().setStyle(Qt.PenStyle.DashLine)
-boxPlot2.whiskersCapLine().setStyle(Qt.PenStyle.SolidLine)
+boxPlot2.whiskersLine().setStyle(Line.Style.DashLine)
+boxPlot2.whiskersCapLine().setStyle(Line.Style.SolidLine)
 boxPlot2.setWhiskersCapSize(Worksheet.convertToSceneUnits(25, Worksheet.Unit.Point))
 boxPlot2.backgroundAt(0).setEnabled(True)
 boxPlot2.backgroundAt(0).setFirstColor("black")
@@ -199,7 +199,7 @@ for axis in plotArea3.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
 
@@ -228,8 +228,8 @@ boxPlot3.symbolData().setStyle(Symbol.Style.NoSymbols)
 boxPlot3.symbolWhiskerEnd().setStyle(Symbol.Style.NoSymbols)
 boxPlot3.setJitteringEnabled(True)
 boxPlot3.setRugEnabled(False)
-boxPlot3.whiskersLine().setStyle(Qt.PenStyle.SolidLine)
-boxPlot3.whiskersCapLine().setStyle(Qt.PenStyle.NoPen)
+boxPlot3.whiskersLine().setStyle(Line.Style.SolidLine)
+boxPlot3.whiskersCapLine().setStyle(Line.Style.NoPen)
 boxPlot3.backgroundAt(0).setEnabled(True)
 boxPlot3.backgroundAt(0).setOpacity(0.3)
 boxPlot3.backgroundAt(1).setEnabled(True)
@@ -253,7 +253,7 @@ for axis in plotArea4.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
 
@@ -286,8 +286,8 @@ boxPlot4.symbolData().setColor("black")
 boxPlot4.symbolWhiskerEnd().setStyle(Symbol.Style.NoSymbols)
 boxPlot4.setJitteringEnabled(True)
 boxPlot4.setRugEnabled(False)
-boxPlot4.whiskersLine().setStyle(Qt.PenStyle.SolidLine)
-boxPlot4.whiskersCapLine().setStyle(Qt.PenStyle.NoPen)
+boxPlot4.whiskersLine().setStyle(Line.Style.SolidLine)
+boxPlot4.whiskersCapLine().setStyle(Line.Style.NoPen)
 boxPlot4.backgroundAt(0).setEnabled(False)
 boxPlot4.backgroundAt(1).setEnabled(False)
 boxPlot4.recalc()
@@ -309,12 +309,12 @@ for axis in plotArea5.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-        axis.majorTicksLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
+        axis.majorTicksLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-        axis.majorTicksLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
+        axis.majorTicksLine().setStyle(Line.Style.NoPen)
     else:
         axis.setVisible(False)
 
@@ -339,8 +339,8 @@ boxPlot5.setWhiskersCapSize(0)
 boxPlot5.whiskersCapLine().setColor("black")
 boxPlot5.setJitteringEnabled(True)
 for i in range(spreadsheet1.columnCount()):
-    boxPlot5.medianLineAt(i).setStyle(Qt.PenStyle.NoPen)
-    boxPlot5.borderLineAt(i).setStyle(Qt.PenStyle.NoPen)
+    boxPlot5.medianLineAt(i).setStyle(Line.Style.NoPen)
+    boxPlot5.borderLineAt(i).setStyle(Line.Style.NoPen)
     boxPlot5.backgroundAt(i).setEnabled(False)
 
 plotArea6 = CartesianPlot("Version 6")
@@ -360,7 +360,7 @@ for axis in plotArea6.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
 
@@ -405,7 +405,7 @@ for axis in plotArea7.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
 
@@ -450,7 +450,7 @@ for axis in plotArea8.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
 
@@ -495,7 +495,7 @@ for axis in plotArea9.children(AspectType.Axis):
         axis.setLabelsTextType(Axis.LabelsTextType.CustomValues)
         axis.setLabelsTextColumn(spreadsheet2.column(1))
         axis.setLabelsFont(fo7)
-        axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
+        axis.majorGridLine().setStyle(Line.Style.NoPen)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         axis.setLabelsFont(fo7)
 

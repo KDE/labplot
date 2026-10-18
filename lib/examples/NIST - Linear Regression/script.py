@@ -55,8 +55,8 @@ plotArea = CartesianPlot("Plot Area")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 
 for axis in plotArea.children(AspectType.Axis):
-    axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-    axis.minorGridLine().setStyle(Qt.PenStyle.NoPen)
+    axis.majorGridLine().setStyle(Line.Style.NoPen)
+    axis.minorGridLine().setStyle(Line.Style.NoPen)
 
 allFits.addChild(plotArea)
 
@@ -121,8 +121,8 @@ plotArea2 = CartesianPlot("Plot Area2")
 plotArea2.setType(CartesianPlot.Type.FourAxes)
 
 for axis in plotArea2.children(AspectType.Axis):
-    axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-    axis.minorGridLine().setStyle(Qt.PenStyle.NoPen)
+    axis.majorGridLine().setStyle(Line.Style.NoPen)
+    axis.minorGridLine().setStyle(Line.Style.NoPen)
 
 allFits.addChild(plotArea2)
 
@@ -217,8 +217,8 @@ plotArea3 = CartesianPlot("Plot Area3")
 plotArea3.setType(CartesianPlot.Type.FourAxes)
 
 for axis in plotArea3.children(AspectType.Axis):
-    axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-    axis.minorGridLine().setStyle(Qt.PenStyle.NoPen)
+    axis.majorGridLine().setStyle(Line.Style.NoPen)
+    axis.minorGridLine().setStyle(Line.Style.NoPen)
 
 allFits2.addChild(plotArea3)
 
@@ -283,8 +283,8 @@ plotArea4 = CartesianPlot("Plot Area4")
 plotArea4.setType(CartesianPlot.Type.FourAxes)
 
 for axis in plotArea4.children(AspectType.Axis):
-    axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-    axis.minorGridLine().setStyle(Qt.PenStyle.NoPen)
+    axis.majorGridLine().setStyle(Line.Style.NoPen)
+    axis.minorGridLine().setStyle(Line.Style.NoPen)
 
 allFits2.addChild(plotArea4)
 

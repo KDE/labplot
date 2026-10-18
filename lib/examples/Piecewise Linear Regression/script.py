@@ -125,12 +125,12 @@ worksheet.addChild(plot)
 # Configure axes
 x_axis = plot.horizontalAxis()
 x_axis.title().setText("Time (hours)")
-x_axis.majorGridLine().setStyle(Qt.PenStyle.DotLine)
+x_axis.majorGridLine().setStyle(Line.Style.DotLine)
 x_axis.majorGridLine().setOpacity(0.3)
 
 y_axis = plot.verticalAxis()
 y_axis.title().setText("Temperature (°C)")
-y_axis.majorGridLine().setStyle(Qt.PenStyle.DotLine)
+y_axis.majorGridLine().setStyle(Line.Style.DotLine)
 y_axis.majorGridLine().setOpacity(0.3)
 
 # Plot raw data
@@ -230,7 +230,7 @@ plot.addChild(fit_curve_pelt)
 # Style the PELT fit line differently
 fit_curve_pelt.line().setWidth(Worksheet.convertToSceneUnits(2, Worksheet.Unit.Point))
 fit_curve_pelt.line().setColor(QColor(50, 200, 50))  # Green
-fit_curve_pelt.line().setStyle(Qt.PenStyle.DashLine)
+fit_curve_pelt.line().setStyle(Line.Style.DashLine)
 
 # Get PELT fit results
 fit_result_pelt = fit_curve_pelt.fitResult()
@@ -350,7 +350,7 @@ if HAS_PWLF:
     pwlf_curve.setLineType(XYCurve.LineType.Line)
     pwlf_curve.line().setWidth(Worksheet.convertToSceneUnits(2, Worksheet.Unit.Point))
     pwlf_curve.line().setColor(QColor(50, 150, 220))  # Blue
-    pwlf_curve.line().setStyle(Qt.PenStyle.DashLine)
+    pwlf_curve.line().setStyle(Line.Style.DashLine)
     pwlf_curve.symbol().setStyle(Symbol.Style.NoSymbols)
     plot.addChild(pwlf_curve)
     pwlf_curve.retransform()

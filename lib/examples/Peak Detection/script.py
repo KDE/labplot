@@ -182,13 +182,13 @@ worksheet.addChild(plot)
 # Configure axes - do this AFTER adding to worksheet
 x_axis = plot.horizontalAxis()
 x_axis.title().setText("2θ (degrees)")
-x_axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-x_axis.minorGridLine().setStyle(Qt.PenStyle.NoPen)
+x_axis.majorGridLine().setStyle(Line.Style.NoPen)
+x_axis.minorGridLine().setStyle(Line.Style.NoPen)
 
 y_axis = plot.verticalAxis()
 y_axis.title().setText("Intensity (counts)")
-y_axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-y_axis.minorGridLine().setStyle(Qt.PenStyle.NoPen)
+y_axis.majorGridLine().setStyle(Line.Style.NoPen)
+y_axis.minorGridLine().setStyle(Line.Style.NoPen)
 
 # === Plot Spectrum ===
 curve = XYCurve("XRD Pattern")
@@ -231,7 +231,7 @@ for i, peak in enumerate(peaks_sorted[:n_labels]):
 	plot.addChild(ref_line)
 	ref_line.setOrientation(ReferenceLine.Orientation.Vertical)
 	ref_line.setPositionLogical(QPointF(peak['x_pos'], 0))
-	ref_line.line().setStyle(Qt.PenStyle.DashLine)
+	ref_line.line().setStyle(Line.Style.DashLine)
 	ref_line.line().setWidth(Worksheet.convertToSceneUnits(0, Worksheet.Unit.Point))
 	ref_line.line().setOpacity(0.5)
 	ref_line.retransform()  # Make line visible

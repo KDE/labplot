@@ -71,15 +71,15 @@ for axis in plotArea1.children(AspectType.Axis):
     if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
         te10.setText("t")
         axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DotLine)
+        axis.majorGridLine().setStyle(Line.Style.SolidLine)
+        axis.minorGridLine().setStyle(Line.Style.DotLine)
         axis.setLabelsFont(fo7)
         axis.setScalingFactor(0.0001)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         te10.setText("signal")
         axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DotLine)
+        axis.majorGridLine().setStyle(Line.Style.SolidLine)
+        axis.minorGridLine().setStyle(Line.Style.DotLine)
         axis.setLabelsFont(fo7)
 
 worksheet.addChild(plotArea1)
@@ -118,14 +118,14 @@ for axis in plotArea2.children(AspectType.Axis):
     if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
         te10.setText("frequency")
         axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DotLine)
+        axis.majorGridLine().setStyle(Line.Style.SolidLine)
+        axis.minorGridLine().setStyle(Line.Style.DotLine)
         axis.setLabelsFont(fo7)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         te10.setText("amplitude")
         axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DotLine)
+        axis.majorGridLine().setStyle(Line.Style.SolidLine)
+        axis.minorGridLine().setStyle(Line.Style.DotLine)
         axis.setLabelsFont(fo7)
 
 worksheet.addChild(plotArea2)
@@ -171,15 +171,15 @@ for axis in plotArea3.children(AspectType.Axis):
     if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
         te10.setText("t")
         axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DotLine)
+        axis.majorGridLine().setStyle(Line.Style.SolidLine)
+        axis.minorGridLine().setStyle(Line.Style.DotLine)
         axis.setLabelsFont(fo7)
         axis.setScalingFactor(0.0001)
     elif axis.orientation() == WorksheetElement.Orientation.Vertical and axis.position() == Axis.Position.Left:
         te10.setText("signal")
         axis.title().setText(te10.toHtml())
-        axis.majorGridLine().setStyle(Qt.PenStyle.SolidLine)
-        axis.minorGridLine().setStyle(Qt.PenStyle.DotLine)
+        axis.majorGridLine().setStyle(Line.Style.SolidLine)
+        axis.minorGridLine().setStyle(Line.Style.DotLine)
         axis.setLabelsFont(fo7)
 
 worksheet.addChild(plotArea3)
