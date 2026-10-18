@@ -315,11 +315,11 @@ QString ExpressionParser::functionTooltip(const QString& function) {
 	if (!description.isEmpty())
 		tip += QStringLiteral(" — %1").arg(description.toHtmlEscaped());
 	if (!syntax.isEmpty())
-		tip += QStringLiteral("<br><b>Syntax:</b> <code>%1</code>").arg(syntax.toHtmlEscaped());
+		tip += QStringLiteral("<br><br><b>Syntax:<br></b> <code>%1</code>").arg(syntax.toHtmlEscaped());
 	if (!example.isEmpty())
-		tip += QStringLiteral("<br><b>Example:</b> <code>%1</code>").arg(example.toHtmlEscaped());
+		tip += QStringLiteral("<br><br><b>Example:<br></b> <code>%1</code>").arg(example.toHtmlEscaped());
 	if (!remark.isEmpty())
-		tip += QStringLiteral("<br><b>Note:</b> %1").arg(remark.toHtmlEscaped());
+		tip += QStringLiteral("<br><br><b>Note:<br></b> %1").arg(remark.toHtmlEscaped());
 	tip += QStringLiteral("</body></html>");
 	return tip;
 }
