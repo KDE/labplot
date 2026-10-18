@@ -1018,7 +1018,8 @@ void AbstractAspectTest::loadExampleProjects() {
 	for (const auto& fi : files) {
 		// skip project that require python or Maxima runtimes that are not available in the CI environment
 		if (fi.fileName() == QLatin1String("Seasonal Decomposition with STL and MSTL.lml")
-			|| fi.fileName() == QLatin1String("Maxima Tutorial for Beginners.lml") || fi.fileName() == QLatin1String("Duffing Oscillator in Maxima.lml"))
+			|| fi.fileName() == QLatin1String("Maxima Tutorial for Beginners.lml") || fi.fileName() == QLatin1String("Duffing Oscillator in Maxima.lml")
+			|| fi.fileName() == QLatin1String("Matplotlib - Quick Start.lml") || fi.fileName() == QLatin1String("NumPy - Quick Start.lml"))
 			continue;
 
 		// QDEBUG(QStringLiteral("loading example project: %1").arg(fi.absoluteFilePath()));
