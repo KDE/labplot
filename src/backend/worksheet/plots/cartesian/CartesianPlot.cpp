@@ -210,7 +210,7 @@ void CartesianPlot::init(bool loading) {
 	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 
-	d->cursorLine->setStyle(Qt::SolidLine);
+	d->cursorLine->setStyle(Line::Style::SolidLine);
 	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
 	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 
@@ -245,7 +245,7 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
-		axis->minorGridLine()->setStyle(Qt::NoPen);
+		axis->minorGridLine()->setStyle(Line::Style::NoPen);
 		axis->setSuppressRetransform(false);
 
 		// x2
@@ -259,8 +259,8 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksNumber(1);
-		axis->majorGridLine()->setStyle(Qt::NoPen);
-		axis->minorGridLine()->setStyle(Qt::NoPen);
+		axis->majorGridLine()->setStyle(Line::Style::NoPen);
+		axis->minorGridLine()->setStyle(Line::Style::NoPen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
@@ -274,7 +274,7 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
-		axis->minorGridLine()->setStyle(Qt::NoPen);
+		axis->minorGridLine()->setStyle(Line::Style::NoPen);
 		axis->setSuppressRetransform(false);
 
 		// y2
@@ -288,8 +288,8 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksNumber(1);
-		axis->majorGridLine()->setStyle(Qt::NoPen);
-		axis->minorGridLine()->setStyle(Qt::NoPen);
+		axis->majorGridLine()->setStyle(Line::Style::NoPen);
+		axis->minorGridLine()->setStyle(Line::Style::NoPen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
@@ -339,7 +339,7 @@ void CartesianPlot::setType(Type type) {
 		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 
-		d->borderLine->setStyle(Qt::NoPen);
+		d->borderLine->setStyle(Line::Style::NoPen);
 
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());
@@ -381,7 +381,7 @@ void CartesianPlot::setType(Type type) {
 		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 
-		d->borderLine->setStyle(Qt::NoPen);
+		d->borderLine->setStyle(Line::Style::NoPen);
 
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());
@@ -2828,7 +2828,7 @@ void CartesianPlot::childAboutToBeAdded(const AbstractAspect* /*parent*/, const 
 	auto* firstXAxis = horizontalAxis();
 	if (firstXAxis) {
 		firstXAxis->title()->setText(QString());
-		firstXAxis->majorGridLine()->setStyle(Qt::NoPen);
+		firstXAxis->majorGridLine()->setStyle(Line::Style::NoPen);
 		firstXAxis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 		firstXAxis->setMajorTickStartOffset(0.5);
 		firstXAxis->setMajorTicksType(Axis::TicksType::Spacing);

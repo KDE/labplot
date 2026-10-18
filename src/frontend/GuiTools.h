@@ -11,6 +11,8 @@
 #ifndef GUITOOLS_H
 #define GUITOOLS_H
 
+#include "backend/worksheet/Line.h"
+
 #include <QPen>
 
 class ExpressionTextEdit;
@@ -30,6 +32,11 @@ public:
 	static bool isDarkMode();
 
 	static void updateBrushStyles(QComboBox*, const QColor&);
+	static void updateLineStyles(QComboBox*, const QColor&);
+	static void updateLineStyles(QMenu*, QActionGroup*, const QColor&);
+	static void selectLineStyleAction(QActionGroup*, Line::Style);
+	static Line::Style lineStyleFromAction(QActionGroup*, QAction*);
+	// deprecated, use updateLineStyles instead
 	static void updatePenStyles(QComboBox*, const QColor&);
 	static void updatePenStyles(QMenu*, QActionGroup*, const QColor&);
 	static void selectPenStyleAction(QActionGroup*, Qt::PenStyle);

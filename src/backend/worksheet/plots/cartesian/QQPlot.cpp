@@ -68,7 +68,7 @@ void QQPlot::init() {
 	d->referenceCurve->setHidden(true);
 	d->referenceCurve->graphicsItem()->setParentItem(d);
 	d->referenceCurve->line()->init(group);
-	d->referenceCurve->line()->setStyle(Qt::SolidLine);
+	d->referenceCurve->line()->setStyle(Line::Style::SolidLine);
 	d->referenceCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->referenceCurve->background()->setPosition(Background::Position::No);
 
@@ -92,7 +92,7 @@ void QQPlot::init() {
 	d->percentilesCurve->graphicsItem()->setParentItem(d);
 	d->percentilesCurve->symbol()->init(group);
 	d->percentilesCurve->symbol()->setStyle(Symbol::Style::Circle);
-	d->percentilesCurve->line()->setStyle(Qt::NoPen);
+	d->percentilesCurve->line()->setStyle(Line::Style::NoPen);
 	d->percentilesCurve->background()->setPosition(Background::Position::No);
 
 	// columns holding the data for the percentiles curve
@@ -719,7 +719,7 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	d->suppressRecalc = true;
 
 	d->referenceCurve->line()->loadThemeConfig(group, color);
-	d->percentilesCurve->line()->setStyle(Qt::NoPen);
+	d->percentilesCurve->line()->setStyle(Line::Style::NoPen);
 	d->percentilesCurve->symbol()->loadThemeConfig(group, color);
 
 	d->suppressRecalc = false;

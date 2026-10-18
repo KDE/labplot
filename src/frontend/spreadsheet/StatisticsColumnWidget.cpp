@@ -269,7 +269,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 	plot->setRightPadding(2 * padding);
 	plot->setVerticalPadding(padding);
 	plot->setBottomPadding(padding);
-	plot->borderLine()->setStyle(Qt::NoPen);
+	plot->borderLine()->setStyle(Line::Style::NoPen);
 
 	// set the axes labels
 	auto axes = plot->children<Axis>();
@@ -288,7 +288,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 		axis->setLabelsFont(font);
 		axis->setLabelsOffset(2);
 		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->majorGridLine()->setStyle(Qt::NoPen);
+		axis->majorGridLine()->setStyle(Line::Style::NoPen);
 		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setArrowType(Axis::ArrowType::NoArrow);
 		axis->setSuppressRetransform(false);
@@ -310,7 +310,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 	auto* curve = new XYCurve(QString());
 	curve->setSuppressRetransform(false);
 	plot->addChild(curve);
-	curve->line()->setStyle(Qt::SolidLine);
+	curve->line()->setStyle(Line::Style::SolidLine);
 	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	curve->background()->setPosition(Background::Position::No);
 	curve->setXColumn(xColumn);
@@ -328,7 +328,7 @@ void StatisticsColumnWidget::showHistogram() {
 	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(m_column->name());
-			axis->majorGridLine()->setStyle(Qt::NoPen);
+			axis->majorGridLine()->setStyle(Line::Style::NoPen);
 		} else
 			axis->title()->setText(i18n("Frequency"));
 
@@ -407,8 +407,8 @@ void StatisticsColumnWidget::showBoxPlot() {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			axis->setMajorTicksDirection(Axis::noTicks);
-			axis->majorGridLine()->setStyle(Qt::NoPen);
-			axis->minorGridLine()->setStyle(Qt::NoPen);
+			axis->majorGridLine()->setStyle(Line::Style::NoPen);
+			axis->minorGridLine()->setStyle(Line::Style::NoPen);
 			axis->title()->setText(QString());
 		} else
 			axis->title()->setText(m_column->name());
@@ -481,7 +481,7 @@ void StatisticsColumnWidget::showBarPlot() {
 	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
-			axis->majorGridLine()->setStyle(Qt::NoPen);
+			axis->majorGridLine()->setStyle(Line::Style::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(0.5);
 			axis->setMajorTicksType(Axis::TicksType::Spacing);
@@ -599,7 +599,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	curve->setCoordinateSystemIndex(1); // assign to the second y-range going from 0 to 100%
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
-	curve->line()->setStyle(Qt::SolidLine);
+	curve->line()->setStyle(Line::Style::SolidLine);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
 	curve->value()->setType(Value::Type::Y);
 	curve->value()->setPosition(Value::Position::Right);
@@ -618,7 +618,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
-			axis->majorGridLine()->setStyle(Qt::NoPen);
+			axis->majorGridLine()->setStyle(Line::Style::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(0.5);
 			axis->setMajorTicksType(Axis::TicksType::Spacing);
@@ -661,7 +661,7 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	const double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
-	plot->borderLine()->setStyle(Qt::NoPen);
+	plot->borderLine()->setStyle(Line::Style::NoPen);
 
 	ws->addChild(plot);
 	plot->setSuppressRetransform(false);

@@ -91,6 +91,115 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color) {
 	comboBox->setCurrentIndex(index);
 }
 
+// helper to create a QPen for a given Line::Style (for drawing in UI)
+static QPen penForLineStyle(Line::Style style, const QColor& color, qreal width) {
+	QPen pen;
+	pen.setColor(color);
+	pen.setWidthF(width);
+	pen.setJoinStyle(Qt::MiterJoin);
+
+	if (style == Line::Style::RoundDotLine) {
+		pen.setCapStyle(Qt::RoundCap);
+		pen.setStyle(Qt::CustomDashLine);
+		pen.setDashPattern({0.001, 2.0});
+	} else {
+		pen.setCapStyle(Qt::FlatCap);
+		pen.setStyle(static_cast<Qt::PenStyle>(style));
+	}
+	return pen;
+}
+
+/*!
+	fills the ComboBox \c combobox with Line::Style values including RoundDotLine.
+*/
+void GuiTools::updateLineStyles(QComboBox* comboBox, const QColor& color) {
+	int index = comboBox->currentIndex();
+	comboBox->clear();
+
+	QPainter pa;
+	int offset = 2;
+	int w = 50;
+	int h = 10;
+	QPixmap pm(w, h);
+	comboBox->setIconSize(QSize(w, h));
+
+	static std::array<QString, 7> list = {i18n("No Line"),
+										  i18n("Solid Line"),
+										  i18n("Dash Line"),
+										  i18n("Dot Line"),
+										  i18n("Dash-dot Line"),
+										  i18n("Dash-dot-dot Line"),
+										  i18n("Round Dot Line")};
+	for (int i = 0; i < 7; i++) {
+		pm.fill(Qt::transparent);
+		pa.begin(&pm);
+		pa.setRenderHint(QPainter::Antialiasing, true);
+		pa.setPen(penForLineStyle(static_cast<Line::Style>(i), color, 1));
+		pa.drawLine(offset, h / 2, w - offset, h / 2);
+		pa.end();
+		comboBox->addItem(QIcon(pm), list[i]);
+	}
+	comboBox->setCurrentIndex(index);
+}
+
+/*!
+	fills the QMenu \c menu with Line::Style values including RoundDotLine.
+*/
+void GuiTools::updateLineStyles(QMenu* menu, QActionGroup* actionGroup, const QColor& color) {
+	QPainter pa;
+	int offset = 2;
+	int w = 50;
+	int h = 10;
+	QPixmap pm(w, h);
+
+	static std::array<QString, 7> list = {i18n("No Line"),
+										  i18n("Solid Line"),
+										  i18n("Dash Line"),
+										  i18n("Dot Line"),
+										  i18n("Dash-dot Line"),
+										  i18n("Dash-dot-dot Line"),
+										  i18n("Round Dot Line")};
+
+	QAction* action;
+	if (actionGroup->actions().isEmpty()) {
+		menu->setStyleSheet(QLatin1String("QMenu::icon { width:50px; height:10px; }"));
+
+		for (int i = 0; i < 7; i++) {
+			pm.fill(Qt::transparent);
+			pa.begin(&pm);
+			pa.setRenderHint(QPainter::Antialiasing, true);
+			pa.setPen(penForLineStyle(static_cast<Line::Style>(i), color, 1));
+			pa.drawLine(offset, h / 2, w - offset, h / 2);
+			pa.end();
+			action = new QAction(QIcon(pm), list[i], actionGroup);
+			action->setCheckable(true);
+			menu->addAction(action);
+		}
+	} else {
+		for (int i = 0; i < 7; i++) {
+			pm.fill(Qt::transparent);
+			pa.begin(&pm);
+			pa.setRenderHint(QPainter::Antialiasing, true);
+			pa.setPen(penForLineStyle(static_cast<Line::Style>(i), color, 1));
+			pa.drawLine(offset, h / 2, w - offset, h / 2);
+			pa.end();
+			action = actionGroup->actions().at(i);
+			action->setIcon(QIcon(pm));
+		}
+	}
+}
+
+void GuiTools::selectLineStyleAction(QActionGroup* actionGroup, Line::Style style) {
+	int index = static_cast<int>(style);
+	Q_ASSERT(index < actionGroup->actions().size());
+	actionGroup->actions().at(index)->setChecked(true);
+}
+
+Line::Style GuiTools::lineStyleFromAction(QActionGroup* actionGroup, QAction* action) {
+	int index = actionGroup->actions().indexOf(action);
+	return static_cast<Line::Style>(index);
+}
+
 /*!
 	fills the QMenu \c menu with the six possible Qt::PenStyles, the color \c color is used.
 	QActions are created with \c actionGroup as the parent, if not available.

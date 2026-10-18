@@ -102,7 +102,7 @@ void ParetoChart::init(bool loading) {
 	// TODO: read from the config?
 	// KConfig config;
 	// KConfigGroup group = config.group(QStringLiteral("ParetoChart"));
-	d->linePlot->line()->setStyle(Qt::SolidLine);
+	d->linePlot->line()->setStyle(Line::Style::SolidLine);
 	d->linePlot->symbol()->setStyle(Symbol::Style::Circle);
 	d->linePlot->value()->setType(Value::Type::Y);
 	d->linePlot->value()->setPosition(Value::Position::Right);

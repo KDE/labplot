@@ -33,10 +33,9 @@ public:
 	XYCurve::DropLineType dropLineType{XYCurve::DropLineType::NoDropLine};
 
 	// common parameters
-	Qt::PenStyle style{Qt::SolidLine};
+	Line::Style style{Line::Style::SolidLine};
 	double width{Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)};
 	QColor color{Qt::black};
-	QPen pen;
 	double opacity{1.0};
 
 	Line* const q{nullptr};

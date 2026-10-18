@@ -152,8 +152,8 @@ QMenu* ReferenceLine::createContextMenu() {
 
 	// Line styles
 	const auto& pen = d->line->pen();
-	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, pen.color());
-	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
+	GuiTools::updateLineStyles(lineStyleMenu, lineStyleActionGroup, pen.color());
+	GuiTools::selectLineStyleAction(lineStyleActionGroup, d->line->style());
 	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
 	menu->insertMenu(visibilityAction, lineMenu);
@@ -233,7 +233,7 @@ void ReferenceLine::orientationChangedSlot(QAction* action) {
 
 void ReferenceLine::lineStyleChanged(QAction* action) {
 	Q_D(const ReferenceLine);
-	d->line->setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
+	d->line->setStyle(GuiTools::lineStyleFromAction(lineStyleActionGroup, action));
 }
 
 void ReferenceLine::lineColorChanged(QAction* action) {

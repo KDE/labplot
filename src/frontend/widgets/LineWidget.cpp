@@ -165,7 +165,7 @@ void LineWidget::typeChanged(int index) {
 
 void LineWidget::styleChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
-	auto style = static_cast<Qt::PenStyle>(index);
+	auto style = static_cast<Line::Style>(index);
 	for (auto* line : m_lines)
 		line->setStyle(style);
 }
@@ -175,7 +175,7 @@ void LineWidget::colorChangedSlot(const QColor& color) {
 	for (auto* line : m_lines)
 		line->setColor(color);
 
-	GuiTools::updatePenStyles(ui.cbStyle, color);
+	GuiTools::updateLineStyles(ui.cbStyle, color);
 }
 
 void LineWidget::widthChanged(double value) {
@@ -206,7 +206,7 @@ void LineWidget::dropLineTypeChanged(XYCurve::DropLineType type) {
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
 }
 
-void LineWidget::lineStyleChanged(Qt::PenStyle style) {
+void LineWidget::lineStyleChanged(Line::Style style) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbStyle->setCurrentIndex(static_cast<int>(style));
 }
@@ -217,7 +217,7 @@ void LineWidget::lineColorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.kcbColor->setColor(color);
 	// update the line drawn in the line widget 'select line style' combobox
-	GuiTools::updatePenStyles(ui.cbStyle, color);
+	GuiTools::updateLineStyles(ui.cbStyle, color);
 }
 
 void LineWidget::lineWidthChanged(double width) {
@@ -242,7 +242,7 @@ void LineWidget::load() {
 	setColor(m_line->color());
 	ui.sbWidth->setValue(std::round(Worksheet::convertFromSceneUnits(m_line->width(), Worksheet::Unit::Point)));
 	ui.sbOpacity->setValue(std::round(m_line->opacity() * 100));
-	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
+	GuiTools::updateLineStyles(ui.cbStyle, ui.kcbColor->color());
 	ui.cbStyle->setCurrentIndex(static_cast<int>(m_line->style()));
 }
 
@@ -256,7 +256,7 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 	setColor(group.readEntry(m_prefix + QStringLiteral("Color"), m_line->color()));
 	ui.sbWidth->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), m_line->width()), Worksheet::Unit::Point)));
 	ui.sbOpacity->setValue(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_line->opacity()) * 100);
-	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
+	GuiTools::updateLineStyles(ui.cbStyle, ui.kcbColor->color());
 }
 
 void LineWidget::saveConfig(KConfigGroup& group) const {

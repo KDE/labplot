@@ -73,7 +73,7 @@ void KDEPlot::init() {
 	d->estimationCurve->setHidden(true);
 	d->estimationCurve->graphicsItem()->setParentItem(d);
 	d->estimationCurve->line()->init(group);
-	d->estimationCurve->line()->setStyle(Qt::SolidLine);
+	d->estimationCurve->line()->setStyle(Line::Style::SolidLine);
 	d->estimationCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->estimationCurve->background()->setPosition(Background::Position::No);
 
@@ -95,7 +95,7 @@ void KDEPlot::init() {
 	d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->rugCurve->setHidden(true);
 	d->rugCurve->graphicsItem()->setParentItem(d);
-	d->rugCurve->line()->setStyle(Qt::NoPen);
+	d->rugCurve->line()->setStyle(Line::Style::NoPen);
 	d->rugCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->rugCurve->setRugOrientation(WorksheetElement::Orientation::Horizontal);
 
@@ -582,7 +582,7 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 	d->estimationCurve->background()->loadThemeConfig(group, color);
 
 	d->rugCurve->symbol()->loadThemeConfig(group, color);
-	d->rugCurve->line()->setStyle(Qt::NoPen);
+	d->rugCurve->line()->setStyle(Line::Style::NoPen);
 	d->rugCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->suppressRecalc = false;
