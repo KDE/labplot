@@ -21,6 +21,7 @@
 #include <QCompleter>
 #include <QKeyEvent>
 #include <QScrollBar>
+#include <QStandardItemModel>
 
 /*!
   \class ExpressionTextEdit
@@ -34,21 +35,31 @@
 ExpressionTextEdit::ExpressionTextEdit(QWidget* parent)
 	: KTextEdit(parent)
 	, m_highlighter(new EquationHighlighter(this)) {
-	QStringList list = ExpressionParser::getInstance()->functions();
-	// append description
-	for (auto& s : list)
-		s.append(ExpressionParser::functionArgumentString(s, XYEquationCurve::EquationType::Cartesian) + QStringLiteral(" - ")
-				 + ExpressionParser::getInstance()->functionDescription(s));
-	QStringList constants = ExpressionParser::getInstance()->constants();
-	for (auto& s : constants) {
-		if (s != QLatin1String("..."))
-			s.append(QStringLiteral(" - ") + ExpressionParser::getInstance()->constantDescription(s));
+	auto* parser = ExpressionParser::getInstance();
+	const QStringList& functions = parser->functions();
+	const QStringList& constants = parser->constants();
+
+	// Build completion model with tooltips
+	auto* model = new QStandardItemModel(this);
+	for (const QString& func : functions) {
+		const QString text = func + ExpressionParser::functionArgumentString(func, XYEquationCurve::EquationType::Cartesian)
+			+ QStringLiteral(" - ") + parser->functionDescription(func);
+		auto* item = new QStandardItem(text);
+		item->setToolTip(parser->functionTooltip(func));
+		model->appendRow(item);
 	}
-	list.append(constants);
+	for (const QString& constant : constants) {
+		if (constant != QLatin1String("...")) {
+			const QString text = constant + QStringLiteral(" - ") + parser->constantDescription(constant);
+			auto* item = new QStandardItem(text);
+			item->setToolTip(parser->constantDescription(constant));
+			model->appendRow(item);
+		}
+	}
 
 	setTabChangesFocus(true);
 
-	m_completer = new QCompleter(list, this);
+	m_completer = new QCompleter(model, this);
 	m_completer->setWidget(this);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 
