@@ -183,7 +183,7 @@ bool XYPiecewiseLinearFitCurvePrivate::recalculateSpecific(const AbstractColumn*
 		validPoints++;
 	}
 
-	if (validPoints < 0 || validPoints < 2 * fitData.minSegmentSize) {
+	if (validPoints < 2 * fitData.minSegmentSize) {
 		fitResult.status = QStringLiteral("Not enough valid data points in range");
 		return false;
 	}
