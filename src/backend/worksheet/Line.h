@@ -27,6 +27,19 @@ class Line : public AbstractAspect {
 	Q_OBJECT
 
 public:
+	// Custom line styles extending Qt::PenStyle
+	// Values 0-5 map directly to Qt::PenStyle for backward compatibility
+	enum class Style {
+		NoPen = 0,
+		SolidLine = 1,
+		DashLine = 2,
+		DotLine = 3, // square dots (Qt default)
+		DashDotLine = 4,
+		DashDotDotLine = 5,
+		// Custom styles beyond Qt::PenStyle
+		RoundDotLine = 6, // round dots
+	};
+
 	explicit Line(const QString& name);
 	~Line() override;
 
@@ -50,7 +63,7 @@ public:
 
 	// common parameters
 	QPen pen() const;
-	BASIC_D_ACCESSOR_DECL(Qt::PenStyle, style, Style)
+	BASIC_D_ACCESSOR_DECL(Line::Style, style, Style)
 	CLASS_D_ACCESSOR_DECL(QColor, color, Color)
 	BASIC_D_ACCESSOR_DECL(double, width, Width)
 	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
@@ -67,7 +80,7 @@ Q_SIGNALS:
 	void histogramLineTypeChanged(Histogram::LineType);
 	void dropLineTypeChanged(XYCurve::DropLineType);
 
-	void styleChanged(Qt::PenStyle);
+	void styleChanged(Line::Style);
 	void widthChanged(double);
 	void colorChanged(const QColor&);
 	void opacityChanged(float);

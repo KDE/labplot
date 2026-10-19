@@ -60,7 +60,7 @@ private Q_SLOTS:
 	void histogramLineTypeChanged(Histogram::LineType);
 	void dropLineTypeChanged(XYCurve::DropLineType);
 
-	void lineStyleChanged(Qt::PenStyle);
+	void lineStyleChanged(Line::Style);
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(double);

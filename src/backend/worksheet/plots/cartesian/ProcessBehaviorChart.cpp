@@ -162,23 +162,23 @@ void ProcessBehaviorChart::init(bool loading) {
 	d->exactLimitsEnabled = group.readEntry(QStringLiteral("ExactLimitsEnabled"), true);
 
 	d->dataCurve->line()->init(group);
-	d->dataCurve->line()->setStyle(Qt::SolidLine);
+	d->dataCurve->line()->setStyle(Line::Style::SolidLine);
 	d->dataCurve->symbol()->setStyle(Symbol::Style::Circle);
 	d->dataCurve->background()->setPosition(Background::Position::No);
 
 	d->centerCurve->line()->init(group);
-	d->centerCurve->line()->setStyle(Qt::SolidLine);
+	d->centerCurve->line()->setStyle(Line::Style::SolidLine);
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->centerCurve->background()->setPosition(Background::Position::No);
 
 	d->upperLimitCurve->line()->init(group);
-	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
+	d->upperLimitCurve->line()->setStyle(Line::Style::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->upperLimitCurve->background()->setPosition(Background::Position::No);
 	d->upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
 
 	d->lowerLimitCurve->line()->init(group);
-	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
+	d->lowerLimitCurve->line()->setStyle(Line::Style::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
 	d->lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
@@ -785,7 +785,7 @@ void ProcessBehaviorChart::data2ColumnAboutToBeRemoved(const AbstractAspect* asp
 	}
 }
 
-void ProcessBehaviorChart::labelsBorderStyleChanged(Qt::PenStyle style) {
+void ProcessBehaviorChart::labelsBorderStyleChanged(Line::Style style) {
 	Q_D(ProcessBehaviorChart);
 	if (style != d->centerLabel->borderLine()->style()) {
 		beginMacro(i18n("%1: set labels border style", name()));
@@ -1747,11 +1747,11 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->upperLimitCurve->line()->loadThemeConfig(group, color);
-	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
+	d->upperLimitCurve->line()->setStyle(Line::Style::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->lowerLimitCurve->line()->loadThemeConfig(group, color);
-	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
+	d->lowerLimitCurve->line()->setStyle(Line::Style::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->centerLabel->loadThemeConfig(config);

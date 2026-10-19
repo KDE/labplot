@@ -344,8 +344,8 @@ QMenu* Axis::createContextMenu() {
 	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Line styles
-	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, d->line->pen().color());
-	GuiTools::selectPenStyleAction(lineStyleActionGroup, d->line->pen().style());
+	GuiTools::updateLineStyles(lineStyleMenu, lineStyleActionGroup, d->line->pen().color());
+	GuiTools::selectLineStyleAction(lineStyleActionGroup, d->line->style());
 
 	GuiTools::selectColorAction(lineColorActionGroup, d->line->pen().color());
 
@@ -1080,7 +1080,7 @@ void Axis::orientationChangedSlot(QAction* action) {
 
 void Axis::lineStyleChanged(QAction* action) {
 	Q_D(const Axis);
-	d->line->setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
+	d->line->setStyle(GuiTools::lineStyleFromAction(lineStyleActionGroup, action));
 }
 
 void Axis::lineColorChanged(QAction* action) {
@@ -3559,14 +3559,14 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	if (firstAxis && plot->theme() == QLatin1String("Tufte")) {
 		setRangeType(RangeType::AutoData);
-		d->line->setStyle(Qt::SolidLine);
+		d->line->setStyle(Line::Style::SolidLine);
 	} else {
 		// switch back to "Auto" range type when "AutoData" was selected (either because of Tufte or manually selected),
 		// don't do anything if "Custom" is selected
 		if (rangeType() == RangeType::AutoData)
 			setRangeType(RangeType::Auto);
 
-		d->line->setStyle((Qt::PenStyle)group.readEntry(QStringLiteral("LineStyle"), (int)Qt::SolidLine));
+		d->line->setStyle(static_cast<Line::Style>(group.readEntry(QStringLiteral("LineStyle"), static_cast<int>(Line::Style::SolidLine))));
 	}
 
 	// Title
@@ -3575,9 +3575,9 @@ void Axis::loadThemeConfig(const KConfig& config) {
 
 	// Major grid
 	if (firstAxis)
-		d->majorGridLine->setStyle((Qt::PenStyle)group.readEntry(QStringLiteral("MajorGridStyle"), (int)Qt::SolidLine));
+		d->majorGridLine->setStyle(static_cast<Line::Style>(group.readEntry(QStringLiteral("MajorGridStyle"), static_cast<int>(Line::Style::SolidLine))));
 	else
-		d->majorGridLine->setStyle(Qt::NoPen);
+		d->majorGridLine->setStyle(Line::Style::NoPen);
 
 	d->majorGridLine->setColor(group.readEntry(QStringLiteral("MajorGridColor"), QColor(Qt::gray)));
 	d->majorGridLine->setWidth(group.readEntry(QStringLiteral("MajorGridWidth"), 0.0));
@@ -3590,9 +3590,9 @@ void Axis::loadThemeConfig(const KConfig& config) {
 
 	// Minor grid
 	if (firstAxis)
-		d->minorGridLine->setStyle((Qt::PenStyle)group.readEntry(QStringLiteral("MinorGridStyle"), (int)Qt::DotLine));
+		d->minorGridLine->setStyle(static_cast<Line::Style>(group.readEntry(QStringLiteral("MinorGridStyle"), static_cast<int>(Line::Style::DotLine))));
 	else
-		d->minorGridLine->setStyle(Qt::NoPen);
+		d->minorGridLine->setStyle(Line::Style::NoPen);
 
 	d->minorGridLine->setColor(group.readEntry(QStringLiteral("MinorGridColor"), QColor(Qt::gray)));
 	d->minorGridLine->setWidth(group.readEntry(QStringLiteral("MinorGridWidth"), 0.0));

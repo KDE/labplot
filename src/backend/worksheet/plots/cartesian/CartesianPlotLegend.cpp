@@ -466,7 +466,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	background->draw(painter, m_boundingRectangle, borderCornerRadius);
 
 	// draw the border
-	if (borderLine->style() != Qt::NoPen) {
+	if (borderLine->style() != Line::Style::NoPen) {
 		painter->setPen(borderLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderLine->opacity());

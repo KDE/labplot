@@ -276,7 +276,7 @@ QColor LollipopPlot::colorAt(int index) const {
 		return QColor();
 
 	const auto* line = d->lines.at(index);
-	if (line->style() != Qt::PenStyle::NoPen)
+	if (line->style() != Line::Style::NoPen)
 		return line->pen().color();
 	else {
 		const auto* symbol = d->symbols.at(index);

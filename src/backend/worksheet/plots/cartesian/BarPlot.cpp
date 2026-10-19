@@ -274,7 +274,7 @@ QColor BarPlot::colorAt(int index) const {
 		return background->firstColor();
 	else {
 		const auto* borderLine = d->borderLines.at(index);
-		if (borderLine->style() != Qt::PenStyle::NoPen)
+		if (borderLine->style() != Line::Style::NoPen)
 			return borderLine->pen().color();
 		else
 			return QColor();

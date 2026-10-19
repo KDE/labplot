@@ -304,7 +304,7 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 	painter->restore();
 
 	// draw the border
-	if (borderLine->style() != Qt::NoPen) {
+	if (borderLine->style() != Line::Style::NoPen) {
 		painter->save();
 		painter->setPen(borderLine->pen());
 		painter->setBrush(Qt::NoBrush);

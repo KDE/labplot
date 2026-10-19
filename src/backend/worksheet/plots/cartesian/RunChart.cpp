@@ -68,7 +68,7 @@ void RunChart::init() {
 	d->dataCurve->setHidden(true);
 	d->dataCurve->graphicsItem()->setParentItem(d);
 	d->dataCurve->line()->init(group);
-	d->dataCurve->line()->setStyle(Qt::SolidLine);
+	d->dataCurve->line()->setStyle(Line::Style::SolidLine);
 	d->dataCurve->symbol()->setStyle(Symbol::Style::Circle);
 	d->dataCurve->background()->setPosition(Background::Position::No);
 
@@ -83,7 +83,7 @@ void RunChart::init() {
 	d->centerCurve->setHidden(true);
 	d->centerCurve->graphicsItem()->setParentItem(d);
 	d->centerCurve->line()->init(group);
-	d->centerCurve->line()->setStyle(Qt::SolidLine);
+	d->centerCurve->line()->setStyle(Line::Style::SolidLine);
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->centerCurve->background()->setPosition(Background::Position::No);
 

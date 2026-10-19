@@ -506,7 +506,7 @@ QColor BoxPlot::colorAt(int index) const {
 		return background->firstColor();
 	else {
 		const auto* borderLine = d->borderLines.at(index);
-		if (borderLine->style() != Qt::PenStyle::NoPen)
+		if (borderLine->style() != Line::Style::NoPen)
 			return borderLine->pen().color();
 		else
 			return QColor();
@@ -2024,10 +2024,10 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 			background->setEnabled(false);
 
 		for (auto* line : d->borderLines)
-			line->setStyle(Qt::NoPen);
+			line->setStyle(Line::Style::NoPen);
 
 		for (auto* line : d->medianLines)
-			line->setStyle(Qt::NoPen);
+			line->setStyle(Line::Style::NoPen);
 
 		d->symbolMean->setStyle(Symbol::Style::NoSymbols);
 		d->symbolMedian->setStyle(Symbol::Style::Circle);

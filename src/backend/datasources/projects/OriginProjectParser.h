@@ -13,6 +13,7 @@
 
 #include "backend/datasources/projects/ProjectParser.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_LIBORIGIN
 #ifdef __GNUC__
@@ -97,7 +98,7 @@ private:
 	RangeT::Scale scale(unsigned char) const;
 	QColor color(Origin::Color) const;
 	Background::ColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
-	Qt::PenStyle penStyle(unsigned char lineStyle) const;
+	Line::Style penStyle(unsigned char lineStyle) const;
 	XYCurve::LineType lineType(unsigned char lineConnect) const;
 
 	QList<QPair<QString, QString>> charReplacementList() const;
