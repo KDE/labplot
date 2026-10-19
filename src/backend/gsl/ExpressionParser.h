@@ -15,6 +15,7 @@
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
+#include <QJsonObject>
 #include <QVector>
 
 class ExpressionParser {
@@ -24,6 +25,11 @@ public:
 	static QString parameters(const QString& functionName);
 	static QString functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType);
 	QString functionDescription(const QString& function);
+	QString functionDetailedDescription(const QString& function);
+	QString functionSyntax(const QString& function);
+	QString functionExample(const QString& function);
+	QString functionRemark(const QString& function);
+	QString functionTooltip(const QString& function);
 	QString constantDescription(const QString& constant);
 	void setSpecialFunctionValuePayload(const char* function_name, Parsing::func_tValuePayload, std::shared_ptr<Parsing::Payload> payload);
 	void setSpecialFunction2ValuePayload(const char* function_name, Parsing::func_t2ValuePayload, std::shared_ptr<Parsing::Payload> payload);
@@ -103,5 +109,6 @@ private:
 	QStringList m_constantsUnits;
 	QVector<Parsing::ConstantGroups> m_constantsGroupIndex;
 	QString m_lastErrorMessage;
+	QJsonObject m_functionMetadata; // syntax/example from data/functions.json
 };
 #endif

@@ -30,6 +30,7 @@ New features:
 		* support empty values in integers columns (BUG: 502706)
 		* when entering new values, automatically convert to the requried column mode if the column is still empty
 		* DateTime functions (today, now, date, datedif, year, month, day, hour, minute, second, etc.) for column formulas (BUG: 497924)
+		* More advanced tooltip texts for column functions including details description of the syntax and examples how to use
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)

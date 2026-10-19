@@ -94,8 +94,11 @@ void FunctionsWidget::groupChanged(int index) {
 
 	ui.lwFunctions->clear();
 	for (int i = 0; i < names.size(); ++i) {
-		if (indices.at(i) == groupIndex)
-			ui.lwFunctions->addItem(names.at(i) + QStringLiteral(" (") + functions.at(i) + QStringLiteral(")"));
+		if (indices.at(i) == groupIndex) {
+			auto* item = new QListWidgetItem(names.at(i) + QStringLiteral(" (") + functions.at(i) + QStringLiteral(")"));
+			item->setToolTip(m_expressionParser->functionTooltip(functions.at(i)));
+			ui.lwFunctions->addItem(item);
+		}
 	}
 	ui.lwFunctions->setCurrentRow(0);
 }
@@ -108,8 +111,11 @@ void FunctionsWidget::filterChanged(const QString& filter) {
 		static const QStringList& functions = m_expressionParser->functions();
 		ui.lwFunctions->clear();
 		for (int i = 0; i < names.size(); ++i) {
-			if (names.at(i).contains(filter, Qt::CaseInsensitive) || functions.at(i).contains(filter, Qt::CaseInsensitive))
-				ui.lwFunctions->addItem(names.at(i) + QStringLiteral(" (") + functions.at(i) + QStringLiteral(")"));
+			if (names.at(i).contains(filter, Qt::CaseInsensitive) || functions.at(i).contains(filter, Qt::CaseInsensitive)) {
+				auto* item = new QListWidgetItem(names.at(i) + QStringLiteral(" (") + functions.at(i) + QStringLiteral(")"));
+				item->setToolTip(m_expressionParser->functionTooltip(functions.at(i)));
+				ui.lwFunctions->addItem(item);
+			}
 		}
 
 		if (ui.lwFunctions->count()) {

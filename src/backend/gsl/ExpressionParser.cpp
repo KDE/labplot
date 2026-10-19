@@ -16,7 +16,11 @@
 
 #include <KLocalizedString>
 
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QRegularExpression>
+#include <QStandardPaths>
 
 #include <random>
 
@@ -51,6 +55,17 @@ ExpressionParser::ExpressionParser() {
 	init_table();
 	initFunctions();
 	initConstants();
+
+	// Load function metadata (syntax/example) from JSON
+	const QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("functions.json"));
+	if (!path.isEmpty()) {
+		QFile file(path);
+		if (file.open(QIODevice::ReadOnly)) {
+			const QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+			if (doc.isObject())
+				m_functionMetadata = doc.object().value(QLatin1String("functions")).toObject();
+		}
+	}
 }
 
 // initialize function list	(sync with functions.h and FunctionsWidget.cpp!)
@@ -253,6 +268,62 @@ QString ExpressionParser::functionDescription(const QString& function) {
 	}
 	return QStringLiteral("");
 }
+
+QString ExpressionParser::functionSyntax(const QString& function) {
+	if (m_functionMetadata.contains(function)) {
+		const QJsonObject& obj = m_functionMetadata.value(function).toObject();
+		return obj.value(QLatin1String("syntax")).toString();
+	}
+	return QString();
+}
+
+QString ExpressionParser::functionDetailedDescription(const QString& function) {
+	if (m_functionMetadata.contains(function)) {
+		const QJsonObject& obj = m_functionMetadata.value(function).toObject();
+		return obj.value(QLatin1String("description")).toString();
+	}
+	return QString();
+}
+
+QString ExpressionParser::functionExample(const QString& function) {
+	if (m_functionMetadata.contains(function)) {
+		const QJsonObject& obj = m_functionMetadata.value(function).toObject();
+		return obj.value(QLatin1String("example")).toString();
+	}
+	return QString();
+}
+
+QString ExpressionParser::functionRemark(const QString& function) {
+	if (m_functionMetadata.contains(function)) {
+		const QJsonObject& obj = m_functionMetadata.value(function).toObject();
+		return obj.value(QLatin1String("remark")).toString();
+	}
+	return QString();
+}
+
+QString ExpressionParser::functionTooltip(const QString& function) {
+	const QString& brief = functionDescription(function);
+	const QString& detailed = functionDetailedDescription(function);
+	const QString& syntax = functionSyntax(function);
+	const QString& example = functionExample(function);
+	const QString& remark = functionRemark(function);
+
+	// Use detailed description if available, otherwise fall back to brief
+	const QString& description = detailed.isEmpty() ? brief : detailed;
+
+	QString tip = QStringLiteral("<html><body><b>%1</b>").arg(function.toHtmlEscaped());
+	if (!description.isEmpty())
+		tip += QStringLiteral(" — %1").arg(description.toHtmlEscaped());
+	if (!syntax.isEmpty())
+		tip += QStringLiteral("<br><br><b>Syntax:<br></b> <code>%1</code>").arg(syntax.toHtmlEscaped());
+	if (!example.isEmpty())
+		tip += QStringLiteral("<br><br><b>Example:<br></b> <code>%1</code>").arg(example.toHtmlEscaped());
+	if (!remark.isEmpty())
+		tip += QStringLiteral("<br><br><b>Note:<br></b> %1").arg(remark.toHtmlEscaped());
+	tip += QStringLiteral("</body></html>");
+	return tip;
+}
+
 QString ExpressionParser::constantDescription(const QString& constant) {
 	for (int index = 0; index < _number_constants; index++) {
 		if (constant == QLatin1String(_constants[index].name))
