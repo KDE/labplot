@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-18 00:44+0000\n"
-"PO-Revision-Date: 2026-10-17 07:32+0200\n"
+"PO-Revision-Date: 2026-10-18 06:39+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -3852,12 +3852,12 @@ msgstr "Kumulativni produkt"
 #: src/backend/gsl/functions.cpp:270
 #, kde-format
 msgid "Value from n rows before"
-msgstr ""
+msgstr "Vrednost iz predhodnih n vrstic"
 
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Value from n rows after"
-msgstr ""
+msgstr "Vrednost iz naslednjih n vrstic"
 
 #: src/backend/gsl/functions.cpp:273
 #, kde-format
