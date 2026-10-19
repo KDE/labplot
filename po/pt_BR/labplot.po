@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-18 00:44+0000\n"
-"PO-Revision-Date: 2026-10-17 07:44-0300\n"
+"PO-Revision-Date: 2026-10-18 10:06-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -3855,12 +3855,12 @@ msgstr "Produto acumulado"
 #: src/backend/gsl/functions.cpp:270
 #, kde-format
 msgid "Value from n rows before"
-msgstr ""
+msgstr "Valor de n linhas anteriores"
 
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Value from n rows after"
-msgstr ""
+msgstr "Valor de n linhas posteriores"
 
 #: src/backend/gsl/functions.cpp:273
 #, kde-format

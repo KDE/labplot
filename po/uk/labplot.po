@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-18 00:44+0000\n"
-"PO-Revision-Date: 2026-10-17 17:57+0300\n"
+"PO-Revision-Date: 2026-10-18 20:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -3866,12 +3866,12 @@ msgstr "Накопичувальний добуток"
 #: src/backend/gsl/functions.cpp:270
 #, kde-format
 msgid "Value from n rows before"
-msgstr ""
+msgstr "Значення на n рядків перед тим"
 
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Value from n rows after"
-msgstr ""
+msgstr "Значення на n рядків після того"
 
 #: src/backend/gsl/functions.cpp:273
 #, kde-format

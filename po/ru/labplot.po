@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-18 00:44+0000\n"
-"PO-Revision-Date: 2026-10-13 23:10+0200\n"
-"Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
+"PO-Revision-Date: 2026-10-18 19:13+0200\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -3881,39 +3881,37 @@ msgstr "Случайная выборка"
 #: src/backend/gsl/functions.cpp:265
 #, kde-format
 msgid "Unwrap phase angles"
-msgstr ""
+msgstr "Развёртка фазовых углов"
 
 #: src/backend/gsl/functions.cpp:266
 #, kde-format
 msgid "Unwrap with custom period"
-msgstr ""
+msgstr "Развёртка с заданным периодом"
 
 #: src/backend/gsl/functions.cpp:267
 #, kde-format
 msgid "Difference from previous row"
-msgstr ""
+msgstr "Разность с предыдущей строкой"
 
 #: src/backend/gsl/functions.cpp:268
-#, fuzzy, kde-format
-#| msgid "Cumulative Histogram"
+#, kde-format
 msgid "Cumulative sum"
-msgstr "Интегральная гистограмма"
+msgstr "Накопленная сумма"
 
 #: src/backend/gsl/functions.cpp:269
-#, fuzzy, kde-format
-#| msgid "Cumulative Percentage"
+#, kde-format
 msgid "Cumulative product"
-msgstr "Суммарный процент"
+msgstr "Накопленное произведение"
 
 #: src/backend/gsl/functions.cpp:270
 #, kde-format
 msgid "Value from n rows before"
-msgstr ""
+msgstr "Значение из строки на n выше"
 
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Value from n rows after"
-msgstr ""
+msgstr "Значение из строки на n ниже"
 
 #: src/backend/gsl/functions.cpp:273
 #, kde-format
@@ -5665,67 +5663,64 @@ msgid "restrict to [0, 2 pi]"
 msgstr "ограничить [0, 2π]"
 
 #: src/backend/gsl/functions.cpp:687
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees to radians"
-msgstr "Степени свободы"
+msgstr "Перевод градусов в радианы"
 
 #: src/backend/gsl/functions.cpp:688
 #, kde-format
 msgid "Radians to degrees"
-msgstr ""
+msgstr "Перевод радианов в градусы"
 
 #: src/backend/gsl/functions.cpp:691
 #, kde-format
 msgid "Clip value to range [min, max]"
-msgstr ""
+msgstr "Ограничение значения диапазоном [min, max]"
 
 #: src/backend/gsl/functions.cpp:692
 #, kde-format
 msgid "Floor (largest integer <= x)"
-msgstr ""
+msgstr "Округление вниз (наибольшее целое <= x)"
 
 #: src/backend/gsl/functions.cpp:693
 #, kde-format
 msgid "2^x"
-msgstr ""
+msgstr "2^x"
 
 #: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Floating-point remainder of x/y"
-msgstr ""
+msgstr "Остаток от деления x/y с плавающей точкой"
 
 #: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "IEEE remainder of x/y"
-msgstr ""
+msgstr "Остаток от деления x/y по IEEE"
 
 #: src/backend/gsl/functions.cpp:696
-#, fuzzy, kde-format
-#| msgid "square x"
+#, kde-format
 msgid "Square (x^2)"
-msgstr "x в квадрате"
+msgstr "Квадрат (x^2)"
 
 #: src/backend/gsl/functions.cpp:697
 #, kde-format
 msgid "Reciprocal (1/x)"
-msgstr ""
+msgstr "Обратное число (1/x)"
 
 #: src/backend/gsl/functions.cpp:698
-#, fuzzy, kde-format
-#| msgid "Heavyside theta function"
+#, kde-format
 msgid "Heaviside step function"
-msgstr "Тета-функция Хевисайда"
+msgstr "Ступенчатая функция Хевисайда"
 
 #: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Greatest common divisor"
-msgstr ""
+msgstr "Наибольший общий делитель"
 
 #: src/backend/gsl/functions.cpp:700
 #, kde-format
 msgid "Least common multiple"
-msgstr ""
+msgstr "Наименьшее общее кратное"
 
 #: src/backend/gsl/functions.cpp:703
 #, kde-format

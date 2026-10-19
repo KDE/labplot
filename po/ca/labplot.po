@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-18 00:44+0000\n"
-"PO-Revision-Date: 2026-10-17 08:37+0200\n"
+"PO-Revision-Date: 2026-10-18 14:59+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -3891,12 +3891,12 @@ msgstr "Producte acumulat"
 #: src/backend/gsl/functions.cpp:270
 #, kde-format
 msgid "Value from n rows before"
-msgstr ""
+msgstr "Valor des de n files abans"
 
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Value from n rows after"
-msgstr ""
+msgstr "Valor des de n files després"
 
 #: src/backend/gsl/functions.cpp:273
 #, kde-format
