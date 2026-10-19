@@ -277,6 +277,14 @@ QString ExpressionParser::functionSyntax(const QString& function) {
 	return QString();
 }
 
+QString ExpressionParser::functionDetailedDescription(const QString& function) {
+	if (m_functionMetadata.contains(function)) {
+		const QJsonObject& obj = m_functionMetadata.value(function).toObject();
+		return obj.value(QLatin1String("description")).toString();
+	}
+	return QString();
+}
+
 QString ExpressionParser::functionExample(const QString& function) {
 	if (m_functionMetadata.contains(function)) {
 		const QJsonObject& obj = m_functionMetadata.value(function).toObject();
@@ -294,10 +302,14 @@ QString ExpressionParser::functionRemark(const QString& function) {
 }
 
 QString ExpressionParser::functionTooltip(const QString& function) {
-	const QString& description = functionDescription(function);
+	const QString& brief = functionDescription(function);
+	const QString& detailed = functionDetailedDescription(function);
 	const QString& syntax = functionSyntax(function);
 	const QString& example = functionExample(function);
 	const QString& remark = functionRemark(function);
+
+	// Use detailed description if available, otherwise fall back to brief
+	const QString& description = detailed.isEmpty() ? brief : detailed;
 
 	QString tip = QStringLiteral("<html><body><b>%1</b>").arg(function.toHtmlEscaped());
 	if (!description.isEmpty())

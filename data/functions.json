@@ -1,0 +1,500 @@
+{
+	"_comment": "Function metadata for enhanced tooltips. Descriptions and examples aligned with docs-labplot-org documentation.",
+	"functions": {
+		"sqrt": {
+			"syntax": "sqrt(x)",
+			"example": "sqrt(16) → 4",
+			"description": "Square root"
+		},
+		"pow": {
+			"syntax": "pow(x; y)",
+			"example": "pow(2; 8) → 256",
+			"description": "Power x^y"
+		},
+		"exp": {
+			"syntax": "exp(x)",
+			"example": "exp(1) → 2.718...",
+			"description": "Exponential e^x"
+		},
+		"exp2": {
+			"syntax": "exp2(x)",
+			"example": "exp2(3) → 8",
+			"description": "Power of 2 (2^x)"
+		},
+		"log": {
+			"syntax": "log(x)",
+			"example": "log(e) → 1",
+			"description": "Natural logarithm"
+		},
+		"log10": {
+			"syntax": "log10(x)",
+			"example": "log10(100) → 2",
+			"description": "Base-10 logarithm"
+		},
+		"log2": {
+			"syntax": "log2(x)",
+			"example": "log2(8) → 3",
+			"description": "Base-2 logarithm"
+		},
+		"log1p": {
+			"syntax": "log1p(x)",
+			"example": "log1p(0.001)",
+			"description": "Computes log(1+x) accurately for small x",
+			"remark": "Use instead of log(1+x) when x is close to 0"
+		},
+		"abs": {
+			"syntax": "abs(x)",
+			"example": "abs(-5) → 5",
+			"description": "Absolute value"
+		},
+		"ceil": {
+			"syntax": "ceil(x)",
+			"example": "ceil(3.2) → 4",
+			"description": "Round up"
+		},
+		"floor": {
+			"syntax": "floor(x)",
+			"example": "floor(3.8) → 3",
+			"description": "Round down"
+		},
+		"round": {
+			"syntax": "round(x)",
+			"example": "round(3.5) → 4",
+			"description": "Round to nearest"
+		},
+		"roundn": {
+			"syntax": "roundn(x; n)",
+			"example": "roundn(3.14159; 2) → 3.14",
+			"description": "Round to n decimals"
+		},
+		"trunc": {
+			"syntax": "trunc(x)",
+			"example": "trunc(-3.7) → -3",
+			"description": "Truncates toward zero"
+		},
+		"sgn": {
+			"syntax": "sgn(x)",
+			"example": "sgn(-5) → -1",
+			"description": "Sign function (-1, 0, or 1)"
+		},
+		"square": {
+			"syntax": "square(x)",
+			"example": "square(5) → 25",
+			"description": "Square (x²)"
+		},
+		"cbrt": {
+			"syntax": "cbrt(x)",
+			"example": "cbrt(27) → 3",
+			"description": "Cube root",
+			"remark": "Works correctly for negative numbers unlike pow(x; 1/3)"
+		},
+		"reciprocal": {
+			"syntax": "reciprocal(x)",
+			"example": "reciprocal(4) → 0.25",
+			"description": "Reciprocal (1/x)"
+		},
+		"clip": {
+			"syntax": "clip(x; min; max)",
+			"example": "clip(x; 0; 100)",
+			"description": "Clamp to range [min, max]"
+		},
+		"fmod": {
+			"syntax": "fmod(x; y)",
+			"example": "fmod(5.5; 2) → 1.5",
+			"description": "Floating-point remainder",
+			"remark": "Result has same sign as dividend x"
+		},
+		"remainder": {
+			"syntax": "remainder(x; y)",
+			"example": "remainder(5.5; 2) → -0.5",
+			"description": "IEEE remainder (nearest integer quotient)"
+		},
+		"heaviside": {
+			"syntax": "heaviside(x; h0)",
+			"example": "heaviside(x; 0.5)",
+			"description": "Heaviside step function",
+			"remark": "h0 is the value at x=0"
+		},
+		"gcd": {
+			"syntax": "gcd(a; b)",
+			"example": "gcd(12; 8) → 4",
+			"description": "Greatest common divisor"
+		},
+		"lcm": {
+			"syntax": "lcm(a; b)",
+			"example": "lcm(4; 6) → 12",
+			"description": "Least common multiple"
+		},
+		"hypot": {
+			"syntax": "hypot(x; y)",
+			"example": "hypot(3; 4) → 5",
+			"description": "Equivalent to sqrt(x² + y²)",
+			"remark": "Use instead of sqrt(x^2 + y^2) to avoid overflow"
+		},
+		"sin": {
+			"syntax": "sin(x)",
+			"example": "sin(pi/2) → 1",
+			"remark": "Angle in radians"
+		},
+		"cos": {
+			"syntax": "cos(x)",
+			"example": "cos(0) → 1",
+			"remark": "Angle in radians"
+		},
+		"tan": {
+			"syntax": "tan(x)",
+			"example": "tan(pi/4) → 1",
+			"remark": "Angle in radians"
+		},
+		"asin": {
+			"syntax": "asin(x)",
+			"example": "asin(1) → π/2",
+			"remark": "Result in radians"
+		},
+		"acos": {
+			"syntax": "acos(x)",
+			"example": "acos(0) → π/2",
+			"remark": "Result in radians"
+		},
+		"atan": {
+			"syntax": "atan(x)",
+			"example": "atan(1) → π/4",
+			"remark": "Result in radians"
+		},
+		"atan2": {
+			"syntax": "atan2(y; x)",
+			"example": "atan2(1; 1) → π/4",
+			"description": "Two-argument arctangent, handles all quadrants",
+			"remark": "Arguments are (y; x), not (x; y). Result in radians."
+		},
+		"deg2rad": {
+			"syntax": "deg2rad(degrees)",
+			"example": "sin(deg2rad(45))",
+			"description": "Convert degrees to radians"
+		},
+		"rad2deg": {
+			"syntax": "rad2deg(radians)",
+			"example": "rad2deg(pi) → 180",
+			"description": "Convert radians to degrees"
+		},
+		"if": {
+			"syntax": "if(condition; ifTrue; ifFalse)",
+			"example": "if(x > 0; 1; 0)",
+			"description": "Conditional expression"
+		},
+		"and": {
+			"syntax": "and(a; b)",
+			"example": "and(x > 0; y > 0)",
+			"description": "Logical AND, returns 1.0 or 0.0"
+		},
+		"or": {
+			"syntax": "or(a; b)",
+			"example": "or(x < 0; x > 10)",
+			"description": "Logical OR, returns 1.0 or 0.0"
+		},
+		"not": {
+			"syntax": "not(a)",
+			"example": "not(x == 0)",
+			"description": "Logical NOT, returns 1.0 or 0.0"
+		},
+		"between": {
+			"syntax": "between(x; min; max)",
+			"example": "between(x; 0; 100)",
+			"description": "Test if value is in range (exclusive)",
+			"remark": "Returns 1.0 if min < x < max"
+		},
+		"between_inc": {
+			"syntax": "between_inc(x; min; max)",
+			"example": "between_inc(x; 0; 100)",
+			"description": "Test if value is in range (inclusive)",
+			"remark": "Returns 1.0 if min <= x <= max"
+		},
+		"today": {
+			"syntax": "today()",
+			"example": "year(today()) - year(birthdate)",
+			"description": "Current date"
+		},
+		"now": {
+			"syntax": "now()",
+			"example": "hour(now())",
+			"description": "Current date and time"
+		},
+		"date": {
+			"syntax": "date(year; month; day)",
+			"example": "date(2024; 12; 25)",
+			"description": "Create date from components"
+		},
+		"time": {
+			"syntax": "time(hour; minute; second)",
+			"example": "time(14; 30; 0)",
+			"description": "Create time from components"
+		},
+		"year": {
+			"syntax": "year(date)",
+			"example": "year(date_column)",
+			"description": "Extract year"
+		},
+		"month": {
+			"syntax": "month(date)",
+			"example": "ceil(month(date) / 3)",
+			"description": "Extract month (1-12)",
+			"remark": "Example shows quarter extraction"
+		},
+		"day": {
+			"syntax": "day(date)",
+			"example": "day(date_column)",
+			"description": "Extract day (1-31)"
+		},
+		"weekday": {
+			"syntax": "weekday(date)",
+			"example": "weekday(date_column)",
+			"description": "Day of week (1=Monday, 7=Sunday)"
+		},
+		"weeknum": {
+			"syntax": "weeknum(date)",
+			"example": "weeknum(date_column)",
+			"description": "ISO week number (1-53)"
+		},
+		"hour": {
+			"syntax": "hour(datetime)",
+			"example": "hour(timestamp)",
+			"description": "Extract hour (0-23)"
+		},
+		"minute": {
+			"syntax": "minute(datetime)",
+			"example": "minute(timestamp)",
+			"description": "Extract minute (0-59)"
+		},
+		"second": {
+			"syntax": "second(datetime)",
+			"example": "second(timestamp)",
+			"description": "Extract second (0-59)"
+		},
+		"datedif": {
+			"syntax": "datedif(start; end; unit)",
+			"example": "datedif(start_date; end_date; 1)",
+			"description": "Date difference",
+			"remark": "Unit: 1=days, 2=months, 3=years"
+		},
+		"eomonth": {
+			"syntax": "eomonth(start_date; months)",
+			"example": "eomonth(date; 0)",
+			"description": "Last day of month, offset by months",
+			"remark": "0 = current month, negative = past months"
+		},
+		"networkdays": {
+			"syntax": "networkdays(start; end)",
+			"example": "networkdays(start_date; end_date)",
+			"description": "Business days between dates (excludes weekends)"
+		},
+		"size": {
+			"syntax": "size(col)",
+			"example": "size(x)",
+			"description": "Number of values in column",
+			"remark": "Requires column name, not expression"
+		},
+		"sum": {
+			"syntax": "sum(col)",
+			"example": "sum(x)",
+			"description": "Sum of values",
+			"remark": "Requires column name, not expression"
+		},
+		"min": {
+			"syntax": "min(col)",
+			"example": "min(x)",
+			"description": "Minimum value",
+			"remark": "Requires column name, not expression"
+		},
+		"max": {
+			"syntax": "max(col)",
+			"example": "max(x)",
+			"description": "Maximum value",
+			"remark": "Requires column name, not expression"
+		},
+		"mean": {
+			"syntax": "mean(col)",
+			"example": "(x - mean(x)) / stdev(x)",
+			"description": "Arithmetic mean",
+			"remark": "Requires column name, not expression. Example shows z-score."
+		},
+		"median": {
+			"syntax": "median(col)",
+			"example": "median(x)",
+			"description": "Median",
+			"remark": "Requires column name, not expression"
+		},
+		"stdev": {
+			"syntax": "stdev(col)",
+			"example": "stdev(x)",
+			"description": "Standard deviation",
+			"remark": "Requires column name, not expression"
+		},
+		"var": {
+			"syntax": "var(col)",
+			"example": "var(x)",
+			"description": "Variance",
+			"remark": "Requires column name, not expression"
+		},
+		"quartile1": {
+			"syntax": "quartile1(col)",
+			"example": "quartile1(x)",
+			"description": "First quartile (Q1)",
+			"remark": "Requires column name, not expression"
+		},
+		"quartile3": {
+			"syntax": "quartile3(col)",
+			"example": "quartile3(x)",
+			"description": "Third quartile (Q3)",
+			"remark": "Requires column name, not expression"
+		},
+		"iqr": {
+			"syntax": "iqr(col)",
+			"example": "iqr(x)",
+			"description": "Interquartile range (Q3 - Q1)",
+			"remark": "Requires column name, not expression"
+		},
+		"percentile": {
+			"syntax": "percentile(p; col)",
+			"example": "percentile(95; x)",
+			"description": "p-th percentile",
+			"remark": "Requires column name, not expression. p is 0-100."
+		},
+		"quantile": {
+			"syntax": "quantile(q; col)",
+			"example": "quantile(0.75; x)",
+			"description": "q-th quantile",
+			"remark": "Requires column name, not expression. q is 0-1."
+		},
+		"skew": {
+			"syntax": "skew(col)",
+			"example": "skew(x)",
+			"description": "Skewness",
+			"remark": "Requires column name, not expression"
+		},
+		"kurt": {
+			"syntax": "kurt(col)",
+			"example": "kurt(x)",
+			"description": "Kurtosis",
+			"remark": "Requires column name, not expression"
+		},
+		"sma": {
+			"syntax": "sma(window; col)",
+			"example": "sma(5; x)",
+			"description": "Simple moving average",
+			"remark": "Requires column name, not expression"
+		},
+		"smmin": {
+			"syntax": "smmin(window; col)",
+			"example": "smmin(5; x)",
+			"description": "Moving minimum",
+			"remark": "Requires column name, not expression"
+		},
+		"smmax": {
+			"syntax": "smmax(window; col)",
+			"example": "smmax(5; x)",
+			"description": "Moving maximum",
+			"remark": "Requires column name, not expression"
+		},
+		"smr": {
+			"syntax": "smr(window; col)",
+			"example": "smr(5; x)",
+			"description": "Moving range",
+			"remark": "Requires column name, not expression"
+		},
+		"cumsum": {
+			"syntax": "cumsum(col)",
+			"example": "cumsum(sales)",
+			"description": "Cumulative sum up to current row",
+			"remark": "Requires column name, not expression"
+		},
+		"cumprod": {
+			"syntax": "cumprod(col)",
+			"example": "cumprod(1 + rate)",
+			"description": "Cumulative product up to current row",
+			"remark": "Requires column name, not expression"
+		},
+		"diff": {
+			"syntax": "diff(col)",
+			"example": "diff(x)",
+			"description": "Difference from previous row",
+			"remark": "Requires column name, not expression. First row is NaN."
+		},
+		"lag": {
+			"syntax": "lag(n; col)",
+			"example": "lag(1; x)",
+			"description": "Value from n rows before",
+			"remark": "Requires column name, not expression. Returns NaN if out of bounds."
+		},
+		"lead": {
+			"syntax": "lead(n; col)",
+			"example": "lead(1; x)",
+			"description": "Value from n rows after",
+			"remark": "Requires column name, not expression. Returns NaN if out of bounds."
+		},
+		"unwrap": {
+			"syntax": "unwrap(col)",
+			"example": "unwrap(phase)",
+			"description": "Unwrap phase angles by replacing deltas > π with their 2π complement",
+			"remark": "Requires column name, not expression. Period is 2π."
+		},
+		"unwrapp": {
+			"syntax": "unwrapp(period; col)",
+			"example": "unwrapp(360; angle_degrees)",
+			"description": "Unwrap with custom period",
+			"remark": "Requires column name, not expression. Use 360 for degrees."
+		},
+		"cell": {
+			"syntax": "cell(index; col)",
+			"example": "cell(i-1; x)",
+			"description": "Access cell at index in another column",
+			"remark": "Requires column name, not expression"
+		},
+		"cell_with_default": {
+			"syntax": "cell_with_default(index; default; col)",
+			"example": "cell_with_default(i-2; 0; temperature)",
+			"description": "Access cell with default if out of range",
+			"remark": "Requires column name, not expression"
+		},
+		"cell_curr_column": {
+			"syntax": "cell_curr_column(index)",
+			"example": "cell_curr_column(i-1)",
+			"description": "Access cell at index in current column"
+		},
+		"cell_curr_column_with_default": {
+			"syntax": "cell_curr_column_with_default(index; default)",
+			"example": "cell_curr_column_with_default(i-1; 0)",
+			"description": "Access cell in current column with default"
+		},
+		"rand": {
+			"syntax": "rand()",
+			"example": "rand()",
+			"description": "Random integer [0, RAND_MAX]"
+		},
+		"drand": {
+			"syntax": "drand()",
+			"example": "drand()",
+			"description": "Random float [0, 1]"
+		},
+		"randflat": {
+			"syntax": "randflat(a; b)",
+			"example": "randflat(0; 100)",
+			"description": "Uniform random in [a, b]"
+		},
+		"randgaussian": {
+			"syntax": "randgaussian(sigma)",
+			"example": "x + randgaussian(0.1)",
+			"description": "Gaussian random with given sigma",
+			"remark": "Example shows adding noise to data"
+		},
+		"randpoisson": {
+			"syntax": "randpoisson(mu)",
+			"example": "randpoisson(5)",
+			"description": "Poisson random with mean mu"
+		},
+		"randbinomial": {
+			"syntax": "randbinomial(p; n)",
+			"example": "randbinomial(0.5; 10)",
+			"description": "Binomial random"
+		}
+	}
+}

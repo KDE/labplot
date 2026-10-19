@@ -25,6 +25,7 @@ public:
 	static QString parameters(const QString& functionName);
 	static QString functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType);
 	QString functionDescription(const QString& function);
+	QString functionDetailedDescription(const QString& function);
 	QString functionSyntax(const QString& function);
 	QString functionExample(const QString& function);
 	QString functionRemark(const QString& function);

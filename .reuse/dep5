@@ -3,6 +3,10 @@ Upstream-Name: LabPlot
 Upstream-Contact: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 Source: https://invent.kde.org/education/labplot/
 
+Files: data/functions.json
+Copyright: 2026 Alexander Semke <alexander.semke@web.de>
+License: GPL-2.0-or-later
+
 Files: data/colormaps/cmocean*
 Copyright: 2020 Fabio Crameri
 License: MIT
