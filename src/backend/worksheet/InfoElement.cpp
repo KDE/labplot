@@ -1047,14 +1047,14 @@ void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		return;
 
 	// do not draw connection line when the label is not visible
-	if (connectionLine->style() != Qt::NoPen && q->m_title->isVisible() && !m_connectionLine.isNull()) {
+	if (connectionLine->style() != Line::Style::NoPen && q->m_title->isVisible() && !m_connectionLine.isNull()) {
 		painter->setOpacity(connectionLine->opacity());
 		painter->setPen(connectionLine->pen());
 		painter->drawLine(m_connectionLine);
 	}
 
 	// draw vertical line, which connects all points together
-	if (verticalLine->style() != Qt::NoPen && !xposLine.isNull()) {
+	if (verticalLine->style() != Line::Style::NoPen && !xposLine.isNull()) {
 		painter->setOpacity(verticalLine->opacity());
 		painter->setPen(verticalLine->pen());
 		painter->drawLine(xposLine);
@@ -1063,7 +1063,7 @@ void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 
 void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->button() == Qt::MouseButton::LeftButton) {
-		if (verticalLine->style() != Qt::NoPen) {
+		if (verticalLine->style() != Line::Style::NoPen) {
 			const double width = verticalLine->pen().widthF();
 			if (abs(xposLine.x1() - event->pos().x()) < ((width < 3) ? 3 : width)) {
 				if (!isSelected())
@@ -1222,14 +1222,14 @@ void InfoElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 void InfoElementPrivate::recalcShape() {
 	m_shape = QPainterPath();
 
-	if (verticalLine->style() != Qt::PenStyle::NoPen) {
+	if (verticalLine->style() != Line::Style::NoPen) {
 		QPainterPath path;
 		path.moveTo(xposLine.p1());
 		path.lineTo(xposLine.p2());
 		m_shape.addPath(WorksheetElement::shapeFromPath(path, verticalLine->pen()));
 	}
 
-	if (connectionLine->style() != Qt::PenStyle::NoPen) {
+	if (connectionLine->style() != Line::Style::NoPen) {
 		QPainterPath path;
 		path.moveTo(m_connectionLine.p1());
 		path.lineTo(m_connectionLine.p2());

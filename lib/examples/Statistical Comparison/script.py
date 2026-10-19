@@ -143,13 +143,13 @@ worksheet.addChild(plot)
 # Configure axes - do this AFTER adding to worksheet
 x_axis = plot.horizontalAxis()
 x_axis.title().setText("Treatment Group")
-x_axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-x_axis.minorGridLine().setStyle(Qt.PenStyle.NoPen)
+x_axis.majorGridLine().setStyle(Line.Style.NoPen)
+x_axis.minorGridLine().setStyle(Line.Style.NoPen)
 
 y_axis = plot.verticalAxis()
 y_axis.title().setText("Response (%)")
-y_axis.majorGridLine().setStyle(Qt.PenStyle.NoPen)
-y_axis.minorGridLine().setStyle(Qt.PenStyle.NoPen)
+y_axis.majorGridLine().setStyle(Line.Style.NoPen)
+y_axis.minorGridLine().setStyle(Line.Style.NoPen)
 
 # Create box plot with all groups
 boxplot = BoxPlot("Group Comparison")

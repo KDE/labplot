@@ -176,29 +176,29 @@ void XYCurve::init(bool loading) {
 
 void XYCurve::setPlotType(PlotType type) {
 	Q_D(XYCurve);
-	d->dropLine->setStyle(Qt::NoPen);
+	d->dropLine->setStyle(Line::Style::NoPen);
 	d->background->setEnabled(false);
 
 	if (type == PlotType::Line) {
-		d->line->setStyle(Qt::SolidLine);
+		d->line->setStyle(Line::Style::SolidLine);
 		d->lineType = LineType::Line;
 		d->symbol->setStyle(Symbol::Style::NoSymbols);
 		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
 		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
 	} else if (type == PlotType::LineHorizontalStep) {
-		d->line->setStyle(Qt::SolidLine);
+		d->line->setStyle(Line::Style::SolidLine);
 		d->lineType = LineType::StartHorizontal;
 		d->symbol->setStyle(Symbol::Style::NoSymbols);
 		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
 		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
 	} else if (type == PlotType::LineVerticalStep) {
-		d->line->setStyle(Qt::SolidLine);
+		d->line->setStyle(Line::Style::SolidLine);
 		d->lineType = LineType::StartVertical;
 		d->symbol->setStyle(Symbol::Style::NoSymbols);
 		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
 		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
 	} else if (type == PlotType::LineSpline) {
-		d->line->setStyle(Qt::SolidLine);
+		d->line->setStyle(Line::Style::SolidLine);
 		d->lineType = LineType::SplineCubicNatural;
 		d->symbol->setStyle(Symbol::Style::NoSymbols);
 		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
@@ -219,19 +219,19 @@ void XYCurve::setPlotType(PlotType type) {
 		d->errorBar->setXErrorType(ErrorBar::ErrorType::Symmetric);
 		d->errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
 	} else if (type == PlotType::LineSymbol) {
-		d->line->setStyle(Qt::SolidLine);
+		d->line->setStyle(Line::Style::SolidLine);
 		d->lineType = LineType::Line;
 		d->symbol->setStyle(Symbol::Style::Circle);
 		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
 		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
 	} else if (type == PlotType::LineSymbol2PointSegment) {
-		d->line->setStyle(Qt::SolidLine);
+		d->line->setStyle(Line::Style::SolidLine);
 		d->lineType = LineType::Segments2;
 		d->symbol->setStyle(Symbol::Style::Circle);
 		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
 		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
 	} else if (type == PlotType::LineSymbol3PointSegment) {
-		d->line->setStyle(Qt::SolidLine);
+		d->line->setStyle(Line::Style::SolidLine);
 		d->lineType = LineType::Segments3;
 		d->symbol->setStyle(Symbol::Style::Circle);
 		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
@@ -645,7 +645,7 @@ void XYCurve::recalc() {
  */
 void XYCurve::enableLineOptimization(bool enable) {
 	Q_D(XYCurve);
-	if (d->line->style() != Qt::NoPen) {
+	if (d->line->style() != Line::Style::NoPen) {
 		d->suppressRecalc = true;
 		d->updateLines(enable);
 		d->suppressRecalc = false;

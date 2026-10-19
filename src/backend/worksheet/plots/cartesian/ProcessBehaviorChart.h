@@ -11,9 +11,9 @@
 #define PROCESSBEHAVIORCHART_H
 
 #include "Plot.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 
-class Line;
 class ProcessBehaviorChartPrivate;
 class Symbol;
 class XYCurve;
@@ -101,7 +101,7 @@ private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void data2ColumnAboutToBeRemoved(const AbstractAspect*);
 	void renameInternalCurves();
-	void labelsBorderStyleChanged(Qt::PenStyle);
+	void labelsBorderStyleChanged(Line::Style);
 	void labelsBorderWidthChanged(double);
 	void labelsBorderColorChanged(const QColor&);
 	void labelsBorderOpacityChanged(float);

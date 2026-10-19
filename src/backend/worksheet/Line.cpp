@@ -61,14 +61,9 @@ void Line::init(const KConfigGroup& group) {
 	if (d->prefix == QLatin1String("DropLine"))
 		d->dropLineType = (XYCurve::DropLineType)group.readEntry(d->prefix + QStringLiteral("Type"), (int)XYCurve::DropLineType::NoDropLine);
 
-	d->style = static_cast<Qt::PenStyle>(group.readEntry(d->prefix + QStringLiteral("Style"), (int)Qt::SolidLine));
+	d->style = static_cast<Line::Style>(group.readEntry(d->prefix + QStringLiteral("Style"), static_cast<int>(Line::Style::SolidLine)));
 	d->width = group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 	d->color = group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black));
-	d->pen.setStyle(d->style);
-	d->pen.setColor(d->color);
-	d->pen.setWidthF(d->width);
-	d->pen.setCapStyle(Qt::FlatCap);
-	d->pen.setJoinStyle(Qt::MiterJoin);
 	d->opacity = group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0);
 }
 
@@ -79,8 +74,28 @@ BASIC_SHARED_D_READER_IMPL(Line, bool, histogramLineTypeAvailable, histogramLine
 BASIC_SHARED_D_READER_IMPL(Line, Histogram::LineType, histogramLineType, histogramLineType)
 BASIC_SHARED_D_READER_IMPL(Line, XYCurve::DropLineType, dropLineType, dropLineType)
 
-BASIC_SHARED_D_READER_IMPL(Line, QPen, pen, pen)
-BASIC_SHARED_D_READER_IMPL(Line, Qt::PenStyle, style, style)
+QPen Line::pen() const {
+	Q_D(const Line);
+	QPen pen;
+	pen.setColor(d->color);
+	pen.setWidthF(d->width);
+	pen.setJoinStyle(Qt::MiterJoin);
+
+	if (d->style == Style::RoundDotLine) {
+		// Round dots: near-zero dash with RoundCap creates circles
+		pen.setCapStyle(Qt::RoundCap);
+		pen.setStyle(Qt::CustomDashLine);
+		// Dash pattern in pen-width units: tiny dash + gap of 2x width
+		pen.setDashPattern({0.001, 2.0});
+	} else {
+		pen.setCapStyle(Qt::FlatCap);
+		pen.setStyle(static_cast<Qt::PenStyle>(d->style));
+	}
+
+	return pen;
+}
+
+BASIC_SHARED_D_READER_IMPL(Line, Line::Style, style, style)
 BASIC_SHARED_D_READER_IMPL(Line, QColor, color, color)
 BASIC_SHARED_D_READER_IMPL(Line, double, width, width)
 BASIC_SHARED_D_READER_IMPL(Line, double, opacity, opacity)
@@ -107,8 +122,8 @@ void Line::setDropLineType(XYCurve::DropLineType type) {
 		exec(new LineSetDropLineTypeCmd(d, type, ki18n("%1: drop line type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Line, SetStyle, Qt::PenStyle, style, update)
-void Line::setStyle(Qt::PenStyle style) {
+STD_SETTER_CMD_IMPL_F_S(Line, SetStyle, Line::Style, style, update)
+void Line::setStyle(Line::Style style) {
 	Q_D(Line);
 	if (style != d->style)
 		exec(new LineSetStyleCmd(d, style, ki18n("%1: set line style")));
@@ -150,9 +165,6 @@ QString LinePrivate::name() const {
 }
 
 void LinePrivate::update() {
-	pen.setStyle(style);
-	pen.setColor(color);
-	pen.setWidthF(width);
 	Q_EMIT q->updateRequested();
 }
 
@@ -183,7 +195,11 @@ void Line::save(QXmlStreamWriter* writer) const {
 	else if (d->prefix == QLatin1String("DropLine"))
 		writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->dropLineType)));
 
-	WRITE_QPEN(d->pen);
+	writer->writeAttribute(QStringLiteral("style"), QString::number(static_cast<int>(d->style)));
+	writer->writeAttribute(QStringLiteral("color_r"), QString::number(d->color.red()));
+	writer->writeAttribute(QStringLiteral("color_g"), QString::number(d->color.green()));
+	writer->writeAttribute(QStringLiteral("color_b"), QString::number(d->color.blue()));
+	writer->writeAttribute(QStringLiteral("width"), QString::number(d->width));
 	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
 
 	if (d->createXmlElement)
@@ -205,11 +221,29 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 	if (d->prefix == QLatin1String("DropLine"))
 		READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
 
-	READ_QPEN(d->pen);
-	d->style = d->pen.style();
-	d->color = d->pen.color();
-	d->width = d->pen.widthF();
+	READ_INT_VALUE("style", style, Line::Style);
 
+	QColor color;
+	str = attribs.value(QStringLiteral("color_r")).toString();
+	if (str.isEmpty())
+		reader->raiseMissingAttributeWarning(QStringLiteral("color_r"));
+	else
+		color.setRed(str.toInt());
+
+	str = attribs.value(QStringLiteral("color_g")).toString();
+	if (str.isEmpty())
+		reader->raiseMissingAttributeWarning(QStringLiteral("color_g"));
+	else
+		color.setGreen(str.toInt());
+
+	str = attribs.value(QStringLiteral("color_b")).toString();
+	if (str.isEmpty())
+		reader->raiseMissingAttributeWarning(QStringLiteral("color_b"));
+	else
+		color.setBlue(str.toInt());
+	d->color = color;
+
+	READ_DOUBLE_VALUE("width", width);
 	READ_DOUBLE_VALUE("opacity", opacity);
 
 	return true;
@@ -226,7 +260,7 @@ void Line::loadThemeConfig(const KConfigGroup& group) {
 
 void Line::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	Q_D(const Line);
-	setStyle((Qt::PenStyle)group.readEntry(d->prefix + QStringLiteral("Style"), (int)Qt::SolidLine));
+	setStyle(static_cast<Line::Style>(group.readEntry(d->prefix + QStringLiteral("Style"), static_cast<int>(Line::Style::SolidLine))));
 	setWidth(group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	setColor(themeColor);
 	setOpacity(group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0));
@@ -234,8 +268,8 @@ void Line::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) 
 
 void Line::saveThemeConfig(KConfigGroup& group) const {
 	Q_D(const Line);
-	group.writeEntry(d->prefix + QStringLiteral("Style"), static_cast<int>(d->pen.style()));
-	group.writeEntry(d->prefix + QStringLiteral("Width"), d->pen.widthF());
-	group.writeEntry(d->prefix + QStringLiteral("Color"), d->pen.color());
+	group.writeEntry(d->prefix + QStringLiteral("Style"), static_cast<int>(d->style));
+	group.writeEntry(d->prefix + QStringLiteral("Width"), d->width);
+	group.writeEntry(d->prefix + QStringLiteral("Color"), d->color);
 	group.writeEntry(d->prefix + QStringLiteral("Opacity"), d->opacity);
 }

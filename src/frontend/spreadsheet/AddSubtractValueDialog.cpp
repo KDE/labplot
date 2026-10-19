@@ -514,7 +514,7 @@ void AddSubtractValueDialog::initPreview() {
 	const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
-	plot->borderLine()->setStyle(Qt::NoPen);
+	plot->borderLine()->setStyle(Line::Style::NoPen);
 	m_previewPlotTitle = plot->title();
 
 	// x-axis
@@ -524,7 +524,7 @@ void AddSubtractValueDialog::initPreview() {
 	plot->addChild(axis);
 	axis->setPosition(Axis::Position::Bottom);
 	axis->setMajorTicksDirection(Axis::ticksIn);
-	axis->majorGridLine()->setStyle(Qt::NoPen);
+	axis->majorGridLine()->setStyle(Line::Style::NoPen);
 	axis->setMinorTicksDirection(Axis::noTicks);
 	axis->title()->setText(QString());
 	auto font = axis->labelsFont();
@@ -540,7 +540,7 @@ void AddSubtractValueDialog::initPreview() {
 	plot->addChild(axis);
 	axis->setPosition(Axis::Position::Left);
 	axis->setMajorTicksDirection(Axis::ticksIn);
-	axis->majorGridLine()->setStyle(Qt::NoPen);
+	axis->majorGridLine()->setStyle(Line::Style::NoPen);
 	axis->setMinorTicksDirection(Axis::noTicks);
 	axis->title()->setText(QString());
 	font = axis->labelsFont();

@@ -1435,9 +1435,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 	// border
 	if (layer.borderType == Origin::BorderType::None)
-		plot->borderLine()->setStyle(Qt::NoPen);
+		plot->borderLine()->setStyle(Line::Style::NoPen);
 	else
-		plot->borderLine()->setStyle(Qt::SolidLine);
+		plot->borderLine()->setStyle(Line::Style::SolidLine);
 
 	// ranges: swap axes when exchanged
 	const auto& originXAxis = layer.exchangedAxes ? layer.yAxis : layer.xAxis;
@@ -1589,9 +1589,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 		// border line
 		if (originLegend.borderType == Origin::BorderType::None)
-			legend->borderLine()->setStyle(Qt::NoPen);
+			legend->borderLine()->setStyle(Line::Style::NoPen);
 		else
-			legend->borderLine()->setStyle(Qt::SolidLine);
+			legend->borderLine()->setStyle(Line::Style::SolidLine);
 
 		// background color, determine it with the help of the border type
 		if (originLegend.borderType == Origin::BorderType::DarkMarble)
@@ -2249,30 +2249,30 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// major grid
 	const auto& majorGrid = originAxis.majorGrid;
-	Qt::PenStyle penStyle(Qt::NoPen);
+	Line::Style lineStyle(Line::Style::NoPen);
 	if (!majorGrid.hidden) {
 		switch (majorGrid.style) {
 		case Origin::GraphCurve::Solid:
-			penStyle = Qt::SolidLine;
+			lineStyle = Line::Style::SolidLine;
 			break;
 		case Origin::GraphCurve::Dash:
 		case Origin::GraphCurve::ShortDash:
-			penStyle = Qt::DashLine;
+			lineStyle = Line::Style::DashLine;
 			break;
 		case Origin::GraphCurve::Dot:
 		case Origin::GraphCurve::ShortDot:
-			penStyle = Qt::DotLine;
+			lineStyle = Line::Style::DotLine;
 			break;
 		case Origin::GraphCurve::DashDot:
 		case Origin::GraphCurve::ShortDashDot:
-			penStyle = Qt::DashDotLine;
+			lineStyle = Line::Style::DashDotLine;
 			break;
 		case Origin::GraphCurve::DashDotDot:
-			penStyle = Qt::DashDotDotLine;
+			lineStyle = Line::Style::DashDotDotLine;
 			break;
 		}
 	}
-	axis->majorGridLine()->setStyle(penStyle);
+	axis->majorGridLine()->setStyle(lineStyle);
 
 	Origin::Color gridColor;
 	gridColor.type = Origin::Color::ColorType::Regular;
@@ -2282,30 +2282,30 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// minor grid
 	const auto& minorGrid = originAxis.minorGrid;
-	penStyle = Qt::NoPen;
+	lineStyle = Line::Style::NoPen;
 	if (!minorGrid.hidden) {
 		switch (minorGrid.style) {
 		case Origin::GraphCurve::Solid:
-			penStyle = Qt::SolidLine;
+			lineStyle = Line::Style::SolidLine;
 			break;
 		case Origin::GraphCurve::Dash:
 		case Origin::GraphCurve::ShortDash:
-			penStyle = Qt::DashLine;
+			lineStyle = Line::Style::DashLine;
 			break;
 		case Origin::GraphCurve::Dot:
 		case Origin::GraphCurve::ShortDot:
-			penStyle = Qt::DotLine;
+			lineStyle = Line::Style::DotLine;
 			break;
 		case Origin::GraphCurve::DashDot:
 		case Origin::GraphCurve::ShortDashDot:
-			penStyle = Qt::DashDotLine;
+			lineStyle = Line::Style::DashDotLine;
 			break;
 		case Origin::GraphCurve::DashDotDot:
-			penStyle = Qt::DashDotDotLine;
+			lineStyle = Line::Style::DashDotDotLine;
 			break;
 		}
 	}
-	axis->minorGridLine()->setStyle(penStyle);
+	axis->minorGridLine()->setStyle(lineStyle);
 
 	gridColor.regular = minorGrid.color;
 	axis->minorGridLine()->setColor(OriginProjectParser::color(gridColor));
@@ -2325,7 +2325,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	axis->line()->setWidth(Worksheet::convertToSceneUnits(lineThickness * elementScalingFactor, Worksheet::Unit::Point));
 
 	if (axisFormat.hidden)
-		axis->line()->setStyle(Qt::NoPen);
+		axis->line()->setStyle(Line::Style::NoPen);
 	// TODO: read line style properties? (solid line, dashed line, etc.)
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength * elementScalingFactor, Worksheet::Unit::Point));
@@ -2478,7 +2478,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 		// TODO: handle unsigned char boxWidth of Origin::GraphCurve
 	} else
-		curve->line()->setStyle(Qt::NoPen);
+		curve->line()->setStyle(Line::Style::NoPen);
 
 	// symbol properties
 	loadSymbol(originCurve, curve->symbol(), curve);
@@ -3124,24 +3124,24 @@ QString strreverse(const QString& str) { // QString reversing
 	return QLatin1String(ba);
 }
 
-Qt::PenStyle OriginProjectParser::penStyle(unsigned char lineStyle) const {
+Line::Style OriginProjectParser::penStyle(unsigned char lineStyle) const {
 	switch (lineStyle) {
 	case Origin::GraphCurve::Solid:
-		return Qt::SolidLine;
+		return Line::Style::SolidLine;
 	case Origin::GraphCurve::Dash:
 	case Origin::GraphCurve::ShortDash:
-		return Qt::DashLine;
+		return Line::Style::DashLine;
 	case Origin::GraphCurve::Dot:
 	case Origin::GraphCurve::ShortDot:
-		return Qt::DotLine;
+		return Line::Style::DotLine;
 	case Origin::GraphCurve::DashDot:
 	case Origin::GraphCurve::ShortDashDot:
-		return Qt::DashDotLine;
+		return Line::Style::DashDotLine;
 	case Origin::GraphCurve::DashDotDot:
-		return Qt::DashDotDotLine;
+		return Line::Style::DashDotDotLine;
 	}
 
-	return Qt::SolidLine;
+	return Line::Style::SolidLine;
 }
 
 XYCurve::LineType OriginProjectParser::lineType(unsigned char lineConnect) const {
