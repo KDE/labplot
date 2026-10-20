@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-18 00:44+0000\n"
+"POT-Creation-Date: 2026-10-20 00:48+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -173,7 +173,7 @@ msgstr "Dni"
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
-#: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:162
+#: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:271
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:124
 #: src/frontend/widgets/LineWidget.cpp:117
@@ -9104,33 +9104,33 @@ msgstr "%1: nastaviť index lepiaceho bodu"
 msgid "%1: set connectionline curve name"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/Line.cpp:100
+#: src/backend/worksheet/Line.cpp:115
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:568
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: zmena typu čiary"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:122
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: zmena typu spustnej čiary"
 
-#: src/backend/worksheet/Line.cpp:114
+#: src/backend/worksheet/Line.cpp:129
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: nastaviť štýl čiary"
 
-#: src/backend/worksheet/Line.cpp:121
+#: src/backend/worksheet/Line.cpp:136
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/Line.cpp:128
+#: src/backend/worksheet/Line.cpp:143
 #, kde-format
 msgid "%1: set line color"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/Line.cpp:135
+#: src/backend/worksheet/Line.cpp:150
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: nastaviť priehľadnosť čiary"
@@ -12922,17 +12922,17 @@ msgstr "Zadajte kľúčové slovo, ktoré chcete hľadať"
 msgid "Search..."
 msgstr "Hľadať..."
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:199
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Red"
 msgstr "Červená"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:199
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Green"
 msgstr "Zelená"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:200
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Blue"
 msgstr "Modrá"
@@ -16825,7 +16825,7 @@ msgid "Model:"
 msgstr "Model:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
-#: src/frontend/GuiTools.cpp:633
+#: src/frontend/GuiTools.cpp:742
 #, kde-format
 msgid "Description:"
 msgstr "Popis:"
@@ -17609,250 +17609,262 @@ msgctxt "@title:window"
 msgid "Properties: Script"
 msgstr "Vlastnosti"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:126
+#: src/frontend/GuiTools.cpp:155 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "No Line"
 msgstr "Bez čiary"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:127
+#: src/frontend/GuiTools.cpp:156 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Solid Line"
 msgstr "Plná čiara"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:128
+#: src/frontend/GuiTools.cpp:157 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash Line"
 msgstr "Čiarkovaná čiara"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:129
+#: src/frontend/GuiTools.cpp:158 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dot Line"
 msgstr "Bodková čiara"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:130
+#: src/frontend/GuiTools.cpp:159 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash-dot Line"
 msgstr "Bodkočiarkovaná čiara"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:131
+#: src/frontend/GuiTools.cpp:160 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash-dot-dot Line"
 msgstr "Čiarkovano-bodkovano-bodkovaná čiara"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
+#, fuzzy, kde-format
+#| msgid "Dot Line"
+msgid "Round Dot Line"
+msgstr "Bodková čiara"
+
+#: src/frontend/GuiTools.cpp:272
 #, kde-format
 msgid "Uniform"
 msgstr "Rovnomerné"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:273
 #, kde-format
 msgid "Extremely Dense"
 msgstr "Extrémne husté"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:274
 #, kde-format
 msgid "Very Dense"
 msgstr "Veľmi husté"
 
-#: src/frontend/GuiTools.cpp:166
+#: src/frontend/GuiTools.cpp:275
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "Mierne husté"
 
-#: src/frontend/GuiTools.cpp:167
+#: src/frontend/GuiTools.cpp:276
 #, kde-format
 msgid "Half Dense"
 msgstr "Polovične husté"
 
-#: src/frontend/GuiTools.cpp:168
+#: src/frontend/GuiTools.cpp:277
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "Mierne riedke"
 
-#: src/frontend/GuiTools.cpp:169
+#: src/frontend/GuiTools.cpp:278
 #, kde-format
 msgid "Very Sparse"
 msgstr "Veľmi riedke"
 
-#: src/frontend/GuiTools.cpp:170
+#: src/frontend/GuiTools.cpp:279
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "Extrémne riedke"
 
-#: src/frontend/GuiTools.cpp:171
+#: src/frontend/GuiTools.cpp:280
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "Horiz. čiary"
 
-#: src/frontend/GuiTools.cpp:172
+#: src/frontend/GuiTools.cpp:281
 #, kde-format
 msgid "Vert. Lines"
 msgstr "Vert. čiary"
 
-#: src/frontend/GuiTools.cpp:173
+#: src/frontend/GuiTools.cpp:282
 #, kde-format
 msgid "Crossing Lines"
 msgstr "Krížené čiary"
 
-#: src/frontend/GuiTools.cpp:174
+#: src/frontend/GuiTools.cpp:283
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "Spätné diag. čiary"
 
-#: src/frontend/GuiTools.cpp:175
+#: src/frontend/GuiTools.cpp:284
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "Dopredné diag. čiary"
 
-#: src/frontend/GuiTools.cpp:176
+#: src/frontend/GuiTools.cpp:285
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "Krížené diag. čiary"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "White"
 msgstr "Biela"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Black"
 msgstr "Čierna"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Dark Red"
 msgstr "Tmavočervená"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Light Red"
 msgstr "Svetločervená"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Dark Green"
 msgstr "Tmavozelená"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Green"
 msgstr "Svetlozelená"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Dark Blue"
 msgstr "Tmavomodrá"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Blue"
 msgstr "Svetlomodrá"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Dark Yellow"
 msgstr "Tmavožltá"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Yellow"
 msgstr "Žltá"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Yellow"
 msgstr "Svetložltá"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Cyan"
 msgstr "Tmavoazúrová"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Cyan"
 msgstr "Tyrkysová"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Light Cyan"
 msgstr "Svetloazúrová"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Magenta"
 msgstr "Tmavofialová"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Magenta"
 msgstr "Purpurová"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Light Magenta"
 msgstr "Svetlofialová"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Orange"
 msgstr "Tmavooranžová"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Orange"
 msgstr "Oranžová"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Light Orange"
 msgstr "Svetlooranžová"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Dark Grey"
 msgstr "Tmavošedá"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Grey"
 msgstr "Šedá"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Light Grey"
 msgstr "Svetlošedá"
 
-#: src/frontend/GuiTools.cpp:322
+#: src/frontend/GuiTools.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Otvoriť súbor obrázka"
 
-#: src/frontend/GuiTools.cpp:322
+#: src/frontend/GuiTools.cpp:431
 #, kde-format
 msgid "Images (%1)"
 msgstr "Obrázky (%1)"
 
-#: src/frontend/GuiTools.cpp:515
+#: src/frontend/GuiTools.cpp:624
 #, kde-format
 msgid "Select file to load function definition"
 msgstr "Funkcie"
 
-#: src/frontend/GuiTools.cpp:532 src/frontend/GuiTools.cpp:622
+#: src/frontend/GuiTools.cpp:641 src/frontend/GuiTools.cpp:731
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr "Definícia funkcie LabPlot"
 
-#: src/frontend/GuiTools.cpp:606
+#: src/frontend/GuiTools.cpp:715
 #, kde-format
 msgid "Select file to save function definition"
 msgstr "Vybrať súbor na uloženie definície funkcie"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:634 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:743 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -27492,7 +27504,7 @@ msgstr "Vlastné hodnoty chýb, asymetrické"
 msgid "Data, +-:"
 msgstr "Dáta, +-"
 
-#: src/frontend/widgets/ExpressionTextEdit.cpp:140
+#: src/frontend/widgets/ExpressionTextEdit.cpp:151
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
@@ -27500,7 +27512,7 @@ msgstr[0] "Nedefinovaná premenná: %2. Definujte ju v zozname premenných."
 msgstr[1] "Nedefinované premenné: %2. Definujte ich v zozname premenných."
 msgstr[2] "Nedefinované premenné: %2. Definujte ich v zozname premenných."
 
-#: src/frontend/widgets/ExpressionTextEdit.cpp:148
+#: src/frontend/widgets/ExpressionTextEdit.cpp:159
 #, kde-format
 msgid "Invalid expression"
 msgstr "Neplatný výraz"

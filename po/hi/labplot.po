@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-18 00:44+0000\n"
+"POT-Creation-Date: 2026-10-20 00:48+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -175,7 +175,7 @@ msgstr "दिन"
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
-#: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:162
+#: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:271
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:124
 #: src/frontend/widgets/LineWidget.cpp:117
@@ -9160,33 +9160,33 @@ msgstr "%1: ग्लूपॉइंट इंडेक्स सेट कर�
 msgid "%1: set connectionline curve name"
 msgstr "%1: कनेक्शनलाइन वक्र नाम सेट करें"
 
-#: src/backend/worksheet/Line.cpp:100
+#: src/backend/worksheet/Line.cpp:115
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:568
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: पंक्ति प्रकार परिवर्तित"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:122
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: ड्रॉप लाइन प्रकार परिवर्तित"
 
-#: src/backend/worksheet/Line.cpp:114
+#: src/backend/worksheet/Line.cpp:129
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: लाइन शैली सेट करें"
 
-#: src/backend/worksheet/Line.cpp:121
+#: src/backend/worksheet/Line.cpp:136
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: लाइन की चौड़ाई निर्धारित करें"
 
-#: src/backend/worksheet/Line.cpp:128
+#: src/backend/worksheet/Line.cpp:143
 #, kde-format
 msgid "%1: set line color"
 msgstr "%1: लाइन रंग सेट करें"
 
-#: src/backend/worksheet/Line.cpp:135
+#: src/backend/worksheet/Line.cpp:150
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: लाइन अपारदर्शिता सेट करें"
@@ -13070,17 +13070,17 @@ msgstr "वह कीवर्ड दर्ज करें जिसे आप 
 msgid "Search..."
 msgstr "खोज..."
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:199
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Red"
 msgstr "लाल"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:199
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Green"
 msgstr "हरा"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:200
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Blue"
 msgstr "नीला"
@@ -16904,7 +16904,7 @@ msgid "Model:"
 msgstr "नमूना:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
-#: src/frontend/GuiTools.cpp:633
+#: src/frontend/GuiTools.cpp:742
 #, fuzzy, kde-format
 #| msgid "Description"
 msgid "Description:"
@@ -17671,251 +17671,263 @@ msgctxt "@title:window"
 msgid "Properties: Script"
 msgstr "गुण: फिट"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:126
+#: src/frontend/GuiTools.cpp:155 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "No Line"
 msgstr "कोई पंक्ति नहीं"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:127
+#: src/frontend/GuiTools.cpp:156 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Solid Line"
 msgstr "ठोस पंक्ति"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:128
+#: src/frontend/GuiTools.cpp:157 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash Line"
 msgstr "डैश लाइन"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:129
+#: src/frontend/GuiTools.cpp:158 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dot Line"
 msgstr "डॉट लाइन"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:130
+#: src/frontend/GuiTools.cpp:159 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash-dot Line"
 msgstr "डैश-डॉट लाइन"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:131
+#: src/frontend/GuiTools.cpp:160 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash-dot-dot Line"
 msgstr "डैश-डॉट-डॉट लाइन"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
+#, fuzzy, kde-format
+#| msgid "Dot Line"
+msgid "Round Dot Line"
+msgstr "डॉट लाइन"
+
+#: src/frontend/GuiTools.cpp:272
 #, kde-format
 msgid "Uniform"
 msgstr "वर्दी"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:273
 #, kde-format
 msgid "Extremely Dense"
 msgstr "अत्यंत सघन"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:274
 #, kde-format
 msgid "Very Dense"
 msgstr "बहुत घना"
 
-#: src/frontend/GuiTools.cpp:166
+#: src/frontend/GuiTools.cpp:275
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "कुछ हद तक घना"
 
-#: src/frontend/GuiTools.cpp:167
+#: src/frontend/GuiTools.cpp:276
 #, kde-format
 msgid "Half Dense"
 msgstr "अर्ध घना"
 
-#: src/frontend/GuiTools.cpp:168
+#: src/frontend/GuiTools.cpp:277
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "कुछ हद तक विरल"
 
-#: src/frontend/GuiTools.cpp:169
+#: src/frontend/GuiTools.cpp:278
 #, kde-format
 msgid "Very Sparse"
 msgstr "बहुत विरल"
 
-#: src/frontend/GuiTools.cpp:170
+#: src/frontend/GuiTools.cpp:279
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "अत्यंत विरल"
 
-#: src/frontend/GuiTools.cpp:171
+#: src/frontend/GuiTools.cpp:280
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "पीले रंग में पंक्तियां"
 
-#: src/frontend/GuiTools.cpp:172
+#: src/frontend/GuiTools.cpp:281
 #, kde-format
 msgid "Vert. Lines"
 msgstr "ऊर्ध्वाधर रेखाएँ"
 
-#: src/frontend/GuiTools.cpp:173
+#: src/frontend/GuiTools.cpp:282
 #, kde-format
 msgid "Crossing Lines"
 msgstr "पार लाइनों"
 
-#: src/frontend/GuiTools.cpp:174
+#: src/frontend/GuiTools.cpp:283
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "पिछड़ी डायग्न. रेखाएँ"
 
-#: src/frontend/GuiTools.cpp:175
+#: src/frontend/GuiTools.cpp:284
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "आगे की डायग्नोसिस लाइनें"
 
-#: src/frontend/GuiTools.cpp:176
+#: src/frontend/GuiTools.cpp:285
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "विकर्ण रेखाएँ पार करना"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "White"
 msgstr "सफ़ेद"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Black"
 msgstr "काला"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Dark Red"
 msgstr "गहरा लाल"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Light Red"
 msgstr "हलका लाल"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Dark Green"
 msgstr "गहरा हरा"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Green"
 msgstr "हल्का हरा"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Dark Blue"
 msgstr "गहरा नीला"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Blue"
 msgstr "हल्का नीला रंग"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Dark Yellow"
 msgstr "गहरा पीला"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Yellow"
 msgstr "पीला"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Yellow"
 msgstr "पीली रोशनी"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Cyan"
 msgstr "गहरा सियान"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Cyan"
 msgstr "सियान"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Light Cyan"
 msgstr "हल्का सियान"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Magenta"
 msgstr "गहरा मैजेंटा"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Magenta"
 msgstr "मैजेंटा"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Light Magenta"
 msgstr "हल्का मैजंटा"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Orange"
 msgstr "गहरा नारंगी"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Orange"
 msgstr "नारंगी"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Light Orange"
 msgstr "हल्का नारंगी"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Dark Grey"
 msgstr "गहरा भूरा"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Grey"
 msgstr "स्लेटी"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Light Grey"
 msgstr "हल्का भूरा रंग"
 
-#: src/frontend/GuiTools.cpp:322
+#: src/frontend/GuiTools.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "छवि फ़ाइल खोलें"
 
-#: src/frontend/GuiTools.cpp:322
+#: src/frontend/GuiTools.cpp:431
 #, kde-format
 msgid "Images (%1)"
 msgstr "छवियाँ (%1)"
 
-#: src/frontend/GuiTools.cpp:515
+#: src/frontend/GuiTools.cpp:624
 #, fuzzy, kde-format
 #| msgid "Select predefined function"
 msgid "Select file to load function definition"
 msgstr "पूर्वनिर्धारित फ़ंक्शन का चयन करें"
 
-#: src/frontend/GuiTools.cpp:532 src/frontend/GuiTools.cpp:622
+#: src/frontend/GuiTools.cpp:641 src/frontend/GuiTools.cpp:731
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:606
+#: src/frontend/GuiTools.cpp:715
 #, kde-format
 msgid "Select file to save function definition"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:634 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:743 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -27636,14 +27648,14 @@ msgstr "कस्टम त्रुटि मान, असममित"
 msgid "Data, +-:"
 msgstr "डेटा, +-:"
 
-#: src/frontend/widgets/ExpressionTextEdit.cpp:140
+#: src/frontend/widgets/ExpressionTextEdit.cpp:151
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/frontend/widgets/ExpressionTextEdit.cpp:148
+#: src/frontend/widgets/ExpressionTextEdit.cpp:159
 #, fuzzy, kde-format
 #| msgid "Invalid separator"
 msgid "Invalid expression"
