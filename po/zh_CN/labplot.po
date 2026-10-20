@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-18 00:44+0000\n"
+"POT-Creation-Date: 2026-10-20 00:48+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -173,7 +173,7 @@ msgstr "天"
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:215
-#: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:162
+#: src/frontend/dockwidgets/XYCurveDock.cpp:437 src/frontend/GuiTools.cpp:271
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:124
 #: src/frontend/widgets/LineWidget.cpp:117
@@ -8998,33 +8998,33 @@ msgstr ""
 msgid "%1: set connectionline curve name"
 msgstr ""
 
-#: src/backend/worksheet/Line.cpp:100
+#: src/backend/worksheet/Line.cpp:115
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:568
 #, kde-format
 msgid "%1: line type changed"
 msgstr ""
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:122
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr ""
 
-#: src/backend/worksheet/Line.cpp:114
+#: src/backend/worksheet/Line.cpp:129
 #, kde-format
 msgid "%1: set line style"
 msgstr ""
 
-#: src/backend/worksheet/Line.cpp:121
+#: src/backend/worksheet/Line.cpp:136
 #, kde-format
 msgid "%1: set line width"
 msgstr ""
 
-#: src/backend/worksheet/Line.cpp:128
+#: src/backend/worksheet/Line.cpp:143
 #, kde-format
 msgid "%1: set line color"
 msgstr ""
 
-#: src/backend/worksheet/Line.cpp:135
+#: src/backend/worksheet/Line.cpp:150
 #, kde-format
 msgid "%1: set line opacity"
 msgstr ""
@@ -12794,17 +12794,17 @@ msgstr "输入您要搜索的关键字"
 msgid "Search..."
 msgstr "搜索..."
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:199
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Red"
 msgstr "红色"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:199
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Green"
 msgstr "绿色"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:200
+#: src/frontend/colormaps/ColorMapsWidget.cpp:189 src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Blue"
 msgstr "蓝色"
@@ -16457,7 +16457,7 @@ msgid "Model:"
 msgstr "模式："
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
-#: src/frontend/GuiTools.cpp:633
+#: src/frontend/GuiTools.cpp:742
 #, kde-format
 msgid "Description:"
 msgstr ""
@@ -17201,250 +17201,262 @@ msgctxt "@title:window"
 msgid "Properties: Script"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:126
+#: src/frontend/GuiTools.cpp:155 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "No Line"
 msgstr "无连接"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:127
+#: src/frontend/GuiTools.cpp:156 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Solid Line"
 msgstr "实线"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:128
+#: src/frontend/GuiTools.cpp:157 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash Line"
 msgstr "虚线"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:129
+#: src/frontend/GuiTools.cpp:158 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dot Line"
 msgstr "点线"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:130
+#: src/frontend/GuiTools.cpp:159 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash-dot Line"
 msgstr "点虚相间线"
 
-#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:108
+#: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:131
+#: src/frontend/GuiTools.cpp:160 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash-dot-dot Line"
 msgstr "双点虚相间线"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
+#, fuzzy, kde-format
+#| msgid "Dot Line"
+msgid "Round Dot Line"
+msgstr "点线"
+
+#: src/frontend/GuiTools.cpp:272
 #, kde-format
 msgid "Uniform"
 msgstr "均匀"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:273
 #, kde-format
 msgid "Extremely Dense"
 msgstr "极度稠密"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:274
 #, kde-format
 msgid "Very Dense"
 msgstr "非常稠密"
 
-#: src/frontend/GuiTools.cpp:166
+#: src/frontend/GuiTools.cpp:275
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "有些稠密"
 
-#: src/frontend/GuiTools.cpp:167
+#: src/frontend/GuiTools.cpp:276
 #, kde-format
 msgid "Half Dense"
 msgstr "半稠半疏"
 
-#: src/frontend/GuiTools.cpp:168
+#: src/frontend/GuiTools.cpp:277
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "有些稀疏"
 
-#: src/frontend/GuiTools.cpp:169
+#: src/frontend/GuiTools.cpp:278
 #, kde-format
 msgid "Very Sparse"
 msgstr "非常稀疏"
 
-#: src/frontend/GuiTools.cpp:170
+#: src/frontend/GuiTools.cpp:279
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "极度稀疏"
 
-#: src/frontend/GuiTools.cpp:171
+#: src/frontend/GuiTools.cpp:280
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "水平线"
 
-#: src/frontend/GuiTools.cpp:172
+#: src/frontend/GuiTools.cpp:281
 #, kde-format
 msgid "Vert. Lines"
 msgstr "垂直线"
 
-#: src/frontend/GuiTools.cpp:173
+#: src/frontend/GuiTools.cpp:282
 #, kde-format
 msgid "Crossing Lines"
 msgstr "十字线"
 
-#: src/frontend/GuiTools.cpp:174
+#: src/frontend/GuiTools.cpp:283
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "反斜对角线"
 
-#: src/frontend/GuiTools.cpp:175
+#: src/frontend/GuiTools.cpp:284
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "正斜对角线"
 
-#: src/frontend/GuiTools.cpp:176
+#: src/frontend/GuiTools.cpp:285
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "交叉对角线"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "White"
 msgstr "白色"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Black"
 msgstr "黑色"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Dark Red"
 msgstr "暗红"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Light Red"
 msgstr "浅红色"
 
-#: src/frontend/GuiTools.cpp:199
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Dark Green"
 msgstr "暗绿"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Green"
 msgstr "浅绿色"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Dark Blue"
 msgstr "暗蓝"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Blue"
 msgstr "浅蓝"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Dark Yellow"
 msgstr "深黄色"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Yellow"
 msgstr "黄色"
 
-#: src/frontend/GuiTools.cpp:200
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Light Yellow"
 msgstr "淡黄色"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Cyan"
 msgstr "暗青"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Cyan"
 msgstr "青色"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Light Cyan"
 msgstr "浅青色"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Magenta"
 msgstr "深洋红"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Magenta"
 msgstr "洋红"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Light Magenta"
 msgstr "浅洋红色"
 
-#: src/frontend/GuiTools.cpp:201
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Dark Orange"
 msgstr "深橙色"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Orange"
 msgstr "橙色"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Light Orange"
 msgstr "浅橙色"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Dark Grey"
 msgstr "暗灰色"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Grey"
 msgstr "灰"
 
-#: src/frontend/GuiTools.cpp:202
+#: src/frontend/GuiTools.cpp:311
 #, kde-format
 msgid "Light Grey"
 msgstr "浅灰色"
 
-#: src/frontend/GuiTools.cpp:322
+#: src/frontend/GuiTools.cpp:431
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "打开图像文件"
 
-#: src/frontend/GuiTools.cpp:322
+#: src/frontend/GuiTools.cpp:431
 #, kde-format
 msgid "Images (%1)"
 msgstr "图像 (%1)"
 
-#: src/frontend/GuiTools.cpp:515
+#: src/frontend/GuiTools.cpp:624
 #, kde-format
 msgid "Select file to load function definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:532 src/frontend/GuiTools.cpp:622
+#: src/frontend/GuiTools.cpp:641 src/frontend/GuiTools.cpp:731
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:606
+#: src/frontend/GuiTools.cpp:715
 #, kde-format
 msgid "Select file to save function definition"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:634 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:743 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -26979,13 +26991,13 @@ msgstr "自定义误差值，不对称"
 msgid "Data, +-:"
 msgstr "数据 ±："
 
-#: src/frontend/widgets/ExpressionTextEdit.cpp:140
+#: src/frontend/widgets/ExpressionTextEdit.cpp:151
 #, kde-format
 msgid "Undefined variable: %2. Define it in the list of variables."
 msgid_plural "Undefined variables: %2. Define them in the list of variables."
 msgstr[0] ""
 
-#: src/frontend/widgets/ExpressionTextEdit.cpp:148
+#: src/frontend/widgets/ExpressionTextEdit.cpp:159
 #, kde-format
 msgid "Invalid expression"
 msgstr ""
