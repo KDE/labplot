@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-20 00:48+0000\n"
-"PO-Revision-Date: 2026-10-18 18:48+0300\n"
+"PO-Revision-Date: 2026-10-20 19:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17647,7 +17647,7 @@ msgstr "Düz çizgi"
 #: src/frontend/GuiTools.cpp:157 src/frontend/GuiTools.cpp:217
 #, kde-format
 msgid "Dash Line"
-msgstr "Tire çizgisi"
+msgstr "Tire çizgi"
 
 #: src/frontend/GuiTools.cpp:82 src/frontend/GuiTools.cpp:129
 #: src/frontend/GuiTools.cpp:158 src/frontend/GuiTools.cpp:217
@@ -17668,10 +17668,9 @@ msgid "Dash-dot-dot Line"
 msgstr "Tire–Nokta–Nokta çizgisi"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "Nokta çizgisi"
+msgstr "Yuvarlak Nokta çizgisi"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format

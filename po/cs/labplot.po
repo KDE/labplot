@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-20 00:48+0000\n"
-"PO-Revision-Date: 2026-10-18 10:58+0200\n"
+"PO-Revision-Date: 2026-10-20 13:10+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -17722,10 +17722,9 @@ msgid "Dash-dot-dot Line"
 msgstr "Přímka s pomlčkami a dvěma tečkami"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "Tečkovaná přímka"
+msgstr "Přímka s tečkami a kruhy"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format

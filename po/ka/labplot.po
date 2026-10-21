@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-20 00:48+0000\n"
-"PO-Revision-Date: 2026-10-18 04:03+0200\n"
+"PO-Revision-Date: 2026-10-20 06:29+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17733,10 +17733,9 @@ msgid "Dash-dot-dot Line"
 msgstr "ტირე, წერტილი, წერტილიანი ხაზი"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "წერტილებიანი ხაზი"
+msgstr "მრგვალწერტილიანი ხაზი"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format

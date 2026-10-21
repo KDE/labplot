@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-20 00:48+0000\n"
-"PO-Revision-Date: 2026-10-18 20:48+0300\n"
+"PO-Revision-Date: 2026-10-20 09:19+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -17816,10 +17816,9 @@ msgid "Dash-dot-dot Line"
 msgstr "штрих-подвійний пунктир"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "пунктир"
+msgstr "пунктир з круглих крапок"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format

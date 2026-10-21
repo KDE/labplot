@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-20 00:48+0000\n"
-"PO-Revision-Date: 2026-10-18 14:59+0200\n"
+"PO-Revision-Date: 2026-10-20 09:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -17914,10 +17914,9 @@ msgid "Dash-dot-dot Line"
 msgstr "Línia de guió-punt-punt"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "Línia de punts"
+msgstr "Línia de punts rodons"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format
