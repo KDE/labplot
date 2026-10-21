@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-20 00:48+0000\n"
-"PO-Revision-Date: 2026-10-18 10:06-0300\n"
+"PO-Revision-Date: 2026-10-20 07:31-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -17792,10 +17792,9 @@ msgid "Dash-dot-dot Line"
 msgstr "Linha com traço, ponto e ponto"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "Linha pontilhada"
+msgstr "Linha pontilhada arredondada"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format
