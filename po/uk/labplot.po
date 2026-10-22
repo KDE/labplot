@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-20 00:48+0000\n"
+"POT-Creation-Date: 2026-10-22 00:46+0000\n"
 "PO-Revision-Date: 2026-10-20 09:19+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -19537,8 +19537,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Питати підтвердження при перезапуску системи модулів обробки."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a python virtual environment."
+#, fuzzy, kde-format
+#| msgid "Select the path to a python virtual environment."
+msgid "Select the path to a Python virtual environment."
 msgstr "Виберіть шлях до віртуального середовища python."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
@@ -19553,8 +19554,10 @@ msgid "Select the Virtual Environment"
 msgstr "Виберіть віртуальне середовище"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, kde-format
-msgid "The selected virtual environment does not contain a python executable."
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected virtual environment does not contain a python executable."
+msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 "У вибраному віртуальному середовищі не міститься виконуваного файла python."
 
@@ -19565,10 +19568,13 @@ msgstr "У вибраному віртуальному середовищі не
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected virtual environment python version does not match the "
+#| "application python version."
 msgid ""
-"The selected virtual environment python version does not match the "
-"application python version."
+"The selected virtual environment Python version does not match the "
+"application Python version."
 msgstr ""
 "Версія python вибраного віртуального середовища не зібгається з версією "
 "python програми."

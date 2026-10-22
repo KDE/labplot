@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-20 00:48+0000\n"
+"POT-Creation-Date: 2026-10-22 00:46+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -19522,7 +19522,7 @@ msgstr ""
 
 #: src/frontend/SettingsScriptingPage.cpp:39
 #, fuzzy, kde-format
-msgid "Select the path to a python virtual environment."
+msgid "Select the path to a Python virtual environment."
 msgstr "全部選取"
 
 #: src/frontend/SettingsScriptingPage.cpp:52
@@ -19538,7 +19538,7 @@ msgstr "全部選取"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
 #, kde-format
-msgid "The selected virtual environment does not contain a python executable."
+msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 
 #: src/frontend/SettingsScriptingPage.cpp:236
@@ -19550,8 +19550,8 @@ msgstr ""
 #: src/frontend/SettingsScriptingPage.cpp:295
 #, kde-format
 msgid ""
-"The selected virtual environment python version does not match the "
-"application python version."
+"The selected virtual environment Python version does not match the "
+"application Python version."
 msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:26

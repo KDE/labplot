@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-20 00:48+0000\n"
+"POT-Creation-Date: 2026-10-22 00:46+0000\n"
 "PO-Revision-Date: 2026-10-20 09:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -19636,8 +19636,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Demana confirmació en reiniciar el sistema del dorsal."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a python virtual environment."
+#, fuzzy, kde-format
+#| msgid "Select the path to a python virtual environment."
+msgid "Select the path to a Python virtual environment."
 msgstr "Seleccioneu el camí a l'entorn virtual Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
@@ -19652,8 +19653,10 @@ msgid "Select the Virtual Environment"
 msgstr "Selecció d'entorn virtual"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, kde-format
-msgid "The selected virtual environment does not contain a python executable."
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected virtual environment does not contain a python executable."
+msgid "The selected virtual environment does not contain a Python executable."
 msgstr "L'entorn virtual seleccionat no conté cap executable Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:236
@@ -19663,10 +19666,13 @@ msgstr "L'entorn virtual seleccionat no conté cap fitxer pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected virtual environment python version does not match the "
+#| "application python version."
 msgid ""
-"The selected virtual environment python version does not match the "
-"application python version."
+"The selected virtual environment Python version does not match the "
+"application Python version."
 msgstr ""
 "La versió del Python de l'entorn virtual seleccionat no coincideix amb la "
 "versió del Python de l'aplicació."

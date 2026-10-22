@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-20 00:48+0000\n"
+"POT-Creation-Date: 2026-10-22 00:46+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -19355,8 +19355,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Žiadať potvrdenie pri reštartovaní backendového systému."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a python virtual environment."
+#, fuzzy, kde-format
+#| msgid "Select the path to a python virtual environment."
+msgid "Select the path to a Python virtual environment."
 msgstr "Vyberte cestu k virtuálnemu prostrediu Pythonu."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
@@ -19371,8 +19372,10 @@ msgid "Select the Virtual Environment"
 msgstr "Vybrať virtuálne prostredie"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, kde-format
-msgid "The selected virtual environment does not contain a python executable."
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected virtual environment does not contain a python executable."
+msgid "The selected virtual environment does not contain a Python executable."
 msgstr "Vybrané virtuálne prostredie neobsahuje spustiteľný súbor Pythonu."
 
 #: src/frontend/SettingsScriptingPage.cpp:236
@@ -19382,10 +19385,13 @@ msgstr "Vybrané virtuálne prostredie neobsahuje súbor pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected virtual environment python version does not match the "
+#| "application python version."
 msgid ""
-"The selected virtual environment python version does not match the "
-"application python version."
+"The selected virtual environment Python version does not match the "
+"application Python version."
 msgstr ""
 "Verzia Pythonu vo vybranom virtuálnom prostredí sa nezhoduje s verziou "
 "Pythonu aplikácie."

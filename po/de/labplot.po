@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-20 00:48+0000\n"
+"POT-Creation-Date: 2026-10-22 00:46+0000\n"
 "PO-Revision-Date: 2026-10-15 23:35+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -19475,8 +19475,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Bestätigung beim Neustart des Backendsystems."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a python virtual environment."
+#, fuzzy, kde-format
+#| msgid "Select the path to a python virtual environment."
+msgid "Select the path to a Python virtual environment."
 msgstr "Auswahl für Pfad zur Pythonumgebung"
 
 #: src/frontend/SettingsScriptingPage.cpp:52
@@ -19491,8 +19492,10 @@ msgid "Select the Virtual Environment"
 msgstr "Auswah der virtuellen Umgebung"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, kde-format
-msgid "The selected virtual environment does not contain a python executable."
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected virtual environment does not contain a python executable."
+msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 "Die ausgewählte virtuelle Umgebung enthält keine ausführbare Python-Datei."
 
@@ -19503,10 +19506,13 @@ msgstr "Die ausgewählte virtuelle Umgebung enthält keine pyvenv.cfg-Datei."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The selected virtual environment python version does not match the "
+#| "application python version."
 msgid ""
-"The selected virtual environment python version does not match the "
-"application python version."
+"The selected virtual environment Python version does not match the "
+"application Python version."
 msgstr ""
 "Die Python-Version der ausgewählten virtuellen Umgebung stimmt nicht mit der "
 "Python-Version der Anwendung überein."

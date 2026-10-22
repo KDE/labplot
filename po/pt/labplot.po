@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-20 00:48+0000\n"
+"POT-Creation-Date: 2026-10-22 00:46+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -19927,7 +19927,7 @@ msgstr "Pedir a confirmação ao reiniciar o sistema da infra-estrutura."
 #: src/frontend/SettingsScriptingPage.cpp:39
 #, fuzzy, kde-format
 #| msgid " Select the image file"
-msgid "Select the path to a python virtual environment."
+msgid "Select the path to a Python virtual environment."
 msgstr " Seleccionar o ficheiro da imagem"
 
 #: src/frontend/SettingsScriptingPage.cpp:52
@@ -19945,7 +19945,7 @@ msgstr " Seleccionar o ficheiro da imagem"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
 #, kde-format
-msgid "The selected virtual environment does not contain a python executable."
+msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 
 #: src/frontend/SettingsScriptingPage.cpp:236
@@ -19957,8 +19957,8 @@ msgstr ""
 #: src/frontend/SettingsScriptingPage.cpp:295
 #, kde-format
 msgid ""
-"The selected virtual environment python version does not match the "
-"application python version."
+"The selected virtual environment Python version does not match the "
+"application Python version."
 msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:26

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-20 00:48+0000\n"
+"POT-Creation-Date: 2026-10-22 00:46+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -19424,7 +19424,7 @@ msgstr "बैकएंड सिस्टम को पुनः आरंभ �
 #: src/frontend/SettingsScriptingPage.cpp:39
 #, fuzzy, kde-format
 #| msgid " Select the image file"
-msgid "Select the path to a python virtual environment."
+msgid "Select the path to a Python virtual environment."
 msgstr "छवि फ़ाइल का चयन करें"
 
 #: src/frontend/SettingsScriptingPage.cpp:52
@@ -19442,7 +19442,7 @@ msgstr "छवि फ़ाइल का चयन करें"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
 #, kde-format
-msgid "The selected virtual environment does not contain a python executable."
+msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 
 #: src/frontend/SettingsScriptingPage.cpp:236
@@ -19454,8 +19454,8 @@ msgstr ""
 #: src/frontend/SettingsScriptingPage.cpp:295
 #, kde-format
 msgid ""
-"The selected virtual environment python version does not match the "
-"application python version."
+"The selected virtual environment Python version does not match the "
+"application Python version."
 msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
