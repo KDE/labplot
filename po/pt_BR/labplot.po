@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-22 00:46+0000\n"
-"PO-Revision-Date: 2026-10-20 07:31-0300\n"
+"PO-Revision-Date: 2026-10-22 09:39-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -19510,8 +19510,7 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Pede confirmação ao reiniciar o sistema de infraestrutura."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
 msgstr "Selecione o caminho para um ambiente virtual Python."
 
@@ -19527,9 +19526,7 @@ msgid "Select the Virtual Environment"
 msgstr "Selecionar o ambiente virtual"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "O ambiente virtual selecionado não contém um executável do Python."
 
@@ -19540,10 +19537,7 @@ msgstr "O ambiente virtual selecionado não contém um arquivo pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."

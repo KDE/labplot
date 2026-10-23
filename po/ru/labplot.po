@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-22 00:46+0000\n"
-"PO-Revision-Date: 2026-10-20 11:20+0200\n"
+"PO-Revision-Date: 2026-10-22 05:43+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -1131,8 +1131,8 @@ msgstr ""
 "Когда в качестве десятичного разделителя используется символ точки, числа "
 "должны быть представлены в виде:<ul><li>1234.56</li><li>1,234.56</"
 "li><li>итак далее</li></ul>Если же в качестве десятичного разделителя "
-"используетсязапятая, числа должны быть представлены в виде: <ul><li>1234,56</"
-"li> <li>1.234,56</li><li> и так далее</li></ul>"
+"используется запятая, числа должны быть представлены в виде: "
+"<ul><li>1234,56</li> <li>1.234,56</li><li> и так далее</li></ul>"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:146
 #, kde-format
@@ -1184,7 +1184,7 @@ msgid ""
 "Sunday</td></tr></table><br><br>In case the provided expression is empty, "
 "the format will be auto-detected."
 msgstr ""
-"Строка форматирования даты может быть представлена в следующихвыражениях:"
+"Строка форматирования даты может быть представлена в следующих выражениях:"
 "<table><tr><td>d</td><td>день месяца в виде числа без ведущего нуля (1 — 31)."
 "</td></tr><tr><td>dd</td><td>день месяца в виде числа с ведущим нулём (01 — "
 "31).</td></tr><tr><td>ddd</td><td>локализованное сокращение дня недели (от "
@@ -1201,24 +1201,25 @@ msgstr ""
 "tr><tr><td>yyyy</td><td>год в виде четырёхзначного числа. Если год "
 "представлен отрицательным числом, то перед числом добавляется знак «минус».</"
 "td></tr></table><br><br>Строка форматирования времени может быть "
-"представлена в следующихвыражениях:<table><tr><td>h</td><td>час без ведущего "
-"нуля (0 — 23 или 1 — 12 при отображении AM/PM)</td></tr><tr> <td>hh</"
-"td><td>час с ведущим нулём (00 — 23 или 01 — 12 при отображении AM/PM)</td></"
-"tr><tr><td>H</td><td>час без ведущего нуля (0 — 23, даже при отображении AM/"
-"PM)</td></tr> <tr><td>HH</td><td>час с ведущим нулём (00 — 23, даже при "
-"отображении AM/PM)</td></tr><tr><td>m</td><td>минута без ведущего нуля (0 — "
-"59)</td></tr><tr><td>mm</td><td>минута с ведущим нулём (00 — 59)</td></"
-"tr><tr><td>s</td><td>секунда без ведущего нуля (0 — 59)</td></tr><tr><td>ss</"
-"td><td>секунда с ведущим нулём (00 — 59)</td></tr><tr><td>z</"
-"td><td>миллисекунды без ведущих нулей (0 — 999)</td></tr><tr><td>zzz</"
-"td><td>миллисекунды с ведущими нулями (000 — 999)</td></tr><tr><td>AP или A</"
-"td><td>интерпретируется как время в формате AM/PM. AP должно быть либо «AM», "
-"либо «PM».</td></tr><tr> <td>ap или a</td><td>интерпретируется как время в "
-"формате AM/PM. ap должно быть либо «am», либо «pm».</td></tr></"
-"table><br><br> Примеры:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></"
-"tr><tr> <td>ddd d MMMM yy</td><td>вс, 20 июля 69 г.</td></tr><tr> <td>«День "
-"недели:» dddd</td><td>День недели: воскресенье</td></tr> </table><br><br>В "
-"случае передачи пустого выражения формат определяется автоматически."
+"представлена в следующих выражениях:<table><tr><td>h</td><td>час без "
+"ведущего нуля (0 — 23 или 1 — 12 при отображении AM/PM)</td></tr><tr> "
+"<td>hh</td><td>час с ведущим нулём (00 — 23 или 01 — 12 при отображении AM/"
+"PM)</td></tr><tr><td>H</td><td>час без ведущего нуля (0 — 23, даже при "
+"отображении AM/PM)</td></tr> <tr><td>HH</td><td>час с ведущим нулём (00 — "
+"23, даже при отображении AM/PM)</td></tr><tr><td>m</td><td>минута без "
+"ведущего нуля (0 — 59)</td></tr><tr><td>mm</td><td>минута с ведущим нулём "
+"(00 — 59)</td></tr><tr><td>s</td><td>секунда без ведущего нуля (0 — 59)</"
+"td></tr><tr><td>ss</td><td>секунда с ведущим нулём (00 — 59)</td></"
+"tr><tr><td>z</td><td>миллисекунды без ведущих нулей (0 — 999)</td></"
+"tr><tr><td>zzz</td><td>миллисекунды с ведущими нулями (000 — 999)</td></"
+"tr><tr><td>AP или A</td><td>интерпретируется как время в формате AM/PM. AP "
+"должно быть либо «AM», либо «PM».</td></tr><tr> <td>ap или a</"
+"td><td>интерпретируется как время в формате AM/PM. ap должно быть либо «am», "
+"либо «pm».</td></tr></table><br><br> Примеры:<table><tr><td>dd.MM.yyyy</"
+"td><td>20.07.1969</td></tr><tr> <td>ddd d MMMM yy</td><td>вс, 20 июля 69 г.</"
+"td></tr><tr> <td>«День недели:» dddd</td><td>День недели: воскресенье</td></"
+"tr> </table><br><br>В случае передачи пустого выражения формат определяется "
+"автоматически."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:228
 #: src/backend/datasources/filters/ParquetFilter.cpp:76
@@ -3617,7 +3618,7 @@ msgstr "Многочлены Гегенбауэра"
 #: src/backend/gsl/functions.cpp:110
 #, kde-format
 msgid "Hermite Polynomials and Functions"
-msgstr "Полиномы и функции Хермита"
+msgstr "Полиномы и функции Эрмита"
 
 #: src/backend/gsl/functions.cpp:113
 #, kde-format
@@ -3650,7 +3651,7 @@ msgstr "Логарифм и связанные с ним функции"
 #: src/backend/gsl/functions.cpp:124
 #, kde-format
 msgid "Mathieu Functions"
-msgstr "Функции Матье"
+msgstr "Функции Матьё"
 
 # BUGME: please add context --aspotashev
 #: src/backend/gsl/functions.cpp:127
@@ -3779,7 +3780,7 @@ msgstr "Распределение Вейбулла"
 #: src/backend/gsl/functions.cpp:175
 #, kde-format
 msgid "Gumbel Distribution"
-msgstr "Распределение Гамбела"
+msgstr "Распределение Гумбеля"
 
 #: src/backend/gsl/functions.cpp:177
 #, kde-format
@@ -4192,7 +4193,7 @@ msgstr "нелинейный аддитивный обратносвязный �
 #: src/backend/gsl/functions.cpp:316
 #, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "нелинейный аддитивный обратносвязанный ГСЧ [0, 1]"
+msgstr "нелинейный аддитивный обратносвязный ГСЧ [0, 1]"
 
 #: src/backend/gsl/functions.cpp:317
 #, kde-format
@@ -4470,22 +4471,22 @@ msgstr "Производная масштабированной функции �
 #: src/backend/gsl/functions.cpp:392
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
-msgstr "n-ый нуль функции Эйри первого рода"
+msgstr "n-й нуль функции Эйри первого рода"
 
 #: src/backend/gsl/functions.cpp:393
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
-msgstr "n-ый нуль функции Эйри второго рода"
+msgstr "n-й нуль функции Эйри второго рода"
 
 #: src/backend/gsl/functions.cpp:394
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
-msgstr "n-ый нуль производной функции Эйри первого рода"
+msgstr "n-й нуль производной функции Эйри первого рода"
 
 #: src/backend/gsl/functions.cpp:395
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
-msgstr "n-ый нуль производной функции Эйри второго рода"
+msgstr "n-й нуль производной функции Эйри второго рода"
 
 #: src/backend/gsl/functions.cpp:398
 #, kde-format
@@ -4759,17 +4760,17 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:443
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
-msgstr "n-ый положительный нуль функции Бесселя J0"
+msgstr "n-й положительный нуль функции Бесселя J0"
 
 #: src/backend/gsl/functions.cpp:444
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
-msgstr "n-ый положительный нуль функции Бесселя J1"
+msgstr "n-й положительный нуль функции Бесселя J1"
 
 #: src/backend/gsl/functions.cpp:445
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
-msgstr "n-ый положительный нуль функции Бесселя Jnu"
+msgstr "n-й положительный нуль функции Бесселя Jnu"
 
 #: src/backend/gsl/functions.cpp:448
 #, kde-format
@@ -5386,7 +5387,7 @@ msgid ""
 "space"
 msgstr ""
 "Первая радиальная собственная функция лапласиана на трёхмерном "
-"гиперболическомпространстве"
+"гиперболическом пространстве"
 
 #: src/backend/gsl/functions.cpp:614
 #, kde-format
@@ -5394,8 +5395,8 @@ msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr ""
-"l-ая радиальная собственная функция лапласиана на трёхмерном "
-"гиперболическомпространстве"
+"l-ая радиальная собственная функция лапласиана на трёхмерном гиперболическом "
+"пространстве"
 
 #: src/backend/gsl/functions.cpp:617
 #, kde-format
@@ -6287,7 +6288,7 @@ msgstr "Обратная интегральная функция распред�
 #: src/backend/gsl/functions.cpp:859
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
-msgstr "Плотность вероятности для распределения Гамбеля (тип 1)"
+msgstr "Плотность вероятности для распределения Гумбеля (тип 1)"
 
 #: src/backend/gsl/functions.cpp:860
 #, kde-format
@@ -6312,7 +6313,7 @@ msgstr "Обратная интегральная функция распред�
 #: src/backend/gsl/functions.cpp:864
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
-msgstr "Плотность вероятности для распределения Гамбеля (тип 2)"
+msgstr "Плотность вероятности для распределения Гумбеля (тип 2)"
 
 #: src/backend/gsl/functions.cpp:865
 #, kde-format
@@ -7344,7 +7345,7 @@ msgstr "Интерполяция"
 #: src/backend/nsl/nsl_geom_linesim.c:24
 #, kde-format
 msgid "Opheim"
-msgstr "Алгоритм Опхайма"
+msgstr "Алгоритм Опхейма"
 
 #: src/backend/nsl/nsl_geom_linesim.c:25
 #, kde-format
@@ -7549,13 +7550,13 @@ msgstr "Распределение Вейбулла"
 #, kde-format
 msgid "Gumbel Type-1 (Maximum Value; log-Weibull)"
 msgstr ""
-"Распределение Гамбеля (тип 1) (максимальное значение; логарифмическое "
+"Распределение Гумбеля (тип 1) (максимальное значение; логарифмическое "
 "распределение Вейбулла)"
 
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr "Распределение Гамбеля (тип 2)"
+msgstr "Распределение Гумбеля (тип 2)"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:835
@@ -7628,7 +7629,7 @@ msgstr "Прямоугольное (равномерное)"
 #: src/backend/nsl/nsl_sf_window.c:17
 #, kde-format
 msgid "Triangular II (Bartlett)"
-msgstr "Треугольное 2 (Барлетта)"
+msgstr "Треугольное 2 (Бартлетта)"
 
 #: src/backend/nsl/nsl_sf_window.c:18
 #, kde-format
@@ -7683,7 +7684,7 @@ msgstr "Бартлетта-Ханна"
 #: src/backend/nsl/nsl_sf_window.c:29
 #, kde-format
 msgid "Lanczos"
-msgstr "Ланчоса"
+msgstr "Ланцоша"
 
 #: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
@@ -8875,7 +8876,7 @@ msgstr "При уровне значимости %1 данные случайн�
 #, kde-format
 msgid ""
 "At the significance level %1, the process is unstable (non-homogeneous). %2"
-msgstr "При уровне значимости %1 процесс нестабилен (неоднородн). %2"
+msgstr "При уровне значимости %1 процесс нестабилен (неоднороден). %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1885
 #, kde-format
@@ -14654,8 +14655,8 @@ msgid ""
 "Specify the target folder in the current project where the selected objects "
 "have to be imported into."
 msgstr ""
-"Укажите целевую папку в текущем проекте, в которую будут "
-"импортированывыбранные объекты."
+"Укажите целевую папку в текущем проекте, в которую будут импортированы "
+"выбранные объекты."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
@@ -14913,7 +14914,7 @@ msgid ""
 "guarantee of the message delivery:<ul><li>0 - deliver at most once</li><li>1 "
 "- deliver at least once</li><li>2 - deliver exactly once</li></ul>"
 msgstr ""
-"Задайте параметры качества (QoS) для подписки, чтобы определитьгарантии "
+"Задайте параметры качества (QoS) для подписки, чтобы определить гарантии "
 "отправки сообщения:<ul><li>0 — отправить не более одного раза</li><li>1 — "
 "отправить не менее одного раза</li> <li>2 — отправить точно один раз</li></"
 "ul>"
@@ -15527,8 +15528,8 @@ msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr ""
-"Укажите коэффициент для контроля ширины ящика в процентах "
-"относительновеличины по умолчанию."
+"Укажите коэффициент для контроля ширины ящика в процентах относительно "
+"величины по умолчанию."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:249
 #, kde-format
@@ -16235,9 +16236,9 @@ msgstr ""
 "вручную</li><li>По ширине — количество интервалов вычисляется на основе "
 "заданной ширины интервала через <i>k = (max(x) - min(x) / h</i>)</"
 "li><li>Квадратный корень — <i>k = sqrt(n)</i></li><li>Райс — <i>k = 2 * "
-"pow(n, 3/2)</i>, упрощённая альтернатива методу Стерджеса</li><li>Стерджес — "
+"pow(n, 3/2)</i>, упрощённая альтернатива методу Стёрджеса</li><li>Стёрджес — "
 "<i>k = log2(n) + 1</i>, предполагает приблизительно нормальное "
-"распределение</li><li>Доан — модифицированная версия метода Стерджеса, "
+"распределение</li><li>Доан — модифицированная версия метода Стёрджеса, "
 "подробности см. в документации</li><li>Скотт — <i>h = 3.49 * sigma / pow(n, "
 "3/2)</i>, оптимальный метод для нормально распределённых данных</li></ul>"
 
@@ -16616,7 +16617,7 @@ msgid ""
 "Uncheck this option to reduce the size of the project file at costs of the "
 "longer project load times."
 msgstr ""
-"При включении параметра результаты расчётов в кривых анализа будутсохранены "
+"При включении параметра результаты расчётов в кривых анализа будут сохранены "
 "в файле проекта.\n"
 "Снимите флажок для уменьшения размера файла проекта за счёт более "
 "продолжительного времени его загрузки."
@@ -17246,7 +17247,7 @@ msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
 "cutoff value. Please fix this."
 msgstr ""
-"Ширина полосы <= 0, поскольку значение нижнего порога меньшезначения "
+"Ширина полосы <= 0, поскольку значение нижнего порога меньше значения "
 "верхнего. Исправьте ошибку."
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:422
@@ -18439,7 +18440,7 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
-"Не удалось открыть файл «%1». Нажмите кнопку «Продолжить», чтобыпродолжить "
+"Не удалось открыть файл «%1». Нажмите кнопку «Продолжить», чтобы продолжить "
 "загрузку программы, либо кнопку «Отмена» для выхода."
 
 #: src/frontend/LabPlot.cpp:143
@@ -19761,8 +19762,7 @@ msgstr "Запрашивать подтверждение при перезап�
 
 # BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
 msgstr "Выберите путь к виртуальной среде Python."
 
@@ -19778,9 +19778,7 @@ msgid "Select the Virtual Environment"
 msgstr "Выбор виртуальной среды"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "В выбранной виртуальной среде отсутствует исполняемый файл Python."
 
@@ -19791,10 +19789,7 @@ msgstr "Выбранная виртуальная среда не содержи
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
@@ -21401,7 +21396,7 @@ msgid ""
 "because of this. "
 msgstr ""
 "Выделенные столбцы содержат разные типы данных, в связи с чем не могут быть "
-"выравнены. "
+"выровнены. "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3018
 #, kde-format
@@ -23694,8 +23689,8 @@ msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
 "fully opaque."
 msgstr ""
-"Непрозрачность задаётся в интервале от 0 до 100, где 0 означает "
-"полнуюпрозрачность, а 100 — полную непрозрачность."
+"Непрозрачность задаётся в интервале от 0 до 100, где 0 означает полную "
+"прозрачность, а 100 — полную непрозрачность."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTicks)
 #: src/frontend/ui/dockwidgets/axisdock.ui:656

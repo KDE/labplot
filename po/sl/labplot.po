@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-22 00:46+0000\n"
-"PO-Revision-Date: 2026-10-20 12:22+0200\n"
+"PO-Revision-Date: 2026-10-22 07:41+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -19457,10 +19457,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Ob ponovnem zagonu zalednega sistema prosite za potrditev."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
-msgstr "Izberite pot do virtualnega okolja Python."
+msgstr "Izberite pot do Pythonovega virtualnega okolja."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -19474,11 +19473,9 @@ msgid "Select the Virtual Environment"
 msgstr "Izberite virtualno okolje"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
-msgstr "Izbrano virtualno okolje ne vsebuje izvedljive datoteke python."
+msgstr "Izbrano virtualno okolje ne vsebuje Pythonove izvedljive datoteke."
 
 #: src/frontend/SettingsScriptingPage.cpp:236
 #, kde-format
@@ -19487,15 +19484,12 @@ msgstr "Izbrano virtualno okolje ne vsebuje datoteke pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
 msgstr ""
-"Izbrana različica Pythona za virtualno okolje se ne ujema z različico "
+"Izbrana različica Pythona virtualnega okolja se ne ujema z različico "
 "Pythonove aplikacije."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26

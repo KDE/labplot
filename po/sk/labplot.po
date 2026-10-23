@@ -549,10 +549,9 @@ msgid "%1: set random values"
 msgstr "%1: nastaviť písmo"
 
 #: src/backend/core/column/Column.cpp:1108
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgid "Path: %1"
-msgstr "Cesta:"
+msgstr "Cesta: %1"
 
 #: src/backend/core/column/Column.cpp:1109
 #: src/frontend/datasources/ImportFileWidget.cpp:1741
@@ -3790,39 +3789,37 @@ msgstr "Hodnoty"
 #: src/backend/gsl/functions.cpp:265
 #, kde-format
 msgid "Unwrap phase angles"
-msgstr ""
+msgstr "Rozbaliť fázové uhly"
 
 #: src/backend/gsl/functions.cpp:266
 #, kde-format
 msgid "Unwrap with custom period"
-msgstr ""
+msgstr "Rozbaliť s vlastnou periódou"
 
 #: src/backend/gsl/functions.cpp:267
 #, kde-format
 msgid "Difference from previous row"
-msgstr ""
+msgstr "Rozdiel od predchádzajúceho riadka"
 
 #: src/backend/gsl/functions.cpp:268
-#, fuzzy, kde-format
-#| msgid "Cumulative Histogram"
+#, kde-format
 msgid "Cumulative sum"
-msgstr "Kumulatívny histogram"
+msgstr "Kumulatívny súčet"
 
 #: src/backend/gsl/functions.cpp:269
-#, fuzzy, kde-format
-#| msgid "Cumulative Percentage"
+#, kde-format
 msgid "Cumulative product"
-msgstr "Kumulatívne percento"
+msgstr "Kumulatívny súčin"
 
 #: src/backend/gsl/functions.cpp:270
 #, kde-format
 msgid "Value from n rows before"
-msgstr ""
+msgstr "Hodnota z n riadkov predtým"
 
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Value from n rows after"
-msgstr ""
+msgstr "Hodnota z n riadkov potom"
 
 #: src/backend/gsl/functions.cpp:273
 #, kde-format
@@ -4193,8 +4190,7 @@ msgid "equal"
 msgstr "je rovné"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not a Number"
 msgstr "Nie je číslo"
 
@@ -5556,67 +5552,64 @@ msgid "restrict to [0, 2 pi]"
 msgstr "obmedziť na [0, 2 pi]"
 
 #: src/backend/gsl/functions.cpp:687
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees to radians"
-msgstr "Stupne voľnosti"
+msgstr "Stupne na radiány"
 
 #: src/backend/gsl/functions.cpp:688
 #, kde-format
 msgid "Radians to degrees"
-msgstr ""
+msgstr "Radiány na stupne"
 
 #: src/backend/gsl/functions.cpp:691
 #, kde-format
 msgid "Clip value to range [min, max]"
-msgstr ""
+msgstr "Orezať hodnotu na rozsah [min, max]"
 
 #: src/backend/gsl/functions.cpp:692
 #, kde-format
 msgid "Floor (largest integer <= x)"
-msgstr ""
+msgstr "Dolná celá časť (najväčšie celé číslo <= x)"
 
 #: src/backend/gsl/functions.cpp:693
 #, kde-format
 msgid "2^x"
-msgstr ""
+msgstr "2^x"
 
 #: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Floating-point remainder of x/y"
-msgstr ""
+msgstr "Zvyšok x/y v pohyblivej čiarke"
 
 #: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "IEEE remainder of x/y"
-msgstr ""
+msgstr "Zvyšok x/y podľa IEEE"
 
 #: src/backend/gsl/functions.cpp:696
-#, fuzzy, kde-format
-#| msgid "square x"
+#, kde-format
 msgid "Square (x^2)"
-msgstr "štvorec s x"
+msgstr "Druhá mocnina (x^2)"
 
 #: src/backend/gsl/functions.cpp:697
 #, kde-format
 msgid "Reciprocal (1/x)"
-msgstr ""
+msgstr "Prevrátená hodnota (1/x)"
 
 #: src/backend/gsl/functions.cpp:698
-#, fuzzy, kde-format
-#| msgid "Heavyside theta function"
+#, kde-format
 msgid "Heaviside step function"
-msgstr "Heavysideova theta funkcia"
+msgstr "Heavisideova skoková funkcia"
 
 #: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Greatest common divisor"
-msgstr ""
+msgstr "Najväčší spoločný deliteľ"
 
 #: src/backend/gsl/functions.cpp:700
 #, kde-format
 msgid "Least common multiple"
-msgstr ""
+msgstr "Najmenší spoločný násobok"
 
 #: src/backend/gsl/functions.cpp:703
 #, kde-format
@@ -11164,7 +11157,7 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:94
 #, kde-format
 msgid "Baseline correction requires at least 1 point, none provided."
-msgstr ""
+msgstr "Korekcia základnej línie vyžaduje aspoň 1 bod, nebol zadaný žiadny."
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
@@ -11177,6 +11170,8 @@ msgid ""
 "Convolution requires at least 1 point per input. Signal has %1 points, "
 "response has %2 points."
 msgstr ""
+"Konvolúcia vyžaduje aspoň 1 bod pre každý vstup. Signál má %1 bodov, odozva "
+"má %2 bodov."
 
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
@@ -11189,6 +11184,8 @@ msgid ""
 "Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
 "signal 2 has %2 points."
 msgstr ""
+"Korelácia vyžaduje aspoň 1 bod pre každý signál. Signál 1 má %1 bodov, "
+"signál 2 má %2 bodov."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11243,7 +11240,7 @@ msgstr "%1: nastaviť voľby a vykonať deriváciu"
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:112
 #, kde-format
 msgid "Differentiation requires at least 3 points, only %1 provided."
-msgstr ""
+msgstr "Derivovanie vyžaduje aspoň 3 body, zadaných je iba %1."
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
@@ -11406,7 +11403,7 @@ msgstr "Model nemá žiadne parametre!"
 #, kde-format
 msgid ""
 "Insufficient weight data points. X has %1 points, y-error has %2 points."
-msgstr ""
+msgstr "Nedostatok dátových bodov váh. X má %1 bodov, chyba y má %2 bodov."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -11415,15 +11412,12 @@ msgid "No X data available!"
 msgstr "Nie sú k dispozícii žiadne dáta X!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)!"
+#, kde-format
 msgid ""
 "Number of data points (%1) must be greater than or equal to the number of "
 "parameters (%2)."
 msgstr ""
-"Počet dátových bodov (%1) musí byť väčší alebo rovný počtu parametrov (%2)!"
+"Počet dátových bodov (%1) musí byť väčší alebo rovný počtu parametrov (%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
@@ -11511,7 +11505,7 @@ msgstr "%1: nastaviť voľby a vykonať integráciu"
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:111
 #, kde-format
 msgid "Integration requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Integrácia vyžaduje aspoň 2 body, zadaných je iba %1."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
@@ -11529,14 +11523,13 @@ msgid "Not enough data points available."
 msgstr "Nie je dostatok dátových bodov."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
-#, fuzzy, kde-format
-#| msgid ""
-#| "interpolation failed since x data is not strictly monotonic increasing!"
+#, kde-format
 msgid ""
 "interpolation failed since x data is not strictly monotonic increasing at x_"
 "%1 = %2 (previous x_%3 = %4)."
 msgstr ""
-"interpolácia zlyhala, pretože dáta x nie sú striktne monotónne rastúce!"
+"interpolácia zlyhala, pretože dáta x nie sú striktne monotónne rastúce pri x_"
+"%1 = %2 (predchádzajúce x_%3 = %4)."
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:69
 #, kde-format
@@ -11546,7 +11539,7 @@ msgstr "%1: nastaviť písmo"
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:119
 #, kde-format
 msgid "Line simplification requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Zjednodušenie čiary vyžaduje aspoň 2 body, zadaných je iba %1."
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, kde-format
@@ -11639,17 +11632,17 @@ msgid "%1: set options and perform the smooth"
 msgstr "%1: nastaviť voľby a vykonať vyhladzovanie"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid ""
 "Number of x and y data points must be equal. x has %1 points, y has %2 "
 "points."
-msgstr "Počet dátových bodov x a y musí byť rovnaký."
+msgstr ""
+"Počet dátových bodov x a y musí byť rovnaký. x má %1 bodov, y má %2 bodov."
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
 #, kde-format
 msgid "Smoothing requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "Vyhladzovanie vyžaduje aspoň 2 body, zadaných je iba %1."
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333
@@ -14083,7 +14076,7 @@ msgstr[2] "%1 cBajt"
 #: src/frontend/datasources/ImportFileWidget.cpp:1747
 #, kde-format
 msgid "SHA-256: %1"
-msgstr ""
+msgstr "SHA-256: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1750
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
@@ -17139,6 +17132,9 @@ msgid ""
 "Exact Linear Time): detection of changepoints with linear computational cost."
 "</li></ul>"
 msgstr ""
+"Metóda detekcie bodov zmeny:<ul><li>Binárna segmentácia: rekurzívne delí "
+"dáta na segmenty na detekciu bodov zmeny.</li><li>PELT (Pruned Exact Linear "
+"Time): detekcia bodov zmeny s lineárnou výpočtovou náročnosťou.</li></ul>"
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:401
 #, kde-format
@@ -17177,6 +17173,8 @@ msgid ""
 "X-range of the data used for the fit. Only data points within this range are "
 "considered."
 msgstr ""
+"Rozsah X dát použitých na preloženie. Berú sa do úvahy len dátové body v "
+"tomto rozsahu."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:417
 #, kde-format
@@ -17184,18 +17182,18 @@ msgid ""
 "If checked, the data range used for the fit is automatically determined from "
 "the data. A custom range can be specified otherwise."
 msgstr ""
+"Ak je zaškrtnuté, rozsah dát použitých na preloženie sa určí automaticky z "
+"dát. Inak je možné zadať vlastný rozsah."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:420
-#, fuzzy, kde-format
-#| msgid "The fraction of the data used to perform the local fit."
+#, kde-format
 msgid "Minimum X-value of the data used for the fit."
-msgstr "Podiel údajov použitých na lokálne preloženie."
+msgstr "Najmenšia hodnota X dát použitých na preloženie."
 
 #: src/frontend/dockwidgets/XYPiecewiseLinearFitCurveDock.cpp:422
-#, fuzzy, kde-format
-#| msgid "The fraction of the data used to perform the local fit."
+#, kde-format
 msgid "Maximum X-value of the data used for the fit."
-msgstr "Podiel údajov použitých na lokálne preloženie."
+msgstr "Najväčšia hodnota X dát použitých na preloženie."
 
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:199
 #, kde-format
@@ -17646,10 +17644,9 @@ msgid "Dash-dot-dot Line"
 msgstr "Čiarkovano-bodkovano-bodkovaná čiara"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "Bodková čiara"
+msgstr "Okrúhla bodková čiara"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format
@@ -19127,10 +19124,9 @@ msgid "Automatically show output when a script produces output"
 msgstr "Automaticky zobraziť výstup, keď skript vytvorí výstup"
 
 #: src/frontend/SettingsEditorPage.cpp:28
-#, fuzzy, kde-format
-#| msgid "Save Data in Project file:"
+#, kde-format
 msgid "Save script output in project files"
-msgstr "Uložiť dáta do projektového súboru:"
+msgstr "Ukladať výstup skriptu do súborov projektu"
 
 #: src/frontend/SettingsGeneralPage.cpp:27
 #, kde-format
@@ -19355,8 +19351,7 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Žiadať potvrdenie pri reštartovaní backendového systému."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
 msgstr "Vyberte cestu k virtuálnemu prostrediu Pythonu."
 
@@ -19372,9 +19367,7 @@ msgid "Select the Virtual Environment"
 msgstr "Vybrať virtuálne prostredie"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "Vybrané virtuálne prostredie neobsahuje spustiteľný súbor Pythonu."
 
@@ -19385,10 +19378,7 @@ msgstr "Vybrané virtuálne prostredie neobsahuje súbor pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
@@ -25813,10 +25803,9 @@ msgstr "Min. veľkosť segmentu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFitRange)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:248
-#, fuzzy, kde-format
-#| msgid "Plot Range:"
+#, kde-format
 msgid "Fit Range:"
-msgstr "Rozsah grafu:"
+msgstr "Rozsah preloženia:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:367
@@ -27872,8 +27861,7 @@ msgid "Search/Filter text"
 msgstr "Hľadať/filtrovať text"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:62
-#, fuzzy, kde-format
-#| msgid "Clea&r Selection"
+#, kde-format
 msgid "Clear selection"
 msgstr "Vyčistiť výber"
 

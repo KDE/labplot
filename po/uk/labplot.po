@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-22 00:46+0000\n"
-"PO-Revision-Date: 2026-10-20 09:19+0300\n"
+"PO-Revision-Date: 2026-10-22 13:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -19537,10 +19537,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Питати підтвердження при перезапуску системи модулів обробки."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
-msgstr "Виберіть шлях до віртуального середовища python."
+msgstr "Виберіть шлях до віртуального середовища Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -19554,12 +19553,10 @@ msgid "Select the Virtual Environment"
 msgstr "Виберіть віртуальне середовище"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
-"У вибраному віртуальному середовищі не міститься виконуваного файла python."
+"У вибраному віртуальному середовищі не міститься виконуваного файла Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:236
 #, kde-format
@@ -19568,16 +19565,13 @@ msgstr "У вибраному віртуальному середовищі не
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
 msgstr ""
 "Версія python вибраного віртуального середовища не зібгається з версією "
-"python програми."
+"Python програми."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-22 00:46+0000\n"
-"PO-Revision-Date: 2026-10-14 09:41+0200\n"
+"PO-Revision-Date: 2026-10-19 08:30+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 26.08.1\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -3850,10 +3850,9 @@ msgid "Difference from previous row"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:268
-#, fuzzy, kde-format
-#| msgid "Cumulative Histogram"
+#, kde-format
 msgid "Cumulative sum"
-msgstr "Istogramma cumulativo"
+msgstr "Somma cumulativa"
 
 #: src/backend/gsl/functions.cpp:269
 #, fuzzy, kde-format
@@ -5607,15 +5606,14 @@ msgid "restrict to [0, 2 pi]"
 msgstr "limitato a [0, 2 pi]"
 
 #: src/backend/gsl/functions.cpp:687
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees to radians"
-msgstr "Gradi di libertà"
+msgstr "Da gradi a radianti"
 
 #: src/backend/gsl/functions.cpp:688
 #, kde-format
 msgid "Radians to degrees"
-msgstr ""
+msgstr "Da radianti a gradi"
 
 #: src/backend/gsl/functions.cpp:691
 #, kde-format
@@ -5630,7 +5628,7 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:693
 #, kde-format
 msgid "2^x"
-msgstr ""
+msgstr "2^x"
 
 #: src/backend/gsl/functions.cpp:694
 #, kde-format
@@ -5643,15 +5641,14 @@ msgid "IEEE remainder of x/y"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:696
-#, fuzzy, kde-format
-#| msgid "square x"
+#, kde-format
 msgid "Square (x^2)"
-msgstr "x quadrato"
+msgstr "Quadrato (x^2)"
 
 #: src/backend/gsl/functions.cpp:697
 #, kde-format
 msgid "Reciprocal (1/x)"
-msgstr ""
+msgstr "Reciproco (1/x)"
 
 #: src/backend/gsl/functions.cpp:698
 #, fuzzy, kde-format
@@ -5662,12 +5659,12 @@ msgstr "Funzione gradino di Heaviside"
 #: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Greatest common divisor"
-msgstr ""
+msgstr "Massimo comun divisione"
 
 #: src/backend/gsl/functions.cpp:700
 #, kde-format
 msgid "Least common multiple"
-msgstr ""
+msgstr "Minimo comune multiplo"
 
 #: src/backend/gsl/functions.cpp:703
 #, kde-format

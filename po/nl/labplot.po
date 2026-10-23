@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-22 00:46+0000\n"
-"PO-Revision-Date: 2026-10-20 14:10+0200\n"
+"PO-Revision-Date: 2026-10-22 18:19+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -19504,10 +19504,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Bevestiging vragen bij herstarten van de backend."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
-msgstr "Selecteer het pad naar de python virtuele omgeving."
+msgstr "Selecteer het pad naar de Python virtuele omgeving."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -19521,12 +19520,10 @@ msgid "Select the Virtual Environment"
 msgstr "Selecteer de virtuele omgeving"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
-"De geselecteerde virtuele omgeving bevat geen python uitvoerbaar bestand."
+"De geselecteerde virtuele omgeving bevat geen Python uitvoerbaar bestand."
 
 #: src/frontend/SettingsScriptingPage.cpp:236
 #, kde-format
@@ -19535,16 +19532,13 @@ msgstr "De geselecteerde virtuele omgeving bevat geen pyvenv.cfg bestand."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
 msgstr ""
-"De python-versie van de geselecteerde virtuele omgeving komt niet overeen "
-"met de versie van de python-toepassing."
+"De Python-versie van de geselecteerde virtuele omgeving komt niet overeen "
+"met de versie van de Python-toepassing."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format

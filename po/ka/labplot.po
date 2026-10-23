@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-22 00:46+0000\n"
-"PO-Revision-Date: 2026-10-20 06:29+0200\n"
+"PO-Revision-Date: 2026-10-22 06:20+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -19443,10 +19443,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "დადასტურების თხოვნა უკანაბოლოს სისტემის გადატვირთვისას."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
-msgstr "აირჩიეთ ბილიკი python-ის ვირტუალურ გარემომდე."
+msgstr "აირჩიეთ ბილიკი Python-ის ვირტუალურ გარემომდე."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -19460,9 +19459,7 @@ msgid "Select the Virtual Environment"
 msgstr "აირჩიეთ ვირტუალური გარემო"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "არჩეული ვირტუალური გარემო გამშვებ ფაილს python არ შეიცავს."
 
@@ -19473,15 +19470,12 @@ msgstr "არჩეული ვირტუალური გარემო 
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
 msgstr ""
-"არჩეული ვირტუალური გარემოს python-ის ვერსია აპლიკაციის python-ის ვერსიას არ "
+"არჩეული ვირტუალური გარემოს Python-ის ვერსია აპლიკაციის Python-ის ვერსიას არ "
 "ემთხვევა."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
