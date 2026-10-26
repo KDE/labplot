@@ -115,7 +115,7 @@ DatapickerCurve* Datapicker::activeCurve() {
 }
 
 Spreadsheet* Datapicker::currentSpreadsheet() const {
-	if (!view_specific())
+	if (!m_partView)
 		return nullptr;
 
 	const int index = view_specific()->currentIndex();

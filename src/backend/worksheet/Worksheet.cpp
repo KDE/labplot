@@ -182,7 +182,7 @@ void Worksheet::fillElementsContextMenu(QMenu* menu) {
  * changes visibility for all selected worksheet elements
  */
 void Worksheet::changeSelectedVisibility() {
-	if (!view_specific())
+	if (!m_partView)
 		return;
 
 	const auto& selectedItems = view_specific()->selectedItems();
@@ -290,7 +290,7 @@ bool Worksheet::exportView() const {
 }
 
 bool Worksheet::exportView(QPixmap& pixmap) const {
-	if (!view_specific())
+	if (!m_partView)
 		return false;
 
 	view_specific()->exportToPixmap(pixmap);
@@ -509,7 +509,7 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool sele
 		Q_EMIT childAspectDeselectedInView(aspect);
 
 	// handle the resize items on selection changes
-	if (selected && view_specific()) {
+	if (selected && m_partView) {
 		const auto& items = view_specific()->selectedItems();
 		if (items.size() == 1) {
 			// only one object is selected, make it resiable if it's a container and
@@ -575,12 +575,12 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 }
 
 void Worksheet::setIsClosing() {
-	if (view_specific())
+	if (m_partView)
 		view_specific()->setIsClosing();
 }
 
 void Worksheet::suppressSelectionChangedEvent(bool value) {
-	if (view_specific())
+	if (m_partView)
 		view_specific()->suppressSelectionChangedEvent(value);
 }
 
@@ -672,7 +672,7 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 }
 
 void Worksheet::setInteractive(bool value) {
-	if (!view_specific())
+	if (!m_partView)
 		view();
 	view_specific()->setInteractive(value);
 }
@@ -695,7 +695,7 @@ void Worksheet::registerShortcuts() {
 }
 
 WorksheetElement* Worksheet::currentSelection() {
-	if (!view_specific()) {
+	if (!m_partView) {
 		view();
 		return nullptr;
 	}
@@ -1634,7 +1634,7 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	// determine the currently selected plot/container and make it
 	// resizable or not depending on the layout settings
 	bool resizable = (layout == Worksheet::Layout::NoLayout);
-	if (q->view_specific()) {
+	if (q->m_partView) {
 		const auto& items = q->view_specific()->selectedItems();
 		if (items.size() == 1) {
 			const auto& item = items.constFirst();

@@ -105,7 +105,7 @@ bool Workbook::printPreview() const {
 
 Spreadsheet* Workbook::currentSpreadsheet() const {
 #ifndef SDK
-	if (!view_specific())
+	if (!m_partView)
 		return nullptr;
 
 	int index = view_specific()->currentIndex();
