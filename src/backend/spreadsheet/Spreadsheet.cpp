@@ -935,7 +935,7 @@ QMenu* Spreadsheet::createContextMenu() {
 
 void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #ifndef SDK
-	if (view_specific())
+	if (m_partView)
 		view_specific()->fillColumnContextMenu(menu, column);
 #else
 	Q_UNUSED(menu)
@@ -945,7 +945,7 @@ void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 void Spreadsheet::fillColumnsContextMenu(QMenu* menu) {
 #ifndef SDK
-	if (view_specific())
+	if (m_partView)
 		view_specific()->fillColumnsContextMenu(menu);
 #else
 	Q_UNUSED(menu)
@@ -1990,7 +1990,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		m_model->suppressSignals(false);
 
 #ifndef SDK
-	if (view_specific())
+	if (m_partView)
 		view_specific()->resizeHeader();
 #endif
 

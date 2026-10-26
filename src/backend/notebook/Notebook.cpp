@@ -378,7 +378,7 @@ void Notebook::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 void Notebook::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& columns) {
 #ifndef SDK
-	if (view_specific())
+	if (m_partView)
 		view_specific()->fillColumnsContextMenu(menu, columns);
 #else
 	Q_UNUSED(menu)
