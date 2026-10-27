@@ -16653,7 +16653,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
 #, kde-format
 msgid "Repeats:"
-msgstr "Repite:"
+msgstr "Repete:"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:237
 #, kde-format
