@@ -13,6 +13,8 @@
 #include "OriginObj.h"
 #include "tree.hh"
 
+#include <locale>
+
 #ifdef GENERATE_CODE_FOR_LOG
 #    define LOG_PRINT(logfile, ...)                                                                \
         {                                                                                          \
