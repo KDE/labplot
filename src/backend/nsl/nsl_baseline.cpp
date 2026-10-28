@@ -634,7 +634,7 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 		// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
 		for (size_t i = 0; i < n; ++i) {
 			// Check for division by zero or invalid values
-			if (s == 0 || std::isnan(s) || std::sinf(m)) {
+			if (s == 0 || std::isnan(s) || std::isinf(m)) {
 				// Use default weight if calculation would be invalid
 				gsl_vector_set(w_new, i, 1.);
 			} else {
