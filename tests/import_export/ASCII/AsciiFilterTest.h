@@ -45,6 +45,8 @@ private Q_SLOTS:
 	void testSparseFile03();
 
 	void testFileEndingWithoutLinebreak();
+	void testCarriageReturnLineEndings();
+	void testCarriageReturnBufferReader();
 
 	// header handling
 	void testHeaderDisabled();

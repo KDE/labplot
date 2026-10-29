@@ -130,6 +130,12 @@ void AsciiFilterTest::lineCount() {
 	QCOMPARE(AsciiFilter::lineCount(fileName3), 5);
 	QCOMPARE(AsciiFilter::lineCount(fileName3, 3), 3);
 	QCOMPARE(AsciiFilter::lineCount(fileName3, 10), 5);
+
+	const QString& fileName4 = QFINDTESTDATA(QLatin1String("data/cr_line_endings.txt"));
+	QCOMPARE(AsciiFilter::lineCount(fileName4), 2);
+	QCOMPARE(AsciiFilter::lineCount(fileName4, 1), 1);
+	QCOMPARE(AsciiFilter::lineCount(fileName4, 2), 2);
+	QCOMPARE(AsciiFilter::lineCount(fileName4, 10), 2);
 }
 
 // column modes
@@ -574,6 +580,85 @@ void AsciiFilterTest::testFileEndingWithoutLinebreak() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 9);
 	QCOMPARE(spreadsheet.column(1)->integerAt(3), 16);
 	QCOMPARE(spreadsheet.column(1)->integerAt(4), 25);
+}
+
+void AsciiFilterTest::testCarriageReturnLineEndings() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/cr_line_endings.txt"));
+
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = true;
+	p.headerEnabled = false;
+	p.intAsDouble = false;
+	filter.setProperties(p);
+
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 2);
+	QCOMPARE(spreadsheet.columnCount(), 4);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 2);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 3);
+	QCOMPARE(spreadsheet.column(3)->integerAt(0), 4);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 10);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 9);
+	QCOMPARE(spreadsheet.column(2)->integerAt(1), 8);
+	QCOMPARE(spreadsheet.column(3)->integerAt(1), 7);
+
+	// Test preview functionality with CR line endings
+	const auto preview = filter.preview(fileName, 10);
+	QCOMPARE(preview.size(), 2);
+	QCOMPARE(preview.at(0), (QStringList{QStringLiteral("1"), QStringLiteral("2"), QStringLiteral("3"), QStringLiteral("4")}));
+	QCOMPARE(preview.at(1), (QStringList{QStringLiteral("10"), QStringLiteral("9"), QStringLiteral("8"), QStringLiteral("7")}));
+}
+
+void AsciiFilterTest::testCarriageReturnBufferReader() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	// Test mixed CR and CRLF in BufferReader
+	QByteArray data("10,20,30\r40,50,60\r\n70,80,90\r");
+	BufferReader reader(data);
+
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = false;
+	p.intAsDouble = false;
+	p.columnNamesString = QStringLiteral("Column 1, Column 2, Column 3");
+	p.dataTypesString = QStringLiteral("Int, Int, Int");
+	p.startColumn = 1;
+	p.endColumn = 3;
+	p.startRow = 1;
+	p.endRow = -1;
+
+	QCOMPARE(filter.initialize(p).success(), true);
+
+	filter.setDataSource(&spreadsheet);
+	filter.readFromDevice(reader, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, -1, 0);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 3);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 10);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 20);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 30);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 40);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 50);
+	QCOMPARE(spreadsheet.column(2)->integerAt(1), 60);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 70);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 80);
+	QCOMPARE(spreadsheet.column(2)->integerAt(2), 90);
 }
 
 // ##############################################################################

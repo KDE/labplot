@@ -58,6 +58,70 @@ private:
 	const bool reset;
 };
 const QLatin1String INTERNAL_SEPARATOR(",");
+
+template<typename ReadFunc>
+size_t countLines(ReadFunc readChunk, size_t maxLines) {
+	size_t count = 0;
+	bool lastWasCR = false;
+	bool hasCharsOnLine = false;
+	char buffer[65536];
+
+	while (true) {
+		const qint64 bytesRead = readChunk(buffer, sizeof(buffer));
+		if (bytesRead <= 0)
+			break;
+
+		for (qint64 i = 0; i < bytesRead; ++i) {
+			const char c = buffer[i];
+			if (c == '\r') {
+				++count;
+				lastWasCR = true;
+				hasCharsOnLine = false;
+				if (count >= maxLines)
+					return count;
+			} else if (c == '\n') {
+				if (lastWasCR) {
+					lastWasCR = false;
+				} else {
+					++count;
+					hasCharsOnLine = false;
+					if (count >= maxLines)
+						return count;
+				}
+			} else {
+				lastWasCR = false;
+				hasCharsOnLine = true;
+			}
+		}
+	}
+
+	if (hasCharsOnLine && count < maxLines)
+		++count;
+
+	return count;
+}
+
+QByteArray readLineWithCR(QIODevice& device) {
+	QByteArray line;
+	line.reserve(128);
+	char c;
+	while (device.getChar(&c)) {
+		line.append(c);
+		if (c == '\n')
+			break;
+		if (c == '\r') {
+			char next;
+			if (device.getChar(&next)) {
+				if (next == '\n')
+					line.append(next);
+				else
+					device.ungetChar(next);
+			}
+			break;
+		}
+	}
+	return line;
+}
 } // Anonymous namespace
 
 BufferReader::BufferReader(const QByteArray& buffer)
@@ -253,25 +317,27 @@ size_t AsciiFilter::lineCount(const QString& fileName, const size_t maxLines) {
 	if (device.compressionType() == KCompressionDevice::None) { // uncompressed
 		device.close();
 
-		std::ifstream file(fileName.toStdString());
+		std::ifstream file(fileName.toStdString(), std::ios::binary);
+		if (!file.is_open())
+			return 0;
 
-		size_t count = 0;
-		std::string line;
-		while (std::getline(file, line) && count < maxLines)
-			++count;
+		const size_t count = countLines(
+			[&file](char* buf, size_t size) -> qint64 {
+				file.read(buf, size);
+				return file.gcount();
+			},
+			maxLines);
 		DEBUG(Q_FUNC_INFO << "Number of lines: " << count)
 		return count;
 	}
 
 	// fallback for compressed data
-	size_t count = 0;
-	while (!device.atEnd()) {
-		if (count >= maxLines) // stop when maxLines available
-			return count;
-		device.readLine();
-		count++;
-	}
-
+	const size_t count = countLines(
+		[&device](char* buf, size_t size) -> qint64 {
+			return device.read(buf, size);
+		},
+		maxLines);
+	DEBUG(Q_FUNC_INFO << "Number of lines: " << count)
 	return count;
 }
 
@@ -740,7 +806,8 @@ QString AsciiFilterPrivate::convertTranslatedDataTypesToNative(const QStringView
 }
 
 bool AsciiFilterPrivate::ignoringLine(QStringView line, const AsciiFilter::Properties& p) {
-	return line.isEmpty() || (line.size() == 1 && line.at(0) == QLatin1Char('\n')) || (!p.commentCharacter.isEmpty() && line.startsWith(p.commentCharacter))
+	return line.isEmpty() || (line.size() == 1 && (line.at(0) == QLatin1Char('\n') || line.at(0) == QLatin1Char('\r')))
+		|| (!p.commentCharacter.isEmpty() && line.startsWith(p.commentCharacter))
 		|| (line.size() == 2 && line.at(0) == QLatin1Char('\r') && line.at(1) == QLatin1Char('\n'));
 }
 
@@ -1309,7 +1376,11 @@ Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line) {
 			return Status::NoNewLine();
 	}
 
-	line = QString::fromUtf8(device.readLine());
+	const auto bytes = readLineWithCR(device);
+	if (bytes.isEmpty() && device.atEnd())
+		return Status::DeviceAtEnd();
+
+	line = QString::fromUtf8(bytes);
 	return Status::Success();
 }
 
