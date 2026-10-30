@@ -81,8 +81,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-26.09.0.tar.xz",
-                    "sha256": "8059eadb6805340768f138c465b57f8164c92b4a0773c37ef031ea6c0d987b2e"
+                    "url": "https://poppler.freedesktop.org/poppler-26.10.0.tar.xz",
+                    "sha256": "6792cb7c69205007ad87d2e936cecc5b3a31fac29ab54ffc3175fdb6b2a6ce35"
                 }
             ],
             "modules": [
@@ -113,8 +113,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/release-service/26.08.1/src/analitza-26.08.1.tar.xz",
-                    "sha256": "4719c9c39d6f34862cafc6f5e4e3b0f88fb996167b46fea0415e0396ea545db8"
+                    "url": "https://download.kde.org/stable/release-service/26.08.2/src/analitza-26.08.2.tar.xz",
+                    "sha256": "f96d4eccc2057d70fa55da6829428e2a298eebe859262dea2a268c44ccfaa309"
                 }
             ]
         },
@@ -124,8 +124,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/release-service/26.08.1/src/cantor-26.08.1.tar.xz",
-                    "sha256": "5935a4cbd47d0dc84122d56e968c8bdd5416f8b9a69b8f97f42f791b526dc3b0"
+                    "url": "https://download.kde.org/stable/release-service/26.08.2/src/cantor-26.08.2.tar.xz",
+                    "sha256": "bb56336175e90870290e7432f35049ac50563a4dbbb9102efe7696af807b4377"
                 }
             ]
         },
@@ -187,8 +187,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/lib/cerf/-/archive/v3.8/libcerf-v3.8.tar.gz",
-                    "sha256": "451c07f9639055d340f473bdf4a4deef286e6eda52a395facce4280742430224"
+                    "url": "https://jugit.fz-juelich.de/mlz/lib/cerf/-/archive/v3.9/libcerf-v3.9.tar.gz",
+                    "sha256": "094d39c7ea32682ba451a0c9b250545833cbb6cf24e0193fe727bdd39613b0eb"
                 }
             ]
         },
