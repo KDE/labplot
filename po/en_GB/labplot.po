@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-22 00:46+0000\n"
+"POT-Creation-Date: 2026-10-31 00:46+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -244,7 +244,7 @@ msgid "Y-Error -"
 msgstr "Y-Error -"
 
 #: src/backend/core/AbstractColumn.cpp:224
-#: src/backend/datasources/filters/AsciiFilter.cpp:684
+#: src/backend/datasources/filters/AsciiFilter.cpp:750
 #: src/backend/datasources/filters/MatioFilter.cpp:384
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -264,7 +264,7 @@ msgstr "Big Integer"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/backend/core/AbstractColumn.cpp:230
-#: src/backend/datasources/filters/AsciiFilter.cpp:685
+#: src/backend/datasources/filters/AsciiFilter.cpp:751
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/frontend/ActionsManager.cpp:555
 #: src/frontend/notebook/NotebookView.cpp:104
@@ -1210,33 +1210,33 @@ msgstr ""
 "Sunday</td></tr></table><br><br>In case the provided expression is empty, "
 "the format will be auto-detected."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:228
+#: src/backend/datasources/filters/AsciiFilter.cpp:292
 #: src/backend/datasources/filters/ParquetFilter.cpp:76
 #: src/backend/datasources/filters/ParquetFilter.cpp:89
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Number of columns: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:230
+#: src/backend/datasources/filters/AsciiFilter.cpp:294
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Number of lines: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:585
-#: src/backend/datasources/filters/AsciiFilter.cpp:1372
+#: src/backend/datasources/filters/AsciiFilter.cpp:651
+#: src/backend/datasources/filters/AsciiFilter.cpp:1443
 #: src/backend/datasources/filters/JsonFilter.cpp:248
 #, kde-format
 msgid "Column %1"
 msgstr "Column %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:668
-#: src/backend/datasources/filters/AsciiFilter.cpp:1398
+#: src/backend/datasources/filters/AsciiFilter.cpp:734
+#: src/backend/datasources/filters/AsciiFilter.cpp:1469
 #, kde-format
 msgid "Timestamp"
 msgstr "Timestamp"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:673
-#: src/backend/datasources/filters/AsciiFilter.cpp:1403
+#: src/backend/datasources/filters/AsciiFilter.cpp:739
+#: src/backend/datasources/filters/AsciiFilter.cpp:1474
 #: src/backend/datasources/filters/BinaryFilter.cpp:295
 #: src/backend/datasources/filters/BinaryFilter.cpp:438
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
@@ -1244,29 +1244,29 @@ msgstr "Timestamp"
 msgid "Index"
 msgstr "Index"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:686
+#: src/backend/datasources/filters/AsciiFilter.cpp:752
 #, kde-format
 msgid "DateTime"
 msgstr "DateTime"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:687
+#: src/backend/datasources/filters/AsciiFilter.cpp:753
 #, fuzzy, kde-format
 #| msgid "Timestamp"
 msgid "Timestamp (Unix)"
 msgstr "Timestamp"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:688
+#: src/backend/datasources/filters/AsciiFilter.cpp:754
 #, fuzzy, kde-format
 #| msgid "Timestamp"
 msgid "Timestamp (Windows)"
 msgstr "Timestamp"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:689
+#: src/backend/datasources/filters/AsciiFilter.cpp:755
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:690
+#: src/backend/datasources/filters/AsciiFilter.cpp:756
 #: src/backend/datasources/filters/MatioFilter.cpp:400
 #: src/backend/datasources/filters/MatioFilter.cpp:432
 #, kde-format
