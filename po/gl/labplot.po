@@ -11727,9 +11727,7 @@ msgstr "%1: definir o índice do punto de unión"
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:293
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:753
-#, fuzzy, kde-format
-#| msgctxt "Curve fitting"
-#| msgid "Fit Results"
+#, kde-format
 msgid "Fit Results"
 msgstr "Axustar os resultados"
 
@@ -18880,10 +18878,9 @@ msgid "%1: clear selected rows(s)"
 msgstr "%1: limpar as filas seleccionadas"
 
 #: src/frontend/note/NoteView.cpp:96
-#, fuzzy, kde-format
-#| msgid "&Edit"
+#, kde-format
 msgid "Edit"
-msgstr "&Editar"
+msgstr "Editar"
 
 #: src/frontend/note/NoteView.cpp:100
 #, kde-format

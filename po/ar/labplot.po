@@ -1,13 +1,13 @@
 # Copyright (C) 2025 This file is copyright:
 # This file is distributed under the same license as the labplot package.
-# SPDX-FileCopyrightText: 2022, 2025, 2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2022, 2025-2026 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-31 00:46+0000\n"
-"PO-Revision-Date: 2026-09-23 19:03+0400\n"
+"PO-Revision-Date: 2026-10-31 20:08+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -556,10 +556,9 @@ msgid "%1: set random values"
 msgstr "‏%1: اضبط قيما عشوائية"
 
 #: src/backend/core/column/Column.cpp:1108
-#, fuzzy, kde-format
-#| msgid "Path:"
+#, kde-format
 msgid "Path: %1"
-msgstr "المسار:"
+msgstr "المسار: %1"
 
 #: src/backend/core/column/Column.cpp:1109
 #: src/frontend/datasources/ImportFileWidget.cpp:1741
@@ -3824,39 +3823,37 @@ msgstr "عينة عشوائية"
 #: src/backend/gsl/functions.cpp:265
 #, kde-format
 msgid "Unwrap phase angles"
-msgstr ""
+msgstr "فك التفاف زوايا الطور"
 
 #: src/backend/gsl/functions.cpp:266
 #, kde-format
 msgid "Unwrap with custom period"
-msgstr ""
+msgstr "فك الالتفاف بدورة مخصصة"
 
 #: src/backend/gsl/functions.cpp:267
 #, kde-format
 msgid "Difference from previous row"
-msgstr ""
+msgstr "الفرق عن الصف السابق"
 
 #: src/backend/gsl/functions.cpp:268
-#, fuzzy, kde-format
-#| msgid "Cumulative Histogram"
+#, kde-format
 msgid "Cumulative sum"
-msgstr "مدرج تكراري تراكمي"
+msgstr "المجموع التراكمي"
 
 #: src/backend/gsl/functions.cpp:269
-#, fuzzy, kde-format
-#| msgid "Cumulative Percentage"
+#, kde-format
 msgid "Cumulative product"
-msgstr "النسبة المئوية التراكمية"
+msgstr "الجداء التراكمي"
 
 #: src/backend/gsl/functions.cpp:270
 #, kde-format
 msgid "Value from n rows before"
-msgstr ""
+msgstr "القيمة من n صفوف سابقة"
 
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Value from n rows after"
-msgstr ""
+msgstr "القيمة من n صفوف لاحقة"
 
 #: src/backend/gsl/functions.cpp:273
 #, kde-format
@@ -4228,8 +4225,7 @@ msgid "equal"
 msgstr "يساوي"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not a Number"
 msgstr "ليس عددًا"
 
@@ -5574,67 +5570,64 @@ msgid "restrict to [0, 2 pi]"
 msgstr "اقصر على [0, 2pi]"
 
 #: src/backend/gsl/functions.cpp:687
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees to radians"
-msgstr "درجات الحرية"
+msgstr "من الدرجات إلى الراديان"
 
 #: src/backend/gsl/functions.cpp:688
 #, kde-format
 msgid "Radians to degrees"
-msgstr ""
+msgstr "من الراديان إلى الدرجات"
 
 #: src/backend/gsl/functions.cpp:691
 #, kde-format
 msgid "Clip value to range [min, max]"
-msgstr ""
+msgstr "قص القيمة إلى المدى [min, max]"
 
 #: src/backend/gsl/functions.cpp:692
 #, kde-format
 msgid "Floor (largest integer <= x)"
-msgstr ""
+msgstr "الأرضية (أكبر عدد صحيح <= x)"
 
 #: src/backend/gsl/functions.cpp:693
 #, kde-format
 msgid "2^x"
-msgstr ""
+msgstr "2^x"
 
 #: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Floating-point remainder of x/y"
-msgstr ""
+msgstr "باقي القسمة العائمة لـ x/y"
 
 #: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "IEEE remainder of x/y"
-msgstr ""
+msgstr "باقي IEEE لـ x/y"
 
 #: src/backend/gsl/functions.cpp:696
-#, fuzzy, kde-format
-#| msgid "square x"
+#, kde-format
 msgid "Square (x^2)"
-msgstr "مربع س"
+msgstr "المربع (x^2)"
 
 #: src/backend/gsl/functions.cpp:697
 #, kde-format
 msgid "Reciprocal (1/x)"
-msgstr ""
+msgstr "المقلوب (1/x)"
 
 #: src/backend/gsl/functions.cpp:698
-#, fuzzy, kde-format
-#| msgid "Heavyside theta function"
+#, kde-format
 msgid "Heaviside step function"
-msgstr "دالة هيفسايد ثيتا"
+msgstr "دالة الخطوة هيفيسايد"
 
 #: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Greatest common divisor"
-msgstr ""
+msgstr "القاسم المشترك الأكبر"
 
 #: src/backend/gsl/functions.cpp:700
 #, kde-format
 msgid "Least common multiple"
-msgstr ""
+msgstr "المضاعف المشترك الأصغر"
 
 #: src/backend/gsl/functions.cpp:703
 #, kde-format
@@ -11213,7 +11206,7 @@ msgstr "%1: تعيين خيارات خط الأساس وإجراء التصحي�
 #: src/backend/worksheet/plots/cartesian/XYBaselineCorrectionCurve.cpp:94
 #, kde-format
 msgid "Baseline correction requires at least 1 point, none provided."
-msgstr ""
+msgstr "تصحيح خط الأساس يتطلب نقطة واحدة على الأقل، ولم تُقدَّم أي نقطة."
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
@@ -11226,6 +11219,8 @@ msgid ""
 "Convolution requires at least 1 point per input. Signal has %1 points, "
 "response has %2 points."
 msgstr ""
+"الالتفاف يتطلب نقطة واحدة على الأقل لكل مدخل. الإشارة فيها %1 نقطة، "
+"والاستجابة فيها %2 نقطة."
 
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
@@ -11238,6 +11233,8 @@ msgid ""
 "Correlation requires at least 1 point per signal. Signal 1 has %1 points, "
 "signal 2 has %2 points."
 msgstr ""
+"الارتباط يتطلب نقطة واحدة على الأقل لكل إشارة. الإشارة 1 فيها %1 نقطة، "
+"والإشارة 2 فيها %2 نقطة."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:269
 #, kde-format
@@ -11292,7 +11289,7 @@ msgstr "%1: اِضبط الخيارات ونفِّذ التفاضل"
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:112
 #, kde-format
 msgid "Differentiation requires at least 3 points, only %1 provided."
-msgstr ""
+msgstr "الاشتقاق يتطلب 3 نقاط على الأقل، ولم تُقدَّم سوى %1 نقطة."
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:95
 #, kde-format
@@ -11455,7 +11452,7 @@ msgstr "النموذج ليس لديه مُعاملات!"
 #, kde-format
 msgid ""
 "Insufficient weight data points. X has %1 points, y-error has %2 points."
-msgstr ""
+msgstr "نقاط بيانات الأوزان غير كافية. X فيها %1 نقطة، وخطأ y فيه %2 نقطة."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2426
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -11464,15 +11461,12 @@ msgid "No X data available!"
 msgstr "لا توجد بيانات س متاحة!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2435
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)!"
+#, kde-format
 msgid ""
 "Number of data points (%1) must be greater than or equal to the number of "
 "parameters (%2)."
 msgstr ""
-"يجب أن يكون عدد نقاط البيانات (%1) أكبر من أو يساوي عدد المُعاملات (%2)!"
+"يجب أن يكون عدد نقاط البيانات (%1) أكبر من أو يساوي عدد المعاملات (%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2444
 #, kde-format
@@ -11560,7 +11554,7 @@ msgstr "%1: اِضبط الخيارات ونفِّذ التكامل"
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:111
 #, kde-format
 msgid "Integration requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "التكامل يتطلب نقطتين على الأقل، ولم تُقدَّم سوى %1 نقطة."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
@@ -11578,13 +11572,13 @@ msgid "Not enough data points available."
 msgstr "لا يوجد ما يكفي من نقاط البيانات المتاحة."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:150
-#, fuzzy, kde-format
-#| msgid ""
-#| "interpolation failed since x data is not strictly monotonic increasing!"
+#, kde-format
 msgid ""
 "interpolation failed since x data is not strictly monotonic increasing at x_"
 "%1 = %2 (previous x_%3 = %4)."
-msgstr "فشل الاستيفاء لأن بيانات س لا تتزايد بشكل رتيب صارم!"
+msgstr ""
+"فشل الاستيفاء لأن بيانات x ليست متزايدة رتيبة تمامًا عند x_%1 = %2 (x_%3 "
+"السابقة = %4)."
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:69
 #, kde-format
@@ -11594,7 +11588,7 @@ msgstr "%1: اضبط الخيارات ونفِّذ تبسيط الخط"
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:119
 #, kde-format
 msgid "Line simplification requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "تبسيط الخط يتطلب نقطتين على الأقل، ولم تُقدَّم سوى %1 نقطة."
 
 #: src/backend/worksheet/plots/cartesian/XYPiecewiseLinearFitCurve.cpp:120
 #, kde-format
@@ -11687,17 +11681,16 @@ msgid "%1: set options and perform the smooth"
 msgstr "%1: اِضبط الخيارات ونفِّذ التنعيم"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:115
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid ""
 "Number of x and y data points must be equal. x has %1 points, y has %2 "
 "points."
-msgstr "يجب أن يتساوى عدد نقاط بيانات س وص."
+msgstr "يجب أن يتساوى عدد نقاط بيانات x و y. x فيها %1 نقطة، و y فيها %2 نقطة."
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
 #, kde-format
 msgid "Smoothing requires at least 2 points, only %1 provided."
-msgstr ""
+msgstr "التمهيد يتطلب نقطتين على الأقل، ولم تُقدَّم سوى %1 نقطة."
 
 #: src/backend/worksheet/TextLabel.cpp:318
 #: src/backend/worksheet/TextLabel.cpp:333
@@ -14121,7 +14114,7 @@ msgstr[5] "%1 بايت"
 #: src/frontend/datasources/ImportFileWidget.cpp:1747
 #, kde-format
 msgid "SHA-256: %1"
-msgstr ""
+msgstr "SHA-256: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1750
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
@@ -17646,10 +17639,9 @@ msgid "Dash-dot-dot Line"
 msgstr "خط من شرطة - نقطة - نقطة"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "خطّ مُنقَّط"
+msgstr "خط منقّط دائري"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format
@@ -19351,10 +19343,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "اِطلب تأكيدًا عند إعادة تشغيل نظام الخلفيّة."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
-msgstr "اختر المسار إلى بيئة افتراضية لبايثون."
+msgstr "اختر المسار إلى بيئة Python افتراضية."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -19368,11 +19359,9 @@ msgid "Select the Virtual Environment"
 msgstr "حدد بيئة افتراضية"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
-msgstr "البيئة الافتراضية المحددة لا تحتوي على ملف تنفيذي لبايثون."
+msgstr "البيئة الافتراضية المحددة لا تحتوي على ملف تنفيذي لـ Python."
 
 #: src/frontend/SettingsScriptingPage.cpp:236
 #, kde-format
@@ -19381,14 +19370,12 @@ msgstr "البيئة الافتراضية المحددة لا تحتوي على 
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
-msgstr "إصدار بايثون للبيئة الافتراضية المحددة لا يطابق إصدار بايثون للتطبيق."
+msgstr ""
+"إصدار Python في البيئة الافتراضية المحددة لا يطابق إصدار Python في التطبيق."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
@@ -27879,10 +27866,9 @@ msgid "Search/Filter text"
 msgstr "نص البحث/التصفية"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:62
-#, fuzzy, kde-format
-#| msgid "Clea&r Selection"
+#, kde-format
 msgid "Clear selection"
-msgstr "امحُ التّحديد"
+msgstr "أزل التحديد"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:421
 #, kde-format
