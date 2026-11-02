@@ -86,12 +86,12 @@ endif()
 
 find_path(PySide6_INCLUDE_DIRS
     NAMES pysideqobject.h
-    PATHS ${PySide6_PATH}/include ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/PySide6 /usr/include/PySide6 /usr/local/include /usr/local/include/PySide6 /usr/local/PySide6/include
+    PATHS "${PySide6_PATH}/include" "${PySide6_PATH}/include/PySide6" "${CMAKE_INSTALL_PREFIX}/include" "${CMAKE_INSTALL_PREFIX}/include/PySide6" /usr/include/PySide6 /usr/local/include /usr/local/include/PySide6 /usr/local/PySide6/include
 )
 
 find_path(PySide6_TYPESYSTEMS
     NAMES typesystem_widgets.xml
-    PATHS ${PySide6_PATH}/typesystems ${CMAKE_INSTALL_PREFIX}/PySide6/typesystems /usr/share/PySide6/typesystems /usr/local/share/PySide6/typesystems
+    PATHS "${PySide6_PATH}/typesystems" "${CMAKE_INSTALL_PREFIX}/PySide6/typesystems" /usr/share/PySide6/typesystems /usr/local/share/PySide6/typesystems
 )
 
 find_library(PySide6_ABI3_LIBRARY

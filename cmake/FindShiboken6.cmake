@@ -67,7 +67,7 @@ find_program(Shiboken6_EXECUTABLE
 # find header
 find_path(Shiboken6_INCLUDE_DIRS
     NAMES sbkversion.h
-    PATHS "${Shiboken6_PATH}/include" "${PySide6_PATH}/../shiboken6/include" "${PySide6_PATH}/../shiboken6_generator/include" "${CMAKE_INSTALL_PREFIX}/include" "${CMAKE_INSTALL_PREFIX}/shiboken6/include" "${CMAKE_INSTALL_PREFIX}/include/shiboken6" /usr/include/shiboken6 /usr/local/include /usr/local/include/shiboken6 /usr/local/shiboken6/include
+    PATHS "${Shiboken6_PATH}/include" "${Shiboken6_PATH}/include/shiboken6" "${PySide6_PATH}/../shiboken6/include" "${PySide6_PATH}/../shiboken6/include/shiboken6" "${PySide6_PATH}/../shiboken6_generator/include" "${PySide6_PATH}/../shiboken6_generator/include/shiboken6" "${CMAKE_INSTALL_PREFIX}/include" "${CMAKE_INSTALL_PREFIX}/shiboken6/include" "${CMAKE_INSTALL_PREFIX}/include/shiboken6" /usr/include/shiboken6 /usr/local/include /usr/local/include/shiboken6 /usr/local/shiboken6/include
 )
 
 # Find the library
