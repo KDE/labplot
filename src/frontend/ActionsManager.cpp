@@ -1202,7 +1202,7 @@ void ActionsManager::updateGUI() {
 		}
 
 		// populate worksheet menu
-		auto* view = qobject_cast<WorksheetView*>(w->view());
+		auto* view = w->view();
 		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("worksheet"), m_mainWindow));
 		if (update) {
 			menu->clear();
@@ -1247,7 +1247,7 @@ void ActionsManager::updateGUI() {
 		}
 
 		// populate spreadsheet-menu
-		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
+		auto* view = spreadsheet->view();
 		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("spreadsheet"), m_mainWindow));
 		if (update) {
 			menu->clear();
@@ -1286,7 +1286,7 @@ void ActionsManager::updateGUI() {
 		matrix = dynamic_cast<Matrix*>(m_mainWindow->m_currentAspect->parent<Matrix>());
 	if (matrix) {
 		// populate matrix-menu
-		auto* view = qobject_cast<MatrixView*>(matrix->view());
+		auto* view = matrix->view();
 		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("matrix"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
@@ -1306,7 +1306,7 @@ void ActionsManager::updateGUI() {
 		notebook = dynamic_cast<Notebook*>(m_mainWindow->m_currentAspect->parent<Notebook>());
 	if (notebook) {
 		// menu
-		auto* view = qobject_cast<NotebookView*>(notebook->view());
+		auto* view = notebook->view();
 		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("notebook"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
@@ -1326,7 +1326,7 @@ void ActionsManager::updateGUI() {
 	const auto* script = dynamic_cast<Script*>(m_mainWindow->m_currentAspect);
 	if (script) {
 		// mneu
-		auto* view = qobject_cast<ScriptEditor*>(script->view());
+		auto* view = script->view();
 		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("script"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
@@ -1361,7 +1361,7 @@ void ActionsManager::updateGUI() {
 
 	if (datapicker) {
 		// menu
-		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
+		auto* view = datapicker->view();
 		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("data_extractor"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);

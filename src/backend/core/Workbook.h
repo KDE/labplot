@@ -29,7 +29,9 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QWidget* view() const override;
+#ifndef SDK
+	WorkbookView* view() const;
+#endif
 
 	bool exportView() const override;
 	bool printView() override;
@@ -49,9 +51,7 @@ public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
-#ifndef SDK
-	WorkbookView* view_specific() const;
-#endif
+	QWidget* createView() const override;
 
 private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;

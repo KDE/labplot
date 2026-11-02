@@ -329,37 +329,33 @@ QIcon Notebook::icon() const {
 	return {};
 }
 
-QWidget* Notebook::view() const {
+QWidget* Notebook::createView() const {
 #ifndef SDK
-	if (!m_partView) {
-		auto* newView = new NotebookView(const_cast<Notebook*>(this));
-		newView->setBaseSize(1500, 1500);
-		m_partView = newView;
-		// 	connect(newView, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+	auto* newView = new NotebookView(const_cast<Notebook*>(this));
+	newView->setBaseSize(1500, 1500);
+	// 	connect(newView, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
-		// set the current path in the session to the path of the project file
-		if (m_session) {
-			const Project* project = const_cast<Notebook*>(this)->project();
-			const QString& fileName = project->fileName();
-			if (!fileName.isEmpty()) {
-				QFileInfo fi(fileName);
-				m_session->setWorksheetPath(fi.filePath());
-			}
+	// set the current path in the session to the path of the project file
+	if (m_session) {
+		const Project* project = const_cast<Notebook*>(this)->project();
+		const QString& fileName = project->fileName();
+		if (!fileName.isEmpty()) {
+			QFileInfo fi(fileName);
+			m_session->setWorksheetPath(fi.filePath());
 		}
 	}
+	return newView;
+#else
+	return nullptr;
 #endif
-	return m_partView;
 }
 
-#ifndef SDK
 /*!
- * returns the NotebookView if the view was already created, nullptr otherwise.
- * Doesn't create the view.
+ * returns the NotebookView, the view is created if it doesn't exist yet.
  */
-NotebookView* Notebook::view_specific() const {
-	return static_cast<NotebookView*>(m_partView);
+NotebookView* Notebook::view() const {
+	return static_cast<NotebookView*>(AbstractPart::view());
 }
-#endif
 
 //! Return a new context menu.
 /**
@@ -379,7 +375,7 @@ void Notebook::fillColumnContextMenu(QMenu* menu, Column* column) {
 void Notebook::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& columns) {
 #ifndef SDK
 	if (m_partView)
-		view_specific()->fillColumnsContextMenu(menu, columns);
+		view()->fillColumnsContextMenu(menu, columns);
 #else
 	Q_UNUSED(menu)
 	Q_UNUSED(columns)

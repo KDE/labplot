@@ -1464,7 +1464,12 @@
         <declare-function signature="theme()const" return-type="QString"/>
         <declare-function signature="setTheme(const QString&amp;)" return-type="void"/>
         <?if !scripting ?>
-        <declare-function signature="view()const" return-type="QWidget*"/>
+        <add-function signature="view()const" return-type="QWidget*" access="public" static="no" classmethod="no">
+            <inject-code class="target" position="beginning">
+                QWidget* result = %CPPSELF-&gt;AbstractPart::view();
+                return %CONVERTTOPYTHON[QWidget*](result);
+            </inject-code>
+        </add-function>
         <?endif?>
     </object-type>
 

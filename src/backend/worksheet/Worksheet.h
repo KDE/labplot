@@ -56,7 +56,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	void fillElementsContextMenu(QMenu*);
-	QWidget* view() const override;
+	WorksheetView* view() const;
 
 	QVector<AbstractAspect*> dependsOn() const override;
 	WorksheetElement* currentSelection();
@@ -152,7 +152,7 @@ private:
 
 	Q_DECLARE_PRIVATE(Worksheet)
 	WorksheetPrivate* const d_ptr;
-	WorksheetView* view_specific() const;
+	QWidget* createView() const override;
 	friend class WorksheetPrivate;
 
 private Q_SLOTS:

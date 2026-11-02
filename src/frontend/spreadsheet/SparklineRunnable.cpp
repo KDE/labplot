@@ -11,6 +11,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #include <QWidget>
 

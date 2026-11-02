@@ -123,11 +123,13 @@ public:
 	AbstractFileFilter* filter() const;
 
 	QIcon icon() const override;
-	QWidget* view() const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void finalizeLoad();
+
+protected:
+	QWidget* createView() const override;
 
 private:
 	QString m_fileName;

@@ -27,7 +27,7 @@ public:
 	explicit Script(const QString&, const QString& = {});
 	~Script();
 
-	QWidget* view() const override;
+	ScriptEditor* view() const;
 	QIcon icon() const override;
 
 	bool exportView() const override;
@@ -57,7 +57,7 @@ private:
 	QString m_outputHtml;
 
 	void prepareDocument() const;
-	ScriptEditor* view_specific() const;
+	QWidget* createView() const override;
 
 public Q_SLOTS:
 	void runScript();

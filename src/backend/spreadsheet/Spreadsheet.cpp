@@ -159,30 +159,27 @@ SpreadsheetModel* Spreadsheet::model() const {
   This method may be called multiple times during the life time of an Aspect, or it might not get
   called at all. Aspects must not depend on the existence of a view for their operation.
 */
-QWidget* Spreadsheet::view() const {
+QWidget* Spreadsheet::createView() const {
 #ifndef SDK
-	if (!m_partView) {
-		Q_D(const Spreadsheet);
-		auto* newView = new SpreadsheetView(const_cast<Spreadsheet*>(this), d->readOnly);
-		m_partView = newView;
-	}
-	return m_partView;
+	Q_D(const Spreadsheet);
+	return new SpreadsheetView(const_cast<Spreadsheet*>(this), d->readOnly);
 #else
 	return nullptr;
 #endif
 }
 
+#ifndef SDK
 /*!
- * returns the SpreadsheetView if the view was already created, nullptr otherwise.
- * Doesn't create the view.
+ * returns the SpreadsheetView, the view is created if it doesn't exist yet.
  */
-SpreadsheetView* Spreadsheet::view_specific() const {
-	return static_cast<SpreadsheetView*>(m_partView);
+SpreadsheetView* Spreadsheet::view() const {
+	return static_cast<SpreadsheetView*>(AbstractPart::view());
 }
+#endif
 
 bool Spreadsheet::exportView() const {
 #ifndef SDK
-	return view_specific()->exportView();
+	return view()->exportView();
 #else
 	return true;
 #endif
@@ -190,7 +187,7 @@ bool Spreadsheet::exportView() const {
 
 bool Spreadsheet::printView() {
 #ifndef SDK
-	return view_specific()->printView();
+	return view()->printView();
 #else
 	return true;
 #endif
@@ -198,7 +195,7 @@ bool Spreadsheet::printView() {
 
 bool Spreadsheet::printPreview() const {
 #ifndef SDK
-	return view_specific()->printPreview();
+	return view()->printPreview();
 #else
 	return true;
 #endif
@@ -305,11 +302,11 @@ void Spreadsheet::updateHorizontalHeader() {
 
 		// if the header name of the first column has changed (column mode to be shown, etc.),
 		// reset the column widths and request the view to adjuste the column sizes to the  content
-		if (oldHeader != newHeader && view_specific()) {
+		if (oldHeader != newHeader && m_partView) {
 			const auto& columns = children<Column>();
 			for (auto col : columns)
 				col->setWidth(0);
-			view_specific()->resizeHeader();
+			view()->resizeHeader();
 		}
 	}
 #endif
@@ -936,7 +933,7 @@ QMenu* Spreadsheet::createContextMenu() {
 void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #ifndef SDK
 	if (m_partView)
-		view_specific()->fillColumnContextMenu(menu, column);
+		view()->fillColumnContextMenu(menu, column);
 #else
 	Q_UNUSED(menu)
 	Q_UNUSED(column)
@@ -946,7 +943,7 @@ void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 void Spreadsheet::fillColumnsContextMenu(QMenu* menu) {
 #ifndef SDK
 	if (m_partView)
-		view_specific()->fillColumnsContextMenu(menu);
+		view()->fillColumnsContextMenu(menu);
 #else
 	Q_UNUSED(menu)
 #endif
@@ -1991,7 +1988,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 #ifndef SDK
 	if (m_partView)
-		view_specific()->resizeHeader();
+		view()->resizeHeader();
 #endif
 
 	// row count most probably changed after the import, notify the dock widget.
@@ -2024,12 +2021,12 @@ QString SpreadsheetPrivate::name() const {
 
 void SpreadsheetPrivate::updateCommentsHeader() {
 #ifndef SDK
-	q->view_specific()->showComments(q->showComments());
+	q->view()->showComments(q->showComments());
 #endif
 }
 
 void SpreadsheetPrivate::updateSparklinesHeader() {
 #ifndef SDK
-	q->view_specific()->showSparklines(q->showSparklines());
+	q->view()->showSparklines(q->showSparklines());
 #endif
 }

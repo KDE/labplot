@@ -56,8 +56,10 @@ Script::Script(const QString& name, const QString& lang)
 
 	connect(this, &Script::viewAboutToBeDeleted, [this]() {
 		// keep the output of the editor so it is still available when saving the project or re-opening the view
-		if (auto* editor = view_specific())
+		if (m_partView) {
+			auto* editor = view();
 			m_outputHtml = editor->outputText().isEmpty() ? QString() : editor->outputHtml();
+		}
 	});
 }
 
@@ -139,23 +141,18 @@ bool Script::exportView() const {
 	return true;
 }
 
-QWidget* Script::view() const {
-	if (!m_partView) {
-		auto* newView = new ScriptEditor(const_cast<Script*>(this));
-		if (!m_outputHtml.isEmpty())
-			newView->setOutputHtml(m_outputHtml);
-		m_partView = newView;
-	}
-
-	return m_partView;
+QWidget* Script::createView() const {
+	auto* newView = new ScriptEditor(const_cast<Script*>(this));
+	if (!m_outputHtml.isEmpty())
+		newView->setOutputHtml(m_outputHtml);
+	return newView;
 }
 
 /*!
- * returns the ScriptEditor if the view was already created, nullptr otherwise.
- * Doesn't create the view.
+ * returns the ScriptEditor, the view is created if it doesn't exist yet.
  */
-ScriptEditor* Script::view_specific() const {
-	return static_cast<ScriptEditor*>(m_partView);
+ScriptEditor* Script::view() const {
+	return static_cast<ScriptEditor*>(AbstractPart::view());
 }
 
 void Script::save(QXmlStreamWriter* writer) const {
@@ -219,8 +216,8 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 			m_kTextEditorDocument->setText(attribs.value(QStringLiteral("text")).toString());
 		} else if (!preview && reader->name() == QLatin1String("output")) {
 			m_outputHtml = reader->readElementText(QXmlStreamReader::SkipChildElements);
-			if (auto* editor = view_specific())
-				editor->setOutputHtml(m_outputHtml);
+			if (m_partView)
+				view()->setOutputHtml(m_outputHtml);
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())

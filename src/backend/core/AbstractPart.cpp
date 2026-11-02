@@ -39,13 +39,20 @@ AbstractPart::~AbstractPart() {
 }
 
 /**
- * \fn QWidget *AbstractPart::view() const
- * \brief Construct a primary view on me.
- *
- * The caller receives ownership of the view.
+ * \brief Returns the primary view of the part, the view is created on the first call via createView().
  *
  * This method may be called multiple times during the life time of a Part, or it might not get
  * called at all. Parts must not depend on the existence of a view for their operation.
+ */
+QWidget* AbstractPart::view() const {
+	if (!m_partView)
+		m_partView = createView();
+	return m_partView;
+}
+
+/**
+ * \fn QWidget* AbstractPart::createView() const
+ * \brief Creates the primary view of the part. Called by view() if the view doesn't exist yet.
  */
 #ifndef SDK
 /**

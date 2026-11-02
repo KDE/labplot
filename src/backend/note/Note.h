@@ -31,7 +31,9 @@ public:
 	explicit Note(const QString& name);
 	~Note() override;
 
-	QWidget* view() const override;
+#ifndef SDK
+	NoteView* view() const;
+#endif
 	QIcon icon() const override;
 
 	bool exportView() const override;
@@ -59,9 +61,7 @@ Q_SIGNALS:
 private:
 	Q_DECLARE_PRIVATE(Note)
 	NotePrivate* const d_ptr;
-#ifndef SDK
-	NoteView* view_specific() const;
-#endif
+	QWidget* createView() const override;
 };
 
 #endif // NOTE_H

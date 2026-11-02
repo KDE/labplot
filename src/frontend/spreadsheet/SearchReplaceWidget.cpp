@@ -30,7 +30,7 @@ static const QString defaultDateTimeFormat = QStringLiteral("yyyy-MM-dd hh:mm:ss
 SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* parent)
 	: QWidget(parent)
 	, m_spreadsheet(spreadsheet) {
-	m_view = static_cast<SpreadsheetView*>(spreadsheet->view());
+	m_view = spreadsheet->view();
 
 	auto* layout = new QVBoxLayout(this);
 	this->setLayout(layout);

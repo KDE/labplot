@@ -16,6 +16,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #include <QDirIterator>
 #include <QFileDialog>

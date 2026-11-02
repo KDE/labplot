@@ -64,7 +64,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	void createContextMenu(QMenu*);
-	QWidget* view() const override;
+	DatapickerImageView* view() const;
 
 	bool exportView() const override;
 	bool printView() override;
@@ -129,7 +129,7 @@ private:
 	Q_DECLARE_PRIVATE(DatapickerImage)
 	DatapickerImagePrivate* const d_ptr;
 
-	DatapickerImageView* view_specific() const;
+	QWidget* createView() const override;
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
 	int m_currentRefPoint{-1};

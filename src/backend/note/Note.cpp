@@ -71,11 +71,11 @@ QIcon Note::icon() const {
 bool Note::printView() {
 #ifndef SDK
 	QPrinter printer;
-	auto* dlg = new QPrintDialog(&printer, view_specific());
+	auto* dlg = new QPrintDialog(&printer, view());
 	dlg->setWindowTitle(i18nc("@title:window", "Print Note"));
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
-		view_specific()->print(&printer);
+		view()->print(&printer);
 
 	delete dlg;
 	return ret;
@@ -86,8 +86,8 @@ bool Note::printView() {
 
 bool Note::printPreview() const {
 #ifndef SDK
-	auto* dlg = new QPrintPreviewDialog(view_specific());
-	connect(dlg, &QPrintPreviewDialog::paintRequested, view_specific(), &NoteView::print);
+	auto* dlg = new QPrintPreviewDialog(view());
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view(), &NoteView::print);
 	return dlg->exec();
 #else
 	return false;
@@ -168,13 +168,9 @@ void Note::setMode(const Note::Mode& mode) {
 		exec(new NoteSetModeCmd(d, mode, ki18n("%1: set mode")));
 }
 
-QWidget* Note::view() const {
+QWidget* Note::createView() const {
 #ifndef SDK
-	if (!m_partView) {
-		auto* newView = new NoteView(const_cast<Note*>(this));
-		m_partView = newView;
-	}
-	return m_partView;
+	return new NoteView(const_cast<Note*>(this));
 #else
 	return nullptr;
 #endif
@@ -182,11 +178,10 @@ QWidget* Note::view() const {
 
 #ifndef SDK
 /*!
- * returns the NoteView if the view was already created, nullptr otherwise.
- * Doesn't create the view.
+ * returns the NoteView, the view is created if it doesn't exist yet.
  */
-NoteView* Note::view_specific() const {
-	return static_cast<NoteView*>(m_partView);
+NoteView* Note::view() const {
+	return static_cast<NoteView*>(AbstractPart::view());
 }
 #endif
 

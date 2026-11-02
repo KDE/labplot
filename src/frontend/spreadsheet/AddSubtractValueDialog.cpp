@@ -25,6 +25,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "frontend/GuiTools.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #include <KLocalizedString>
 #include <KMessageBox>

@@ -847,7 +847,7 @@ void DatapickerTest::referenceMoveKeyPress() {
 	points[0]->d_ptr->setSelected(false);
 	points[1]->d_ptr->setSelected(false);
 	points[2]->d_ptr->setSelected(true);
-	auto view = static_cast<DatapickerImageView*>(datapicker.image()->view());
+	auto view = datapicker.image()->view();
 	view->shiftLeftAction->triggered(true);
 
 	VALUES_EQUAL(points[0]->position().x(), 0.);

@@ -720,7 +720,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			// TODO: mode
 			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
 #ifndef SDK
-			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
+			const MatrixModel* matrixModel = matrix->view()->model();
 #endif
 			const int precision = matrix->precision();
 			for (int i = 0; i < tfields; ++i) {

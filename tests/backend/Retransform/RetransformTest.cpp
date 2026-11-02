@@ -139,7 +139,7 @@ void RetransformTest::TestResizeWindows() {
 	const auto& worksheets = project.children(AspectType::Worksheet);
 	QCOMPARE(worksheets.count(), 1);
 	auto worksheet = static_cast<Worksheet*>(worksheets.at(0));
-	auto* view = static_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 
 	view->resize(100, 100);
 	view->processResize();
@@ -220,7 +220,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	auto* worksheet = project.child<Worksheet>(0);
 	QVERIFY(worksheet);
 
-	auto* view = static_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view);
 
 	auto* plot = worksheet->child<CartesianPlot>(0);
@@ -393,7 +393,7 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 
 	QAction a(nullptr);
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
-	auto* view = static_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view);
 	view->initActions();
 	view->changePlotMouseMode(&a);
@@ -491,7 +491,7 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 
 	QAction a(nullptr);
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomYSelection));
-	auto* view = static_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view);
 	view->initActions();
 	view->changePlotMouseMode(&a);
@@ -553,7 +553,7 @@ void RetransformTest::TestPadding() {
 	auto* worksheet = project.child<Worksheet>(0);
 	QVERIFY(worksheet);
 
-	auto* view = static_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view);
 
 	auto* plot = worksheet->child<CartesianPlot>(0);

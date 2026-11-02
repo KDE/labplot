@@ -2075,7 +2075,7 @@ void SpreadsheetTest::testSearchSimple00() {
 	project.addChild(sheet);
 
 	// navigate to the (0,0) cell having the text value "A"
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 	view->goToCell(0, 0);
 
 	// check the initial selection
@@ -2174,7 +2174,7 @@ void SpreadsheetTest::testSearchExtended00() {
 	project.addChild(sheet);
 
 	// navigate to the (0,0) cell having the text value "A"
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 	view->goToCell(0, 0);
 
 	// check the initial selection
@@ -2259,7 +2259,7 @@ void SpreadsheetTest::testSearchExtended01() {
 	project.addChild(sheet);
 
 	// navigate to the (0,0) cell having the text value "A"
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 	view->goToCell(0, 0);
 
 	// check the initial selection
@@ -2344,7 +2344,7 @@ void SpreadsheetTest::testSearchExtended02() {
 	project.addChild(sheet);
 
 	// navigate to the (1,1) cell having the numeric value "2"
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 	view->goToCell(1, 1);
 
 	// check the initial selection
@@ -2429,7 +2429,7 @@ void SpreadsheetTest::testSearchExtended03() {
 	project.addChild(sheet);
 
 	// navigate to the (1,1) cell having the numeric value "2"
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 	view->goToCell(1, 1);
 
 	// check the initial selection
@@ -2522,7 +2522,7 @@ void SpreadsheetTest::testSearchFindAll() {
 	searchReplaceWidget->findAll();
 
 	// checks
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 	auto indexes = view->selectionModel()->selectedIndexes();
 	QCOMPARE(indexes.size(), 2);
 	QCOMPARE(indexes.at(0).row(), 1);
@@ -2544,7 +2544,7 @@ void SpreadsheetTest::testSearchReplaceNumeric() {
 	project.addChild(sheet);
 
 	// navigate to the (1,1) cell having the numeric value 2
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 	view->goToCell(1, 1);
 
 	// check the initial selection
@@ -2610,7 +2610,7 @@ void SpreadsheetTest::testSearchReplaceText() {
 	project.addChild(sheet);
 
 	// navigate to the (0,0) cell having the text value "A"
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 	view->goToCell(0, 0);
 
 	// check the initial selection
@@ -3650,7 +3650,7 @@ void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
 	// check also the position when adding new columns via the actions in the view that also
 	// take the current selected column into account and have more logic for "append left to"
 	// and "append right to" - ensure no columns are added after the statistics spreadsheet
-	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto* view = sheet->view();
 
 	// insert a new column right to the last selected column, it should be placed in front of the statistics spreadsheet
 	view->selectColumn(3); // select the last 4th column

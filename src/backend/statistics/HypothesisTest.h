@@ -57,7 +57,7 @@ public:
 		ramirez_runger_test
 	};
 
-	QWidget* view() const override;
+	HypothesisTestView* view() const;
 	bool exportView() const override;
 	bool printView() override;
 	bool printPreview() const override;
@@ -104,7 +104,7 @@ private:
 	HypothesisTestPrivate* const d_ptr;
 
 protected:
-	HypothesisTestView* view_specific() const;
+	QWidget* createView() const override;
 };
 
 #endif // HYPOTHESISTEST_H

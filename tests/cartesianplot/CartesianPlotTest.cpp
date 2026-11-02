@@ -910,7 +910,7 @@ void CartesianPlotTest::invalidcSystem() {
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
-	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view != nullptr);
 	view->initActions(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
@@ -1049,7 +1049,7 @@ void CartesianPlotTest::autoScaleFitCurveCalculation() {
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
-	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view != nullptr);
 	view->initActions(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
@@ -1101,7 +1101,7 @@ void CartesianPlotTest::wheelEventCenterAxes() {
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
-	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view != nullptr);
 	view->initMenus(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
@@ -1187,7 +1187,7 @@ void CartesianPlotTest::wheelEventNotCenter() {
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
-	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view != nullptr);
 	view->initMenus(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
@@ -1252,7 +1252,7 @@ void CartesianPlotTest::wheelEventOutsideTopLeft() {
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
-	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view != nullptr);
 	view->initMenus(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
@@ -1312,7 +1312,7 @@ void CartesianPlotTest::wheelEventOutsideBottomRight() {
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
-	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	auto* view = worksheet->view();
 	QVERIFY(view != nullptr);
 	view->initMenus(); // needed by SET_CARTESIAN_MOUSE_MODE()
 

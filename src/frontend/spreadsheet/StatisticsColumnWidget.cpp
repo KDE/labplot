@@ -29,6 +29,7 @@
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "frontend/GuiTools.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #include <QTabWidget>
 #include <QTextEdit>

@@ -28,7 +28,7 @@ public:
 	AbstractPart(const QString& name, AspectType type);
 	~AbstractPart() override;
 
-	virtual QWidget* view() const = 0;
+	QWidget* view() const;
 	bool viewCreated() const;
 	void deleteView() const;
 #ifndef SDK
@@ -57,6 +57,8 @@ private:
 	bool m_suppressDeletion{false};
 
 protected:
+	virtual QWidget* createView() const = 0;
+
 	mutable QWidget* m_partView{nullptr};
 
 Q_SIGNALS:

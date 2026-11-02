@@ -57,7 +57,7 @@
 	if (!p1 || !p2)                                                                                                                                            \
 		return;                                                                                                                                                \
                                                                                                                                                                \
-	auto* view = dynamic_cast<WorksheetView*>(w->view());                                                                                                      \
+	auto* view = w->view();                                                                                                                                    \
 	QVERIFY(view != nullptr);                                                                                                                                  \
 	view->initActions(); /* needed by SET_CARTESIAN_MOUSE_MODE() */                                                                                            \
                                                                                                                                                                \

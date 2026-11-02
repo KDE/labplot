@@ -82,13 +82,10 @@ LiveDataSource::~LiveDataSource() {
 	delete m_device;
 }
 
-QWidget* LiveDataSource::view() const {
-	if (!m_partView) {
-		auto* newView = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
-		newView->setSuppressResizeHeader(true);
-		m_partView = newView;
-	}
-	return m_partView;
+QWidget* LiveDataSource::createView() const {
+	auto* newView = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+	newView->setSuppressResizeHeader(true);
+	return newView;
 }
 
 /*!

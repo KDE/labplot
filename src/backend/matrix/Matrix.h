@@ -40,7 +40,9 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QWidget* view() const override;
+#ifndef SDK
+	MatrixView* view() const;
+#endif
 	void updateLocale();
 
 	bool exportView() const override;
@@ -158,9 +160,7 @@ private:
 	MatrixPrivate* const d_ptr;
 
 	mutable MatrixModel* m_model{nullptr};
-#ifndef SDK
-	MatrixView* view_specific() const;
-#endif
+	QWidget* createView() const override;
 	friend class MatrixPrivate;
 };
 

@@ -16,6 +16,7 @@
 
 class AbstractColumn;
 class SeasonalDecompositionPrivate;
+class WorksheetView;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -61,7 +62,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, mstlIterations, MSTLIterations)
 
 	QIcon icon() const override;
-	QWidget* view() const override;
+	WorksheetView* view() const;
 
 #ifndef SDK
 	ContentDockWidget* dockWidget() const override;
@@ -83,6 +84,7 @@ private:
 	SeasonalDecompositionPrivate* const d_ptr;
 	friend class SeasonalDecompositionPrivate;
 
+	QWidget* createView() const override;
 	void init();
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);

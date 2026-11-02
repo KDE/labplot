@@ -32,7 +32,6 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QWidget* view() const override;
 
 	QString topicName() const;
 	MQTTClient* mqttClient() const;
@@ -40,6 +39,9 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+
+protected:
+	QWidget* createView() const override;
 
 private:
 	void initActions();

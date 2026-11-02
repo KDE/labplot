@@ -172,14 +172,14 @@ MainWin::~MainWin() {
 void MainWin::showPresenter() {
 	const auto* w = dynamic_cast<Worksheet*>(m_currentAspect);
 	if (w) {
-		auto* view = static_cast<WorksheetView*>(w->view());
+		auto* view = w->view();
 		view->presenterMode();
 	} else {
 		// currently active object is not a worksheet but we're asked to start in the presenter mode
 		// determine the first available worksheet and show it in the presenter mode
 		auto worksheets = m_project->children<Worksheet>();
 		if (worksheets.size() > 0) {
-			auto* view = static_cast<WorksheetView*>(worksheets.constFirst()->view());
+			auto* view = worksheets.constFirst()->view();
 			view->presenterMode();
 		} else
 			QMessageBox::information(this, i18n("Presenter Mode"), i18n("No worksheets are available in the project. The presenter mode will not be started."));

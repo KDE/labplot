@@ -55,7 +55,7 @@ PresenterWidget::~PresenterWidget() {
 	// the original view was also resized in the full screen mode if "view size" is used.
 	// resize the original view once more to make sure it has the proper scaling after the presenter was closed.
 	if (m_worksheet->useViewSize())
-		static_cast<WorksheetView*>(m_worksheet->view())->processResize();
+		m_worksheet->view()->processResize();
 
 	if (m_navigationPanel) {
 		// save current settings for the navigation panel

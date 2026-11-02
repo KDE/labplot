@@ -38,7 +38,7 @@ public:
 	bool init(QByteArray* content = nullptr);
 	const QString& error() const;
 
-	QWidget* view() const override;
+	NotebookView* view() const;
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillColumnsContextMenu(QMenu*, const QVector<Column*>&);
@@ -62,7 +62,7 @@ public Q_SLOTS:
 	void updateSettings();
 
 private:
-	NotebookView* view_specific() const;
+	QWidget* createView() const override;
 	QString m_backendName;
 	QString m_error;
 #ifdef HAVE_CANTOR_LIBS

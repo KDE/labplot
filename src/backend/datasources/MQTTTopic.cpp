@@ -103,10 +103,8 @@ QMenu* MQTTTopic::createContextMenu() {
 	return menu;
 }
 
-QWidget* MQTTTopic::view() const {
-	if (!m_partView)
-		m_partView = new SpreadsheetView(const_cast<MQTTTopic*>(this), true);
-	return m_partView;
+QWidget* MQTTTopic::createView() const {
+	return new SpreadsheetView(const_cast<MQTTTopic*>(this), true);
 }
 
 /*!

@@ -38,7 +38,7 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QWidget* view() const override;
+	DatapickerView* view() const;
 
 	bool exportView() const override;
 	bool printView() override;
@@ -67,7 +67,7 @@ public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
-	DatapickerView* view_specific() const;
+	QWidget* createView() const override;
 	DatapickerCurve* m_activeCurve{nullptr};
 	Transform* m_transform;
 	DatapickerImage* m_image{nullptr};

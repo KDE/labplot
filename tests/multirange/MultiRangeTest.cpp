@@ -265,7 +265,7 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeMonotonicIncrease() {
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* view = dynamic_cast<WorksheetView*>(ws->view());
+	auto* view = ws->view();
 	QVERIFY(view != nullptr);
 	view->initActions(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
@@ -327,7 +327,7 @@ void MultiRangeTest::zoomInX_SingleRangeDateTimeNonMonotonic() {
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* view = dynamic_cast<WorksheetView*>(ws->view());
+	auto* view = ws->view();
 	QVERIFY(view != nullptr);
 	view->initActions(); // needed by SET_CARTESIAN_MOUSE_MODE()
 

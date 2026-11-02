@@ -38,7 +38,9 @@ public:
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillColumnsContextMenu(QMenu*);
-	QWidget* view() const override;
+#ifndef SDK
+	SpreadsheetView* view() const;
+#endif
 	StatisticsSpreadsheet* statisticsSpreadsheet() const;
 
 	bool exportView() const override;
@@ -134,7 +136,7 @@ private:
 	SpreadsheetModel* m_model{nullptr};
 
 protected:
-	SpreadsheetView* view_specific() const;
+	QWidget* createView() const override;
 	void setSuppressSetCommentFinalizeImport(bool);
 
 private Q_SLOTS:

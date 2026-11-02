@@ -187,7 +187,7 @@ bool HypothesisTest::exportView() const {
 	auto conf = Settings::group(QStringLiteral("HypothesisTest"));
 	const QString dir = conf.readEntry("LastDir", "");
 
-	QString path = QFileDialog::getSaveFileName(view_specific(), i18nc("@title:window", "Export to File"), dir, i18n("Portable Data Format (*.pdf *.PDF)"));
+	QString path = QFileDialog::getSaveFileName(view(), i18nc("@title:window", "Export to File"), dir, i18n("Portable Data Format (*.pdf *.PDF)"));
 	if (path.isEmpty())
 		return false;
 
@@ -202,7 +202,7 @@ bool HypothesisTest::exportView() const {
 	printer.setOutputFormat(QPrinter::PdfFormat);
 	printer.setOutputFileName(path);
 	printer.setCreator(QStringLiteral("LabPlot ") + QLatin1String(LVERSION));
-	view_specific()->print(&printer);
+	view()->print(&printer);
 	return true;
 #else
 	return false;
@@ -212,11 +212,11 @@ bool HypothesisTest::exportView() const {
 bool HypothesisTest::printView() {
 #ifndef SDK
 	QPrinter printer;
-	auto* dlg = new QPrintDialog(&printer, view_specific());
+	auto* dlg = new QPrintDialog(&printer, view());
 	dlg->setWindowTitle(i18nc("@title:window", "Hypothesis Test"));
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
-		view_specific()->print(&printer);
+		view()->print(&printer);
 
 	delete dlg;
 	return ret;
@@ -227,28 +227,23 @@ bool HypothesisTest::printView() {
 
 bool HypothesisTest::printPreview() const {
 #ifndef SDK
-	auto* dlg = new QPrintPreviewDialog(view_specific());
-	connect(dlg, &QPrintPreviewDialog::paintRequested, view_specific(), &HypothesisTestView::print);
+	auto* dlg = new QPrintPreviewDialog(view());
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view(), &HypothesisTestView::print);
 	return dlg->exec();
 #else
 	return false;
 #endif
 }
 
-QWidget* HypothesisTest::view() const {
-	if (!m_partView) {
-		auto* newView = new HypothesisTestView(const_cast<HypothesisTest*>(this));
-		m_partView = newView;
-	}
-	return m_partView;
+QWidget* HypothesisTest::createView() const {
+	return new HypothesisTestView(const_cast<HypothesisTest*>(this));
 }
 
 /*!
- * returns the HypothesisTestView if the view was already created, nullptr otherwise.
- * Doesn't create the view.
+ * returns the HypothesisTestView, the view is created if it doesn't exist yet.
  */
-HypothesisTestView* HypothesisTest::view_specific() const {
-	return static_cast<HypothesisTestView*>(m_partView);
+HypothesisTestView* HypothesisTest::view() const {
+	return static_cast<HypothesisTestView*>(AbstractPart::view());
 }
 
 QPair<int, int> HypothesisTest::variableCount(Test test) {

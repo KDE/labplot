@@ -152,25 +152,21 @@ void DatapickerImage::createContextMenu(QMenu* menu) {
  * This method may be called multiple times during the life time of an Aspect, or it might not get
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
-QWidget* DatapickerImage::view() const {
-	if (!m_partView) {
-		auto* newView = new DatapickerImageView(const_cast<DatapickerImage*>(this));
-		m_partView = newView;
-		connect(newView, &DatapickerImageView::statusInfo, this, &DatapickerImage::statusInfo);
-	}
-	return m_partView;
+QWidget* DatapickerImage::createView() const {
+	auto* newView = new DatapickerImageView(const_cast<DatapickerImage*>(this));
+	connect(newView, &DatapickerImageView::statusInfo, this, &DatapickerImage::statusInfo);
+	return newView;
 }
 
 /*!
- * returns the DatapickerImageView if the view was already created, nullptr otherwise.
- * Doesn't create the view.
+ * returns the DatapickerImageView, the view is created if it doesn't exist yet.
  */
-DatapickerImageView* DatapickerImage::view_specific() const {
-	return static_cast<DatapickerImageView*>(m_partView);
+DatapickerImageView* DatapickerImage::view() const {
+	return static_cast<DatapickerImageView*>(AbstractPart::view());
 }
 
 bool DatapickerImage::exportView() const {
-	auto* dlg = new ExportWorksheetDialog(view_specific());
+	auto* dlg = new ExportWorksheetDialog(view());
 	dlg->setProjectFileName(const_cast<DatapickerImage*>(this)->project()->fileName());
 	dlg->setFileName(name());
 	bool ret;
@@ -180,7 +176,7 @@ bool DatapickerImage::exportView() const {
 		const int resolution = dlg->exportResolution();
 
 		WAIT_CURSOR_AUTO_RESET;
-		view_specific()->exportToFile(path, format, resolution);
+		view()->exportToFile(path, format, resolution);
 	}
 	delete dlg;
 	return ret;
@@ -188,19 +184,19 @@ bool DatapickerImage::exportView() const {
 
 bool DatapickerImage::printView() {
 	QPrinter printer;
-	auto* dlg = new QPrintDialog(&printer, view_specific());
+	auto* dlg = new QPrintDialog(&printer, view());
 	bool ret;
 	dlg->setWindowTitle(i18nc("@title:window", "Print Datapicker Image"));
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
-		view_specific()->print(&printer);
+		view()->print(&printer);
 
 	delete dlg;
 	return ret;
 }
 
 bool DatapickerImage::printPreview() const {
-	auto* dlg = new QPrintPreviewDialog(view_specific());
-	connect(dlg, &QPrintPreviewDialog::paintRequested, view_specific(), &DatapickerImageView::print);
+	auto* dlg = new QPrintPreviewDialog(view());
+	connect(dlg, &QPrintPreviewDialog::paintRequested, view(), &DatapickerImageView::print);
 	return dlg->exec();
 }
 

@@ -305,7 +305,7 @@ void Column::pasteData() {
 #ifndef SDK
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(parentAspect());
 	if (spreadsheet)
-		static_cast<SpreadsheetView*>(spreadsheet->view())->pasteIntoSelection();
+		spreadsheet->view()->pasteIntoSelection();
 #endif
 }
 

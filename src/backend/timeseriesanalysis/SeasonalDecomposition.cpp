@@ -198,9 +198,23 @@ QIcon SeasonalDecomposition::icon() const {
 	return QIcon::fromTheme(QLatin1String("preferences-system-time"));
 }
 
-QWidget* SeasonalDecomposition::view() const {
+WorksheetView* SeasonalDecomposition::view() const {
 	Q_D(const SeasonalDecomposition);
 	return d->worksheet->view();
+}
+
+QWidget* SeasonalDecomposition::createView() const {
+	// the view is owned by the internal worksheet, reset the cached pointer when the worksheet's view gets deleted
+	Q_D(const SeasonalDecomposition);
+	connect(
+		d->worksheet,
+		&AbstractPart::viewAboutToBeDeleted,
+		this,
+		[this]() {
+			m_partView = nullptr;
+		},
+		Qt::SingleShotConnection);
+	return d->worksheet->AbstractPart::view();
 }
 
 #ifndef SDK

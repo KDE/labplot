@@ -346,7 +346,7 @@ void ImportSqlDatabaseTest::testExportSpreadsheetToSqlite() {
 	col3->setValueAt(2, 3.3);
 
 	// export to a temp file
-	auto* view = static_cast<SpreadsheetView*>(spreadsheet.view());
+	auto* view = spreadsheet.view();
 	QTemporaryFile file;
 	QVERIFY(file.open());
 	view->exportToSQLite(file.fileName());
