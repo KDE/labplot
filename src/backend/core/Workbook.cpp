@@ -97,7 +97,7 @@ bool Workbook::printPreview() const {
 
 Spreadsheet* Workbook::currentSpreadsheet() const {
 #ifndef SDK
-	if (!m_partView)
+	if (!hasView())
 		return nullptr;
 
 	int index = view()->currentIndex();
@@ -111,7 +111,7 @@ Spreadsheet* Workbook::currentSpreadsheet() const {
 
 Matrix* Workbook::currentMatrix() const {
 #ifndef SDK
-	if (!m_partView)
+	if (!hasView())
 		return nullptr;
 
 	int index = view()->currentIndex();

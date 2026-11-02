@@ -1827,7 +1827,7 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 			// worksheet elements
 			const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto* worksheet : worksheets) {
-				if (worksheet->viewCreated()) {
+				if (worksheet->hasView()) {
 					const auto& elements = worksheet->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 					for (auto* element : elements)
 						element->updateLocale();
@@ -1837,14 +1837,14 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 			// spreadsheets
 			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* spreadsheet : spreadsheets) {
-				if (spreadsheet->viewCreated())
+				if (spreadsheet->hasView())
 					spreadsheet->updateLocale();
 			}
 
 			// matrices
 			const auto& matrices = m_project->children<Matrix>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* matrix : matrices) {
-				if (matrix->viewCreated())
+				if (matrix->hasView())
 					matrix->updateLocale();
 			}
 		}

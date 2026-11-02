@@ -299,7 +299,7 @@ void Spreadsheet::updateHorizontalHeader() {
 
 		// if the header name of the first column has changed (column mode to be shown, etc.),
 		// reset the column widths and request the view to adjuste the column sizes to the  content
-		if (oldHeader != newHeader && m_partView) {
+		if (oldHeader != newHeader && hasView()) {
 			const auto& columns = children<Column>();
 			for (auto col : columns)
 				col->setWidth(0);
@@ -929,7 +929,7 @@ QMenu* Spreadsheet::createContextMenu() {
 
 void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #ifndef SDK
-	if (m_partView)
+	if (hasView())
 		view()->fillColumnContextMenu(menu, column);
 #else
 	Q_UNUSED(menu)
@@ -939,7 +939,7 @@ void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 void Spreadsheet::fillColumnsContextMenu(QMenu* menu) {
 #ifndef SDK
-	if (m_partView)
+	if (hasView())
 		view()->fillColumnsContextMenu(menu);
 #else
 	Q_UNUSED(menu)
@@ -1984,7 +1984,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		m_model->suppressSignals(false);
 
 #ifndef SDK
-	if (m_partView)
+	if (hasView())
 		view()->resizeHeader();
 #endif
 

@@ -182,7 +182,7 @@ void Worksheet::fillElementsContextMenu(QMenu* menu) {
  * changes visibility for all selected worksheet elements
  */
 void Worksheet::changeSelectedVisibility() {
-	if (!m_partView)
+	if (!hasView())
 		return;
 
 	const auto& selectedItems = view()->selectedItems();
@@ -285,7 +285,7 @@ bool Worksheet::exportView() const {
 }
 
 bool Worksheet::exportView(QPixmap& pixmap) const {
-	if (!m_partView)
+	if (!hasView())
 		return false;
 
 	view()->exportToPixmap(pixmap);
@@ -504,7 +504,7 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool sele
 		Q_EMIT childAspectDeselectedInView(aspect);
 
 	// handle the resize items on selection changes
-	if (selected && m_partView) {
+	if (selected && hasView()) {
 		const auto& items = view()->selectedItems();
 		if (items.size() == 1) {
 			// only one object is selected, make it resiable if it's a container and
@@ -570,12 +570,12 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 }
 
 void Worksheet::setIsClosing() {
-	if (m_partView)
+	if (hasView())
 		view()->setIsClosing();
 }
 
 void Worksheet::suppressSelectionChangedEvent(bool value) {
-	if (m_partView)
+	if (hasView())
 		view()->suppressSelectionChangedEvent(value);
 }
 
@@ -667,7 +667,7 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 }
 
 void Worksheet::setInteractive(bool value) {
-	if (!m_partView)
+	if (!hasView())
 		view();
 	view()->setInteractive(value);
 }
@@ -690,7 +690,7 @@ void Worksheet::registerShortcuts() {
 }
 
 WorksheetElement* Worksheet::currentSelection() {
-	if (!m_partView) {
+	if (!hasView()) {
 		view();
 		return nullptr;
 	}
@@ -1629,7 +1629,7 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	// determine the currently selected plot/container and make it
 	// resizable or not depending on the layout settings
 	bool resizable = (layout == Worksheet::Layout::NoLayout);
-	if (q->m_partView) {
+	if (q->hasView()) {
 		const auto& items = q->view()->selectedItems();
 		if (items.size() == 1) {
 			const auto& item = items.constFirst();

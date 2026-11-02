@@ -29,7 +29,7 @@ public:
 	~AbstractPart() override;
 
 	QWidget* view() const;
-	bool viewCreated() const;
+	bool hasView() const;
 	void deleteView() const;
 #ifndef SDK
 	virtual ContentDockWidget* dockWidget() const;

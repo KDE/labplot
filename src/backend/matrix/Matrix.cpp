@@ -311,7 +311,7 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	m_model->updateHeader();
 
 #ifndef SDK
-	if (m_partView)
+	if (hasView())
 		view()->resizeHeaders();
 #endif
 
@@ -542,7 +542,7 @@ void Matrix::setDimensions(int rows, int cols) {
 void Matrix::addRows() {
 #ifndef SDK
 	Q_D(Matrix);
-	if (!m_partView)
+	if (!hasView())
 		return;
 	WAIT_CURSOR_AUTO_RESET;
 	int count = view()->selectedRowCount(false);
@@ -555,7 +555,7 @@ void Matrix::addRows() {
 void Matrix::addColumns() {
 #ifndef SDK
 	Q_D(Matrix);
-	if (!m_partView)
+	if (!hasView())
 		return;
 	WAIT_CURSOR_AUTO_RESET;
 	int count = view()->selectedRowCount(false);

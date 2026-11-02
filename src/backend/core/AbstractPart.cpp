@@ -38,6 +38,10 @@ AbstractPart::~AbstractPart() {
 #endif
 }
 
+bool AbstractPart::hasView() const {
+	return m_partView != nullptr;
+}
+
 /**
  * \brief Returns the primary view of the part, the view is created on the first call via createView().
  *
@@ -45,7 +49,7 @@ AbstractPart::~AbstractPart() {
  * called at all. Parts must not depend on the existence of a view for their operation.
  */
 QWidget* AbstractPart::view() const {
-	if (!m_partView)
+	if (!hasView())
 		m_partView = createView();
 	return m_partView;
 }
@@ -105,16 +109,12 @@ bool AbstractPart::hasMdiSubWindow() const {
 }
 #endif
 
-bool AbstractPart::viewCreated() const {
-	return m_partView != nullptr;
-}
-
 /*!
  * this function is called when PartMdiView, the mdi-subwindow-wrapper of the actual view,
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
 void AbstractPart::deleteView() const {
-	if (m_partView) {
+	if (hasView()) {
 		Q_EMIT viewAboutToBeDeleted(); // Notify all parts so they can reset their pointers
 
 		// if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.

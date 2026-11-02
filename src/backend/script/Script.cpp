@@ -56,7 +56,7 @@ Script::Script(const QString& name, const QString& lang)
 
 	connect(this, &Script::viewAboutToBeDeleted, [this]() {
 		// keep the output of the editor so it is still available when saving the project or re-opening the view
-		if (m_partView) {
+		if (hasView()) {
 			auto* editor = view();
 			m_outputHtml = editor->outputText().isEmpty() ? QString() : editor->outputHtml();
 		}
@@ -213,7 +213,7 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 			m_kTextEditorDocument->setText(attribs.value(QStringLiteral("text")).toString());
 		} else if (!preview && reader->name() == QLatin1String("output")) {
 			m_outputHtml = reader->readElementText(QXmlStreamReader::SkipChildElements);
-			if (m_partView)
+			if (hasView())
 				view()->setOutputHtml(m_outputHtml);
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
