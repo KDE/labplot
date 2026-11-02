@@ -158,9 +158,6 @@ QWidget* DatapickerImage::createView() const {
 	return newView;
 }
 
-/*!
- * returns the DatapickerImageView, the view is created if it doesn't exist yet.
- */
 DatapickerImageView* DatapickerImage::view() const {
 	return static_cast<DatapickerImageView*>(AbstractPart::view());
 }

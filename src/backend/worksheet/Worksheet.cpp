@@ -234,9 +234,6 @@ QWidget* Worksheet::createView() const {
 	return newView;
 }
 
-/*!
- * returns the WorksheetView, the view is created if it doesn't exist yet.
- */
 WorksheetView* Worksheet::view() const {
 	return static_cast<WorksheetView*>(AbstractPart::view());
 }

@@ -121,9 +121,6 @@ QWidget* Matrix::createView() const {
 }
 
 #ifndef SDK
-/*!
- * returns the MatrixView, the view is created if it doesn't exist yet.
- */
 MatrixView* Matrix::view() const {
 	return static_cast<MatrixView*>(AbstractPart::view());
 }

@@ -148,9 +148,6 @@ QWidget* Script::createView() const {
 	return newView;
 }
 
-/*!
- * returns the ScriptEditor, the view is created if it doesn't exist yet.
- */
 ScriptEditor* Script::view() const {
 	return static_cast<ScriptEditor*>(AbstractPart::view());
 }

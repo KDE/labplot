@@ -239,9 +239,6 @@ QWidget* HypothesisTest::createView() const {
 	return new HypothesisTestView(const_cast<HypothesisTest*>(this));
 }
 
-/*!
- * returns the HypothesisTestView, the view is created if it doesn't exist yet.
- */
 HypothesisTestView* HypothesisTest::view() const {
 	return static_cast<HypothesisTestView*>(AbstractPart::view());
 }

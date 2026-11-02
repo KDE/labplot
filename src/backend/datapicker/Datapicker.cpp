@@ -74,9 +74,6 @@ QWidget* Datapicker::createView() const {
 	return new DatapickerView(const_cast<Datapicker*>(this));
 }
 
-/*!
- * returns the DatapickerView, the view is created if it doesn't exist yet.
- */
 DatapickerView* Datapicker::view() const {
 	return static_cast<DatapickerView*>(AbstractPart::view());
 }

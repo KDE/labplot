@@ -350,9 +350,6 @@ QWidget* Notebook::createView() const {
 #endif
 }
 
-/*!
- * returns the NotebookView, the view is created if it doesn't exist yet.
- */
 NotebookView* Notebook::view() const {
 	return static_cast<NotebookView*>(AbstractPart::view());
 }

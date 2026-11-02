@@ -51,9 +51,6 @@ QWidget* Workbook::createView() const {
 }
 
 #ifndef SDK
-/*!
- * returns the WorkbookView, the view is created if it doesn't exist yet.
- */
 WorkbookView* Workbook::view() const {
 	return static_cast<WorkbookView*>(AbstractPart::view());
 }

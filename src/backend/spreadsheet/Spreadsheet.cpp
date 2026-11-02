@@ -169,9 +169,6 @@ QWidget* Spreadsheet::createView() const {
 }
 
 #ifndef SDK
-/*!
- * returns the SpreadsheetView, the view is created if it doesn't exist yet.
- */
 SpreadsheetView* Spreadsheet::view() const {
 	return static_cast<SpreadsheetView*>(AbstractPart::view());
 }

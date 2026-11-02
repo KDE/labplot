@@ -177,9 +177,6 @@ QWidget* Note::createView() const {
 }
 
 #ifndef SDK
-/*!
- * returns the NoteView, the view is created if it doesn't exist yet.
- */
 NoteView* Note::view() const {
 	return static_cast<NoteView*>(AbstractPart::view());
 }
