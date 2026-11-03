@@ -10,6 +10,7 @@
 #ifndef PLOTDATADIALOG_H
 #define PLOTDATADIALOG_H
 
+#include "backend/core/AbstractColumn.h"
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
@@ -20,7 +21,6 @@ class PlotDataWidget;
 #include <QDialog>
 
 class AbstractAspect;
-class AbstractColumn;
 class AspectTreeModel;
 class CartesianPlot;
 class Column;
@@ -32,6 +32,8 @@ class QComboBox;
 
 class PlotDataDialog : public QDialog {
 	Q_OBJECT
+
+	friend class CartesianPlotTest;
 
 public:
 	explicit PlotDataDialog(AbstractAspect*, Plot::PlotType = Plot::PlotType::Line, QWidget* parent = nullptr);
@@ -48,6 +50,7 @@ private:
 	TreeViewComboBox* cbExistingPlots;
 	TreeViewComboBox* cbExistingWorksheets;
 	QVector<Column*> m_columns;
+	QVector<Column*> m_selectedColumns;
 	QVector<QComboBox*> m_columnComboBoxes;
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
@@ -62,6 +65,15 @@ private:
 	nsl_sf_stats_distribution m_fitDistribution{nsl_sf_stats_gaussian};
 	bool m_fitDistributionMode{false};
 
+	struct ErrorColumns {
+		Column* symmetric{nullptr};
+		Column* plus{nullptr};
+		Column* minus{nullptr};
+	};
+	ErrorColumns findErrorColumns(const Column* dataColumn,
+								  AbstractColumn::PlotDesignation symmetricDesignation,
+								  AbstractColumn::PlotDesignation plusDesignation,
+								  AbstractColumn::PlotDesignation minusDesignation) const;
 
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
 	void processColumnsForHistogram();

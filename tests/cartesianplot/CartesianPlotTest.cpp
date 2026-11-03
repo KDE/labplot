@@ -23,8 +23,10 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotPrivate.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/plots.h"
 #include "frontend/dockwidgets/XYFitCurveDock.h"
+#include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/worksheet/WorksheetView.h"
 
 #include <QAction>
@@ -1814,6 +1816,309 @@ void CartesianPlotTest::legendSingleInstance() {
 	QCOMPARE(plot->childCount<CartesianPlotLegend>(), 1);
 
 	delete project;
+}
+
+void CartesianPlotTest::testPlotDataWithErrorColumns() {
+	Project project;
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	spreadsheet->setColumnCount(4);
+	auto* colX = spreadsheet->column(0);
+	colX->setName(QStringLiteral("x"));
+	colX->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+
+	auto* colXErr = spreadsheet->column(1);
+	colXErr->setName(QStringLiteral("x-error"));
+	colXErr->setPlotDesignation(AbstractColumn::PlotDesignation::XError);
+
+	auto* colY = spreadsheet->column(2);
+	colY->setName(QStringLiteral("y"));
+	colY->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+
+	auto* colYErr = spreadsheet->column(3);
+	colYErr->setName(QStringLiteral("y-error"));
+	colYErr->setPlotDesignation(AbstractColumn::PlotDesignation::YError);
+
+	for (int i = 0; i < 5; ++i) {
+		colX->setValueAt(i, i + 1.0);
+		colXErr->setValueAt(i, 0.1);
+		colY->setValueAt(i, (i + 1.0) * 2.0);
+		colYErr->setValueAt(i, 0.2);
+	}
+
+	PlotDataDialog dlg(spreadsheet, Plot::PlotType::Line);
+	dlg.setSelectedColumns(spreadsheet->children<Column>());
+	dlg.plot();
+
+	// Check created worksheet and plot
+	auto worksheets = project.children<Worksheet>();
+	QVERIFY(!worksheets.isEmpty());
+	auto* ws = worksheets.first();
+	auto plots = ws->children<CartesianPlot>();
+	QVERIFY(!plots.isEmpty());
+	auto* plot = plots.first();
+	auto curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 1);
+
+	auto* curve = curves.first();
+	QCOMPARE(curve->xColumn(), colX);
+	QCOMPARE(curve->yColumn(), colY);
+
+	auto* errorBar = curve->errorBar();
+	QVERIFY(errorBar != nullptr);
+	QCOMPARE(errorBar->xErrorType(), ErrorBar::ErrorType::Symmetric);
+	QCOMPARE(errorBar->xPlusColumn(), colXErr);
+	QCOMPARE(errorBar->yErrorType(), ErrorBar::ErrorType::Symmetric);
+	QCOMPARE(errorBar->yPlusColumn(), colYErr);
+}
+
+void CartesianPlotTest::testPlotDataWithAsymmetricErrors() {
+	Project project;
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	spreadsheet->setColumnCount(4);
+	auto* colX = spreadsheet->column(0);
+	colX->setName(QStringLiteral("x"));
+	colX->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+
+	auto* colY = spreadsheet->column(1);
+	colY->setName(QStringLiteral("y"));
+	colY->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+
+	auto* colYPlus = spreadsheet->column(2);
+	colYPlus->setName(QStringLiteral("y-plus"));
+	colYPlus->setPlotDesignation(AbstractColumn::PlotDesignation::YErrorPlus);
+
+	auto* colYMinus = spreadsheet->column(3);
+	colYMinus->setName(QStringLiteral("y-minus"));
+	colYMinus->setPlotDesignation(AbstractColumn::PlotDesignation::YErrorMinus);
+
+	for (int i = 0; i < 5; ++i) {
+		colX->setValueAt(i, i + 1.0);
+		colY->setValueAt(i, (i + 1.0) * 2.0);
+		colYPlus->setValueAt(i, 0.3);
+		colYMinus->setValueAt(i, 0.1);
+	}
+
+	PlotDataDialog dlg(spreadsheet, Plot::PlotType::Line);
+	dlg.setSelectedColumns(spreadsheet->children<Column>());
+	dlg.plot();
+
+	auto worksheets = project.children<Worksheet>();
+	QVERIFY(!worksheets.isEmpty());
+	auto* ws = worksheets.first();
+	auto plots = ws->children<CartesianPlot>();
+	QVERIFY(!plots.isEmpty());
+	auto* plot = plots.first();
+	auto curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 1);
+
+	auto* curve = curves.first();
+	auto* errorBar = curve->errorBar();
+	QVERIFY(errorBar != nullptr);
+	QCOMPARE(errorBar->yErrorType(), ErrorBar::ErrorType::Asymmetric);
+	QCOMPARE(errorBar->yPlusColumn(), colYPlus);
+	QCOMPARE(errorBar->yMinusColumn(), colYMinus);
+	QCOMPARE(errorBar->xErrorType(), ErrorBar::ErrorType::NoError);
+}
+
+void CartesianPlotTest::testPlotDataWithMinusOnlyError() {
+	Project project;
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	spreadsheet->setColumnCount(3);
+	auto* colX = spreadsheet->column(0);
+	colX->setName(QStringLiteral("x"));
+	colX->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+
+	auto* colY = spreadsheet->column(1);
+	colY->setName(QStringLiteral("y"));
+	colY->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+
+	auto* colYMinus = spreadsheet->column(2);
+	colYMinus->setName(QStringLiteral("y-minus"));
+	colYMinus->setPlotDesignation(AbstractColumn::PlotDesignation::YErrorMinus);
+
+	for (int i = 0; i < 5; ++i) {
+		colX->setValueAt(i, i + 1.0);
+		colY->setValueAt(i, (i + 1.0) * 2.0);
+		colYMinus->setValueAt(i, 0.1);
+	}
+
+	PlotDataDialog dlg(spreadsheet, Plot::PlotType::Line);
+	dlg.setSelectedColumns(spreadsheet->children<Column>());
+	dlg.plot();
+
+	auto worksheets = project.children<Worksheet>();
+	QVERIFY(!worksheets.isEmpty());
+	auto* ws = worksheets.first();
+	auto plots = ws->children<CartesianPlot>();
+	QVERIFY(!plots.isEmpty());
+	auto* plot = plots.first();
+	auto curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 1);
+
+	auto* curve = curves.first();
+	auto* errorBar = curve->errorBar();
+	QVERIFY(errorBar != nullptr);
+	QCOMPARE(errorBar->yErrorType(), ErrorBar::ErrorType::Asymmetric);
+	QCOMPARE(errorBar->yPlusColumn(), nullptr);
+	QCOMPARE(errorBar->yMinusColumn(), colYMinus);
+	QCOMPARE(errorBar->xErrorType(), ErrorBar::ErrorType::NoError);
+}
+
+void CartesianPlotTest::testPlotDataWithPrecedingMinusPlusErrors() {
+	Project project;
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	spreadsheet->setColumnCount(4);
+	auto* colX = spreadsheet->column(0);
+	colX->setName(QStringLiteral("x"));
+	colX->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+
+	auto* colYMinus = spreadsheet->column(1);
+	colYMinus->setName(QStringLiteral("y-minus"));
+	colYMinus->setPlotDesignation(AbstractColumn::PlotDesignation::YErrorMinus);
+
+	auto* colYPlus = spreadsheet->column(2);
+	colYPlus->setName(QStringLiteral("y-plus"));
+	colYPlus->setPlotDesignation(AbstractColumn::PlotDesignation::YErrorPlus);
+
+	auto* colY = spreadsheet->column(3);
+	colY->setName(QStringLiteral("y"));
+	colY->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+
+	for (int i = 0; i < 5; ++i) {
+		colX->setValueAt(i, i + 1.0);
+		colYMinus->setValueAt(i, 0.1);
+		colYPlus->setValueAt(i, 0.3);
+		colY->setValueAt(i, (i + 1.0) * 2.0);
+	}
+
+	PlotDataDialog dlg(spreadsheet, Plot::PlotType::Line);
+	dlg.setSelectedColumns(spreadsheet->children<Column>());
+	dlg.plot();
+
+	auto worksheets = project.children<Worksheet>();
+	QVERIFY(!worksheets.isEmpty());
+	auto* ws = worksheets.first();
+	auto plots = ws->children<CartesianPlot>();
+	QVERIFY(!plots.isEmpty());
+	auto* plot = plots.first();
+	auto curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 1);
+
+	auto* curve = curves.first();
+	auto* errorBar = curve->errorBar();
+	QVERIFY(errorBar != nullptr);
+	QCOMPARE(errorBar->yErrorType(), ErrorBar::ErrorType::Asymmetric);
+	QCOMPARE(errorBar->yPlusColumn(), colYPlus);
+	QCOMPARE(errorBar->yMinusColumn(), colYMinus);
+	QCOMPARE(errorBar->xErrorType(), ErrorBar::ErrorType::NoError);
+}
+
+void CartesianPlotTest::testPlotDataWithMultipleYErrors() {
+	Project project;
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	spreadsheet->setColumnCount(5);
+	auto* colX = spreadsheet->column(0);
+	colX->setName(QStringLiteral("x"));
+	colX->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+
+	auto* colY1 = spreadsheet->column(1);
+	colY1->setName(QStringLiteral("y1"));
+	colY1->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+
+	auto* colY1Err = spreadsheet->column(2);
+	colY1Err->setName(QStringLiteral("y1-error"));
+	colY1Err->setPlotDesignation(AbstractColumn::PlotDesignation::YError);
+
+	auto* colY2 = spreadsheet->column(3);
+	colY2->setName(QStringLiteral("y2"));
+	colY2->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+
+	auto* colY2Err = spreadsheet->column(4);
+	colY2Err->setName(QStringLiteral("y2-error"));
+	colY2Err->setPlotDesignation(AbstractColumn::PlotDesignation::YError);
+
+	for (int i = 0; i < 5; ++i) {
+		colX->setValueAt(i, i + 1.0);
+		colY1->setValueAt(i, (i + 1.0) * 2.0);
+		colY1Err->setValueAt(i, 0.1);
+		colY2->setValueAt(i, (i + 1.0) * 3.0);
+		colY2Err->setValueAt(i, 0.2);
+	}
+
+	PlotDataDialog dlg(spreadsheet, Plot::PlotType::Line);
+	dlg.setSelectedColumns(spreadsheet->children<Column>());
+	dlg.plot();
+
+	auto worksheets = project.children<Worksheet>();
+	QVERIFY(!worksheets.isEmpty());
+	auto* ws = worksheets.first();
+	auto plots = ws->children<CartesianPlot>();
+	QVERIFY(!plots.isEmpty());
+	auto* plot = plots.first();
+	auto curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 2);
+
+	auto* curve1 = curves.at(0);
+	QCOMPARE(curve1->yColumn(), colY1);
+	QCOMPARE(curve1->errorBar()->yErrorType(), ErrorBar::ErrorType::Symmetric);
+	QCOMPARE(curve1->errorBar()->yPlusColumn(), colY1Err);
+
+	auto* curve2 = curves.at(1);
+	QCOMPARE(curve2->yColumn(), colY2);
+	QCOMPARE(curve2->errorBar()->yErrorType(), ErrorBar::ErrorType::Symmetric);
+	QCOMPARE(curve2->errorBar()->yPlusColumn(), colY2Err);
+}
+
+void CartesianPlotTest::testPlotDataErrorColumnsExcluded() {
+	Project project;
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	spreadsheet->setColumnCount(3);
+	auto* colX = spreadsheet->column(0);
+	colX->setName(QStringLiteral("x"));
+	colX->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+
+	auto* colY = spreadsheet->column(1);
+	colY->setName(QStringLiteral("y"));
+	colY->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+
+	auto* colYErr = spreadsheet->column(2);
+	colYErr->setName(QStringLiteral("y-error"));
+	colYErr->setPlotDesignation(AbstractColumn::PlotDesignation::YError);
+
+	for (int i = 0; i < 5; ++i) {
+		colX->setValueAt(i, i + 1.0);
+		colY->setValueAt(i, (i + 1.0) * 2.0);
+		colYErr->setValueAt(i, 0.2);
+	}
+
+	// User explicitly selected only colX and colY (omitted colYErr)
+	PlotDataDialog dlg(spreadsheet, Plot::PlotType::Line);
+	dlg.setSelectedColumns({colX, colY});
+	dlg.plot();
+
+	auto worksheets = project.children<Worksheet>();
+	QVERIFY(!worksheets.isEmpty());
+	auto* ws = worksheets.first();
+	auto plots = ws->children<CartesianPlot>();
+	QVERIFY(!plots.isEmpty());
+	auto* plot = plots.first();
+	auto curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 1);
+
+	auto* curve = curves.first();
+	QCOMPARE(curve->errorBar()->yErrorType(), ErrorBar::ErrorType::NoError);
 }
 
 QTEST_MAIN(CartesianPlotTest)
