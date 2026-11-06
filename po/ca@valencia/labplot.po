@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-31 00:46+0000\n"
+"POT-Creation-Date: 2026-11-06 00:45+0000\n"
 "PO-Revision-Date: 2026-10-22 09:08+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -55,7 +55,7 @@ msgid "Rename"
 msgstr "Canvia el nom"
 
 #: src/backend/core/AbstractAspect.cpp:453
-#: src/backend/spreadsheet/Spreadsheet.cpp:921
+#: src/backend/spreadsheet/Spreadsheet.cpp:920
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:266
 #: src/frontend/worksheet/WorksheetView.cpp:139
@@ -80,7 +80,7 @@ msgstr "Avall"
 
 #: src/backend/core/AbstractAspect.cpp:563
 #: src/backend/core/aspectcommands.h:171
-#: src/backend/datapicker/Datapicker.cpp:216
+#: src/backend/datapicker/Datapicker.cpp:213
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2465
 #, kde-format
 msgid "%1: add %2"
@@ -309,7 +309,7 @@ msgid "UNDEFINED"
 msgstr "Sense definir"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:378
+#: src/backend/spreadsheet/Spreadsheet.cpp:377
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -317,7 +317,7 @@ msgstr[0] "%1: inserix 1 fila"
 msgstr[1] "%1: inserix %2 files"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:361
+#: src/backend/spreadsheet/Spreadsheet.cpp:360
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -362,23 +362,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "En%1"
 
-#: src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:145
 #, kde-format
 msgid "Import Data"
 msgstr "Importa dades"
 
-#: src/backend/core/AbstractPart.cpp:139 src/frontend/ActionsManager.cpp:289
+#: src/backend/core/AbstractPart.cpp:146 src/frontend/ActionsManager.cpp:289
 #, kde-format
 msgid "From File..."
 msgstr "Des del fitxer…"
 
-#: src/backend/core/AbstractPart.cpp:141 src/frontend/ActionsManager.cpp:309
+#: src/backend/core/AbstractPart.cpp:148 src/frontend/ActionsManager.cpp:309
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Des de la base de dades SQL…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:150
+#: src/backend/core/AbstractPart.cpp:157
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -387,22 +387,22 @@ msgstr "Des de la base de dades SQL…"
 msgid "Export"
 msgstr "Exporta"
 
-#: src/backend/core/AbstractPart.cpp:151
+#: src/backend/core/AbstractPart.cpp:158
 #, kde-format
 msgid "Print"
 msgstr "Imprimix"
 
-#: src/backend/core/AbstractPart.cpp:152
+#: src/backend/core/AbstractPart.cpp:159
 #, kde-format
 msgid "Print Preview"
 msgstr "Vista prèvia d'impressió"
 
-#: src/backend/core/AbstractPart.cpp:160 src/frontend/ActionsManager.cpp:412
+#: src/backend/core/AbstractPart.cpp:167 src/frontend/ActionsManager.cpp:412
 #, kde-format
 msgid "&Close"
 msgstr "&Tanca"
 
-#: src/backend/core/AbstractPart.cpp:165 src/backend/core/AbstractPart.cpp:178
+#: src/backend/core/AbstractPart.cpp:172 src/backend/core/AbstractPart.cpp:185
 #, kde-format
 msgid "Show"
 msgstr "Mostra"
@@ -416,10 +416,10 @@ msgstr "tipus de filtre incompatible"
 #: src/backend/core/Folder.cpp:161 src/backend/core/Project.cpp:714
 #: src/backend/datasources/MQTTClient.cpp:1364
 #: src/backend/datasources/MQTTSubscription.cpp:168
-#: src/backend/datasources/MQTTTopic.cpp:273
+#: src/backend/datasources/MQTTTopic.cpp:271
 #: src/backend/lib/XmlStreamReader.cpp:104
 #: src/backend/statistics/HypothesisTest.cpp:1971
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:867
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:881
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #, kde-format
 msgid "unknown element '%1'"
@@ -594,19 +594,19 @@ msgid "auto update: false"
 msgstr "actualització automàtica: fals"
 
 #: src/backend/core/column/Column.cpp:1154
-#: src/backend/spreadsheet/Spreadsheet.cpp:233
+#: src/backend/spreadsheet/Spreadsheet.cpp:232
 #, kde-format
 msgid "Used in Plots:"
 msgstr "Utilitzat en els diagrames:"
 
 #: src/backend/core/column/Column.cpp:1169
-#: src/backend/spreadsheet/Spreadsheet.cpp:250
+#: src/backend/spreadsheet/Spreadsheet.cpp:249
 #, kde-format
 msgid "Used in Axes:"
 msgstr "Utilitzat en els eixos:"
 
 #: src/backend/core/column/Column.cpp:1192
-#: src/backend/spreadsheet/Spreadsheet.cpp:271
+#: src/backend/spreadsheet/Spreadsheet.cpp:270
 #, kde-format
 msgid "Used in Spreadsheet Calculations:"
 msgstr "Utilitzat en els càlculs del full de càlcul:"
@@ -819,19 +819,19 @@ msgid "Invalid project modification time. Using current time."
 msgstr ""
 "Hora de modificació del projecte no vàlida. S'utilitzarà l'hora actual."
 
-#: src/backend/core/Workbook.cpp:219
+#: src/backend/core/Workbook.cpp:218
 #, kde-format
 msgid "matrix"
 msgstr "matriu"
 
-#: src/backend/core/Workbook.cpp:226
+#: src/backend/core/Workbook.cpp:225
 #, kde-format
 msgid "unknown workbook element '%1'"
 msgstr "element «%1» desconegut del llibre de treball"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:48
-#: src/backend/datapicker/Datapicker.cpp:368
+#: src/backend/datapicker/Datapicker.cpp:365
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1948
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1954
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1960
@@ -848,18 +848,18 @@ msgstr "element «%1» desconegut del llibre de treball"
 msgid "Plot"
 msgstr "Diagrama"
 
-#: src/backend/datapicker/Datapicker.cpp:145
+#: src/backend/datapicker/Datapicker.cpp:142
 #, kde-format
 msgid "%1, active curve \"%2\""
 msgstr "%1, corba activa «%2»"
 
 # skip-rule: t-sc-plot
-#: src/backend/datapicker/Datapicker.cpp:213
+#: src/backend/datapicker/Datapicker.cpp:210
 #, kde-format
 msgid "Point %1"
 msgstr "Punt %1"
 
-#: src/backend/datapicker/Datapicker.cpp:385
+#: src/backend/datapicker/Datapicker.cpp:382
 #, kde-format
 msgid "unknown datapicker element '%1'"
 msgstr "element «%1» desconegut del selector de dades"
@@ -952,7 +952,7 @@ msgid "%1: set error bar outline style"
 msgstr "%1: establix l'estil del contorn de la barra d'errors"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:407
+#: src/backend/datapicker/DatapickerImage.cpp:408
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
 #: src/backend/worksheet/plots/cartesian/ParetoChart.cpp:141
@@ -967,7 +967,7 @@ msgid "%1: set visible"
 msgstr "%1: establix com a visible"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:407
+#: src/backend/datapicker/DatapickerImage.cpp:408
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
 #: src/backend/worksheet/plots/cartesian/ParetoChart.cpp:141
@@ -982,50 +982,50 @@ msgstr "%1: establix com a visible"
 msgid "%1: set invisible"
 msgstr "%1: establix com a invisible"
 
-#: src/backend/datapicker/DatapickerImage.cpp:185
+#: src/backend/datapicker/DatapickerImage.cpp:186
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Imprimix la imatge del selector de dades"
 
-#: src/backend/datapicker/DatapickerImage.cpp:304
-#: src/backend/datapicker/DatapickerImage.cpp:359
+#: src/backend/datapicker/DatapickerImage.cpp:305
+#: src/backend/datapicker/DatapickerImage.cpp:360
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: puja una imatge"
 
-#: src/backend/datapicker/DatapickerImage.cpp:358
+#: src/backend/datapicker/DatapickerImage.cpp:359
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: puja una imatge nova"
 
-#: src/backend/datapicker/DatapickerImage.cpp:378
+#: src/backend/datapicker/DatapickerImage.cpp:379
 #: src/backend/worksheet/WorksheetElement.cpp:846
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: establix l'angle del gir"
 
-#: src/backend/datapicker/DatapickerImage.cpp:385
+#: src/backend/datapicker/DatapickerImage.cpp:386
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: establix els punts de l'eix"
 
-#: src/backend/datapicker/DatapickerImage.cpp:392
+#: src/backend/datapicker/DatapickerImage.cpp:393
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: establix la configuració de l'editor"
 
-#: src/backend/datapicker/DatapickerImage.cpp:399
+#: src/backend/datapicker/DatapickerImage.cpp:400
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: establix la llargària mínima del segment"
 
-#: src/backend/datapicker/DatapickerImage.cpp:420
+#: src/backend/datapicker/DatapickerImage.cpp:421
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: elimina tots els punts de l'eix"
 
-#: src/backend/datapicker/DatapickerImage.cpp:715
+#: src/backend/datapicker/DatapickerImage.cpp:716
 #: src/backend/worksheet/Image.cpp:411
 #, kde-format
 msgid "Failed to read image data"
@@ -2453,7 +2453,7 @@ msgstr "Ha fallat durant l'anàlisi sintàctica del fitxer."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:115
 #: src/backend/datasources/MQTTClient.cpp:1188
-#: src/backend/datasources/MQTTTopic.cpp:208
+#: src/backend/datasources/MQTTTopic.cpp:206
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:498
 #, kde-format
@@ -2610,47 +2610,47 @@ msgstr "Fulls: "
 msgid "Invalid region specified."
 msgstr "Regió especificada no vàlida."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:740
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "El dispositiu no existix."
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "L'usuari no té suficient permís per a obrir el dispositiu."
 
-#: src/backend/datasources/LiveDataSource.cpp:749
+#: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
 msgid "Device already opened."
 msgstr "El dispositiu ja es troba obert."
 
-#: src/backend/datasources/LiveDataSource.cpp:752
+#: src/backend/datasources/LiveDataSource.cpp:749
 #, kde-format
 msgid "Device is not open."
 msgstr "El dispositiu no està obert."
 
-#: src/backend/datasources/LiveDataSource.cpp:755
+#: src/backend/datasources/LiveDataSource.cpp:752
 #, kde-format
 msgid "Failed to read data."
 msgstr "Ha fallat mentre es llegien les dades."
 
-#: src/backend/datasources/LiveDataSource.cpp:758
+#: src/backend/datasources/LiveDataSource.cpp:755
 #, kde-format
 msgid "Device not available."
 msgstr "El dispositiu no està disponible."
 
-#: src/backend/datasources/LiveDataSource.cpp:761
+#: src/backend/datasources/LiveDataSource.cpp:758
 #, kde-format
 msgid "Timeout occurred."
 msgstr "S'ha excedit el temps."
 
-#: src/backend/datasources/LiveDataSource.cpp:766
+#: src/backend/datasources/LiveDataSource.cpp:763
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Ha ocorregut l'error següent: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:777
+#: src/backend/datasources/LiveDataSource.cpp:774
 #, kde-format
 msgid "Serial Port Error"
 msgstr "S'ha produït un error del port sèrie"
@@ -2661,7 +2661,7 @@ msgid "%1 %2"
 msgstr "%1 %2"
 
 # skip-rule: t-sc-plot
-#: src/backend/datasources/MQTTTopic.cpp:130
+#: src/backend/datasources/MQTTTopic.cpp:128
 #, kde-format
 msgid "Plot data"
 msgstr "Dibuixa el diagrama de les dades"
@@ -3921,7 +3921,7 @@ msgstr "Mida"
 #. i18n: ectx: property (text), widget (QCheckBox, cbSum)
 #: src/backend/gsl/functions.cpp:279 src/backend/nsl/nsl_conv.c:22
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:42
 #, kde-format
 msgid "Sum"
@@ -3933,9 +3933,9 @@ msgstr "Suma"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:180
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:132
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:104
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:105
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:49
 #: src/frontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
@@ -3949,9 +3949,9 @@ msgstr "Mínim"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:181
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:105
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:134
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:106
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:59
 #: src/frontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
@@ -3976,8 +3976,8 @@ msgstr "Mitjana aritmètica"
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:183
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:134
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:74
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:525
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:114
 #: src/frontend/ui/mqttwillsettingswidget.ui:97
@@ -3998,7 +3998,7 @@ msgstr "Desviació estàndard"
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:285
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:170
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
 #, kde-format
@@ -4036,7 +4036,7 @@ msgstr "Mitjana contra harmònica"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
 #: src/backend/gsl/functions.cpp:289
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:100
 #, kde-format
 msgid "Mode"
@@ -4096,7 +4096,7 @@ msgstr "99é percentil"
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
 #: src/backend/gsl/functions.cpp:299
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:76
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:128
 #, kde-format
 msgid "Trimean"
@@ -4126,7 +4126,7 @@ msgstr "Desviació absoluta de la mediana"
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:303
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:246
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
 #, kde-format
@@ -4138,7 +4138,7 @@ msgstr "Asimetria"
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:304
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:253
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
 #, kde-format
@@ -4149,7 +4149,7 @@ msgstr "Curtosi"
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
 #: src/backend/gsl/functions.cpp:305
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:92
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:93
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:260
 #: src/frontend/ui/mqttwillsettingswidget.ui:185
 #, kde-format
@@ -6639,7 +6639,7 @@ msgstr[0] "%1: afig %2 columna"
 msgstr[1] "%1: afig %2 columnes"
 
 #: src/backend/matrix/Matrix.cpp:687 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:711
+#: src/backend/spreadsheet/Spreadsheet.cpp:710
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: neteja"
@@ -6694,7 +6694,7 @@ msgid "%1: set cell values"
 msgstr "%1: establix els valors de les cel·les"
 
 #: src/backend/matrix/matrixcommands.h:316
-#: src/backend/spreadsheet/Spreadsheet.cpp:842
+#: src/backend/spreadsheet/Spreadsheet.cpp:841
 #, kde-format
 msgid "%1: transpose"
 msgstr "%1: invertix"
@@ -6720,7 +6720,7 @@ msgstr "Imprimix la nota"
 msgid "Text file (*.txt)"
 msgstr "Fitxer de text (*.txt)"
 
-#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:111
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:119
 #: src/backend/statistics/HypothesisTest.cpp:190
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6729,12 +6729,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exporta cap a un fitxer"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:125
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:133
 #, kde-format
 msgid "Export failed"
 msgstr "L'exportació ha fallat"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:125
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:133
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Ha fallat mentre s'obria «%1» per a escriptura."
@@ -6765,7 +6765,7 @@ msgstr "%1: establix la lletra del text"
 msgid "%1: set mode"
 msgstr "%1: establix el mode"
 
-#: src/backend/note/Note.cpp:211
+#: src/backend/note/Note.cpp:213
 #, kde-format
 msgid "no note element found"
 msgstr "no s'ha trobat cap element de nota"
@@ -6785,7 +6785,7 @@ msgstr ""
 #: src/backend/nsl/nsl_baseline.cpp:49
 #: src/backend/statistics/HypothesisTest.cpp:616
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:182
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:515
 #, kde-format
 msgid "Mean"
@@ -7039,10 +7039,10 @@ msgstr "En brut"
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2844
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1117
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:333
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:492
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:630
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:235
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:334
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:493
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:631
 #: src/frontend/widgets/ValueWidget.cpp:129
 #, kde-format
 msgid "Frequency"
@@ -7727,36 +7727,53 @@ msgstr "Tri-ponderada"
 msgid "Tricube"
 msgstr "Tri-cúbica"
 
-#: src/backend/script/Script.cpp:109
+#: src/backend/script/Script.cpp:117
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Fitxer Python (*.py)"
 
-#: src/backend/script/Script.cpp:173 src/backend/script/Script.cpp:366
+#: src/backend/script/Script.cpp:181 src/backend/script/Script.cpp:379
 #, kde-format
 msgid "no script element found"
 msgstr "no s'ha trobat cap element de script"
 
-#: src/backend/script/Script.cpp:240
+#: src/backend/script/Script.cpp:189
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "failed to initialize the script runtime '%1'"
+msgstr "Ha fallat mentre es restablia %1."
+
+#: src/backend/script/Script.cpp:253
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: executa l'script %2"
 
-#: src/backend/script/Script.cpp:346 src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:359 src/backend/script/Script.cpp:364
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:346
+#: src/backend/script/Script.cpp:359
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Ha fallat mentre s'executava l'script."
 
-#: src/backend/script/Script.cpp:351
+#: src/backend/script/Script.cpp:364
 #, kde-format
 msgid "A script is already running."
 msgstr "Ja s'està executant un script."
+
+#: src/backend/script/Script.cpp:387
+#, fuzzy, kde-format
+#| msgid "Attribute 'name' is missing or empty."
+msgid "attribute 'runtime' is missing or empty"
+msgstr "Falta l'atribut «nom» o està buit."
+
+#: src/backend/script/Script.cpp:392
+#, kde-format
+msgid "unsupported script runtime '%1'"
+msgstr ""
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
@@ -7776,125 +7793,125 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "Tipus"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:214
+#: src/backend/spreadsheet/Spreadsheet.cpp:213
 #, kde-format
 msgid "Columns: %1"
 msgstr "Columnes: %1"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:215
+#: src/backend/spreadsheet/Spreadsheet.cpp:214
 #, kde-format
 msgid "Rows: %1"
 msgstr "Files: %1"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:409
+#: src/backend/spreadsheet/Spreadsheet.cpp:408
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: elimina les files amb els valors que falten"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:427
+#: src/backend/spreadsheet/Spreadsheet.cpp:426
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: emmascara les files amb els valors que falten"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:484
+#: src/backend/spreadsheet/Spreadsheet.cpp:483
 #, kde-format
 msgid "%1: toggle comments header"
 msgstr "%1: canvia la capçalera de comentaris"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:492
+#: src/backend/spreadsheet/Spreadsheet.cpp:491
 #, kde-format
 msgid "%1: toggle sparklines header"
 msgstr "%1: canvia la capçalera de minidiagrames"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:555
-#: src/backend/spreadsheet/Spreadsheet.cpp:557
-#: src/backend/spreadsheet/Spreadsheet.cpp:560
+#: src/backend/spreadsheet/Spreadsheet.cpp:554
+#: src/backend/spreadsheet/Spreadsheet.cpp:556
+#: src/backend/spreadsheet/Spreadsheet.cpp:559
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: establix el full de càlcul enllaçat"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:662
+#: src/backend/spreadsheet/Spreadsheet.cpp:661
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: elimina 1 columna"
 msgstr[1] "%1: elimina %2 columnes"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:681
+#: src/backend/spreadsheet/Spreadsheet.cpp:680
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: inserix 1 columna"
 msgstr[1] "%1: inserix %2 columnes"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:732
+#: src/backend/spreadsheet/Spreadsheet.cpp:731
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: neteja les columnes seleccionades"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:748
+#: src/backend/spreadsheet/Spreadsheet.cpp:747
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: neteja totes les màscares"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:958
+#: src/backend/spreadsheet/Spreadsheet.cpp:957
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: mou la columna %2 des de la posició %3 cap a la %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1011
+#: src/backend/spreadsheet/Spreadsheet.cpp:1010
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordena les columnes"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1423
+#: src/backend/spreadsheet/Spreadsheet.cpp:1422
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: eliminació del full de càlcul enllaçat"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1833
+#: src/backend/spreadsheet/Spreadsheet.cpp:1832
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "dades de precisió doble, %1 element"
 msgstr[1] "dades de precisió doble, %1 element"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1836
+#: src/backend/spreadsheet/Spreadsheet.cpp:1835
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "dades de nombre enter, %1 element"
 msgstr[1] "dades de nombre enter, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1839
+#: src/backend/spreadsheet/Spreadsheet.cpp:1838
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "dades de nombre enter gran, %1 element"
 msgstr[1] "dades de nombre enter gran, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1842
+#: src/backend/spreadsheet/Spreadsheet.cpp:1841
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "dades de text, %1 element"
 msgstr[1] "dades de text, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1845
+#: src/backend/spreadsheet/Spreadsheet.cpp:1844
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "dades del mes, %1 element"
 msgstr[1] "dades del mes, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1848
+#: src/backend/spreadsheet/Spreadsheet.cpp:1847
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "dades del dia, %1 element"
 msgstr[1] "dades del dia, %1 elements"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1851
+#: src/backend/spreadsheet/Spreadsheet.cpp:1850
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7924,9 +7941,9 @@ msgstr "%1: canvia el tipus de la columna i establix un valor"
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
 #: src/frontend/dockwidgets/HistogramDock.cpp:266
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:63
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:97
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:103
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:98
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:104
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:32
 #, kde-format
 msgid "Count"
@@ -7964,7 +7981,7 @@ msgid "ThirdQuartile"
 msgstr "TercerQuartil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #, kde-format
 msgid "Interquartile Range"
 msgstr "Amplitud interquartílica"
@@ -8001,7 +8018,7 @@ msgstr "Percentil99"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRange)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:79
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:163
 #, kde-format
 msgid "Range"
@@ -8239,7 +8256,7 @@ msgid "The size of each sample must be equal."
 msgstr "La mida de cada mostra cal que siguen iguals."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
 #, kde-format
 msgid "Standard Deviation"
 msgstr "Desviació estàndard"
@@ -8878,7 +8895,7 @@ msgid "Non-Parametric"
 msgstr "No paramètrica"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:857
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:871
 #, kde-format
 msgid "Result"
 msgstr "Resultat"
@@ -8893,9 +8910,9 @@ msgstr "Tendència"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:117
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:153
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:176
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:683
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:705
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:713
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:697
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:719
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:727
 #, kde-format
 msgid "Seasonal"
 msgstr "Estacional"
@@ -8903,13 +8920,13 @@ msgstr "Estacional"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:123
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:160
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:181
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:739
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:753
 #, kde-format
 msgid "Residual"
 msgstr "Residual"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:862
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:876
 #: src/frontend/ActionsManager.cpp:246 src/frontend/CLIProcessor.cpp:161
 #: src/frontend/MainWin.cpp:1282 src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
@@ -8943,185 +8960,185 @@ msgstr "Component estacional"
 msgid "Residual Component"
 msgstr "Component residual"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:267
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:281
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:543
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: s'ha canviat l'origen de les dades de X"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:274
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:288
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:550
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: s'ha canviat l'origen de les dades de Y"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:291
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:305
 #, kde-format
 msgid "%1: set method"
 msgstr "%1: establix el mètode"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:299
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:313
 #, kde-format
 msgid "%1: set period for STL"
 msgstr "%1: establix el període per a STL"
 
 # skip-rule: da-pel
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:305
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:319
 #, kde-format
 msgid "%1: set robust parameter for STL"
 msgstr "%1: establix un paràmetre robust per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:311
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:325
 #, kde-format
 msgid "%1: set seasonal length for STL"
 msgstr "%1: establix la duració estacional per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:317
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:331
 #, kde-format
 msgid "%1: set trend length for STL"
 msgstr "%1: establix la duració de la tendència per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:323
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:337
 #, kde-format
 msgid "%1: set trend auto-length for STL"
 msgstr "%1: establix la duració automàtica de la tendència per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:329
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:343
 #, kde-format
 msgid "%1: set low pass length for STL"
 msgstr "%1: establix la duració del passabaix per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:335
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:349
 #, kde-format
 msgid "%1: set low pass auto-length for STL"
 msgstr "%1: establix la duració automàtica del passabaix per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:341
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:355
 #, kde-format
 msgid "%1: set seasonal degree for STL"
 msgstr "%1: establix el grau estacional per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:347
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:361
 #, kde-format
 msgid "%1: set trend degree for STL"
 msgstr "%1: establix el grau de la tendència per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:353
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:367
 #, kde-format
 msgid "%1: set low pass degree for STL"
 msgstr "%1: establix el grau del passabaix per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:359
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:373
 #, kde-format
 msgid "%1: set seasonal jump for STL"
 msgstr "%1: establix el salt estacional per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:365
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:379
 #, kde-format
 msgid "%1: set seasonal auto-jump for STL"
 msgstr "%1: establix el salt automàtic estacional per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:371
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:385
 #, kde-format
 msgid "%1: set trend jump for STL"
 msgstr "%1: establix el salt de tendència per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:377
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:391
 #, kde-format
 msgid "%1: set trend auto-jump for STL"
 msgstr "%1: establix el salt automàtic de tendència per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:383
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:397
 #, kde-format
 msgid "%1: set low pass jump for STL"
 msgstr "%1: establix el salt del passabaix per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:389
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:403
 #, kde-format
 msgid "%1: set low pass auto-jump for STL"
 msgstr "%1: establix el salt automàtic del passabaix per a STL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:397
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:411
 #, kde-format
 msgid "%1: set periods for MSTL"
 msgstr "%1: establix els períodes per a MSTL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:403
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:417
 #, kde-format
 msgid "%1: set Lambda for MSTL"
 msgstr "%1: establix la Lambda per a MSTL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:409
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:423
 #, kde-format
 msgid "%1: set iterations for MSTL"
 msgstr "%1: establix les iteracions per a MSTL"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:488
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:502
 #, kde-format
 msgid "No valid data provided."
 msgstr "No s'ha proporcionat cap dada vàlida."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:513
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:527
 #, kde-format
 msgid "Seasonal Length must be odd and at least 3."
 msgstr "La duració estacional cal que siga senar i almenys 3."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:518
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:532
 #, kde-format
 msgid "Trend Length must be odd and at least 3."
 msgstr "La duració de la tendència cal que siga senar i almenys 3."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:523
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:537
 #, kde-format
 msgid "Low-Pass Length must be odd and at least 3."
 msgstr "La duració del passabaix cal que siga senar i almenys 3."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:570
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:584
 #, kde-format
 msgid "STL decomposition failed: %1"
 msgstr "Ha fallat la descomposició STL: %1"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:588
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:602
 #, kde-format
 msgid "No periods specified for MSTL."
 msgstr "No s'han establit períodes per a MSTL."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:594
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:608
 #, kde-format
 msgid "Periods must be at least 2."
 msgstr "Cal que els períodes siguen almenys 2."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:598
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:612
 #, kde-format
 msgid "Time-series has less than two periods."
 msgstr "Les sèries temporals tenen menys de dos períodes."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:604
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:618
 #, kde-format
 msgid "Iterations must be > 0."
 msgstr "Les iteracions cal que siguen > 0."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:609
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:623
 #, kde-format
 msgid "Lambda must be between 0 and 1."
 msgstr "La Lambda cal que siga entre 0 i 1."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:619
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:633
 #, kde-format
 msgid "Box-Cox transformation requires strictly positive data."
 msgstr "La transformació Box-Cox requerix estrictament dades positives."
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:638
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:652
 #, kde-format
 msgid "MSTL decomposition failed: %1"
 msgstr "Ha fallat la descomposició MSTL: %1"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:730
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:744
 #, kde-format
 msgid "Seasonal Component (Period: %1)"
 msgstr "Component estacional (període: %1)"
 
-#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:731
+#: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:745
 #, kde-format
 msgid "Seasonal, Period: %1"
 msgstr "Estacional, període: %1"
@@ -10019,7 +10036,7 @@ msgstr "Diagrama de barres"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2029
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:959
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:961
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:155
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:156
 #, kde-format
 msgid "Bar Plot"
 msgstr "Diagrama de barres"
@@ -10038,7 +10055,7 @@ msgstr "Diagrames estadístics"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:658
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:409
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:150
 #, kde-format
 msgid "Histogram"
 msgstr "Histograma"
@@ -10047,7 +10064,7 @@ msgstr "Histograma"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:662
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:957
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:152
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:153
 #, kde-format
 msgid "Box Plot"
 msgstr "Diagrama de caixes"
@@ -10060,7 +10077,7 @@ msgstr "Diagrama Q-Q"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:670
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2024
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:150
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:151
 #, kde-format
 msgid "KDE Plot"
 msgstr "Diagrama de KDE"
@@ -10433,7 +10450,7 @@ msgid "%1: add inset plot with data"
 msgstr "%1: afig un diagrama intercalat amb dades"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2850
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:635
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:636
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr "Percentatge acumulat"
@@ -16849,7 +16866,7 @@ msgstr ""
 "li></ul>"
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:202
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:162
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:163
 #, kde-format
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
@@ -16859,7 +16876,7 @@ msgstr ""
 "resultant."
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:206
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:166
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:167
 #, kde-format
 msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
@@ -16869,7 +16886,7 @@ msgstr ""
 "petits permeten valors menys negatius."
 
 #: src/frontend/dockwidgets/XYBaselineCorrectionCurveDock.cpp:210
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:170
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:171
 #, kde-format
 msgid "Number of iterations to perform."
 msgstr "Nombre d'iteracions que es realitzaran."
@@ -19098,14 +19115,14 @@ msgstr "Prova d'hipòtesi de %1"
 msgid "%1: variable statistics"
 msgstr "%1: estadístiques de les variables"
 
-#: src/frontend/PlotTemplateDialog.cpp:41
+#: src/frontend/PlotTemplateDialog.cpp:42
 #, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
 msgstr "Plantilles d'àrea de diagrames"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
-#: src/frontend/PlotTemplateDialog.cpp:44
+#: src/frontend/PlotTemplateDialog.cpp:45
 #: src/frontend/SettingsNotebookPage.cpp:47
 #: src/frontend/SettingsWorksheetPage.cpp:66
 #: src/frontend/SettingsWorksheetPage.cpp:82
@@ -19116,56 +19133,56 @@ msgstr "Plantilles d'àrea de diagrames"
 msgid "Default"
 msgstr "Predeterminat"
 
-#: src/frontend/PlotTemplateDialog.cpp:45
+#: src/frontend/PlotTemplateDialog.cpp:46
 #, kde-format
 msgid "Custom Folder"
 msgstr "Carpeta personalitzada"
 
-#: src/frontend/PlotTemplateDialog.cpp:48
+#: src/frontend/PlotTemplateDialog.cpp:49
 #, kde-format
 msgid "Location of plot area templates"
 msgstr "Ubicació de les plantilles d'àrea de diagrames"
 
-#: src/frontend/PlotTemplateDialog.cpp:52
+#: src/frontend/PlotTemplateDialog.cpp:53
 #, kde-format
 msgid "Custom folder for the location of plot area templates"
 msgstr ""
 "Carpeta personalitzada per a la ubicació de les plantilles d'àrea de "
 "diagrames"
 
-#: src/frontend/PlotTemplateDialog.cpp:56
+#: src/frontend/PlotTemplateDialog.cpp:57
 #, kde-format
 msgid "Open the folder for the location of plot area templates"
 msgstr ""
 "Obri la carpeta per a la ubicació de les plantilles d'àrea de diagrames"
 
-#: src/frontend/PlotTemplateDialog.cpp:135
+#: src/frontend/PlotTemplateDialog.cpp:136
 #, kde-format
 msgctxt "@title:window"
 msgid "Select template search path"
 msgstr "Trieu el camí de busca de plantilles"
 
-#: src/frontend/PlotTemplateDialog.cpp:143
+#: src/frontend/PlotTemplateDialog.cpp:144
 #, kde-format
 msgid "No template path provided."
 msgstr "No s'ha proporcionat cap camí cap a plantilla."
 
-#: src/frontend/PlotTemplateDialog.cpp:150
+#: src/frontend/PlotTemplateDialog.cpp:151
 #, kde-format
 msgid "File does not exist."
 msgstr "El fitxer no existix."
 
-#: src/frontend/PlotTemplateDialog.cpp:156
+#: src/frontend/PlotTemplateDialog.cpp:157
 #, kde-format
 msgid "Unable to read the file"
 msgstr "No s'ha pogut llegir el fitxer"
 
-#: src/frontend/PlotTemplateDialog.cpp:168
-#: src/frontend/PlotTemplateDialog.cpp:176
-#: src/frontend/PlotTemplateDialog.cpp:184
-#: src/frontend/PlotTemplateDialog.cpp:193
-#: src/frontend/PlotTemplateDialog.cpp:205
-#: src/frontend/PlotTemplateDialog.cpp:214
+#: src/frontend/PlotTemplateDialog.cpp:169
+#: src/frontend/PlotTemplateDialog.cpp:177
+#: src/frontend/PlotTemplateDialog.cpp:185
+#: src/frontend/PlotTemplateDialog.cpp:194
+#: src/frontend/PlotTemplateDialog.cpp:206
+#: src/frontend/PlotTemplateDialog.cpp:215
 #, kde-format
 msgid "Failed to load the plot template"
 msgstr "Ha fallat mentre es carregava la plantilla de diagrama"
@@ -19319,8 +19336,8 @@ msgstr "Preferències"
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
 #: src/frontend/SettingsDialog.cpp:57
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:97
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:103
 #: src/frontend/ui/datapickercurvewidget.ui:27
 #: src/frontend/ui/datapickerimagewidget.ui:27
 #: src/frontend/ui/dockwidgets/axisdock.ui:36
@@ -19719,132 +19736,132 @@ msgstr ""
 "No s'ha trobat Ghostscript. La composició tipogràfica de LaTeX no és "
 "possible."
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:100
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:101
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Afig un valor"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:101
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:102
 #: src/frontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
 msgstr "Afi&g"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:104
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:105
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Sostrau un valor"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:105
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:110
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:106
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:111
 #, kde-format
 msgid "Subtract:"
 msgstr "Sostracció:"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:106
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:111
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:107
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:112
 #, kde-format
 msgid "&Subtract"
 msgstr "&Sostrau"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:109
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:110
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Baseline"
 msgstr "Sostracció de la línia base"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:114
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:115
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr "Multiplica pel valor"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:115
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:116
 #, kde-format
 msgid "&Multiply"
 msgstr "&Multiplica"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:118
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "Dividix pel valor"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:119
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:120
 #, kde-format
 msgid "&Divide"
 msgstr "&Dividix"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:138
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #, kde-format
 msgid "Custom Value"
 msgstr "Valor personalitzat"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:139
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:140
 #, kde-format
 msgid "Difference"
 msgstr "Diferència"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:155
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:156
 #, kde-format
 msgid "Baseline (arPLS Algorithm)"
 msgstr "Línia base (algorisme arPLS)"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:564
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:565
 #, kde-format
 msgid "raw data"
 msgstr "dades sense processar"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:570
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:571
 #, kde-format
 msgid "baseline"
 msgstr "línia base"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:578
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:579
 #, kde-format
 msgid "result"
 msgstr "resultat"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:658
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:659
 #, kde-format
 msgid "Ratio: %1"
 msgstr "Relació: %1"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:701
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:708
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:715
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:722
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:929
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:972
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1015
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1058
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:702
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:709
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:716
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:723
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:930
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:973
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1016
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1059
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "S'ha proporcionat un valor numèric no vàlid."
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1243
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1244
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: afig %2 als valors de la columna"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1246
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1247
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: sostrau %2 dels valors de la columna"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1249
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1250
 #, kde-format
 msgid "%1: subtract baseline from column values"
 msgstr "%1: sostrau la línia base dels valors de la columna"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1252
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1253
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: multiplica els valors de la columna per %2"
 
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1255
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:1256
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: dividix els valors de la columna per %2"
@@ -20420,20 +20437,20 @@ msgstr "Ajust de la distribució a «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1119
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:356
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:357
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Densitat"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1125
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:386
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:387
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Quantils teòrics"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1128
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:388
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:389
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Quantils de la mostra"
@@ -21475,104 +21492,104 @@ msgstr "Ha fallat mentre s'inserien valors a la taula."
 # (mínim, màxim, mitjanes, etc.) d'un conjunt de dades. No pas a una ubicació
 # física.
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:62
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:25
 #, kde-format
 msgid "Location Measures"
 msgstr "Mesures de situació"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
 #, kde-format
 msgid "Arithmetic Mean"
 msgstr "Mitjana aritmètica"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
 #, kde-format
 msgid "Geometric Mean"
 msgstr "Mitjana geomètrica"
 
 # Nota: https://ca.wikipedia.org/wiki/Mitjana_harm%C3%B2nica
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #, kde-format
 msgid "Harmonic Mean"
 msgstr "Mitjana harmònica"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #, kde-format
 msgid "Contraharmonic Mean"
 msgstr "Mitjana contraharmònica"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:72
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #, kde-format
 msgid "First Quartile"
 msgstr "Primer quartil"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:74
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #, kde-format
 msgid "Third Quartile"
 msgstr "Tercer quartil"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:78
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:156
 #, kde-format
 msgid "Dispersion Measures"
 msgstr "Mesures de dispersió"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
 #, kde-format
 msgid "Mean Absolute Deviation Around Mean"
 msgstr "Desviació absoluta de la mitjana sobre la mitjana"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
 #, kde-format
 msgid "Mean Absolute Deviation Around Median"
 msgstr "Desviació absoluta de la mitjana sobre la mediana"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Median Absolute Deviation"
 msgstr "Desviació absoluta de la mediana"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:86
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:87
 #, kde-format
 msgid "Average 2-Period Moving Range"
 msgstr "Mitjana d'interval mòbil de 2 períodes"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:239
 #, kde-format
 msgid "Shape Measures"
 msgstr "Mesures de forma"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:98
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:99
 #, kde-format
 msgid "Unique Values"
 msgstr "Valors únics"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:121
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:122
 #, kde-format
 msgid "Overview"
 msgstr "Vista general"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:151
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:152
 #, kde-format
 msgid "Normal Q-Q Plot"
 msgstr "Diagrama Q-Q normal"
 
 # skip-rule: kct-box
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:156
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:157
 #, kde-format
 msgid "Pareto Plot"
 msgstr "Diagrama de Pareto"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:233
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:234
 #, kde-format
 msgid "Frequency Table"
 msgstr "Taula de freqüències"
 
-#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:235
+#: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:236
 #, kde-format
 msgid "Percent"
 msgstr "Percentatge"
