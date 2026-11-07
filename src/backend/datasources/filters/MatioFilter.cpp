@@ -887,7 +887,8 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 		// prepare import
 		if (dataSource) {
 			bool ok = false;
-			columnOffset = dataSource->prepareImport(dataContainer, importMode, static_cast<int>(actualRows), static_cast<int>(actualCols), vectorNames, columnModes, ok);
+			columnOffset =
+				dataSource->prepareImport(dataContainer, importMode, static_cast<int>(actualRows), static_cast<int>(actualCols), vectorNames, columnModes, ok);
 			if (!ok) {
 				q->setLastError(i18n("Not enough memory."));
 				return QVector<QStringList>{};
