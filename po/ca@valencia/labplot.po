@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:45+0000\n"
-"PO-Revision-Date: 2026-10-22 09:08+0200\n"
+"PO-Revision-Date: 2026-11-06 14:52+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -7738,10 +7738,9 @@ msgid "no script element found"
 msgstr "no s'ha trobat cap element de script"
 
 #: src/backend/script/Script.cpp:189
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "failed to initialize the script runtime '%1'"
-msgstr "Ha fallat mentre es restablia %1."
+msgstr "fa fallat mentre es restablia l'entorn d'execució de l'script «%1»"
 
 #: src/backend/script/Script.cpp:253
 #, kde-format
@@ -7765,15 +7764,14 @@ msgid "A script is already running."
 msgstr "Ja s'està executant un script."
 
 #: src/backend/script/Script.cpp:387
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "Falta l'atribut «nom» o està buit."
+msgstr "Falta l'atribut «runtime» o està buit"
 
 #: src/backend/script/Script.cpp:392
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "entorn d'execució de l'script «%1» no admés"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
@@ -22667,7 +22665,7 @@ msgstr "Controlador:"
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:66
 #, kde-format
 msgid "Host:"
-msgstr "Amfitrió:"
+msgstr "Màquina:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPort)
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:45+0000\n"
-"PO-Revision-Date: 2026-10-22 13:48+0300\n"
+"PO-Revision-Date: 2026-11-06 17:15+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7703,10 +7703,9 @@ msgid "no script element found"
 msgstr "не знайдено елемента скрипту"
 
 #: src/backend/script/Script.cpp:189
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "failed to initialize the script runtime '%1'"
-msgstr "Не вдалося ініціалізувати %1."
+msgstr "не вдалося ініціалізувати середовище виконання скрипту «%1»"
 
 #: src/backend/script/Script.cpp:253
 #, kde-format
@@ -7730,15 +7729,14 @@ msgid "A script is already running."
 msgstr "Скрипт вже запущено."
 
 #: src/backend/script/Script.cpp:387
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "Пропущено атрибут «name» або вказано порожнє значення атрибута."
+msgstr "пропущено атрибут «runtime» або вказано порожнє значення атрибута."
 
 #: src/backend/script/Script.cpp:392
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "непідтримуване середовище виконання скрипту «%1»"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:45+0000\n"
-"PO-Revision-Date: 2026-10-22 06:20+0200\n"
+"PO-Revision-Date: 2026-11-06 06:41+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7655,10 +7655,9 @@ msgid "no script element found"
 msgstr "სკრიპტის ელემენტი აღმოჩენილი არაა"
 
 #: src/backend/script/Script.cpp:189
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "failed to initialize the script runtime '%1'"
-msgstr "%1-ის ინიციალიზაცია ჩავარდა."
+msgstr "ინიციალიზაციის შეცდომა სკრიპტის გაშვების გარემოსთვის '%1'"
 
 #: src/backend/script/Script.cpp:253
 #, kde-format
@@ -7682,15 +7681,14 @@ msgid "A script is already running."
 msgstr "სკრიპტი უკვე გაშვებულია."
 
 #: src/backend/script/Script.cpp:387
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "ატრიბუტი \"name\" აკლია ან ცარიელია."
+msgstr "ატრიბუტი \"runtime\" აკლია ან ცარიელია"
 
 #: src/backend/script/Script.cpp:392
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "მხარდაუჭერელი სკრიპტის გაშვების გარემო '%1'"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format

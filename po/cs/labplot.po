@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:45+0000\n"
-"PO-Revision-Date: 2026-10-22 12:17+0200\n"
+"PO-Revision-Date: 2026-11-06 11:27+0100\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -7666,10 +7666,9 @@ msgid "no script element found"
 msgstr "skriptový element nenalezen"
 
 #: src/backend/script/Script.cpp:189
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "failed to initialize the script runtime '%1'"
-msgstr "Selhala inicializace %1."
+msgstr "nepodařilo se inicializovat prostředí pro spouštění skriptů '%1'"
 
 #: src/backend/script/Script.cpp:253
 #, kde-format
@@ -7693,15 +7692,14 @@ msgid "A script is already running."
 msgstr "Skript již běží."
 
 #: src/backend/script/Script.cpp:387
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "Chybí atribut 'name' nebo je prázdný."
+msgstr "chybí atribut 'runtime' nebo je prázdný"
 
 #: src/backend/script/Script.cpp:392
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "nepodporované prostředí pro spouštění skriptů '%1'"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:45+0000\n"
-"PO-Revision-Date: 2026-10-22 07:41+0200\n"
+"PO-Revision-Date: 2026-11-06 07:03+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Poedit 3.10\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -7667,10 +7667,9 @@ msgid "no script element found"
 msgstr "ni najdenega elementa skripta"
 
 #: src/backend/script/Script.cpp:189
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "failed to initialize the script runtime '%1'"
-msgstr "Inicializacija %1 ni uspela."
+msgstr "ni uspelo inicializirati izvajalnega okolja skripte '%1'"
 
 #: src/backend/script/Script.cpp:253
 #, kde-format
@@ -7694,15 +7693,14 @@ msgid "A script is already running."
 msgstr "Skript se že izvaja."
 
 #: src/backend/script/Script.cpp:387
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "Atribut 'name' manjka ali je prazen."
+msgstr "Atribut 'runtime' manjka ali je prazen"
 
 #: src/backend/script/Script.cpp:392
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "nepodprto izvajalno okolje skripte '%1'"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
