@@ -81,30 +81,6 @@ option(LOCAL_VECTOR_BLF "Use local build of Vector BLF from src/3rdparty/vector_
 if(ENABLE_VECTOR_BLF)
   set(OPTION_RUN_DOXYGEN OFF CACHE BOOL "" FORCE) # disable running doxygen
   if(${LOCAL_DBC_PARSER})
-      # fix missing variable and keyword for fast_float
-      # NOTE: Must be set BEFORE add_subdirectory(dbc_parser_cpp) which internally adds fast_float
-      if(NOT MSVC_FOUND)
-        # get version of fast_float
-        set(FASTFLOAT_HEADER_PATH "/usr/include/fast_float/float_common.h")
-        if (EXISTS "${FASTFLOAT_HEADER_PATH}")
-          file(READ "${FASTFLOAT_HEADER_PATH}" _ff_header)
-          string(REGEX MATCH "#define FASTFLOAT_VERSION_MAJOR ([0-9]+)" _ ${_ff_header})
-          set(FF_MAJOR ${CMAKE_MATCH_1})
-          string(REGEX MATCH "#define FASTFLOAT_VERSION_MINOR ([0-9]+)" _ ${_ff_header})
-          set(FF_MINOR ${CMAKE_MATCH_1})
-          string(REGEX MATCH "#define FASTFLOAT_VERSION_PATCH ([0-9]+)" _ ${_ff_header})
-          set(FF_PATCH ${CMAKE_MATCH_1})
-          set(FastFloat_VERSION "${FF_MAJOR}.${FF_MINOR}.${FF_PATCH}")
-          message(STATUS "FastFloat version: ${FastFloat_VERSION}")
-        endif()
-        if(FastFloat_VERSION VERSION_GREATER_EQUAL "6.1.4")
-              add_definitions (-UFASTFLOAT_VISUAL_STUDIO)
-        else()
-              add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
-        endif()
-
-        add_definitions (-D__forceinline=inline)
-      endif()
       # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
       if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
@@ -119,6 +95,10 @@ if(ENABLE_VECTOR_BLF)
       # Force disable tests - they require Catch2 via FetchContent
       set(DBC_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
       add_subdirectory(dbc_parser_cpp EXCLUDE_FROM_ALL)
+      # Bundled fast_float tests undefined platform macros with #if; allow this without forcing their values.
+      target_compile_options(dbc PRIVATE
+          $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wno-undef>
+      )
       # dbc library needs PIC when linked into shared liblabplot
       set_target_properties(dbc PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

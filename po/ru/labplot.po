@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-06 00:45+0000\n"
-"PO-Revision-Date: 2026-10-22 05:43+0200\n"
+"PO-Revision-Date: 2026-11-06 07:49+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -7770,10 +7770,9 @@ msgid "no script element found"
 msgstr "Не найден элемент сценария."
 
 #: src/backend/script/Script.cpp:189
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "failed to initialize the script runtime '%1'"
-msgstr "Не удалось инициализировать %1."
+msgstr "не удалось инициализировать среду выполнения сценариев «%1»"
 
 #: src/backend/script/Script.cpp:253
 #, kde-format
@@ -7797,15 +7796,14 @@ msgid "A script is already running."
 msgstr "Сценарий уже выполняется."
 
 #: src/backend/script/Script.cpp:387
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "Атрибут «имя» отсутствует или пуст."
+msgstr "атрибут «runtime» отсутствует или пуст"
 
 #: src/backend/script/Script.cpp:392
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "неподдерживаемая среда выполнения сценариев «%1»"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format

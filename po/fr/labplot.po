@@ -25897,7 +25897,7 @@ msgstr "Pondération pour les données en Y"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:101
 #, kde-format
 msgid "Y-Weight:"
-msgstr "Poids en X :"
+msgstr "Poids en Y :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:108
