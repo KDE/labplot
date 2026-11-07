@@ -116,7 +116,7 @@ namespace {
                         out = function(args..., special_function.payload);
                 } else
                         out = std::nan("0");
-        } catch (const std::bad_variant_access& ex) {
+        } catch (const std::bad_variant_access&) {
                 // Check if this function requires a variable (column name) but got an expression
                 if (std::holds_alternative<Parsing::func_tVariablePayload>(special_function.funsptr->fnct) ||
                     std::holds_alternative<Parsing::func_tValueVariablePayload>(special_function.funsptr->fnct) ||
@@ -139,7 +139,7 @@ namespace {
                 try {
                         const auto fnct_ptr = std::get<FunctionType>(function->fnct);
                         out = fnct_ptr(args...);
-                } catch (const std::bad_variant_access& ex) {
+                } catch (const std::bad_variant_access&) {
                         return wrongArgumentInternalErrorMessage(p, s->name, numArguments);
                 }
         }

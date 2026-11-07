@@ -61,7 +61,7 @@ void DbcParser::getSignals(const QVector<uint32_t>& ids, PrefixType p, SuffixTyp
 	for (const auto id : ids) {
 		for (const auto& message : m_parser.get_messages()) {
 			if (message.id() == id) {
-				idIndex.insert(id, out.value_descriptions.size());
+				idIndex.insert(id, static_cast<int>(out.value_descriptions.size()));
 				for (const auto& signal_ : message.get_signals()) {
 					std::string signal_name;
 					switch (p) {

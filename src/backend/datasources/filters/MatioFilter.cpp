@@ -752,7 +752,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 
 			// find out number of rows
 			for (size_t i = 0; i < actualCols; i++) {
-				matvar_t* cell = Mat_VarGetCell(var, i + startColumn - 1);
+				matvar_t* cell = Mat_VarGetCell(var, static_cast<int>(i + startColumn - 1));
 				if (cell->rank == 2 && cell->dims[0] <= 1) { // read only rank 2 and cells with one row, omit strings
 					if (rows < cell->dims[1] && cell->class_type != MAT_C_CHAR) // find max row count
 						rows = cell->dims[1];
@@ -790,7 +790,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 		case MAT_C_STRUCT: {
 			DEBUG(Q_FUNC_INFO << ", found STRUCT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			DEBUG(Q_FUNC_INFO << ", data type = " << STDSTRING(typeName(var->data_type)) << ", dims = " << var->dims[0] << " x " << var->dims[1])
-			const int nelem = var->dims[0] * var->dims[1];
+			const int nelem = static_cast<int>(var->dims[0] * var->dims[1]);
 			const int nfields = Mat_VarGetNumberOfFields(var);
 			DEBUG(Q_FUNC_INFO << ", nelements = " << nelem << ", nfields = " << nfields)
 			if (endColumn == -1)
@@ -887,7 +887,8 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 		// prepare import
 		if (dataSource) {
 			bool ok = false;
-			columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes, ok);
+			columnOffset =
+				dataSource->prepareImport(dataContainer, importMode, static_cast<int>(actualRows), static_cast<int>(actualCols), vectorNames, columnModes, ok);
 			if (!ok) {
 				q->setLastError(i18n("Not enough memory."));
 				return QVector<QStringList>{};
@@ -940,7 +941,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 			// TODO: complex not supported yet
 
 			for (size_t i = 0; i < actualCols; i++) {
-				matvar_t* cell = Mat_VarGetCell(var, i + startColumn - 1);
+				matvar_t* cell = Mat_VarGetCell(var, static_cast<int>(i + startColumn - 1));
 				// cell->name can be NULL
 				QString dims;
 				for (int j = 0; j < cell->rank; j++)
@@ -954,7 +955,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 			for (size_t i = 0; i < actualRows; i++) {
 				QStringList row;
 				for (size_t j = 0; j < actualCols; j++) {
-					matvar_t* cell = Mat_VarGetCell(var, j + startColumn - 1);
+					matvar_t* cell = Mat_VarGetCell(var, static_cast<int>(j + startColumn - 1));
 					const size_t cellsize = cell->dims[1];
 					if (cell->rank == 2 && cell->dims[0] <= 1) { // read only rank 2 and cells with zero/one row
 						switch (cell->class_type) {
@@ -1096,7 +1097,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 			break;
 		}
 		case MAT_C_STRUCT: {
-			const int nelem = var->dims[0] * var->dims[1];
+			const int nelem = static_cast<int>(var->dims[0] * var->dims[1]);
 			const int nfields = Mat_VarGetNumberOfFields(var);
 
 			if (nelem < 1) {
