@@ -152,7 +152,7 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 			return false; // No file
 		f.close();
 		return true;
-	} catch (const Vector::BLF::Exception& e) {
+	} catch (const Vector::BLF::Exception&) {
 		return false; // Signature was invalid or something else
 	}
 #else
@@ -295,6 +295,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			try {
 				objectHeader = file.read();
 			} catch (std::runtime_error& e) {
+				Q_UNUSED(e)
 				DEBUG("Exception: " << e.what() << std::endl);
 			}
 			if (objectHeader == nullptr)
@@ -377,15 +378,17 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			} else
 				m_DataContainer.setData<qint64>(0, message_index, timestamp);
 
-			const size_t startIndex = idIndexTable.value(id) + 1; // +1 because of time
-			for (size_t i = 1; i < startIndex; i++)
-				m_DataContainer.setData<double>(i, message_index, std::nan("0"));
+			const int startIndex = idIndexTable.value(id) + 1; // +1 because of time
+			const int endIndex = startIndex + static_cast<int>(values.size());
+			const int columnCount = static_cast<int>(m_DataContainer.size());
+			for (int columnIndex = 1; columnIndex < startIndex; columnIndex++)
+				m_DataContainer.setData<double>(columnIndex, message_index, std::nan("0"));
 
-			for (size_t i = startIndex; i < startIndex + values.size(); i++)
-				m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
+			for (int columnIndex = startIndex; columnIndex < endIndex; columnIndex++)
+				m_DataContainer.setData<double>(columnIndex, message_index, values.at(columnIndex - startIndex));
 
-			for (size_t i = startIndex + values.size(); i < m_DataContainer.size(); i++)
-				m_DataContainer.setData<double>(i, message_index, std::nan("0"));
+			for (int columnIndex = endIndex; columnIndex < columnCount; columnIndex++)
+				m_DataContainer.setData<double>(columnIndex, message_index, std::nan("0"));
 
 			message_index++;
 		}
@@ -421,26 +424,28 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			} else
 				m_DataContainer.setData<qint64>(0, message_index, timestamp);
 
-			const std::vector<double>::size_type startIndex = idIndexTable.value(id) + 1; // +1 because of time
+			const int startIndex = idIndexTable.value(id) + 1; // +1 because of time
+			const int endIndex = startIndex + static_cast<int>(values.size());
+			const int columnCount = static_cast<int>(m_DataContainer.size());
 			if (firstMessageValid) {
-				for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
-					const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
-					m_DataContainer.setData<double>(i, message_index, prevValue);
+				for (int columnIndex = 1; columnIndex < startIndex; columnIndex++) {
+					const auto prevValue = m_DataContainer.data<double>(columnIndex, message_index - 1);
+					m_DataContainer.setData<double>(columnIndex, message_index, prevValue);
 				}
-				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++) {
-					m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
+				for (int columnIndex = startIndex; columnIndex < endIndex; columnIndex++) {
+					m_DataContainer.setData<double>(columnIndex, message_index, values.at(columnIndex - startIndex));
 				}
-				for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
-					const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
-					m_DataContainer.setData<double>(i, message_index, prevValue);
+				for (int columnIndex = endIndex; columnIndex < columnCount; columnIndex++) {
+					const auto prevValue = m_DataContainer.data<double>(columnIndex, message_index - 1);
+					m_DataContainer.setData<double>(columnIndex, message_index, prevValue);
 				}
 			} else {
-				for (std::vector<double>::size_type i = 1; i < startIndex; i++)
-					m_DataContainer.setData<double>(i, message_index, std::nan("0"));
-				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++)
-					m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
-				for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++)
-					m_DataContainer.setData<double>(i, message_index, std::nan("0"));
+				for (int columnIndex = 1; columnIndex < startIndex; columnIndex++)
+					m_DataContainer.setData<double>(columnIndex, message_index, std::nan("0"));
+				for (int columnIndex = startIndex; columnIndex < endIndex; columnIndex++)
+					m_DataContainer.setData<double>(columnIndex, message_index, values.at(columnIndex - startIndex));
+				for (int columnIndex = endIndex; columnIndex < columnCount; columnIndex++)
+					m_DataContainer.setData<double>(columnIndex, message_index, std::nan("0"));
 				firstMessageValid = true;
 			}
 			message_index++;

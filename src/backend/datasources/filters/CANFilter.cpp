@@ -237,7 +237,7 @@ QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int line
 			if (!data_ptr)
 				continue;
 
-			switch (m_DataContainer.columnMode(c)) {
+			switch (m_DataContainer.columnMode(static_cast<int>(c))) {
 			case AbstractColumn::ColumnMode::BigInt: {
 				const auto& v = *static_cast<const QVector<qint64>*>(data_ptr);
 				l.append(QString::number(v.at(i)));
