@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 14:38+0000\n"
-"PO-Revision-Date: 2026-10-20 19:45+0300\n"
+"POT-Creation-Date: 2026-11-08 00:10+0000\n"
+"PO-Revision-Date: 2026-11-07 19:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -143,7 +143,7 @@ msgstr "“%1” kopyası"
 #: src/backend/core/AbstractAspect.cpp:954
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
-msgstr "“name” özniteliği eksik veya boş."
+msgstr "“name” özniteliği eksik veya boş"
 
 #: src/backend/core/AbstractAspect.cpp:961
 #, kde-format
@@ -715,7 +715,7 @@ msgstr "Üzgünüm. Dosyayı okuma için açamadık."
 #: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "The project file is empty."
-msgstr "Proje dosyası boş."
+msgstr "Proje dosyası boş"
 
 #: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
@@ -1268,13 +1268,13 @@ msgstr "Aygıt/dosya açılamadı."
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
 #, kde-format
 msgid "Data selection empty."
-msgstr "Veri seçimi boş."
+msgstr "Veri seçimi boş"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #: src/backend/datasources/filters/McapFilter.cpp:188
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "Aygıt/dosya açılamadı veya boş."
+msgstr "Aygıt/dosya açılamadı veya boş"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
@@ -1765,7 +1765,7 @@ msgstr "ad"
 #: src/backend/datasources/filters/JsonFilter.cpp:391
 #, kde-format
 msgid "Device/file is empty."
-msgstr "Aygıt/dosya boş."
+msgstr "Aygıt/dosya boş"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:399
 #, kde-format
@@ -2146,7 +2146,7 @@ msgstr "Seçili değişken yok."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:700
 #, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "Dosya açılamadı veya boş."
+msgstr "Dosya açılamadı veya boş"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:938
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1078
