@@ -479,7 +479,8 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 		case RangeT::Scale::Sqrt:
 		case RangeT::Scale::Square:
 		case RangeT::Scale::Inverse:
-			// Linear spacing for these scales
+		default:
+			// Linear spacing for unhandled enum values
 			x = range.start() + step * i;
 			break;
 		}

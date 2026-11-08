@@ -669,7 +669,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		if (!properties.headerEnabled) {
 			rows.append(determineColumnsSimplifyWhiteSpace(line, properties));
 			if (rows.last().count() != numberColumns)
-				return Status::InvalidNumberDataColumns(numberColumns, (int)rows.last().count(), i + 1);
+				return Status::InvalidNumberDataColumns(numberColumns, (int)rows.last().count(), static_cast<int>(i + 1));
 			i++;
 		} else {
 			// Skip all lines until startRow line
@@ -700,7 +700,7 @@ Status AsciiFilterPrivate::initialize(QIODevice& device) {
 				if (properties.headerEnabled) {
 					i += properties.startRow;
 				}
-				return Status::InvalidNumberDataColumns(numberColumns, (int)rows.last().count(), i + 1);
+				return Status::InvalidNumberDataColumns(numberColumns, (int)rows.last().count(), static_cast<int>(i + 1));
 			}
 			i++;
 		}
@@ -1753,13 +1753,16 @@ void AsciiFilterPrivate::DataContainer::appendVector(AbstractColumn::ColumnMode 
 	case AbstractColumn::ColumnMode::Month:
 		vector = new QVector<QDateTime>();
 		break;
+	default:
+		Q_ASSERT(false);
+		return;
 	}
 
 	m_dataContainer.push_back(vector);
 	m_columnModes.append(cm);
 }
 
-int AsciiFilterPrivate::DataContainer::rowCount(unsigned long index) const {
+int AsciiFilterPrivate::DataContainer::rowCount(size_t index) const {
 	if (index >= m_dataContainer.size())
 		return -1;
 

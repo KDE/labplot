@@ -137,8 +137,8 @@ struct mannwhitney_test_result nsl_stats_mannwhitney_u(const double sample1[], s
 	result.p = p;
 	result.U = U;
 	result.z = z;
-	result.rank_sum1 = rank_sum1;
-	result.rank_sum2 = rank_sum2;
+	result.rank_sum1 = (int)rank_sum1;
+	result.rank_sum2 = (int)rank_sum2;
 	result.mean_rank1 = rank_sum1 / n1;
 	result.mean_rank2 = rank_sum2 / n2;
 
@@ -174,7 +174,7 @@ struct anova_oneway_test_result nsl_stats_anova_oneway_f(const double** groups, 
 	for (size_t i = 0; i < n_groups; i++)
 		ssw += gsl_stats_variance(groups[i], 1, sizes[i]) * (sizes[i] - 1);
 
-	const double delta = total_samples - n_groups;
+	const double delta = (double)(total_samples - n_groups);
 	double F = NAN;
 	if (delta != 0.) {
 		const double ms_within = ssw / delta;
@@ -192,11 +192,11 @@ struct anova_oneway_test_result nsl_stats_anova_oneway_f(const double** groups, 
 		df_within += sizes[i];
 	df_within -= n_groups;
 
-	double p = nsl_stats_fdist_p(F, df_between, df_within);
+	double p = nsl_stats_fdist_p(F, df_between, (double)df_within);
 
 	result.p = p;
-	result.df_between_groups = df_between;
-	result.df_within_groups = df_within;
+	result.df_between_groups = (double)df_between;
+	result.df_within_groups = (double)df_within;
 	result.ss_between_groups = ssb;
 	result.ss_within_groups = ssw;
 	result.ms_between_groups = ms_between;
@@ -246,8 +246,8 @@ struct anova_oneway_repeated_test_result nsl_stats_anova_oneway_repeated_f(const
 
 	double sse = ssw - ssb;
 
-	double dfb = n_groups - 1;
-	double dfe = (n_groups - 1) * (n_samples - 1);
+	double dfb = (double)(n_groups - 1);
+	double dfe = (double)((n_groups - 1) * (n_samples - 1));
 
 	if (dfb == 0. || dfe == 0.) {
 		result.p = NAN;
@@ -259,7 +259,7 @@ struct anova_oneway_repeated_test_result nsl_stats_anova_oneway_repeated_f(const
 
 	double F = msb / mse;
 
-	double p = nsl_stats_fdist_p(F, dfb, dfe);
+	double p = nsl_stats_fdist_p(F, (size_t)dfb, dfe);
 	result.p = p;
 	result.F = F;
 	result.df_treatment = dfb;
@@ -378,7 +378,7 @@ struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** grou
 	free(rank_sum);
 	free(tie_counts);
 
-	double p = gsl_cdf_chisq_Q(H_corrected, n_groups - 1);
+	double p = gsl_cdf_chisq_Q(H_corrected, (double)(n_groups - 1));
 	if (p < 1.e-9)
 		p = 0.0;
 
@@ -513,8 +513,8 @@ nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind
 	result.event_count2 = event_count2;
 	result.censored_count1 = censored_count1;
 	result.censored_count2 = censored_count2;
-	result.total_count1 = size1;
-	result.total_count2 = size2;
+	result.total_count1 = (int)size1;
+	result.total_count2 = (int)size2;
 
 	return result;
 }
@@ -544,13 +544,13 @@ struct independent_t_test_result nsl_stats_independent_t(const double sample1[],
 	double p_value = NAN;
 	switch (tail) {
 	case nsl_stats_tail_type_two:
-		p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(fabs(t_stat), df));
+		p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(fabs(t_stat), (double)df));
 		break;
 	case nsl_stats_tail_type_negative: // Left-tailed: p = two_tailed_p / 2 if t < 0, else 1 - two_tailed_p / 2
-		p_value = gsl_cdf_tdist_P(t_stat, df);
+		p_value = gsl_cdf_tdist_P(t_stat, (double)df);
 		break;
 	case nsl_stats_tail_type_positive: // Right-tailed: p = two_tailed_p / 2 if t > 0, else 1 - two_tailed_p / 2
-		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, df);
+		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, (double)df);
 		break;
 	}
 
@@ -587,13 +587,13 @@ struct one_sample_t_test_result nsl_stats_one_sample_t(const double sample[], si
 	double p_value = 0.0;
 	switch (tail) {
 	case nsl_stats_tail_type_two: // Two-tailed test: p = 2 * (1 - P(T ≤ |t_stat|))
-		p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(fabs(t_stat), df));
+		p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(fabs(t_stat), (double)df));
 		break;
 	case nsl_stats_tail_type_negative: // Left-tailed test: p = P(T ≤ t_stat)
-		p_value = gsl_cdf_tdist_P(t_stat, df);
+		p_value = gsl_cdf_tdist_P(t_stat, (double)df);
 		break;
 	case nsl_stats_tail_type_positive: // Right-tailed test: p = P(T ≥ t_stat) = 1 - P(T ≤ t_stat)
-		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, df);
+		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, (double)df);
 		break;
 	}
 
@@ -730,7 +730,7 @@ struct welch_t_test_result nsl_stats_welch_t(const double sample1[], size_t n1, 
 	struct welch_t_test_result result;
 	result.p = p_value;
 	result.t = t_stat;
-	result.df = df;
+	result.df = (size_t)df;
 	result.mean1 = mean1;
 	result.variance1 = var1;
 	result.mean_standard_error1 = sqrt(stderrsq1);
@@ -781,7 +781,7 @@ struct wilcoxon_test_result nsl_stats_wilcoxon_w(const double sample1[], const d
 		size_t tie_count = j - i;
 		double avg_rank = ((double)(i + 1) + (double)j) / 2.0;
 		for (size_t k = i; k < j; k++) {
-			diffs[k].rank = avg_rank;
+			diffs[k].rank = (int)avg_rank;
 			if (diffs[k].sign == 1) {
 				T_plus += avg_rank;
 				nT_plus += 1;
@@ -845,10 +845,10 @@ struct wilcoxon_test_result nsl_stats_wilcoxon_w(const double sample1[], const d
 	result.z = z;
 	result.W = T;
 	result.tie_count = ties;
-	result.positive_rank_sum = T_plus;
+	result.positive_rank_sum = (int)T_plus;
 	result.positive_rank_mean = (nT_plus != 0) ? T_plus / nT_plus : NAN;
 	result.positive_rank_count = nT_plus;
-	result.negative_rank_sum = T_minus;
+	result.negative_rank_sum = (int)T_minus;
 	result.negative_rank_mean = (nT_minus != 0) ? T_minus / nT_minus : NAN;
 	result.negative_rank_count = nT_minus;
 
@@ -941,7 +941,7 @@ struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const long long** table, siz
 	result.p = p_value;
 	result.x2 = x2;
 	result.total_observed_frequencies = total;
-	result.df = df;
+	result.df = (int)df;
 
 	return result;
 }
@@ -1180,8 +1180,8 @@ struct ramirez_runger_test_result nsl_stats_ramirez_runger(const double sample[]
 
 	// Calculate p-value based on tail type using the F distribution
 	size_t dof = n - 1;
-	size_t eff_dof = 0.62 * (n - 1); // effective degrees of freedom based on the original paper
-	double p = nsl_stats_fdist_p(stability_ratio, dof, eff_dof);
+	size_t eff_dof = (size_t)(0.62 * (n - 1)); // effective degrees of freedom based on the original paper
+	double p = nsl_stats_fdist_p(stability_ratio, dof, (double)eff_dof);
 
 	switch (tail) {
 	case nsl_stats_tail_type_two:

@@ -369,7 +369,7 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegment(const QVector<double>& x, cons
 
 	result.sse = sse;
 	result.sst = sst;
-	result.dof = (Sxx > 1e-15) ? n - 2 : n - 1;
+	result.dof = static_cast<int>((Sxx > 1e-15) ? n - 2 : n - 1);
 
 	if (result.dof > 0) {
 		double mse_val = sse / result.dof;
@@ -445,7 +445,7 @@ void XYPiecewiseLinearFitCurvePrivate::fitSegmentConstrained(const QVector<doubl
 
 	result.sse = sse;
 	result.sst = sst;
-	result.dof = n - 1; // Constrained fit: only 1 free parameter
+	result.dof = static_cast<int>(n - 1); // Constrained fit: only 1 free parameter
 
 	if (result.dof > 0) {
 		double mse_val = sse / result.dof;

@@ -69,7 +69,7 @@ private:
 	struct DataContainer {
 		void clear();
 		void appendVector(AbstractColumn::ColumnMode);
-		int rowCount(unsigned long index = 0) const;
+		int rowCount(size_t index = 0) const;
 
 		template<class T>
 		void appendVector(QVector<T>* data, AbstractColumn::ColumnMode cm) {
