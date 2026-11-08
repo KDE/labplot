@@ -549,7 +549,13 @@ T read(std::ifstream& is) {
 	return r.val;
 }
 
-/// Read value from buffer
+// ===== ROOT Binary Format Deserialization Helpers =====
+// These functions parse ROOT's custom binary file format (https://root.cern/).
+// ROOT stores data in a proprietary serialization format with big-endian encoding,
+// length-prefixed strings, versioned objects, and complex hierarchies. These helpers
+// advance a buffer pointer while extracting typed values and structures.
+
+/// Read value from buffer (big-endian to native byte order)
 template<class T>
 T read(char*& s) {
 	union {
@@ -598,30 +604,45 @@ void SkipObject(char*& buffer) {
 	buffer += 8;
 }
 
-/// Get TString
-std::string String(char*& buffer) {
+/// Deserialize a ROOT TString from buffer (length-prefixed string)
+/// ROOT format: [1-byte length] [string data] OR [0xFF] [4-byte length] [string data]
+std::string String(char*& buffer, char* const bufEnd) {
 	// root/io/io/src/TBufferFile.cxx -> ReadTString
+	if (buffer >= bufEnd)
+		return {};
 	size_t s = *(buffer++);
 	if (s == 0)
 		return {};
 	else {
-		if (s == 0xFF)
+		if (s == 0xFF) {
+			if (buffer + sizeof(int) > bufEnd)
+				return {};
 			s = read<int>(buffer);
+		}
+		if (buffer + s > bufEnd)
+			return {};
 		buffer += s;
 		return {buffer - s, buffer};
 	}
 }
 
 /// Get the header of an object in TObjArray
-std::string readObject(char*& buf, char* const buf0, std::map<size_t, std::string>& tags) {
+std::string readObject(char*& buf, char* const buf0, char* const bufEnd, std::map<size_t, std::string>& tags) {
 	// root/io/io/src/TBufferFile.cxx -> ReadObjectAny
 	std::string clname;
 	unsigned int tag = read<unsigned int>(buf);
 	if (tag & 0x40000000) {
 		tag = read<unsigned int>(buf);
 		if (tag == 0xFFFFFFFF) {
-			tags[buf - buf0 - 2] = clname = buf;
-			buf += clname.size() + 1;
+			// NUL-terminated class name — find NUL within buffer bounds
+			char* end = buf;
+			while (end < bufEnd && *end != '\0')
+				++end;
+			if (end >= bufEnd)
+				return {}; // No NUL found
+			clname.assign(buf, end);
+			tags[buf - buf0 - 2] = clname;
+			buf = end + 1;
 		} else {
 			clname = tags[tag & ~0x80000000];
 		}
@@ -1022,6 +1043,7 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 
 	char* buf = &datastring[0];
 	char* const buf0 = buf - it->second.keylength;
+	char* const bufEnd = &datastring[0] + datastring.size();
 	std::map<std::string, size_t> counts;
 
 	auto search = streamerInfo.find("TBranch");
@@ -1042,12 +1064,12 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 	// read the list of branches
 	Version(buf); // TObjArray
 	SkipObject(buf);
-	String(buf);
+	String(buf, bufEnd);
 	const size_t nbranches = read<int>(buf);
 	const size_t lowb = read<int>(buf);
 	std::map<size_t, std::string> tags;
 	for (size_t i = 0; i < nbranches; ++i) {
-		auto clname = readObject(buf, buf0, tags);
+		auto clname = readObject(buf, buf0, bufEnd, tags);
 		size_t count;
 		Version(buf, count); // TBranch or TBranchElement
 		char* const nbuf = buf + count;
@@ -1058,27 +1080,27 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 			advanceTo(buf, streamerTBranch, std::string(), "TNamed", counts);
 			Version(buf); // TNamed
 			SkipObject(buf);
-			const auto branch = String(buf);
-			String(buf);
+			const auto branch = String(buf, bufEnd);
+			String(buf, bufEnd);
 			// TODO add reading of nested branches (fBranches)
 			advanceTo(buf, streamerTBranch, "TNamed", "fLeaves", counts);
 
 			// fLeaves
 			Version(buf); // TObjArray
 			SkipObject(buf);
-			String(buf);
+			String(buf, bufEnd);
 			const size_t nleaves = read<int>(buf);
 			const size_t lowb2 = read<int>(buf);
 			for (size_t j = 0; j < nleaves; ++j) {
-				clname = readObject(buf, buf0, tags);
+				clname = readObject(buf, buf0, bufEnd, tags);
 				Version(buf, count); // TLeaf(D/F/B/S/I/L/C/O)
 				char* nbuf2 = buf + count;
 				if (j >= lowb2 && clname.size() == 6 && clname.compare(0, 5, "TLeaf") == 0) {
 					Version(buf); // TLeaf
 					Version(buf); // TNamed
 					SkipObject(buf);
-					const auto leafname = String(buf);
-					String(buf); // title
+					const auto leafname = String(buf, bufEnd);
+					String(buf, bufEnd); // title
 					size_t elements = read<int>(buf);
 					int bytes = read<int>(buf);
 					if ((static_cast<int>(leafType(clname.back())) & 0xF) != bytes)
@@ -1122,6 +1144,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 
 	char* buf = &datastring[0];
 	char* const buf0 = buf - it->second.keylength;
+	char* const bufEnd = &datastring[0] + datastring.size();
 	std::map<std::string, size_t> counts;
 
 	if (it->second.type == ContentType::NTuple)
@@ -1134,12 +1157,12 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 	// read the list of branches
 	Version(buf); // TObjArray
 	SkipObject(buf);
-	String(buf);
+	String(buf, bufEnd);
 	const size_t nbranches = read<int>(buf);
 	const size_t lowb = read<int>(buf);
 	std::map<size_t, std::string> tags;
 	for (size_t i = 0; i < nbranches; ++i) {
-		auto clname = readObject(buf, buf0, tags);
+		auto clname = readObject(buf, buf0, bufEnd, tags);
 		size_t count;
 		Version(buf, count); // TBranch or TBranchElement
 		char* const nbuf = buf + count;
@@ -1149,8 +1172,8 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 			}
 			Version(buf); // TNamed
 			SkipObject(buf);
-			const auto currentbranch = String(buf);
-			String(buf);
+			const auto currentbranch = String(buf, bufEnd);
+			String(buf, bufEnd);
 
 			advanceTo(buf, streamerTBranch, "TNamed", "fWriteBasket", counts);
 			int fWriteBasket = read<int>(buf);
@@ -1160,14 +1183,14 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 			// fLeaves
 			Version(buf); // TObjArray
 			SkipObject(buf);
-			String(buf);
+			String(buf, bufEnd);
 			const size_t nleaves = read<int>(buf);
 			const size_t lowb2 = read<int>(buf);
 			int leafoffset = 0, leafcount = 0, leafcontent = 0, leafsize = 0;
 			bool leafsign = false;
 			auto leaftype = ContentType::Invalid;
 			for (size_t j = 0; j < nleaves; ++j) {
-				clname = readObject(buf, buf0, tags);
+				clname = readObject(buf, buf0, bufEnd, tags);
 				Version(buf, count); // TLeaf(D/F/L/I/S/B/O/C/Element)
 				char* nbuf2 = buf + count;
 				if (currentbranch == branchname) {
@@ -1175,8 +1198,8 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 						Version(buf); // TLeaf
 						Version(buf); // TNamed
 						SkipObject(buf);
-						const bool istheleaf = (clname.size() == 6 && leafname == String(buf));
-						String(buf);
+						const bool istheleaf = (clname.size() == 6 && leafname == String(buf, bufEnd));
+						String(buf, bufEnd);
 						const int len = read<int>(buf);
 						const int size = read<int>(buf);
 						if (istheleaf) {
@@ -1350,24 +1373,25 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 	if (!datastring.empty()) {
 		char* buf = &datastring[0];
 		char* const buf0 = buf - buffer.keylength;
+		char* const bufEnd = &datastring[0] + datastring.size();
 		Version(buf);
 		SkipObject(buf); // TCollection
-		String(buf);
+		String(buf, bufEnd);
 		const int nobj = read<int>(buf);
 		std::map<size_t, std::string> tags;
 		for (int i = 0; i < nobj; ++i) {
-			auto clname = readObject(buf, buf0, tags);
+			auto clname = readObject(buf, buf0, bufEnd, tags);
 			size_t count;
 			Version(buf, count);
 			char* const nbuf = buf + count;
 			if (clname == "TStreamerInfo") {
 				Version(buf);
 				SkipObject(buf);
-				std::vector<StreamerInfo>& sinfo = streamerInfo[String(buf)];
-				String(buf);
+				std::vector<StreamerInfo>& sinfo = streamerInfo[String(buf, bufEnd)];
+				String(buf, bufEnd);
 				buf += 8; // skip check sum and version
 
-				clname = readObject(buf, buf0, tags);
+				clname = readObject(buf, buf0, bufEnd, tags);
 				Version(buf, count);
 				if (clname != "TObjArray") {
 					buf += count;
@@ -1375,11 +1399,11 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 				}
 
 				SkipObject(buf); // TObjArray
-				String(buf);
+				String(buf, bufEnd);
 				const int nobj2 = read<int>(buf);
 				const int lowb = read<int>(buf);
 				for (int j = 0; j < nobj2; ++j) {
-					clname = readObject(buf, buf0, tags);
+					clname = readObject(buf, buf0, bufEnd, tags);
 					Version(buf, count);
 					char* const nbuf2 = buf + count;
 
@@ -1391,8 +1415,8 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 							Version(buf); // TStreamerXXX
 							Version(buf); // TStreamerElement
 							SkipObject(buf);
-							const std::string name = String(buf);
-							const std::string title = String(buf);
+							const std::string name = String(buf, bufEnd);
+							const std::string title = String(buf, bufEnd);
 							int type = read<int>(buf);
 							size_t size = read<int>(buf);
 
