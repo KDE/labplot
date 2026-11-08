@@ -294,10 +294,7 @@ double nsl_stats_tdist_t(double parameter, double error) {
 }
 
 double nsl_stats_tdist_p(double t, double dof) {
-	double p = 2. * gsl_cdf_tdist_Q(fabs(t), dof);
-	if (p < 1.e-9)
-		p = 0;
-	return p;
+	return 2. * gsl_cdf_tdist_Q(fabs(t), dof);
 }
 double nsl_stats_tdist_z(double alpha, double dof) {
 	return gsl_cdf_tdist_Pinv(1. - alpha / 2., dof);
@@ -311,10 +308,7 @@ double nsl_stats_tdist_margin(double alpha, double dof, double error) {
 
 /* chi^2 distribution */
 double nsl_stats_chisq_p(double t, double dof) {
-	double p = gsl_cdf_chisq_Q(t, dof);
-	if (p < 1.e-9)
-		p = 0;
-	return p;
+	return gsl_cdf_chisq_Q(t, dof);
 }
 double nsl_stats_chisq_low(double alpha, double n) {
 	return 0.5 * gsl_cdf_chisq_Pinv(alpha / 2., 2 * n);
@@ -334,10 +328,7 @@ double nsl_stats_fdist_p(double F, size_t np, double dof) {
 	if (isnan(F))
 		return 0.;
 
-	double p = gsl_cdf_fdist_Q(F, (double)np, dof);
-	if (p < 1.e-9)
-		p = 0;
-	return p;
+	return gsl_cdf_fdist_Q(F, (double)np, dof);
 }
 
 /* log-likelihood */
