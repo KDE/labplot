@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-06 00:45+0000\n"
+"POT-Creation-Date: 2026-11-08 02:53+0000\n"
 "PO-Revision-Date: 2026-10-03 14:11+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -1298,7 +1298,7 @@ msgstr "Misslyckades öppna enheten/filen eller så är den tom."
 #: src/backend/datasources/filters/HDF5Filter.cpp:1967
 #: src/backend/datasources/filters/ImageFilter.cpp:167
 #: src/backend/datasources/filters/JsonFilter.cpp:522
-#: src/backend/datasources/filters/MatioFilter.cpp:892
+#: src/backend/datasources/filters/MatioFilter.cpp:893
 #: src/backend/datasources/filters/NetCDFFilter.cpp:760
 #: src/backend/datasources/filters/NetCDFFilter.cpp:871
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1003
@@ -1308,7 +1308,7 @@ msgstr "Misslyckades öppna enheten/filen eller så är den tom."
 #: src/backend/datasources/filters/ROOTFilter.cpp:237
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:341
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:342
 #: src/backend/datasources/filters/XLSXFilter.cpp:514
 #, kde-format
 msgid "Not enough memory."
@@ -2014,7 +2014,7 @@ msgstr "Struct innehåller inga fält"
 msgid "Support for this variable type not implemented yet."
 msgstr "Stöd för variabeltypen är inte ännu implementerat."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:1230
+#: src/backend/datasources/filters/MatioFilter.cpp:1231
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr "Variabler med rank större än 2 stöds inte ännu."
@@ -2558,17 +2558,17 @@ msgstr "Ogiltig DBC-fil."
 msgid "Unknown error,"
 msgstr "Okänt fel,"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:452
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:457
 #, kde-format
 msgid "Time_s"
 msgstr "Tid_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:454
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:459
 #, kde-format
 msgid "Time_ns"
 msgstr "Tid_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:456
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:461
 #, kde-format
 msgid "Time_10µs"
 msgstr "Tid_10µs"

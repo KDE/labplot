@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-06 00:45+0000\n"
-"PO-Revision-Date: 2026-10-22 19:25+0300\n"
+"POT-Creation-Date: 2026-11-08 02:53+0000\n"
+"PO-Revision-Date: 2026-11-07 19:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.2\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
@@ -133,7 +133,7 @@ msgstr "“%1” kopyası"
 #: src/backend/core/AbstractAspect.cpp:1007
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
-msgstr "“name” özniteliği eksik veya boş."
+msgstr "“name” özniteliği eksik veya boş"
 
 #: src/backend/core/AbstractAspect.cpp:1013
 #, kde-format
@@ -734,7 +734,7 @@ msgstr "Üzgünüm. Dosyayı okuma için açamadık."
 #: src/backend/core/Project.cpp:569 src/backend/core/Project.cpp:595
 #, kde-format
 msgid "The project file is empty."
-msgstr "Proje dosyası boş."
+msgstr "Proje dosyası boş"
 
 #: src/backend/core/Project.cpp:569 src/backend/core/Project.cpp:595
 #, kde-format
@@ -1281,13 +1281,13 @@ msgstr "Aygıt/dosya açılamadı."
 #: src/backend/datasources/filters/BinaryFilter.cpp:285
 #, kde-format
 msgid "Data selection empty."
-msgstr "Veri seçimi boş."
+msgstr "Veri seçimi boş"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:406
 #: src/backend/datasources/filters/McapFilter.cpp:199
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "Aygıt/dosya açılamadı veya boş."
+msgstr "Aygıt/dosya açılamadı veya boş"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:446
 #: src/backend/datasources/filters/CANFilter.cpp:303
@@ -1300,7 +1300,7 @@ msgstr "Aygıt/dosya açılamadı veya boş."
 #: src/backend/datasources/filters/HDF5Filter.cpp:1967
 #: src/backend/datasources/filters/ImageFilter.cpp:167
 #: src/backend/datasources/filters/JsonFilter.cpp:522
-#: src/backend/datasources/filters/MatioFilter.cpp:892
+#: src/backend/datasources/filters/MatioFilter.cpp:893
 #: src/backend/datasources/filters/NetCDFFilter.cpp:760
 #: src/backend/datasources/filters/NetCDFFilter.cpp:871
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1003
@@ -1310,7 +1310,7 @@ msgstr "Aygıt/dosya açılamadı veya boş."
 #: src/backend/datasources/filters/ROOTFilter.cpp:237
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:341
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:342
 #: src/backend/datasources/filters/XLSXFilter.cpp:514
 #, kde-format
 msgid "Not enough memory."
@@ -1792,7 +1792,7 @@ msgstr "ad"
 #: src/backend/datasources/filters/JsonFilter.cpp:350
 #, kde-format
 msgid "Device/file is empty."
-msgstr "Aygıt/dosya boş."
+msgstr "Aygıt/dosya boş"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:358
 #, kde-format
@@ -2016,7 +2016,7 @@ msgstr "Yapı alan içermiyor"
 msgid "Support for this variable type not implemented yet."
 msgstr "Bu değişken türü için gerçek henüz gerçeklenmedi."
 
-#: src/backend/datasources/filters/MatioFilter.cpp:1230
+#: src/backend/datasources/filters/MatioFilter.cpp:1231
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
 msgstr "2’den büyük sıralı değişkenler henüz desteklenmiyor."
@@ -2174,7 +2174,7 @@ msgstr "Seçili değişken yok."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:702
 #, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "Dosya açılamadı veya boş."
+msgstr "Dosya açılamadı veya boş"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:940
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1080
@@ -2560,17 +2560,17 @@ msgstr "Geçersiz DBC dosyası."
 msgid "Unknown error,"
 msgstr "Bilinmeyen hata."
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:452
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:457
 #, kde-format
 msgid "Time_s"
 msgstr "Zaman_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:454
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:459
 #, kde-format
 msgid "Time_ns"
 msgstr "Zaman_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:456
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:461
 #, kde-format
 msgid "Time_10µs"
 msgstr "Zaman_10µs"
@@ -7645,10 +7645,9 @@ msgid "no script element found"
 msgstr "Bulunan betik ögesi yok"
 
 #: src/backend/script/Script.cpp:189
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "failed to initialize the script runtime '%1'"
-msgstr "%1 ilklendirilemedi."
+msgstr "Betik çalışma zamanı “%1” ilklendirilemedi."
 
 #: src/backend/script/Script.cpp:253
 #, kde-format
@@ -7672,15 +7671,14 @@ msgid "A script is already running."
 msgstr "Bir betik hâlihazırda çalışıyor."
 
 #: src/backend/script/Script.cpp:387
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "“name” özniteliği eksik veya boş."
+msgstr "“runtime” özniteliği eksik veya boş"
 
 #: src/backend/script/Script.cpp:392
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "Desteklenmeyen betik çalışma zamanı “%1”"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
