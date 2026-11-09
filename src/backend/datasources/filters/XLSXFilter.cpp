@@ -15,12 +15,14 @@
 #endif
 
 #include "backend/core/column/ColumnStringIO.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/datasources/filters/XLSXFilterPrivate.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
+#include <QTimeZone>
 #include <QTreeWidgetItem>
 
 XLSXFilter::XLSXFilter()
@@ -417,6 +419,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 	const auto colCount = currentRange.columnCount();
 	auto regionToRead = region;
 	bool isDateOnly = true;
+	QVector<bool> timeOnlyColumns; // for every imported column, true if it contains only time values
 
 	if (auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource)) {
 		std::vector<void*> numericDataPointers;
@@ -429,7 +432,9 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 
 		// determine column type (numeric or not)
 		for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
-			columnNumericTypes.push_back(columnTypeInRange(col, regionToRead));
+			const auto type = columnTypeInRange(col, regionToRead);
+			columnNumericTypes.push_back(type);
+			timeOnlyColumns.push_back(type == QXlsx::Cell::CellType::DateType);
 			if (firstRowAsColumnNames)
 				columnNames.push_back(read(regionToRead.firstRow() - 1, col).toString());
 			else
@@ -488,9 +493,19 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 				} else if (columnNumericTypes.at(j) == QXlsx::Cell::CellType::DateType) {
 					// QDEBUG("DATETIME:" << val.toDateTime())
 					if (datetimeidx < datetimeDataPointers.size()) {
-						if (val.toDateTime().time() != QTime(0, 0))
-							isDateOnly = false;
-						static_cast<QVector<QDateTime>*>(datetimeDataPointers[datetimeidx++])->push_back(val.toDateTime());
+						QDateTime dateTime;
+						if (val.userType() == QMetaType::QTime) {
+							// QXlsx returns cells with an Excel serial number < 1 (time without date) as QTime
+							// which cannot be converted to QDateTime. Use the same date as QDateTime::fromString() does
+							// for time-only strings, see also String2DateTimeFilter.
+							dateTime = QDateTime(QDate(1900, 1, 1), val.toTime(), QTimeZone::UTC);
+						} else if (val.isValid()) {
+							dateTime = val.toDateTime();
+							if (dateTime.time() != QTime(0, 0))
+								isDateOnly = false;
+							timeOnlyColumns[j] = false;
+						}
+						datetimeDataPointers[datetimeidx++]->push_back(dateTime);
 					}
 				} else {
 					if (!stringDataPointers.isEmpty() && stringidx < stringDataPointers.size()) {
@@ -532,6 +547,16 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 
 	if (dataSource)
 		dataSource->finalizeImport(columnOffset, 1, colCount, datetimeFormat, importMode);
+
+	// show the time values without the (artificial) date
+	if (auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource)) {
+		for (int n = 0; n < timeOnlyColumns.size(); ++n) {
+			if (timeOnlyColumns.at(n)) {
+				auto* filter = static_cast<DateTime2StringFilter*>(spreadsheet->column(columnOffset + n)->outputFilter());
+				filter->setFormat(QStringLiteral("hh:mm:ss"));
+			}
+		}
+	}
 }
 #endif
 

@@ -10,8 +10,12 @@
 
 #include "XLSXFilterTest.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnStringIO.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+
+#include <QTimeZone>
 
 void XLSXFilterTest::importFile2Cols() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/2col.xlsx"));
@@ -272,6 +276,50 @@ void XLSXFilterTest::importFileDatetime() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 3.14);
 	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0.22);
 	QCOMPARE(spreadsheet.column(4)->valueAt(3), 0.01);
+}
+
+/*!
+ * separate date and time columns, the time cells (Excel serial number < 1) must not get lost (BUG 523820)
+ */
+void XLSXFilterTest::importFileTime() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/time.xlsx"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	XLSXFilter filter;
+	filter.setFirstRowAsColumnNames(true);
+	filter.setCurrentSheet(QStringLiteral("Sheet1"));
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Date"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Time"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Value"));
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	// date column, the time-only values in the second column don't change the date-only format
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0).date(), QDate(2025, 2, 19));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1).date(), QDate(2025, 2, 19));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(2).date(), QDate(2025, 2, 20));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(3).date(), QDate(2025, 2, 20));
+	QCOMPARE(static_cast<DateTime2StringFilter*>(spreadsheet.column(0)->outputFilter())->format(), QStringLiteral("ddd MMM d yyyy"));
+
+	// time column
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(0), QDateTime(QDate(1900, 1, 1), QTime(13, 28, 28), QTimeZone::UTC));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(1), QDateTime(QDate(1900, 1, 1), QTime(13, 30, 0), QTimeZone::UTC));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(2), QDateTime(QDate(1900, 1, 1), QTime(13, 37, 56), QTimeZone::UTC));
+	QVERIFY(!spreadsheet.column(1)->dateTimeAt(3).isValid()); // empty cell
+	QCOMPARE(static_cast<DateTime2StringFilter*>(spreadsheet.column(1)->outputFilter())->format(), QStringLiteral("hh:mm:ss"));
+	QCOMPARE(spreadsheet.column(1)->asStringColumn()->textAt(0), QStringLiteral("13:28:28"));
+
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 3.9);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 3.8);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 4.3);
+	QCOMPARE(spreadsheet.column(2)->valueAt(3), 4.4);
 }
 
 void XLSXFilterTest::importFileAppend() {
