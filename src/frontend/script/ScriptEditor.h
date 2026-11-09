@@ -63,6 +63,7 @@ private:
 	QList<int> m_maximizedOutputSplitterSizes;
 
 	void initActions();
+	void initToolBar();
 	void initMenus();
 	void setSplitterState(const QByteArray&);
 	QByteArray splitterState();

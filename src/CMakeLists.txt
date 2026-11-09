@@ -190,6 +190,7 @@ set(GUI_SOURCES
 if(ENABLE_SCRIPTING)
     list(APPEND GUI_SOURCES
         ${FRONTEND_DIR}/dockwidgets/ScriptDock.cpp
+        ${FRONTEND_DIR}/script/FloatingToolBar.cpp
         ${FRONTEND_DIR}/script/ScriptEditor.cpp
         ${FRONTEND_DIR}/script/ScriptCompletionModel.cpp
         ${FRONTEND_DIR}/SettingsEditorPage.cpp

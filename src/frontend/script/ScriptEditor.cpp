@@ -9,6 +9,7 @@
 */
 
 #include "ScriptEditor.h"
+#include "FloatingToolBar.h"
 #include "ScriptCompletionModel.h"
 #include "backend/script/Script.h"
 #include <backend/lib/macros.h>
@@ -47,6 +48,7 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	const bool outputVisible = group.readEntry(QStringLiteral("OutputVisible"), true);
 
 	initActions();
+	initToolBar();
 	setOutputVisible(outputVisible);
 	m_toggleOutputAction->setChecked(outputVisible);
 
@@ -164,6 +166,17 @@ void ScriptEditor::initActions() {
 		}
 	});
 	addAction(m_searchAction);
+}
+
+/*!
+ * toolbar on top of the editor to run the script
+ */
+void ScriptEditor::initToolBar() {
+	// floating on top of the text editor, can be moved horizontally
+	auto* toolBar = new FloatingToolBar(ui.editorParent, QStringLiteral("ToolBarPosition"));
+	toolBar->addAction(m_runScriptAction);
+
+	m_runScriptAction->setEnabled(m_script->isInitialized());
 }
 
 void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
