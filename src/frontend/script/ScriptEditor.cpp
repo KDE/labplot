@@ -9,6 +9,7 @@
 */
 
 #include "ScriptEditor.h"
+#include "FloatingToolBar.h"
 #include "ScriptCompletionModel.h"
 #include "backend/script/Script.h"
 #include <backend/lib/macros.h>
@@ -20,8 +21,6 @@
 #include <KConfigGroup>
 
 #include <QMenu>
-#include <QStyle>
-#include <QToolBar>
 #include <QClipboard>
 #include <QKeySequence>
 
@@ -173,25 +172,11 @@ void ScriptEditor::initActions() {
  * toolbar on top of the editor to run the script
  */
 void ScriptEditor::initToolBar() {
-	auto* toolBar = new QToolBar(this);
-	toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-	const int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize);
-	toolBar->setIconSize(QSize(iconSize, iconSize));
-
-	// center the buttons with expanding spacers on both sides
-	auto addSpacer = [toolBar]() {
-		auto* spacer = new QWidget(toolBar);
-		spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-		toolBar->addWidget(spacer);
-	};
-
-	addSpacer();
+	// floating on top of the text editor, can be moved horizontally
+	auto* toolBar = new FloatingToolBar(ui.editorParent, QStringLiteral("ToolBarPosition"));
 	toolBar->addAction(m_runScriptAction);
-	addSpacer();
 
 	m_runScriptAction->setEnabled(m_script->isInitialized());
-
-	ui.verticalLayout->insertWidget(0, toolBar);
 }
 
 void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
