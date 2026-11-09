@@ -14,6 +14,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "tools/TeXRenderer.h"
 
+#include <QTextDocument>
 #include <QTextEdit>
 
 class Line;
@@ -76,7 +77,13 @@ public:
 			if (isHtml || plaintext.isEmpty())
 				return plaintext;
 
-			QTextEdit te(plaintext);
+			QTextEdit te;
+			// HTML passed without the html flag (e.g. from the python bindings) is kept as HTML,
+			// plain text is converted keeping the line breaks (setHtml() would merge the lines)
+			if (Qt::mightBeRichText(plaintext))
+				te.setHtml(plaintext);
+			else
+				te.setPlainText(plaintext);
 			// the html does not contain any colors!
 			return te.toHtml();
 		}

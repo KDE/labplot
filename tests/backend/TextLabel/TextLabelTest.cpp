@@ -15,6 +15,9 @@
 #include "backend/worksheet/TextLabelPrivate.h"
 #include "frontend/widgets/LabelWidget.h"
 
+#include <QTextBlock>
+#include <QTextDocument>
+
 struct TextProperties {
 	QColor fontColor;
 	QColor backgroundColor;
@@ -308,6 +311,33 @@ void TextLabelTest::multiLabelEditColorChangeSelection() {
 		QCOMPARE(te.fontWeight(), QFont::Normal);
 		QCOMPARE(te.toPlainText(), QStringLiteral("Text label 2"));
 	}
+}
+
+/*!
+ * the line breaks of plain text are kept (e.g. text set via the python bindings),
+ * text that is already HTML is used as it is
+ */
+void TextLabelTest::multilinePlainText() {
+	auto paragraphs = [](const QString& html) {
+		QTextDocument doc;
+		doc.setHtml(html);
+		QStringList lines;
+		for (auto block = doc.begin(); block != doc.end(); block = block.next())
+			lines << block.text();
+		return lines;
+	};
+
+	const TextLabel::TextWrapper plain(QStringLiteral("first line\nsecond line"));
+	QVERIFY(plain.isHtml());
+	QCOMPARE(paragraphs(plain.text), QStringList({QStringLiteral("first line"), QStringLiteral("second line")}));
+
+	const TextLabel::TextWrapper html(QStringLiteral("<p>html one</p><p>html two</p>"));
+	QCOMPARE(paragraphs(html.text), QStringList({QStringLiteral("html one"), QStringLiteral("html two")}));
+
+	// the text of the label is shown in two lines
+	TextLabel label(QStringLiteral("label"));
+	label.setText(plain);
+	QCOMPARE(paragraphs(label.text().text), QStringList({QStringLiteral("first line"), QStringLiteral("second line")}));
 }
 
 QTEST_MAIN(TextLabelTest)
