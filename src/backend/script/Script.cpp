@@ -54,6 +54,10 @@ Script::Script(const QString& name, const QString& lang)
 	if (!lang.isEmpty())
 		setRuntime(lang);
 
+	connect(m_kTextEditorDocument, &KTextEditor::Document::textChanged, this, [this]() {
+		setProjectChanged(true);
+	});
+
 	connect(this, &Script::viewAboutToBeDeleted, [this]() {
 		// keep the output of the editor so it is still available when saving the project or re-opening the view
 		if (hasView()) {
