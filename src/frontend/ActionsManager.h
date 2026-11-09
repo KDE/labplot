@@ -16,9 +16,6 @@ class DatapickerImageView;
 class LiveDataSource;
 class NotebookView;
 class MainWin;
-#ifdef HAVE_SCRIPTING
-class ScriptEditor;
-#endif
 class SpreadsheetView;
 class ToggleActionMenu;
 class WorksheetView;
@@ -75,10 +72,6 @@ private:
 	void connectNotebookToolbarActions(const NotebookView*);
 #endif
 
-#ifdef HAVE_SCRIPTING
-	void initScriptToolbarActions();
-	void connectScriptToolbarActions(const ScriptEditor*);
-#endif
 
 	MainWin* m_mainWindow{nullptr};
 	friend class MainWin;
@@ -195,10 +188,6 @@ private:
 	QAction* m_notebookFindAction{nullptr};
 #endif
 
-	// script
-#ifdef HAVE_SCRIPTING
-	QAction* m_scriptRunAction{nullptr};
-#endif
 
 	// Menus
 	QMenu* m_visibilityMenu{nullptr};

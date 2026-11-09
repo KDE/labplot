@@ -20,6 +20,8 @@
 #include <KConfigGroup>
 
 #include <QMenu>
+#include <QStyle>
+#include <QToolBar>
 #include <QClipboard>
 #include <QKeySequence>
 
@@ -47,6 +49,7 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	const bool outputVisible = group.readEntry(QStringLiteral("OutputVisible"), true);
 
 	initActions();
+	initToolBar();
 	setOutputVisible(outputVisible);
 	m_toggleOutputAction->setChecked(outputVisible);
 
@@ -164,6 +167,31 @@ void ScriptEditor::initActions() {
 		}
 	});
 	addAction(m_searchAction);
+}
+
+/*!
+ * toolbar on top of the editor to run the script
+ */
+void ScriptEditor::initToolBar() {
+	auto* toolBar = new QToolBar(this);
+	toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+	const int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize);
+	toolBar->setIconSize(QSize(iconSize, iconSize));
+
+	// center the buttons with expanding spacers on both sides
+	auto addSpacer = [toolBar]() {
+		auto* spacer = new QWidget(toolBar);
+		spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+		toolBar->addWidget(spacer);
+	};
+
+	addSpacer();
+	toolBar->addAction(m_runScriptAction);
+	addSpacer();
+
+	m_runScriptAction->setEnabled(m_script->isInitialized());
+
+	ui.verticalLayout->insertWidget(0, toolBar);
 }
 
 void ScriptEditor::writeOutput(bool isErr, const QString& msg) {

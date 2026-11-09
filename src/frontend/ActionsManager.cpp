@@ -528,9 +528,6 @@ void ActionsManager::initActions() {
 #ifdef HAVE_CANTOR_LIBS
 	initNotebookToolbarActions();
 #endif
-#ifdef HAVE_SCRIPTING
-	initScriptToolbarActions();
-#endif
 }
 
 void ActionsManager::showHelp() {
@@ -864,15 +861,6 @@ void ActionsManager::initDataExtractorToolbarActions() {
 	collection->addAction(QStringLiteral("data_extractor_magnification"), m_dataExtractorMagnificationMenu);
 }
 
-#ifdef HAVE_SCRIPTING
-void ActionsManager::initScriptToolbarActions() {
-	auto* collection = m_mainWindow->actionCollection();
-
-	m_scriptRunAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
-	m_scriptRunAction->setToolTip(QStringLiteral("Run the script"));
-	collection->addAction(QStringLiteral("script_run"), m_scriptRunAction);
-}
-#endif
 
 void ActionsManager::initMenus() {
 #ifdef HAVE_PURPOSE
@@ -1059,7 +1047,6 @@ void ActionsManager::initMenus() {
 #else
 	delete factory->container(QStringLiteral("script"), m_mainWindow);
 	delete factory->container(QStringLiteral("new_script"), m_mainWindow);
-	delete factory->container(QStringLiteral("script_toolbar"), m_mainWindow);
 	// remove the new_script action created in the rc file
 	delete m_mainWindow->actionCollection()->action(QStringLiteral("new_script"));
 #endif
@@ -1113,7 +1100,6 @@ void ActionsManager::updateGUIOnProjectChanges() {
 #endif
 #ifdef HAVE_SCRIPTING
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->hide();
 #endif
 	}
 
@@ -1167,7 +1153,6 @@ void ActionsManager::updateGUI() {
 #endif
 #ifdef HAVE_SCRIPTING
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->hide();
 #endif
 		m_printAction->setEnabled(false);
 		m_printPreviewAction->setEnabled(false);
@@ -1332,10 +1317,6 @@ void ActionsManager::updateGUI() {
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
-		// toolbar
-		connectScriptToolbarActions(view);
-		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(true);
-
 		// deactivate the shortcuts for the undo/redo action so those shortcuts can be used in the text editor
 		m_undoAction->setShortcut(QKeySequence());
 		m_redoAction->setShortcut(QKeySequence());
@@ -1343,7 +1324,6 @@ void ActionsManager::updateGUI() {
 		m_searchAction->setShortcut(QKeySequence());
 	} else {
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(false);
 		m_undoAction->setShortcut(QKeySequence::Undo);
 		m_redoAction->setShortcut(QKeySequence::Redo);
 		m_searchAction->setShortcut(QKeySequence::Find);
@@ -1656,12 +1636,3 @@ void ActionsManager::connectDataExtractorToolbarActions(DatapickerImageView* vie
 	m_dataExtractorMagnificationMenu->setDefaultActionFromData(view->magnification());
 }
 
-#ifdef HAVE_SCRIPTING
-void ActionsManager::connectScriptToolbarActions(const ScriptEditor* view) {
-	disconnect(m_scriptRunAction, &QAction::triggered, nullptr, nullptr);
-	connect(m_scriptRunAction, &QAction::triggered, view, &ScriptEditor::run);
-
-	const bool initialized = view->isInitialized();
-	m_scriptRunAction->setEnabled(initialized);
-}
-#endif
