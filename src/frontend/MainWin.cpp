@@ -918,6 +918,14 @@ bool MainWin::closeProject() {
 	if (m_project == nullptr)
 		return true; // nothing to close
 
+#ifdef HAVE_SCRIPTING
+	// a paused script is still executing (in a nested event loop) and accesses the project, it must be stopped first
+	if (Script::isAnyScriptDebugging()) {
+		KMessageBox::error(this, i18n("A script is being debugged. Stop the debugger before closing the project."));
+		return false;
+	}
+#endif
+
 	if (warnModified())
 		return false;
 

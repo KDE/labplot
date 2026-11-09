@@ -37,6 +37,7 @@ private:
 	QAction* m_copyNameAction{nullptr};
 	QAction* m_copyValueAction{nullptr};
 	QAction* m_copyNameValueAction{nullptr};
+	QMetaObject::Connection m_modelResetConnection;
 
 	void toggleFilterOptionsMenu(bool);
 	void filterTextChanged(const QString&);

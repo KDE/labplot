@@ -29,7 +29,9 @@ ScriptDock::ScriptDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-	ui.tvVariables->setRootIsDecorated(false);
+	// containers and objects can be expanded to show their elements/attributes
+	ui.tvVariables->setRootIsDecorated(true);
+	ui.tvVariables->setUniformRowHeights(true);
 	ui.tvVariables->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.tvVariables->setAlternatingRowColors(true);
 
@@ -65,6 +67,14 @@ void ScriptDock::setScriptsList(QList<Script*> list) {
 
 	ui.leRuntime->setText(m_script->language());
 	ui.tvVariables->setModel(m_script->variableModel());
+
+	// the variables are updated after each run and at each pause of the debugger, re-apply the filter
+	disconnect(m_modelResetConnection);
+	if (auto* model = m_script->variableModel())
+		m_modelResetConnection = connect(model, &QAbstractItemModel::modelReset, this, [this]() {
+			filterTextChanged(ui.leFilter->text());
+		});
+	filterTextChanged(ui.leFilter->text());
 }
 
 void ScriptDock::retranslateUi() {
@@ -84,6 +94,8 @@ void ScriptDock::filterTextChanged(const QString& text) {
 	auto sensitivity = m_caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 	bool matchCompleteWord = m_matchCompleteWordAction->isChecked();
 	const auto* model = ui.tvVariables->model();
+	if (!model)
+		return;
 
 	for (int i = 0; i < model->rowCount(); i++) {
 		const auto& child = model->index(i, 0);

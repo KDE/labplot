@@ -49,6 +49,15 @@ public:
 
 	QAbstractItemModel* variableModel();
 
+	// debugging
+	bool supportsDebugging() const;
+	bool isDebugging() const;
+	bool isDebugPaused() const;
+	QList<int> breakpoints() const;
+	int executionLine() const;
+	void toggleBreakpoint(int line);
+	static bool isAnyScriptDebugging();
+
 private:
 	QString m_language;
 	ScriptRuntime* m_scriptRuntime{nullptr};
@@ -57,10 +66,21 @@ private:
 	QString m_outputHtml;
 
 	void prepareDocument() const;
+	void initMarks();
+	void clearRunMarks();
+	void setExecutionLine(int line);
+	void prepareRun();
+	void finishRun();
 	QWidget* createView() const override;
 
 public Q_SLOTS:
 	void runScript();
+	void debugScript();
+	void debugContinue();
+	void debugStepOver();
+	void debugStepInto();
+	void debugStepOut();
+	void debugStop();
 	void cancelScript();
 
 Q_SIGNALS:
@@ -70,6 +90,7 @@ Q_SIGNALS:
 	void editorFontChanged(const QFont&);
 	void outputFontChanged(const QFont&);
 	void editorThemeChanged(const QString&);
+	void debugStateChanged(); // debugging started/stopped or the execution was paused/resumed
 
 public:
 	static QStringList languages;
@@ -80,6 +101,8 @@ public:
 private:
 	static bool m_isRunning;
 	static Script* m_lastRunScript;
+	static Script* m_debuggingScript;
+	int m_executionLine{-1};
 
 	static ScriptRuntime* newScriptRuntime(const QString&, Script*);
 	static void runScript(Script*, const QString&);

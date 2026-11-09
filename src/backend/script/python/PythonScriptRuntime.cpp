@@ -37,6 +37,9 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QPointer>
+
+#include <KLocalizedString>
 
 #include <KConfigGroup>
 
@@ -78,6 +81,8 @@ PythonScriptRuntime::PythonScriptRuntime(Script* script)
 PythonScriptRuntime::~PythonScriptRuntime() {
 	INFO(Q_FUNC_INFO)
 	if (Py_IsInitialized()) {
+		clearVariableHandles();
+
 		PyGILState_STATE gil = PyGILState_Ensure();
 		// allow python garbage collection
 		Py_XDECREF(m_localDict);
@@ -543,6 +548,287 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	return true;
 }
 
+// ##############################################################################
+// ##################################  Debugging  ###############################
+// ##############################################################################
+
+// Python helper driving the execution of the script via bdb. user_line() is called by bdb for every line where the
+// execution should stop (breakpoint or step), it calls back into C++ (debugPauseCallback) which waits for the user's
+// next command and returns it as int (see ScriptRuntime::DebugCommand).
+static const char* debuggerHelperSource = R"PY(
+import bdb
+import linecache
+
+class _LabPlotDebugger(bdb.Bdb):
+    def __init__(self, filename, pause):
+        super().__init__()
+        self._labplot_file = self.canonic(filename)
+        self._labplot_pause = pause
+        self._labplot_started = False
+
+    def user_line(self, frame):
+        if self.canonic(frame.f_code.co_filename) != self._labplot_file:
+            # code outside of the script (e.g. in an imported module), keep stepping until we're back in the script
+            self.set_step()
+            return
+
+        if not self._labplot_started:
+            # bdb starts in single-step mode, run until the first breakpoint instead of stopping at the first line
+            self._labplot_started = True
+            if not self.break_here(frame):
+                self.set_continue()
+                return
+
+        command = self._labplot_pause(frame.f_lineno, frame.f_locals, self)
+        if command == 0:
+            self.set_continue()
+        elif command == 1:
+            self.set_next(frame)
+        elif command == 2:
+            self.set_step()
+        elif command == 3:
+            self.set_return(frame)
+        else:
+            self.set_quit()
+
+    def _labplot_set_breakpoints(self, lines):
+        self.clear_all_file_breaks(self._labplot_file)
+        for line in lines:
+            self.set_break(self._labplot_file, line)
+
+def _labplot_debug_run(code, filename, source, breakpoints, namespace, pause):
+    debugger = _LabPlotDebugger(filename, pause)
+    file = debugger._labplot_file
+    # bdb validates breakpoints against linecache, register the script's source since it isn't a file on disk
+    linecache.cache[file] = (len(source), None, source.splitlines(True), file)
+    try:
+        for line in breakpoints:
+            debugger.set_break(file, line)
+        debugger.run(code, namespace, namespace)
+    finally:
+        debugger.clear_all_breaks()
+        linecache.cache.pop(file, None)
+)PY";
+
+static const char* debuggerCapsuleName = "labplot.PythonScriptRuntime";
+
+static PyMethodDef debugPauseMethodDef = {"_labplot_debug_pause", PythonScriptRuntime::debugPauseCallback, METH_VARARGS, nullptr};
+
+bool PythonScriptRuntime::supportsDebugging() const {
+	return true;
+}
+
+// called from the python debugger helper, self is a capsule holding the PythonScriptRuntime, args are (lineno, locals, debugger)
+PyObject* PythonScriptRuntime::debugPauseCallback(PyObject* self, PyObject* args) {
+	auto* runtime = static_cast<PythonScriptRuntime*>(PyCapsule_GetPointer(self, debuggerCapsuleName));
+	if (!runtime)
+		return nullptr;
+
+	int line = 0;
+	PyObject* locals = nullptr; // borrowed reference
+	PyObject* debugger = nullptr; // borrowed reference
+	if (!PyArg_ParseTuple(args, "iOO", &line, &locals, &debugger))
+		return nullptr;
+
+	const auto command = runtime->debugPause(line - 1, locals, debugger);
+	return PyLong_FromLong(static_cast<long>(command));
+}
+
+ScriptRuntime::DebugCommand PythonScriptRuntime::debugPause(int line, PyObject* locals, PyObject* debugger) {
+	// show the variables of the current frame while paused
+	populateVariableInfo(locals);
+
+	// the debugger object is kept alive by the python call stack while we're paused
+	m_pausedDebugger = debugger;
+	QPointer<PythonScriptRuntime> guard(this);
+	const auto command = waitForDebugCommand(line);
+	if (guard)
+		m_pausedDebugger = nullptr;
+	return command;
+}
+
+void PythonScriptRuntime::setBreakpoints(const QList<int>& breakpoints) {
+	if (!m_pausedDebugger)
+		return;
+
+	PyGILState_STATE gil = PyGILState_Ensure();
+	auto* lines = PyList_New(0);
+	if (lines) {
+		for (int line : breakpoints) {
+			auto* lineObj = PyLong_FromLong(line);
+			PyList_Append(lines, lineObj);
+			Py_DECREF(lineObj);
+		}
+		auto* result = PyObject_CallMethod(m_pausedDebugger, "_labplot_set_breakpoints", "O", lines);
+		if (!result) {
+			WARN(Q_FUNC_INFO << ", failed to update the breakpoints")
+			PyErr_Clear();
+		}
+		Py_XDECREF(result);
+		Py_DECREF(lines);
+	}
+	PyGILState_Release(gil);
+}
+
+// returns a new reference to the function _labplot_debug_run defined in debuggerHelperSource
+PyObject* PythonScriptRuntime::createDebuggerRunFunction() {
+	auto* helperDict = createLocalDict(); // new reference
+	if (!helperDict)
+		return nullptr;
+
+	auto* compiled = Py_CompileString(debuggerHelperSource, "<labplot-debugger>", Py_file_input); // new reference
+	if (!compiled) {
+		Py_DECREF(helperDict);
+		return nullptr;
+	}
+
+	auto* result = PyEval_EvalCode(compiled, helperDict, helperDict); // new reference
+	Py_DECREF(compiled);
+	if (!result) {
+		Py_DECREF(helperDict);
+		return nullptr;
+	}
+	Py_DECREF(result);
+
+	auto* runFunction = PyDict_GetItemString(helperDict, "_labplot_debug_run"); // borrowed reference
+	Py_XINCREF(runFunction);
+	Py_DECREF(helperDict);
+	return runFunction;
+}
+
+/*!
+ * removes the leading traceback entries of the debugger helper (bdb) from the current python error
+ * so the traceback and the error line refer to the script only
+ */
+void PythonScriptRuntime::trimTracebackToScript() {
+	PyObject *type, *value, *traceback;
+	PyErr_Fetch(&type, &value, &traceback);
+	PyErr_NormalizeException(&type, &value, &traceback);
+
+	PyObject* current = traceback;
+	Py_XINCREF(current);
+	while (current && current != Py_None) {
+		bool inScript = false;
+		auto* frame = PyObject_GetAttrString(current, "tb_frame");
+		auto* code = frame ? PyObject_GetAttrString(frame, "f_code") : nullptr;
+		auto* fileName = code ? PyObject_GetAttrString(code, "co_filename") : nullptr;
+		if (fileName)
+			inScript = (pyUnicodeToQString(fileName) == m_name);
+		Py_XDECREF(fileName);
+		Py_XDECREF(code);
+		Py_XDECREF(frame);
+		PyErr_Clear();
+
+		if (inScript)
+			break;
+
+		auto* next = PyObject_GetAttrString(current, "tb_next"); // new reference
+		Py_DECREF(current);
+		current = next;
+	}
+
+	if (current && current != Py_None) {
+		Py_XDECREF(traceback);
+		traceback = current;
+		if (value)
+			PyException_SetTraceback(value, traceback);
+	} else
+		Py_XDECREF(current); // no frame of the script found, keep the full traceback
+
+	PyErr_Clear();
+	PyErr_Restore(type, value, traceback);
+}
+
+/*!
+ * executes the code under the control of bdb, the execution is paused at the given (1-based) lines
+ * and on every step requested via ScriptRuntime::sendDebugCommand()
+ */
+bool PythonScriptRuntime::debug(const QString& code, const QList<int>& breakpoints) {
+	INFO(Q_FUNC_INFO << ", breakpoints: " << breakpoints.size())
+	if (!Py_IsInitialized() || !ready)
+		return false;
+
+	PyGILState_STATE gil = PyGILState_Ensure();
+
+	if (!reset() || !m_localDict) {
+		WARN(Q_FUNC_INFO << ", Failed to create new local context for script execution")
+		PyGILState_Release(gil);
+		return false;
+	}
+
+	if (!redirectOutput()) {
+		WARN(Q_FUNC_INFO << ", Redirect python output to output in our ScriptEditor")
+		PyGILState_Release(gil);
+		return false;
+	}
+
+	PyErr_Clear();
+
+	const QByteArray fileName = m_name.toUtf8();
+	const QByteArray source = code.toUtf8();
+
+	auto* compiled = Py_CompileString(source.constData(), fileName.constData(), Py_file_input); // new reference
+	if (!compiled) {
+		const bool ok = PyErr_Occurred();
+		if (ok) {
+			m_errorLine = PythonScriptRuntime::getPyErrorLine();
+			printPyError();
+		}
+		unRedirectOutput();
+		PyGILState_Release(gil);
+		return ok; // syntax errors are reported in the output
+	}
+
+	auto* runFunction = createDebuggerRunFunction(); // new reference
+	if (!runFunction) {
+		WARN(Q_FUNC_INFO << ", Failed to initialize the debugger")
+		if (PyErr_Occurred())
+			printPyError();
+		Py_DECREF(compiled);
+		unRedirectOutput();
+		PyGILState_Release(gil);
+		return false;
+	}
+
+	auto* capsule = PyCapsule_New(this, debuggerCapsuleName, nullptr); // new reference
+	auto* pauseFunction = capsule ? PyCFunction_New(&debugPauseMethodDef, capsule) : nullptr; // new reference, holds a reference to capsule
+	Py_XDECREF(capsule);
+
+	auto* breakpointList = PyList_New(0);
+	for (int line : breakpoints) {
+		auto* lineObj = PyLong_FromLong(line);
+		PyList_Append(breakpointList, lineObj);
+		Py_DECREF(lineObj);
+	}
+	auto* fileNameObj = PyUnicode_FromString(fileName.constData());
+	auto* sourceObj = PyUnicode_FromString(source.constData());
+
+	PyObject* result = nullptr;
+	if (pauseFunction && breakpointList && fileNameObj && sourceObj)
+		result = PyObject_CallFunctionObjArgs(runFunction, compiled, fileNameObj, sourceObj, breakpointList, m_localDict, pauseFunction, nullptr);
+
+	Py_XDECREF(sourceObj);
+	Py_XDECREF(fileNameObj);
+	Py_XDECREF(breakpointList);
+	Py_XDECREF(pauseFunction);
+	Py_DECREF(runFunction);
+	Py_DECREF(compiled);
+
+	if (result)
+		Py_DECREF(result);
+	else if (PyErr_Occurred()) {
+		trimTracebackToScript();
+		m_errorLine = PythonScriptRuntime::getPyErrorLine();
+		printPyError();
+	}
+
+	unRedirectOutput();
+	populateVariableInfo();
+	PyGILState_Release(gil);
+
+	return true;
+}
+
 PyTypeObject* PythonScriptRuntime::getPythonLoggerType() {
 	INFO(Q_FUNC_INFO)
 	static PyTypeObject* cachedType = nullptr;
@@ -726,169 +1012,241 @@ int PythonScriptRuntime::getPyErrorLine() {
 	return errorLine;
 }
 
-bool PythonScriptRuntime::populateVariableInfo() {
-	auto* items = PyDict_Items(m_localDict);
-	if (!items)
+// ##############################################################################
+// ##############################  Variable viewer  #############################
+// ##############################################################################
+
+namespace {
+// max. number of children shown for containers and objects
+constexpr Py_ssize_t maxChildVariables = 1000;
+// max. length of the value representation shown in the variable viewer
+constexpr int maxValueLength = 1000;
+
+// returns the name of the type of obj (type(obj).__name__)
+QString pyTypeName(PyObject* obj) {
+	QString name;
+	auto* type = PyObject_Type(obj); // new reference
+	if (type) {
+		auto* typeName = PyObject_GetAttrString(type, "__name__"); // new reference
+		if (typeName)
+			name = PythonScriptRuntime::pyUnicodeToQString(typeName);
+		Py_XDECREF(typeName);
+		Py_DECREF(type);
+	}
+	PyErr_Clear();
+	return name;
+}
+
+// scalar values without children worth showing
+bool isScalar(PyObject* obj) {
+	return obj == Py_None || PyBool_Check(obj) || PyLong_Check(obj) || PyFloat_Check(obj) || PyComplex_Check(obj) || PyUnicode_Check(obj)
+		|| PyBytes_Check(obj) || PyByteArray_Check(obj);
+}
+
+bool isExpandable(PyObject* obj) {
+	if (isScalar(obj))
 		return false;
+	if (PyDict_Check(obj) || PyList_Check(obj) || PyTuple_Check(obj) || PyAnySet_Check(obj)) {
+		const auto size = PyObject_Size(obj);
+		PyErr_Clear();
+		return size > 0;
+	}
+	return true; // other objects: show their attributes
+}
+}
 
-	QMap<QString, VariableInfo> variablesInfo;
+/*!
+ * creates the info for the variable \c name with the value \c obj (borrowed reference) shown in the variable viewer.
+ * For expandable values a reference is kept in m_variableHandles to fetch the children later.
+ */
+ScriptRuntime::VariableInfo PythonScriptRuntime::variableInfo(const QString& name, PyObject* obj) {
+	VariableInfo info;
+	info.name = name;
 
-	auto size = PyList_Size(items);
-	INFO(Q_FUNC_INFO << ", items in local dictionary:" << size)
+	auto* repr = PyObject_Repr(obj); // new reference
+	if (repr) {
+		info.value = pyUnicodeToQString(repr);
+		Py_DECREF(repr);
+	} else {
+		info.value = QStringLiteral("<repr failed>");
+		PyErr_Clear();
+	}
+	if (info.value.size() > maxValueLength)
+		info.value = info.value.left(maxValueLength) + QStringLiteral("…");
 
-	for (Py_ssize_t i = 0; i < size; ++i) {
-		auto* item = PySequence_GetItem(items, i);
-		if (!item) {
-			Py_DECREF(items);
-			return false;
-		}
+	auto* type = PyObject_Type(obj); // new reference
+	if (type) {
+		auto* typeRepr = PyObject_Repr(type); // new reference, e.g. "<class 'int'>"
+		if (typeRepr)
+			info.type = pyUnicodeToQString(typeRepr);
+		Py_XDECREF(typeRepr);
+		Py_DECREF(type);
+	}
+	PyErr_Clear();
 
-		auto* keyObj = PySequence_GetItem(item, 0);
-		if (!keyObj) {
-			Py_DECREF(items);
-			Py_DECREF(item);
-			return false;
-		}
-
-		const QString& key = PythonScriptRuntime::pyUnicodeToQString(keyObj);
-		if (key.isNull()) {
-			Py_DECREF(items);
-			Py_DECREF(item);
-			Py_DECREF(keyObj);
-			return false;
-		}
-
-		Py_DECREF(keyObj);
-
-		if (key.startsWith(QStringLiteral("__"))) {
-			Py_DECREF(item);
-			continue;
-		}
-
-		if (QString::compare(key, QStringLiteral("project"), Qt::CaseSensitive) == 0) {
-			Py_DECREF(item);
-			continue;
-		}
-
-		auto* valueObj = PySequence_GetItem(item, 1);
-		if (!valueObj) {
-			Py_DECREF(items);
-			Py_DECREF(item);
-			return false;
-		}
-
-		// Use stable ABI: Check type name instead of PyModule_Check
-		auto* typeObj = PyObject_Type(valueObj);
-		if (typeObj) {
-			auto* typeName = PyObject_GetAttrString(typeObj, "__name__");
-			if (typeName) {
-				const QString& name = pyUnicodeToQString(typeName);
-				Py_DECREF(typeName);
-				Py_DECREF(typeObj);
-				if (name == QStringLiteral("module")) {
-					Py_DECREF(item);
-					Py_DECREF(valueObj);
-					continue;
-				}
-			} else {
-				Py_DECREF(typeObj);
-			}
-		}
-
-		// Use stable ABI: PyCallable_Check instead of PyFunction_Check
-		// This filters out functions, methods, and other callables
-		if (PyCallable_Check(valueObj)) {
-			Py_DECREF(item);
-			Py_DECREF(valueObj);
-			continue;
-		}
-
-		// Use stable ABI: Check type name instead of PyType_Check
-		{
-			auto* typeObj = PyObject_Type(valueObj);
-			if (typeObj) {
-				auto* typeName = PyObject_GetAttrString(typeObj, "__name__");
-				if (typeName) {
-					const QString& name = pyUnicodeToQString(typeName);
-					Py_DECREF(typeName);
-					Py_DECREF(typeObj);
-					if (name == QStringLiteral("type")) {
-						Py_DECREF(item);
-						Py_DECREF(valueObj);
-						continue;
-					}
-				} else {
-					Py_DECREF(typeObj);
-				}
-			}
-		}
-
-		auto* valueRepr = PyObject_Repr(valueObj);
-		if (!valueRepr) {
-			Py_DECREF(item);
-			Py_DECREF(valueObj);
-			Py_DECREF(items);
-			return false;
-		}
-
-		Py_DECREF(item);
-		Py_DECREF(valueObj);
-
-		const QString& value = PythonScriptRuntime::pyUnicodeToQString(valueRepr);
-		if (value.isNull()) {
-			Py_DECREF(items);
-			Py_DECREF(valueRepr);
-			return false;
-		}
-		// DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
-
-		Py_DECREF(valueRepr);
-
-		// Use stable ABI: Py_CompileString + PyEval_EvalCode instead of PyRun_String
-		const QString& typeQuery = QStringLiteral("type(") + key + QStringLiteral(")");
-		auto* compiledTypeQuery = Py_CompileString(qPrintable(typeQuery), "<type_check>", Py_eval_input);
-		if (!compiledTypeQuery) {
-			Py_DECREF(items);
-			return false;
-		}
-		typeObj = PyEval_EvalCode(compiledTypeQuery, m_localDict, m_localDict);
-		Py_DECREF(compiledTypeQuery);
-		if (!typeObj) {
-			Py_DECREF(items);
-			return false;
-		}
-
-		auto* typeRepr = PyObject_Repr(typeObj);
-		if (!typeRepr) {
-			Py_DECREF(typeObj);
-			Py_DECREF(items);
-			return false;
-		}
-
-		Py_DECREF(typeObj);
-
-		const QString& type = PythonScriptRuntime::pyUnicodeToQString(typeRepr);
-		if (type.isNull()) {
-			Py_DECREF(items);
-			Py_DECREF(typeRepr);
-			return false;
-		}
-		// DEBUG(Q_FUNC_INFO << ", type = " << type.toStdString())
-
-		Py_DECREF(typeRepr);
-
-		ScriptRuntime::VariableInfo variableInfo;
-		variableInfo.value = value;
-		variableInfo.type = type;
-
-		variablesInfo.insert(key, variableInfo);
+	info.hasChildren = isExpandable(obj);
+	if (info.hasChildren) {
+		Py_INCREF(obj);
+		info.handle = m_variableHandles.size();
+		m_variableHandles << obj;
 	}
 
+	return info;
+}
+
+void PythonScriptRuntime::clearVariableHandles() {
+	if (m_variableHandles.isEmpty())
+		return;
+
+	PyGILState_STATE gil = PyGILState_Ensure();
+	for (auto* obj : std::as_const(m_variableHandles))
+		Py_DECREF(obj);
+	m_variableHandles.clear();
+	PyGILState_Release(gil);
+}
+
+/*!
+ * Updates the variable model with the variables in \c variables (a dict or any other mapping like frame.f_locals).
+ * The local context of the script is used if \c variables is null.
+ */
+bool PythonScriptRuntime::populateVariableInfo(PyObject* variables) {
+	if (!variables)
+		variables = m_localDict;
+	if (!variables)
+		return false;
+
+	// the old handles are not used anymore after the model is reset below
+	clearVariableHandles();
+
+	auto* items = PyMapping_Items(variables); // new reference, list of (key, value) tuples
+	if (!items) {
+		PyErr_Clear();
+		m_variableModel->setVariablesInfo({});
+		return false;
+	}
+
+	QList<VariableInfo> variablesInfo;
+	const auto size = PyList_Size(items);
+	for (Py_ssize_t i = 0; i < size; ++i) {
+		auto* item = PyList_GetItem(items, i); // borrowed reference
+		auto* keyObj = item ? PyTuple_GetItem(item, 0) : nullptr; // borrowed reference
+		auto* valueObj = item ? PyTuple_GetItem(item, 1) : nullptr; // borrowed reference
+		if (!keyObj || !valueObj || !PyUnicode_Check(keyObj)) {
+			PyErr_Clear();
+			continue;
+		}
+
+		const QString key = pyUnicodeToQString(keyObj);
+		if (key.isEmpty() || key.startsWith(QStringLiteral("__")) || key == QStringLiteral("project"))
+			continue;
+
+		// skip modules, classes and functions
+		const QString typeName = pyTypeName(valueObj);
+		if (typeName == QStringLiteral("module") || typeName == QStringLiteral("type") || PyCallable_Check(valueObj))
+			continue;
+
+		variablesInfo << variableInfo(key, valueObj);
+	}
 	Py_DECREF(items);
 
-	m_variableModel->setVariablesInfo(variablesInfo);
+	std::sort(variablesInfo.begin(), variablesInfo.end(), [](const VariableInfo& a, const VariableInfo& b) {
+		return a.name < b.name;
+	});
 
+	m_variableModel->setVariablesInfo(variablesInfo);
 	return true;
+}
+
+/*!
+ * returns the elements of containers (dict, list, tuple, set, other sequences)
+ * or the attributes of other objects of the variable with the given handle
+ */
+QList<ScriptRuntime::VariableInfo> PythonScriptRuntime::childVariables(int handle) {
+	QList<VariableInfo> children;
+	if (handle < 0 || handle >= m_variableHandles.size() || !Py_IsInitialized())
+		return children;
+
+	PyGILState_STATE gil = PyGILState_Ensure();
+	auto* obj = m_variableHandles.at(handle); // the handle owns the reference
+
+	auto addMoreItem = [&children](Py_ssize_t size) {
+		VariableInfo info;
+		info.name = QStringLiteral("…");
+		info.value = i18n("%1 more items", size - maxChildVariables);
+		children << info;
+	};
+
+	if (PyDict_Check(obj)) {
+		auto* items = PyDict_Items(obj); // new reference
+		const auto size = items ? PyList_Size(items) : 0;
+		for (Py_ssize_t i = 0; i < std::min(size, maxChildVariables); ++i) {
+			auto* item = PyList_GetItem(items, i); // borrowed
+			auto* key = PyTuple_GetItem(item, 0); // borrowed
+			auto* keyRepr = PyObject_Repr(key); // new reference
+			const QString keyStr = keyRepr ? pyUnicodeToQString(keyRepr) : QString();
+			Py_XDECREF(keyRepr);
+			children << variableInfo(QLatin1Char('[') + keyStr + QLatin1Char(']'), PyTuple_GetItem(item, 1));
+		}
+		if (size > maxChildVariables)
+			addMoreItem(size);
+		Py_XDECREF(items);
+	} else if (PyAnySet_Check(obj)) {
+		auto* iter = PyObject_GetIter(obj); // new reference
+		Py_ssize_t i = 0;
+		const auto size = PyObject_Size(obj);
+		while (iter && i < maxChildVariables) {
+			auto* element = PyIter_Next(iter); // new reference
+			if (!element)
+				break;
+			children << variableInfo(QStringLiteral("{%1}").arg(i++), element);
+			Py_DECREF(element);
+		}
+		if (size > maxChildVariables)
+			addMoreItem(size);
+		Py_XDECREF(iter);
+	} else if (PySequence_Check(obj) && !isScalar(obj)) { // list, tuple, numpy arrays, ...
+		const auto size = PySequence_Size(obj);
+		for (Py_ssize_t i = 0; i < std::min(size, maxChildVariables); ++i) {
+			auto* element = PySequence_GetItem(obj, i); // new reference
+			if (!element) {
+				PyErr_Clear();
+				break;
+			}
+			children << variableInfo(QStringLiteral("[%1]").arg(i), element);
+			Py_DECREF(element);
+		}
+		if (size > maxChildVariables)
+			addMoreItem(size);
+	}
+
+	// attributes of objects, for containers only if no elements were found (e.g. empty sequence-like objects)
+	if (children.isEmpty() && !PyDict_Check(obj) && !PyList_Check(obj) && !PyTuple_Check(obj) && !PyAnySet_Check(obj)) {
+		auto* names = PyObject_Dir(obj); // new reference
+		const auto size = names ? PyList_Size(names) : 0;
+		for (Py_ssize_t i = 0; i < size && children.size() < maxChildVariables; ++i) {
+			auto* nameObj = PyList_GetItem(names, i); // borrowed
+			const QString name = pyUnicodeToQString(nameObj);
+			if (name.isEmpty() || name.startsWith(QLatin1Char('_')))
+				continue;
+
+			auto* attr = PyObject_GetAttr(obj, nameObj); // new reference
+			if (!attr) {
+				PyErr_Clear();
+				continue;
+			}
+
+			// skip methods, classes and modules
+			const QString typeName = pyTypeName(attr);
+			if (!PyCallable_Check(attr) && typeName != QStringLiteral("module") && typeName != QStringLiteral("type"))
+				children << variableInfo(name, attr);
+			Py_DECREF(attr);
+		}
+		Py_XDECREF(names);
+	}
+
+	PyErr_Clear();
+	PyGILState_Release(gil);
+	return children;
 }
 
 QString PythonScriptRuntime::pyUnicodeToQString(PyObject* obj) {

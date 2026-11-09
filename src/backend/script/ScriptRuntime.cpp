@@ -11,6 +11,9 @@
 #include "Script.h"
 
 #include <KLocalizedString>
+
+#include <QEventLoop>
+#include <QPointer>
 /*!
  * \class ScriptRuntime
  * \brief Abstract class providing an interface for scripting runtimes
@@ -51,6 +54,84 @@ QAbstractItemModel* ScriptRuntime::variableModel() const {
 	return m_variableModel;
 }
 
+ScriptRuntime::~ScriptRuntime() {
+	// don't leave a paused debug session waiting for a command that will never come
+	if (m_debugLoop) {
+		*m_pendingDebugCommand = DebugCommand::Stop;
+		m_debugLoop->quit();
+	}
+}
+
+/*!
+ * \brief Returns whether the runtime supports debugging via \c debug()
+ */
+bool ScriptRuntime::supportsDebugging() const {
+	return false;
+}
+
+/*!
+ * \brief Executes the code under the control of the debugger, pausing at the given breakpoints
+ * \param code - The statements to execute
+ * \param breakpoints - 1-based lines where the execution should pause
+ * \return Whether the execution was successful or not
+ */
+bool ScriptRuntime::debug(const QString& /* code */, const QList<int>& /* breakpoints */) {
+	return false;
+}
+
+/*!
+ * \brief Updates the breakpoints of the paused debug session
+ * \param breakpoints - 1-based lines where the execution should pause
+ */
+void ScriptRuntime::setBreakpoints(const QList<int>& /* breakpoints */) {
+}
+
+/*!
+ * \brief Returns true if the execution is currently paused by the debugger and is waiting for a command
+ */
+bool ScriptRuntime::isDebugPaused() const {
+	return m_debugLoop != nullptr;
+}
+
+/*!
+ * \brief Resumes a paused debug session with the given command
+ */
+void ScriptRuntime::sendDebugCommand(DebugCommand command) {
+	if (!m_debugLoop)
+		return;
+
+	*m_pendingDebugCommand = command;
+	m_debugLoop->quit();
+}
+
+/*!
+ * \brief Pauses the execution and waits until the user sends a debug command via \c sendDebugCommand().
+ *
+ * The scripts are executed in the GUI thread, a nested event loop is used to keep the GUI responsive while paused.
+ * \param line - 0-based line in the script where the execution is paused
+ */
+ScriptRuntime::DebugCommand ScriptRuntime::waitForDebugCommand(int line) {
+	if (m_debugLoop) // already paused, shouldn't happen
+		return DebugCommand::Continue;
+
+	QEventLoop loop;
+	DebugCommand command = DebugCommand::Stop;
+	m_debugLoop = &loop;
+	m_pendingDebugCommand = &command;
+
+	QPointer<ScriptRuntime> guard(this);
+	Q_EMIT debugPaused(line);
+	loop.exec();
+
+	if (guard) {
+		m_debugLoop = nullptr;
+		m_pendingDebugCommand = nullptr;
+		Q_EMIT debugResumed();
+	}
+
+	return command;
+}
+
 /*!
  * \fn virtual bool ScriptRuntime::init() = 0;
  * \brief Initializes the script runtime
@@ -74,22 +155,104 @@ QAbstractItemModel* ScriptRuntime::variableModel() const {
  * \return Whether the execution was successful or not
  */
 
-VariablesInfoModel::VariablesInfoModel(ScriptRuntime* parent)
-	: QAbstractTableModel(parent) {
+/*!
+ * \brief Returns the children (elements, attributes) of the variable with the given handle
+ * \param handle - the handle of the variable as provided in VariableInfo::handle
+ */
+QList<ScriptRuntime::VariableInfo> ScriptRuntime::childVariables(int /* handle */) {
+	return {};
 }
 
-int VariablesInfoModel::columnCount(const QModelIndex& parent) const {
-	if (parent.isValid())
-		return 0;
-	else
-		return 3;
+VariablesInfoModel::VariablesInfoModel(ScriptRuntime* parent)
+	: QAbstractItemModel(parent)
+	, m_runtime(parent) {
+	m_root.childrenFetched = true;
+}
+
+VariablesInfoModel::~VariablesInfoModel() = default;
+
+VariablesInfoModel::Node* VariablesInfoModel::node(const QModelIndex& index) const {
+	if (!index.isValid())
+		return const_cast<Node*>(&m_root);
+	return static_cast<Node*>(index.internalPointer());
+}
+
+void VariablesInfoModel::setChildren(Node* parent, const QList<ScriptRuntime::VariableInfo>& variables) {
+	for (const auto& info : variables) {
+		auto* child = new Node;
+		child->info = info;
+		child->parent = parent;
+		child->childrenFetched = !info.hasChildren;
+		parent->children << child;
+	}
+}
+
+void VariablesInfoModel::setVariablesInfo(const QList<ScriptRuntime::VariableInfo>& variables) {
+	beginResetModel();
+	qDeleteAll(m_root.children);
+	m_root.children.clear();
+	setChildren(&m_root, variables);
+	endResetModel();
+}
+
+QModelIndex VariablesInfoModel::index(int row, int column, const QModelIndex& parent) const {
+	const auto* parentNode = node(parent);
+	if (row < 0 || row >= parentNode->children.size() || column < 0 || column >= columnCount())
+		return {};
+	return createIndex(row, column, parentNode->children.at(row));
+}
+
+QModelIndex VariablesInfoModel::parent(const QModelIndex& index) const {
+	if (!index.isValid())
+		return {};
+
+	auto* parentNode = node(index)->parent;
+	if (!parentNode || parentNode == &m_root)
+		return {};
+
+	const int row = parentNode->parent->children.indexOf(parentNode);
+	return createIndex(row, 0, parentNode);
+}
+
+int VariablesInfoModel::columnCount(const QModelIndex& /* parent */) const {
+	return 3;
 }
 
 int VariablesInfoModel::rowCount(const QModelIndex& parent) const {
-	if (parent.isValid())
+	if (parent.column() > 0)
 		return 0;
-	else
-		return m_variablesInfo.size();
+	return node(parent)->children.size();
+}
+
+bool VariablesInfoModel::hasChildren(const QModelIndex& parent) const {
+	if (parent.column() > 0)
+		return false;
+	const auto* n = node(parent);
+	return n->childrenFetched ? !n->children.isEmpty() : n->info.hasChildren;
+}
+
+bool VariablesInfoModel::canFetchMore(const QModelIndex& parent) const {
+	if (!parent.isValid() || parent.column() > 0)
+		return false;
+	return !node(parent)->childrenFetched;
+}
+
+void VariablesInfoModel::fetchMore(const QModelIndex& parent) {
+	auto* n = node(parent);
+	if (n->childrenFetched)
+		return;
+	n->childrenFetched = true;
+
+	const auto& children = m_runtime ? m_runtime->childVariables(n->info.handle) : QList<ScriptRuntime::VariableInfo>();
+	if (children.isEmpty()) {
+		// update the expand indicator
+		Q_EMIT dataChanged(parent, parent);
+		return;
+	}
+
+	beginInsertRows(parent, 0, children.size() - 1);
+	setChildren(n, children);
+	endInsertRows();
 }
 
 QVariant VariablesInfoModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -103,36 +266,22 @@ QVariant VariablesInfoModel::headerData(int section, Qt::Orientation orientation
 			return i18nc("@title:column", "Type");
 		}
 	}
-	return QVariant();
-}
-
-QVariant VariablesInfoModel::data(const QModelIndex& index, int role) const {
-	if ((role != Qt::DisplayRole) || !index.isValid())
-		return QVariant();
-
-	const auto& variable = m_variableNames.at(index.row());
-	const auto& variableInfo = m_variablesInfo.value(variable);
-
-	switch (index.column()) {
-	case 0:
-		return QVariant(variable);
-	case 1:
-		return QVariant(variableInfo.value);
-	case 2:
-		return QVariant(variableInfo.type);
-	}
-
 	return {};
 }
 
-void VariablesInfoModel::setVariablesInfo(const QMap<QString, ScriptRuntime::VariableInfo>& variablesInfo) {
-	beginRemoveRows(QModelIndex(), 0, m_variablesInfo.size() - 1);
-	m_variablesInfo.clear();
-	m_variableNames.clear();
-	endRemoveRows();
+QVariant VariablesInfoModel::data(const QModelIndex& index, int role) const {
+	if (!index.isValid() || (role != Qt::DisplayRole && role != Qt::ToolTipRole))
+		return {};
 
-	beginInsertRows(QModelIndex(), 0, variablesInfo.size() - 1);
-	m_variablesInfo = variablesInfo;
-	m_variableNames = variablesInfo.keys();
-	endInsertRows();
+	const auto& info = node(index)->info;
+	switch (index.column()) {
+	case 0:
+		return info.name;
+	case 1:
+		return info.value;
+	case 2:
+		return info.type;
+	}
+
+	return {};
 }

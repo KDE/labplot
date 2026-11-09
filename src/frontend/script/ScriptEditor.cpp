@@ -17,11 +17,14 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+#include <KActionCollection>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 
 #include <QMenu>
 #include <QClipboard>
+#include <QKeyEvent>
 #include <QKeySequence>
 
 ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
@@ -48,6 +51,7 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	const bool outputVisible = group.readEntry(QStringLiteral("OutputVisible"), true);
 
 	initActions();
+	initDebugActions();
 	initToolBar();
 	setOutputVisible(outputVisible);
 	m_toggleOutputAction->setChecked(outputVisible);
@@ -124,8 +128,140 @@ void ScriptEditor::createContextMenu(QMenu* menu) {
 
 	menu->insertAction(firstAction, m_runScriptAction);
 
+	if (m_script->supportsDebugging()) {
+		menu->insertAction(firstAction, m_debugAction);
+		if (m_script->isDebugging()) {
+			menu->insertAction(firstAction, m_debugStepOverAction);
+			menu->insertAction(firstAction, m_debugStepIntoAction);
+			menu->insertAction(firstAction, m_debugStepOutAction);
+			menu->insertAction(firstAction, m_debugStopAction);
+		}
+		menu->insertAction(firstAction, m_toggleBreakpointAction);
+	}
+
 	if (firstAction)
 		menu->insertSeparator(firstAction);
+}
+
+void ScriptEditor::initDebugActions() {
+	auto createAction = [this](const QString& icon, const QString& text, const QKeySequence& shortcut, void (ScriptEditor::*slot)()) {
+		auto* action = new QAction(QIcon::fromTheme(icon), text, this);
+		action->setShortcut(shortcut);
+		action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+		action->setShortcutVisibleInContextMenu(true);
+		connect(action, &QAction::triggered, this, slot);
+		addAction(action);
+		return action;
+	};
+
+	m_debugAction = createAction(QStringLiteral("debug-run"), i18n("Debug"), QKeySequence(Qt::Key_F5), &ScriptEditor::debugOrContinue);
+	m_debugAction->setWhatsThis(i18n("Run the script in the debugger, the execution pauses at the breakpoints. Continues the execution if paused."));
+	m_debugStepOverAction = createAction(QStringLiteral("debug-step-over"), i18n("Step Over"), QKeySequence(Qt::Key_F10), &ScriptEditor::debugStepOver);
+	m_debugStepIntoAction = createAction(QStringLiteral("debug-step-into"), i18n("Step Into"), QKeySequence(Qt::Key_F11), &ScriptEditor::debugStepInto);
+	m_debugStepOutAction = createAction(QStringLiteral("debug-step-out"), i18n("Step Out"), QKeySequence(Qt::SHIFT | Qt::Key_F11), &ScriptEditor::debugStepOut);
+	m_debugStopAction = createAction(QStringLiteral("process-stop"), i18n("Stop Debugging"), QKeySequence(Qt::SHIFT | Qt::Key_F5), &ScriptEditor::debugStop);
+	m_toggleBreakpointAction =
+		createAction(QStringLiteral("debug-breakpoint"), i18n("Toggle Breakpoint"), QKeySequence(Qt::Key_F9), &ScriptEditor::toggleBreakpoint);
+	// not every icon theme provides debug-breakpoint, use the same fallback as for the breakpoint marks
+	if (m_toggleBreakpointAction->icon().isNull())
+		m_toggleBreakpointAction->setIcon(QIcon::fromTheme(QStringLiteral("media-record")));
+
+	// KTextEditor::View uses some of these keys for its own actions (e.g. F5 = reload, F9/F10/F11 = view options),
+	// these would make our shortcuts ambiguous since both are active in the editor. Remove the keys from the editor's actions.
+	const auto debugActions = {m_debugAction, m_debugStepOverAction, m_debugStepIntoAction, m_debugStepOutAction, m_debugStopAction, m_toggleBreakpointAction};
+	const auto viewActions = m_kTextEditorView->actionCollection()->actions();
+	for (auto* debugAction : debugActions) {
+		const auto& key = debugAction->shortcut();
+		for (auto* viewAction : viewActions) {
+			auto shortcuts = viewAction->shortcuts();
+			if (shortcuts.removeAll(key) > 0)
+				viewAction->setShortcuts(shortcuts);
+		}
+	}
+
+	// show the icon border where the breakpoints can be toggled by clicking
+	m_kTextEditorView->setConfigValue(QStringLiteral("icon-bar"), true);
+
+	connect(m_script, &Script::debugStateChanged, this, &ScriptEditor::updateDebugState);
+	updateDebugState();
+}
+
+/*!
+ * The debug keys (F5, F10, ...) are also used by actions of the main window with a window-wide shortcut context
+ * (e.g. F10 = "Open Main Menu" of the hamburger menu). Two active actions with the same key make the shortcut ambiguous
+ * and none of them is triggered. Claim the key for the debug action before the shortcut handling of Qt kicks in.
+ */
+bool ScriptEditor::event(QEvent* event) {
+	if (event->type() == QEvent::ShortcutOverride) {
+		auto* keyEvent = static_cast<QKeyEvent*>(event);
+		const QKeySequence key(keyEvent->keyCombination());
+		for (auto* action : {m_debugAction, m_debugStepOverAction, m_debugStepIntoAction, m_debugStepOutAction, m_debugStopAction, m_toggleBreakpointAction}) {
+			if (action && action->isEnabled() && action->shortcuts().contains(key)) {
+				keyEvent->accept();
+				action->trigger();
+				return true;
+			}
+		}
+	}
+
+	return QWidget::event(event);
+}
+
+/*!
+ * toolbar on top of the editor to run and debug the script
+ */
+void ScriptEditor::initToolBar() {
+	// floating on top of the text editor, can be moved horizontally
+	auto* toolBar = new FloatingToolBar(ui.editorParent, QStringLiteral("ToolBarPosition"));
+	toolBar->addAction(m_runScriptAction);
+	toolBar->addSeparator();
+	toolBar->addAction(m_debugAction);
+	toolBar->addAction(m_debugStepOverAction);
+	toolBar->addAction(m_debugStepIntoAction);
+	toolBar->addAction(m_debugStepOutAction);
+	toolBar->addAction(m_debugStopAction);
+	toolBar->addSeparator();
+	toolBar->addAction(m_toggleBreakpointAction);
+}
+
+void ScriptEditor::updateDebugState() {
+	const bool supported = m_script->supportsDebugging();
+	const bool debugging = m_script->isDebugging();
+	const bool paused = m_script->isDebugPaused();
+
+	m_runScriptAction->setEnabled(m_script->isInitialized() && !debugging);
+	m_debugAction->setEnabled(supported && (!debugging || paused));
+	if (paused) {
+		m_debugAction->setText(i18n("Continue"));
+		m_debugAction->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
+	} else {
+		m_debugAction->setText(i18n("Debug"));
+		m_debugAction->setIcon(QIcon::fromTheme(QStringLiteral("debug-run")));
+	}
+	m_debugStepOverAction->setEnabled(paused);
+	m_debugStepIntoAction->setEnabled(paused);
+	m_debugStepOutAction->setEnabled(paused);
+	m_debugStopAction->setEnabled(paused);
+	m_toggleBreakpointAction->setEnabled(supported);
+
+	// show the line where the execution is paused
+	const int line = m_script->executionLine();
+	if (paused && line >= 0)
+		m_kTextEditorView->setCursorPosition(KTextEditor::Cursor(line, 0));
+
+	Q_EMIT debugStateChanged();
+}
+
+bool ScriptEditor::supportsDebugging() const {
+	return m_script && m_script->supportsDebugging();
+}
+
+bool ScriptEditor::isDebugging() const {
+	return m_script && m_script->isDebugging();
+}
+
+bool ScriptEditor::isDebugPaused() const {
+	return m_script && m_script->isDebugPaused();
 }
 
 void ScriptEditor::initActions() {
@@ -166,17 +302,6 @@ void ScriptEditor::initActions() {
 		}
 	});
 	addAction(m_searchAction);
-}
-
-/*!
- * toolbar on top of the editor to run the script
- */
-void ScriptEditor::initToolBar() {
-	// floating on top of the text editor, can be moved horizontally
-	auto* toolBar = new FloatingToolBar(ui.editorParent, QStringLiteral("ToolBarPosition"));
-	toolBar->addAction(m_runScriptAction);
-
-	m_runScriptAction->setEnabled(m_script->isInitialized());
 }
 
 void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
@@ -256,6 +381,33 @@ void ScriptEditor::run() {
 	WAIT_CURSOR_AUTO_RESET;
 	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); // make sure the wait cursor is shown right away, before the blocking script execution starts
 	m_script->runScript();
+}
+
+void ScriptEditor::debugOrContinue() {
+	if (m_script->isDebugPaused())
+		m_script->debugContinue();
+	else if (!m_script->isDebugging())
+		m_script->debugScript();
+}
+
+void ScriptEditor::debugStepOver() {
+	m_script->debugStepOver();
+}
+
+void ScriptEditor::debugStepInto() {
+	m_script->debugStepInto();
+}
+
+void ScriptEditor::debugStepOut() {
+	m_script->debugStepOut();
+}
+
+void ScriptEditor::debugStop() {
+	m_script->debugStop();
+}
+
+void ScriptEditor::toggleBreakpoint() {
+	m_script->toggleBreakpoint(m_kTextEditorView->cursorPosition().line());
 }
 
 void ScriptEditor::clearOutput() {

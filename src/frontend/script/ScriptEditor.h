@@ -33,6 +33,14 @@ public:
 	~ScriptEditor();
 
 	bool isInitialized() const;
+	bool supportsDebugging() const;
+	bool isDebugging() const;
+	bool isDebugPaused() const;
+
+protected:
+	bool event(QEvent*) override;
+
+public:
 
 	void writeOutput(bool, const QString&);
 	QString outputText();
@@ -43,11 +51,21 @@ private Q_SLOTS:
 	void handleAnchorClicked(const QUrl&);
 	void setOutputVisible(bool);
 	void setOutputMaximized(bool);
+	void updateDebugState();
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void run();
+	void debugOrContinue();
+	void debugStepOver();
+	void debugStepInto();
+	void debugStepOut();
+	void debugStop();
+	void toggleBreakpoint();
 	void clearOutput();
+
+Q_SIGNALS:
+	void debugStateChanged();
 
 private:
 	Ui::ScriptEditorWidget ui;
@@ -58,11 +76,18 @@ private:
 	QAction* m_toggleOutputAction{nullptr};
 	QAction* m_maximizeOutputAction{nullptr};
 	QAction* m_codeCompletionAction{nullptr};
+	QAction* m_debugAction{nullptr};
+	QAction* m_debugStepOverAction{nullptr};
+	QAction* m_debugStepIntoAction{nullptr};
+	QAction* m_debugStepOutAction{nullptr};
+	QAction* m_debugStopAction{nullptr};
+	QAction* m_toggleBreakpointAction{nullptr};
 	ScriptCompletionModel* m_completionModel{nullptr};
 	QList<int> m_outputSplitterSizes;
 	QList<int> m_maximizedOutputSplitterSizes;
 
 	void initActions();
+	void initDebugActions();
 	void initToolBar();
 	void initMenus();
 	void setSplitterState(const QByteArray&);
