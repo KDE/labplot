@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:53+0000\n"
+"POT-Creation-Date: 2026-11-10 00:53+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2520,44 +2520,44 @@ msgstr ""
 msgid "Unsupported file type, neither histogram no tree."
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1531
 #, kde-format
 msgid "Not a ROOT file"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1512
+#: src/backend/datasources/filters/ROOTFilter.cpp:1536
 #, fuzzy, kde-format
 #| msgid "Format Type"
 msgid "File format version: %1"
 msgstr "Τύπος αποθήκευσης"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1520
+#: src/backend/datasources/filters/ROOTFilter.cpp:1544
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1522
+#: src/backend/datasources/filters/ROOTFilter.cpp:1546
 #, fuzzy, kde-format
 #| msgid "Number of levels"
 msgid "Number of free data records: %1"
 msgstr "Πλήθος επιπέδων"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1524
+#: src/backend/datasources/filters/ROOTFilter.cpp:1548
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1550
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1555
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1536
+#: src/backend/datasources/filters/ROOTFilter.cpp:1560
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""

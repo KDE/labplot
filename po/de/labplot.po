@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:53+0000\n"
+"POT-Creation-Date: 2026-11-10 00:53+0000\n"
 "PO-Revision-Date: 2026-10-15 23:35+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -2427,42 +2427,42 @@ msgstr "Keine Spalte verfügbar"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Nicht unterstützter Dateityp, weder Histogramm noch Baum."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1531
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Keine ROOT-Datei"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1512
+#: src/backend/datasources/filters/ROOTFilter.cpp:1536
 #, kde-format
 msgid "File format version: %1"
 msgstr "Dateiformat-Version: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1520
+#: src/backend/datasources/filters/ROOTFilter.cpp:1544
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Größe des freien Dateneinträge: %1 Bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1522
+#: src/backend/datasources/filters/ROOTFilter.cpp:1546
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Anzahl der freien Dateneinträge: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1524
+#: src/backend/datasources/filters/ROOTFilter.cpp:1548
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "TNamedgröße: %1 Bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1550
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Größe des Dateizeiger: %1 Bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1555
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Komprimierungslevel und -algortihmus: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1536
+#: src/backend/datasources/filters/ROOTFilter.cpp:1560
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Größe des TStreamerInfo Eintrags: %1 Bytes"

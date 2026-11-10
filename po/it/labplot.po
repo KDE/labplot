@@ -1,4 +1,4 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# SPDX-FileCopyrightText: 2026 This _file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
 # SPDX-FileCopyrightText: 2017-2026 Paolo Zamponi <feus73@gmail.com>
 # SPDX-FileCopyrightText: 2020, 2022, 2025 Vincenzo Reale <smart2128vr@gmail.com>
@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:53+0000\n"
-"PO-Revision-Date: 2026-10-19 08:30+0200\n"
+"POT-Creation-Date: 2026-11-10 00:53+0000\n"
+"PO-Revision-Date: 2026-10-27 15:41+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2458,42 +2458,42 @@ msgstr "Nessuna colonna disponibile"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Tipo di file mobile non supportato, né istogramma, né albero."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1531
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Non è un file ROOT"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1512
+#: src/backend/datasources/filters/ROOTFilter.cpp:1536
 #, kde-format
 msgid "File format version: %1"
 msgstr "Versione del formato del file: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1520
+#: src/backend/datasources/filters/ROOTFilter.cpp:1544
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Dimensione del record di dati LIBERO: %1 byte"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1522
+#: src/backend/datasources/filters/ROOTFilter.cpp:1546
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Numero di record di dati liberi: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1524
+#: src/backend/datasources/filters/ROOTFilter.cpp:1548
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "Dimensione TNamed: %1 byte"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1550
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Dimensione dei puntatori di file: %1 byte"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1555
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Livello di compressione ed algoritmo: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1536
+#: src/backend/datasources/filters/ROOTFilter.cpp:1560
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Dimensione del record TStreamerInfo: %1 byte"
@@ -3837,17 +3837,17 @@ msgstr "Campione casuale"
 #: src/backend/gsl/functions.cpp:265
 #, kde-format
 msgid "Unwrap phase angles"
-msgstr ""
+msgstr "Elimina le discontinuità degli angoli di fase"
 
 #: src/backend/gsl/functions.cpp:266
 #, kde-format
 msgid "Unwrap with custom period"
-msgstr ""
+msgstr "Elimina le discontinuità con periodo personalizzato"
 
 #: src/backend/gsl/functions.cpp:267
 #, kde-format
 msgid "Difference from previous row"
-msgstr ""
+msgstr "Differenza rispetto alla riga precedente"
 
 #: src/backend/gsl/functions.cpp:268
 #, kde-format
@@ -3855,20 +3855,19 @@ msgid "Cumulative sum"
 msgstr "Somma cumulativa"
 
 #: src/backend/gsl/functions.cpp:269
-#, fuzzy, kde-format
-#| msgid "Cumulative Percentage"
+#, kde-format
 msgid "Cumulative product"
-msgstr "Percentuale cumulativa"
+msgstr "Prodotto cumulativo"
 
 #: src/backend/gsl/functions.cpp:270
 #, kde-format
 msgid "Value from n rows before"
-msgstr ""
+msgstr "Valore di n righe precedenti"
 
 #: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "Value from n rows after"
-msgstr ""
+msgstr "Valore di n righe successive"
 
 #: src/backend/gsl/functions.cpp:273
 #, kde-format
@@ -5618,12 +5617,12 @@ msgstr "Da radianti a gradi"
 #: src/backend/gsl/functions.cpp:691
 #, kde-format
 msgid "Clip value to range [min, max]"
-msgstr ""
+msgstr "Limita il valore all'intervallo [min, max]"
 
 #: src/backend/gsl/functions.cpp:692
 #, kde-format
 msgid "Floor (largest integer <= x)"
-msgstr ""
+msgstr "Parte intera inferiore (massimo intero ≤ x)"
 
 #: src/backend/gsl/functions.cpp:693
 #, kde-format
@@ -5633,12 +5632,12 @@ msgstr "2^x"
 #: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Floating-point remainder of x/y"
-msgstr ""
+msgstr "Resto in virgola mobile di x/y"
 
 #: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "IEEE remainder of x/y"
-msgstr ""
+msgstr "Resto secondo lo standard IEEE di x/y"
 
 #: src/backend/gsl/functions.cpp:696
 #, kde-format
@@ -5651,8 +5650,7 @@ msgid "Reciprocal (1/x)"
 msgstr "Reciproco (1/x)"
 
 #: src/backend/gsl/functions.cpp:698
-#, fuzzy, kde-format
-#| msgid "Heavyside theta function"
+#, kde-format
 msgid "Heaviside step function"
 msgstr "Funzione gradino di Heaviside"
 
@@ -17835,10 +17833,9 @@ msgid "Dash-dot-dot Line"
 msgstr "Linea con sequenze trattino-punto-punto"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "Linea punteggiata"
+msgstr "Linea a puntini rotondi"
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format
@@ -19554,10 +19551,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Chiedi conferma prima di riavviare il motore di sistema."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
+#, kde-format
 msgid "Select the path to a Python virtual environment."
-msgstr "Seleziona il percorso di un ambiente python virtuale."
+msgstr "Seleziona il percorso di un ambiente Python virtuale."
 
 #: src/frontend/SettingsScriptingPage.cpp:52
 #, kde-format
@@ -19571,9 +19567,7 @@ msgid "Select the Virtual Environment"
 msgstr "Seleziona l'ambiente virtuale"
 
 #: src/frontend/SettingsScriptingPage.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment does not contain a python executable."
+#, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "L'ambiente virtuale selezionato non contiene un eseguibile Python."
 
@@ -19584,10 +19578,7 @@ msgstr "L'ambiente virtuale selezionato non contiene un file pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:264
 #: src/frontend/SettingsScriptingPage.cpp:295
-#, fuzzy, kde-format
-#| msgid ""
-#| "The selected virtual environment python version does not match the "
-#| "application python version."
+#, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
