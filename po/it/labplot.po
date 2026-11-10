@@ -1,4 +1,4 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# SPDX-FileCopyrightText: 2026 This _file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
 # SPDX-FileCopyrightText: 2017-2026 Paolo Zamponi <feus73@gmail.com>
 # SPDX-FileCopyrightText: 2020, 2022, 2025 Vincenzo Reale <smart2128vr@gmail.com>
