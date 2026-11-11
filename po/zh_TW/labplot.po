@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-10 00:53+0000\n"
+"POT-Creation-Date: 2026-11-11 00:56+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -272,7 +272,7 @@ msgstr "方向"
 #: src/backend/core/AbstractColumn.cpp:230
 #: src/backend/datasources/filters/AsciiFilter.cpp:751
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
-#: src/frontend/ActionsManager.cpp:555
+#: src/frontend/ActionsManager.cpp:552
 #: src/frontend/notebook/NotebookView.cpp:104
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -6780,7 +6780,7 @@ msgstr "列印"
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:119
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:123
 #: src/backend/statistics/HypothesisTest.cpp:190
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6790,13 +6790,13 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "匯出到檔案"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:133
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:137
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Export failed"
 msgstr "匯出到檔案"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:133
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:137
 #, fuzzy, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "無法開啟檔案 %1 以讀取"
@@ -7819,51 +7819,51 @@ msgstr "高度"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:117
+#: src/backend/script/Script.cpp:121
 #, kde-format
 msgid "Python file (*.py)"
 msgstr ""
 
-#: src/backend/script/Script.cpp:181 src/backend/script/Script.cpp:379
+#: src/backend/script/Script.cpp:185 src/backend/script/Script.cpp:383
 #, fuzzy, kde-format
 msgid "no script element found"
 msgstr "檔案資訊"
 
-#: src/backend/script/Script.cpp:189
+#: src/backend/script/Script.cpp:193
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "failed to initialize the script runtime '%1'"
 msgstr "開啟失敗"
 
-#: src/backend/script/Script.cpp:253
+#: src/backend/script/Script.cpp:257
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:359 src/backend/script/Script.cpp:364
+#: src/backend/script/Script.cpp:363 src/backend/script/Script.cpp:368
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, fuzzy, kde-format
 msgid "Script"
 msgstr "文稿"
 
-#: src/backend/script/Script.cpp:359
+#: src/backend/script/Script.cpp:363
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to run the script."
 msgstr "開啟失敗"
 
-#: src/backend/script/Script.cpp:364
+#: src/backend/script/Script.cpp:368
 #, kde-format
 msgid "A script is already running."
 msgstr ""
 
-#: src/backend/script/Script.cpp:387
+#: src/backend/script/Script.cpp:391
 #, fuzzy, kde-format
 #| msgid "Attribute 'name' is missing or empty."
 msgid "attribute 'runtime' is missing or empty"
 msgstr "屬性 'name' 遺失或為空。"
 
-#: src/backend/script/Script.cpp:392
+#: src/backend/script/Script.cpp:396
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr ""
@@ -9938,7 +9938,7 @@ msgstr "垂直軸："
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2442
-#: src/frontend/ActionsManager.cpp:559
+#: src/frontend/ActionsManager.cpp:556
 #: src/frontend/datasources/ImportFileWidget.cpp:115
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:117
@@ -9992,7 +9992,7 @@ msgid "Inset Plot Area with Data"
 msgstr "繪製區域"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/frontend/ActionsManager.cpp:903
+#: src/frontend/ActionsManager.cpp:891
 #: src/frontend/notebook/NotebookView.cpp:175
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:442
@@ -12583,8 +12583,8 @@ msgstr "匯出"
 msgid "Export selected element"
 msgstr "符合選擇區域"
 
-#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1434
-#: src/frontend/ActionsManager.cpp:1442
+#: src/frontend/ActionsManager.cpp:369 src/frontend/ActionsManager.cpp:1414
+#: src/frontend/ActionsManager.cpp:1422
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -12701,133 +12701,133 @@ msgstr ""
 msgid "What's New"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:550
+#: src/frontend/ActionsManager.cpp:547
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "繪製區域"
 
-#: src/frontend/ActionsManager.cpp:566
+#: src/frontend/ActionsManager.cpp:563
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:251
 #, fuzzy, kde-format
 msgid "Vertical Layout"
 msgstr "垂直佈局"
 
-#: src/frontend/ActionsManager.cpp:571
+#: src/frontend/ActionsManager.cpp:568
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:255
 #, fuzzy, kde-format
 msgid "Horizontal Layout"
 msgstr "水平佈局"
 
-#: src/frontend/ActionsManager.cpp:576
+#: src/frontend/ActionsManager.cpp:573
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:259
 #, fuzzy, kde-format
 msgid "Grid Layout"
 msgstr "佈局"
 
-#: src/frontend/ActionsManager.cpp:581
+#: src/frontend/ActionsManager.cpp:578
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:263
 #, fuzzy, kde-format
 msgid "No Layout"
 msgstr "佈局"
 
-#: src/frontend/ActionsManager.cpp:589 src/frontend/ActionsManager.cpp:630
+#: src/frontend/ActionsManager.cpp:586 src/frontend/ActionsManager.cpp:627
 #: src/frontend/worksheet/WorksheetView.cpp:187
 #: src/frontend/worksheet/WorksheetView.cpp:349
 #, fuzzy, kde-format
 msgid "Select and Edit"
 msgstr "全部選取"
 
-#: src/frontend/ActionsManager.cpp:594 src/frontend/ActionsManager.cpp:821
+#: src/frontend/ActionsManager.cpp:591 src/frontend/ActionsManager.cpp:818
 #: src/frontend/datapicker/DatapickerImageView.cpp:132
 #: src/frontend/worksheet/WorksheetView.cpp:192
 #, fuzzy, kde-format
 msgid "Navigate"
 msgstr "導覽"
 
-#: src/frontend/ActionsManager.cpp:599 src/frontend/ActionsManager.cpp:826
+#: src/frontend/ActionsManager.cpp:596 src/frontend/ActionsManager.cpp:823
 #: src/frontend/datapicker/DatapickerImageView.cpp:136
 #: src/frontend/worksheet/WorksheetView.cpp:196
 #, fuzzy, kde-format
 msgid "Select and Zoom"
 msgstr "全部選取"
 
-#: src/frontend/ActionsManager.cpp:605 src/frontend/ActionsManager.cpp:855
+#: src/frontend/ActionsManager.cpp:602 src/frontend/ActionsManager.cpp:852
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "縮放"
 
-#: src/frontend/ActionsManager.cpp:611 src/frontend/ActionsManager.cpp:861
+#: src/frontend/ActionsManager.cpp:608 src/frontend/ActionsManager.cpp:858
 #, fuzzy, kde-format
 #| msgid "StandardDev"
 msgctxt "@action"
 msgid "Magnification"
 msgstr "標準差"
 
-#: src/frontend/ActionsManager.cpp:624
+#: src/frontend/ActionsManager.cpp:621
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgctxt "@action"
 msgid "Add New"
 msgstr "新增"
 
-#: src/frontend/ActionsManager.cpp:636
+#: src/frontend/ActionsManager.cpp:633
 #: src/frontend/worksheet/WorksheetView.cpp:354
 #, kde-format
 msgid "Crosshair"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:641
+#: src/frontend/ActionsManager.cpp:638
 #: src/frontend/worksheet/WorksheetView.cpp:359
 #, fuzzy, kde-format
 msgid "Select Region and Zoom In"
 msgstr "全部選取"
 
-#: src/frontend/ActionsManager.cpp:646
+#: src/frontend/ActionsManager.cpp:643
 #: src/frontend/worksheet/WorksheetView.cpp:364
 #, fuzzy, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "全部選取"
 
-#: src/frontend/ActionsManager.cpp:651
+#: src/frontend/ActionsManager.cpp:648
 #: src/frontend/worksheet/WorksheetView.cpp:369
 #, fuzzy, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "全部選取"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:656 src/frontend/MainWin.cpp:1658
+#: src/frontend/ActionsManager.cpp:653 src/frontend/MainWin.cpp:1658
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1556
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Cursor"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:664
+#: src/frontend/ActionsManager.cpp:661
 #: src/frontend/worksheet/WorksheetView.cpp:382
 #, fuzzy, kde-format
 msgid "Auto Scale"
 msgstr "自動比例"
 
-#: src/frontend/ActionsManager.cpp:668
+#: src/frontend/ActionsManager.cpp:665
 #: src/frontend/worksheet/WorksheetView.cpp:386
 #, fuzzy, kde-format
 msgid "Auto Scale X"
 msgstr "自動比例"
 
-#: src/frontend/ActionsManager.cpp:672
+#: src/frontend/ActionsManager.cpp:669
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, fuzzy, kde-format
 msgid "Auto Scale Y"
 msgstr "自動比例"
 
-#: src/frontend/ActionsManager.cpp:677 src/frontend/ActionsManager.cpp:780
+#: src/frontend/ActionsManager.cpp:674 src/frontend/ActionsManager.cpp:777
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:61
@@ -12838,7 +12838,7 @@ msgstr "自動比例"
 msgid "Zoom In"
 msgstr "放大"
 
-#: src/frontend/ActionsManager.cpp:681 src/frontend/ActionsManager.cpp:783
+#: src/frontend/ActionsManager.cpp:678 src/frontend/ActionsManager.cpp:780
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:65
@@ -12849,138 +12849,138 @@ msgstr "放大"
 msgid "Zoom Out"
 msgstr "縮小"
 
-#: src/frontend/ActionsManager.cpp:685
+#: src/frontend/ActionsManager.cpp:682
 #: src/frontend/worksheet/WorksheetView.cpp:402
 #, fuzzy, kde-format
 #| msgid "Zoom in"
 msgid "Zoom In X"
 msgstr "放大"
 
-#: src/frontend/ActionsManager.cpp:689
+#: src/frontend/ActionsManager.cpp:686
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, fuzzy, kde-format
 #| msgid "Zoom out"
 msgid "Zoom Out X"
 msgstr "縮小"
 
-#: src/frontend/ActionsManager.cpp:693
+#: src/frontend/ActionsManager.cpp:690
 #: src/frontend/worksheet/WorksheetView.cpp:410
 #, fuzzy, kde-format
 #| msgid "Zoom in"
 msgid "Zoom In Y"
 msgstr "放大"
 
-#: src/frontend/ActionsManager.cpp:697
+#: src/frontend/ActionsManager.cpp:694
 #: src/frontend/worksheet/WorksheetView.cpp:414
 #, fuzzy, kde-format
 #| msgid "Zoom out"
 msgid "Zoom Out Y"
 msgstr "縮小"
 
-#: src/frontend/ActionsManager.cpp:702
+#: src/frontend/ActionsManager.cpp:699
 #: src/frontend/worksheet/WorksheetView.cpp:418
 #, fuzzy, kde-format
 msgid "Shift Left X"
 msgstr "右"
 
-#: src/frontend/ActionsManager.cpp:706
+#: src/frontend/ActionsManager.cpp:703
 #: src/frontend/worksheet/WorksheetView.cpp:420
 #, fuzzy, kde-format
 msgid "Shift Right X"
 msgstr "右"
 
-#: src/frontend/ActionsManager.cpp:710
+#: src/frontend/ActionsManager.cpp:707
 #: src/frontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Shift Up Y"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:714
+#: src/frontend/ActionsManager.cpp:711
 #: src/frontend/worksheet/WorksheetView.cpp:424
 #, kde-format
 msgid "Shift Down Y"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:726
+#: src/frontend/ActionsManager.cpp:723
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:543
 #, kde-format
 msgid "Insert Row Above"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:729
+#: src/frontend/ActionsManager.cpp:726
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:544
 #, kde-format
 msgid "Insert Row Below"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:732
+#: src/frontend/ActionsManager.cpp:729
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:547
 #, fuzzy, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "移除列"
 
-#: src/frontend/ActionsManager.cpp:736
+#: src/frontend/ActionsManager.cpp:733
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:396
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Insert Column Left"
 msgstr "刪除選取的物件"
 
-#: src/frontend/ActionsManager.cpp:739
+#: src/frontend/ActionsManager.cpp:736
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:397
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Insert Column Right"
 msgstr "刪除選取的物件"
 
-#: src/frontend/ActionsManager.cpp:742
+#: src/frontend/ActionsManager.cpp:739
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:400
 #, fuzzy, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "移除列"
 
-#: src/frontend/ActionsManager.cpp:746
+#: src/frontend/ActionsManager.cpp:743
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:530
 #, fuzzy, kde-format
 #| msgid "Export"
 msgid "&Sort..."
 msgstr "匯出"
 
-#: src/frontend/ActionsManager.cpp:747
+#: src/frontend/ActionsManager.cpp:744
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:531
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Sort multiple columns together"
 msgstr "刪除選取的物件"
 
-#: src/frontend/ActionsManager.cpp:750
+#: src/frontend/ActionsManager.cpp:747
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:532
 #, fuzzy, kde-format
 #| msgid "&Ascending"
 msgid "Sort &Ascending"
 msgstr "遞增(&A)"
 
-#: src/frontend/ActionsManager.cpp:751
+#: src/frontend/ActionsManager.cpp:748
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:533
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:754
+#: src/frontend/ActionsManager.cpp:751
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #, fuzzy, kde-format
 #| msgid "&Descending"
 msgid "Sort &Descending"
 msgstr "遞減(&D)"
 
-#: src/frontend/ActionsManager.cpp:755
+#: src/frontend/ActionsManager.cpp:752
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:535
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/ActionsManager.cpp:766 src/frontend/ActionsManager.cpp:1600
+#: src/frontend/ActionsManager.cpp:763 src/frontend/ActionsManager.cpp:1580
 #: src/frontend/dockwidgets/LiveDataDock.cpp:239
 #: src/frontend/ui/dockwidgets/livedatadock.ui:165
 #, kde-format
@@ -12989,126 +12989,126 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
-#: src/frontend/ActionsManager.cpp:769
+#: src/frontend/ActionsManager.cpp:766
 #: src/frontend/ui/dockwidgets/livedatadock.ui:172
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, fuzzy, kde-format
 msgid "Update"
 msgstr "資料"
 
-#: src/frontend/ActionsManager.cpp:786
+#: src/frontend/ActionsManager.cpp:783
 #: src/frontend/notebook/NotebookView.cpp:69
 #, kde-format
 msgid "Find"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:789
+#: src/frontend/ActionsManager.cpp:786
 #: src/frontend/notebook/NotebookView.cpp:77
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, fuzzy, kde-format
 msgid "Restart"
 msgstr "開始"
 
-#: src/frontend/ActionsManager.cpp:792
+#: src/frontend/ActionsManager.cpp:789
 #: src/frontend/notebook/NotebookView.cpp:80
 #: src/frontend/notebook/NotebookView.cpp:398
 #, fuzzy, kde-format
 msgid "Evaluate Notebook"
 msgstr "值"
 
-#: src/frontend/ActionsManager.cpp:806
+#: src/frontend/ActionsManager.cpp:803
 #: src/frontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:811
+#: src/frontend/ActionsManager.cpp:808
 #: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:816
+#: src/frontend/ActionsManager.cpp:813
 #: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Select Curve Segments"
 msgstr "刪除選取的物件"
 
-#: src/frontend/ActionsManager.cpp:832
+#: src/frontend/ActionsManager.cpp:829
 #: src/frontend/datapicker/DatapickerImageView.cpp:153
 #, kde-format
 msgid "New Curve"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:838
+#: src/frontend/ActionsManager.cpp:835
 #: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "Shift Left"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:842
+#: src/frontend/ActionsManager.cpp:839
 #: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, fuzzy, kde-format
 msgid "Shift Right"
 msgstr "右"
 
-#: src/frontend/ActionsManager.cpp:846
+#: src/frontend/ActionsManager.cpp:843
 #: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:850
+#: src/frontend/ActionsManager.cpp:847
 #: src/frontend/datapicker/DatapickerImageView.cpp:168
 #, kde-format
 msgid "Shift Down"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:942
+#: src/frontend/ActionsManager.cpp:930
 #, kde-format
 msgid "Window Visibility"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:959
+#: src/frontend/ActionsManager.cpp:947
 #, fuzzy, kde-format
 msgid "Color Scheme"
 msgstr "色彩映射"
 
-#: src/frontend/ActionsManager.cpp:1400
+#: src/frontend/ActionsManager.cpp:1380
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1434
+#: src/frontend/ActionsManager.cpp:1414
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1438
+#: src/frontend/ActionsManager.cpp:1418
 #, kde-format
 msgid "Project shared successfully"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1441
+#: src/frontend/ActionsManager.cpp:1421
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1596
+#: src/frontend/ActionsManager.cpp:1576
 #: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, fuzzy, kde-format
 msgid "Continue"
 msgstr "密度"
 
-#: src/frontend/ActionsManager.cpp:1597
+#: src/frontend/ActionsManager.cpp:1577
 #: src/frontend/dockwidgets/LiveDataDock.cpp:236
 #, kde-format
 msgid "Continue Reading"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:1601
+#: src/frontend/ActionsManager.cpp:1581
 #: src/frontend/dockwidgets/LiveDataDock.cpp:240
 #, kde-format
 msgid "Pause Reading"
@@ -18289,26 +18289,20 @@ msgstr "即時資料來源..."
 msgid "Notebook Toolbar"
 msgstr "備忘"
 
-#. i18n: ectx: ToolBar (script_toolbar)
-#: src/frontend/labplotui.rc:95
-#, fuzzy, kde-format
-msgid "Script Toolbar"
-msgstr "專案屬性"
-
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/frontend/labplotui.rc:100
+#: src/frontend/labplotui.rc:95
 #, fuzzy, kde-format
 msgid "Plot Area Toolbar"
 msgstr "從"
 
 #. i18n: ectx: Menu (file)
-#: src/frontend/labplotui.rc:128
+#: src/frontend/labplotui.rc:123
 #, fuzzy, kde-format
 msgid "&File"
 msgstr "檔案(&F)"
 
 #. i18n: ectx: Menu (new)
-#: src/frontend/labplotui.rc:130
+#: src/frontend/labplotui.rc:125
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "&Add New"
@@ -18316,68 +18310,68 @@ msgstr "新增"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:141 src/frontend/labplotui.rc:176
+#: src/frontend/labplotui.rc:136 src/frontend/labplotui.rc:171
 #, fuzzy, kde-format
 msgid "&Notebook"
 msgstr "備忘"
 
 #. i18n: ectx: Menu (new_script)
 #. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:147 src/frontend/labplotui.rc:179
+#: src/frontend/labplotui.rc:142 src/frontend/labplotui.rc:174
 #, fuzzy, kde-format
 msgid "&Script"
 msgstr "文稿"
 
 #. i18n: ectx: Menu (import)
-#: src/frontend/labplotui.rc:152
+#: src/frontend/labplotui.rc:147
 #, fuzzy, kde-format
 msgid "Import"
 msgstr "匯入"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:168
+#: src/frontend/labplotui.rc:163
 #, kde-format
 msgid "&Edit"
 msgstr "編輯(&E)"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:173
+#: src/frontend/labplotui.rc:168
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "試算表(&S)"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:174
+#: src/frontend/labplotui.rc:169
 #, fuzzy, kde-format
 msgid "&Matrix"
 msgstr "矩陣"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:175
+#: src/frontend/labplotui.rc:170
 #, kde-format
 msgid "&Worksheet"
 msgstr "工作表(&W)"
 
 #. i18n: ectx: Menu (data_extractor)
-#: src/frontend/labplotui.rc:177
+#: src/frontend/labplotui.rc:172
 #, fuzzy, kde-format
 msgid "&Data Extractor"
 msgstr "資料格式"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:178
+#: src/frontend/labplotui.rc:173
 #, fuzzy, kde-format
 msgid "&Drawing"
 msgstr "繪圖"
 
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:180
+#: src/frontend/labplotui.rc:175
 #, kde-format
 msgid "&Tools"
 msgstr ""
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:184
+#: src/frontend/labplotui.rc:179
 #, kde-format
 msgid "&Windows"
 msgstr "視窗(&W)"
@@ -19196,6 +19190,11 @@ msgstr[0] "刪除選取的物件"
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
 msgstr[0] "刪除選取的物件"
+
+#: src/frontend/script/FloatingToolBar.cpp:31
+#, kde-format
+msgid "Drag to move the toolbar"
+msgstr ""
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format
@@ -28627,6 +28626,10 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Unable to open file:"
 msgstr "開啟失敗"
+
+#, fuzzy
+#~ msgid "Script Toolbar"
+#~ msgstr "專案屬性"
 
 #, fuzzy
 #~| msgid "Number of points"
