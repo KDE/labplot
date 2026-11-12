@@ -188,6 +188,10 @@ bool PythonScriptRuntime::initPython() {
 		return false;
 	}
 
+	// disable colorized output (python >= 3.13) so we don't show any ANSI color codes in the plain text widget
+	qputenv("PYTHON_COLORS", "0");
+	qputenv("NO_COLOR", "1");
+
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
 	// for a change in this config to take effect the application may need to restart, though can reinitialize python without needing restart
 	// (finalize then initialize)
