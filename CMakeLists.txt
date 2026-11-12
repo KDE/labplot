@@ -828,6 +828,8 @@ if(ENABLE_PYTHON_SCRIPTING)
 endif()
 
 ### Qt Advanced Docking System (required) #####################
+option(ENABLE_LOCAL_QADS "Build with the bundled Qt Advanced Docking System" ON)
+if(ENABLE_LOCAL_QADS)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
     if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
@@ -835,6 +837,12 @@ endif()
     else ()
         message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
     endif()
+else()
+    find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG REQUIRED NAMES qt${QT_VERSION_MAJOR}advanceddocking qtadvanceddocking-qt${QT_VERSION_MAJOR})
+    if(NOT TARGET ads::qt${QT_VERSION_MAJOR}advanceddocking)
+        add_library(ads::qt${QT_VERSION_MAJOR}advanceddocking ALIAS ads::qtadvanceddocking-qt${QT_VERSION_MAJOR})
+    endif()
+endif()
 
 ### Touch bar on macOS (optional) #############################
 if(APPLE AND ENABLE_TOUCHBAR)

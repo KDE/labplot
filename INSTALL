@@ -2,7 +2,7 @@ To compile LabPlot from source following packages are required (for Fedora see s
 	* CMake version 3.17.0 or higher
 	* Qt version 5.12 or higher (including the devel-package, libqt5-devel or similar)
 	* KDE Frameworks 5.32.0 or higher (including the devel-package)
-	* Qt Advanced Docking System (QADS) or Qt5::GuiPrivate to build QADS locally
+	* Qt Advanced Docking System (QADS) (the bundled copy is used by default; install the development package and configure with -DENABLE_LOCAL_QADS=OFF to use the system version; Qt6 GuiPrivate development files are required)
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
 optional packages
