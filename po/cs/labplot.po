@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-06 11:27+0100\n"
+"PO-Revision-Date: 2026-11-11 12:25+0100\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -19086,7 +19086,7 @@ msgstr[2] "Průzkumník projektů: odstranit %1 vybraných objektů"
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Přetažením přesuňte panel nástrojů"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format

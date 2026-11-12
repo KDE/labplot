@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-06 17:15+0200\n"
+"PO-Revision-Date: 2026-11-11 17:09+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -19186,7 +19186,7 @@ msgstr[3] "Навігатор проєктами: вилучити познач�
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Перетягніть, щоб пересунути панель інструментів"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format

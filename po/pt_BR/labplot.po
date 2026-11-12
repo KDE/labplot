@@ -13,15 +13,15 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-06 08:39-0300\n"
+"PO-Revision-Date: 2026-11-11 09:39-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
-"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -19157,7 +19157,7 @@ msgstr[1] "Explorador de projeto: excluir %1 objetos selecionados"
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Arraste para mover a barra de ferramentas"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format

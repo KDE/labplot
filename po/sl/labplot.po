@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-06 07:03+0100\n"
+"PO-Revision-Date: 2026-11-11 07:38+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -19110,7 +19110,7 @@ msgstr[3] "Raziskovalec projekta: izbriši %1 izbranih predmetov"
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Povlecite za premikanje orodne vrstice"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format

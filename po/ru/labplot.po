@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-06 07:49+0200\n"
+"PO-Revision-Date: 2026-11-11 23:00+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -15917,7 +15917,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:spinbox Suffix for the X position in %"
 msgid "%v%"
-msgstr "%v%"
+msgstr "%v %"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:407
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:630
@@ -15928,7 +15928,7 @@ msgstr "%v%"
 #, kde-format
 msgctxt "@label:spinbox Suffix for the Y position in %"
 msgid "%v%"
-msgstr "%v%"
+msgstr "%v %"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:812
 #, kde-format
@@ -17223,12 +17223,12 @@ msgstr "Источник данных недоступен."
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1521
 #, kde-format
 msgid "%1 % lower confidence level"
-msgstr "%1 % нижний уровень достоверности"
+msgstr "%1 % нижний уровень достоверности"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1522
 #, kde-format
 msgid "%1 % upper confidence level"
-msgstr "%1 % верхний уровень достоверности"
+msgstr "%1 % верхний уровень достоверности"
 
 # BUGME: please add context --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
@@ -19408,7 +19408,7 @@ msgstr[3] "Обозреватель проекта: удалить %1 выбра
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Перетащите, чтобы переместить панель инструментов"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-06 14:52+0100\n"
+"PO-Revision-Date: 2026-11-11 20:29+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7115,12 +7115,12 @@ msgstr "Butterworth"
 #: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Chebyshev Type I"
-msgstr "Chebyshev de tipus I"
+msgstr "Txebixov de tipus I"
 
 #: src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Chebyshev Type II"
-msgstr "Chebyshev de tipus II"
+msgstr "Txebixov de tipus II"
 
 #: src/backend/nsl/nsl_filter.c:23
 #, kde-format
@@ -19283,7 +19283,7 @@ msgstr[1] "Explorador del projecte: elimina %1 objectes seleccionats"
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Arrossegueu per a moure la barra d'eines"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format

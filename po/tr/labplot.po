@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-07 19:20+0300\n"
+"PO-Revision-Date: 2026-11-11 20:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -940,7 +940,7 @@ msgstr "%1: Hata çubuğu dolgusunu ayarla"
 #: src/backend/datapicker/DatapickerCurve.cpp:385
 #, kde-format
 msgid "%1: set error bar outline style"
-msgstr "%1: Hata çubuğu taslak biçemini ayarla"
+msgstr "%1: Hata çubuğu taslak stilini ayarla"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:408
@@ -4771,7 +4771,7 @@ msgstr "Tam eliptik integral Pi’nin Legendre formu"
 #: src/backend/gsl/functions.cpp:472
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
-msgstr "Tamamlanmamış eliptik integral F’nin legendre biçemi"
+msgstr "Tamamlanmamış eliptik integral F’nin legendre stili"
 
 #: src/backend/gsl/functions.cpp:473
 #, kde-format
@@ -9020,17 +9020,17 @@ msgstr "%1: Arka plan türü değişti"
 #: src/backend/worksheet/Background.cpp:239
 #, kde-format
 msgid "%1: background color style changed"
-msgstr "%1: Arka plan renk biçemi değişti"
+msgstr "%1: Arka plan renk stili değişti"
 
 #: src/backend/worksheet/Background.cpp:246
 #, kde-format
 msgid "%1: background image style changed"
-msgstr "%1: Arka plan görüntü biçemi değişti"
+msgstr "%1: Arka plan görüntü stili değişti"
 
 #: src/backend/worksheet/Background.cpp:253
 #, kde-format
 msgid "%1: background brush style changed"
-msgstr "%1: Arka plan fırça biçemi değişti"
+msgstr "%1: Arka plan fırça stili değişti"
 
 #: src/backend/worksheet/Background.cpp:260
 #, kde-format
@@ -9126,7 +9126,7 @@ msgstr "%1: Damla satır türü değişti"
 #: src/backend/worksheet/Line.cpp:129
 #, kde-format
 msgid "%1: set line style"
-msgstr "%1: Çizgi biçemini ayarla"
+msgstr "%1: Çizgi stilini ayarla"
 
 #: src/backend/worksheet/Line.cpp:136
 #, kde-format
@@ -9247,7 +9247,7 @@ msgstr "Çizgi"
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Style"
-msgstr "Biçem"
+msgstr "Stil"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:324
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
@@ -10671,7 +10671,7 @@ msgstr "%1: Etiket arka plan rengini ayarla"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:791
 #, kde-format
 msgid "%1: set labels border style"
-msgstr "%1: Etiket metni kenarlığı biçemini ayarla"
+msgstr "%1: Etiket metni kenarlığı stilini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:802
 #, kde-format
@@ -10732,7 +10732,7 @@ msgstr "%1: Merkez metriğini ayarla"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
 msgid "%1: set symbol style"
-msgstr "%1: Sembol biçemini ayarla"
+msgstr "%1: Sembol stilini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:157
 #, kde-format
@@ -10757,7 +10757,7 @@ msgstr "%1: Sembol dolgusunu ayarla"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:185
 #, kde-format
 msgid "%1: set symbol outline style"
-msgstr "%1: Sembol sınırlarının biçemini ayarla"
+msgstr "%1: Sembol sınırlarının stilini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:192
 #, kde-format
@@ -19030,7 +19030,7 @@ msgstr[1] "Proje Gezgini: Seçili %1 nesneyi sil"
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Araç çubuğunu hareket ettirmek için sürükleyin"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format
@@ -21594,7 +21594,7 @@ msgstr "Hata Çubukları"
 #: src/frontend/ui/symbolwidget.ui:240 src/frontend/worksheet/GridDialog.cpp:41
 #, kde-format
 msgid "Style:"
-msgstr "Biçem:"
+msgstr "Stil:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFillingColor)
 #. i18n: ectx: property (text), widget (QLabel, lBorderColor)
@@ -27320,7 +27320,7 @@ msgstr "Merkeze Döşenmiş"
 #: src/frontend/widgets/BackgroundWidget.cpp:286
 #, kde-format
 msgid "%1 elements: background color style changed"
-msgstr "%1 öge: Arka plan renk biçemi değişti"
+msgstr "%1 öge: Arka plan renk stili değişti"
 
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:94
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:99
