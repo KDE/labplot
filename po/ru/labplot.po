@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:10+0000\n"
-"PO-Revision-Date: 2026-10-22 05:43+0200\n"
+"PO-Revision-Date: 2026-11-11 22:58+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -14174,12 +14174,12 @@ msgstr "Источник данных недоступен."
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
 #, kde-format
 msgid "%1 % lower confidence level"
-msgstr "%1 % нижний уровень достоверности"
+msgstr "%1 % нижний уровень достоверности"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
 #, kde-format
 msgid "%1 % upper confidence level"
-msgstr "%1 % верхний уровень достоверности"
+msgstr "%1 % верхний уровень достоверности"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:289
