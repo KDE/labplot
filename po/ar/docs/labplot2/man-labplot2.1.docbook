@@ -1,0 +1,187 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Arabic "INCLUDE">
+]>
+
+<!--  Please keep this man page content in sync with Command Line Options sections of Okular handbook -->
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>دليل مستخدم معمل الرسم</title>
+<author
+><firstname
+>Helen</firstname
+><surname
+>Faulkner</surname
+> <contrib
+>LabPlot man page.</contrib
+> <email
+>helen_ml_faulkner@yahoo.co.uk</email
+></author>
+<date
+>2018-09-28</date>
+<releaseinfo
+>LabPlot 2.6</releaseinfo>
+<productname
+>معمل الرسم</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>labplot2</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+>معمل الرسم2</refname>
+<refpurpose
+>تطبيق من كيدي للرسم البياني التفاعلي وتحليل البيانات العلمية.</refpurpose>
+</refnamediv>
+<!-- body begins here -->
+<refsynopsisdiv id='synopsis'>
+<cmdsynopsis
+><command
+>labplot2</command
+> <arg choice="opt"
+><replaceable
+>خيارات معمل الرسم</replaceable
+></arg
+> <arg choice="opt"
+><replaceable
+>ملف</replaceable
+></arg
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsect1 id="description"
+><title
+>الوصف</title>
+<para
+>معمل الرسم هي أداة لرسم البيانات وتحليلها. </para>
+<para
+>تشمل ميزاتها رسم البيانات والدوال ثنائية وثلاثية الأبعاد، تحرير سهل للرسوم البيانية، تحليل البيانات والدوال، دعم أوراق عمل مختلفة باستخدام واجهة المستندات المتعددة وملفات مشاريع معمل الرسم. </para>
+<para
+>لاحظ أن معمل الرسم يُستدعى باستخدام <command
+>labplot2</command
+>. </para>
+
+</refsect1>
+
+<refsect1 id="options"
+><title
+>خيارات معمل الرسم</title>
+<para
+>للحصول على ملخص كامل للخيارات العامة، شغّل <userinput
+><command
+>labplot2</command
+> <parameter
+>--help</parameter
+></userinput
+>. </para>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--no-splash</option
+></term>
+<listitem>
+<para
+>لا تعرض شاشة البداية.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><option
+>--presenter</option
+></term>
+<listitem>
+<para
+>اِبدأ بوضعيّة المُقدِّم.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1 id="arguments"
+><title
+>المعاملات</title>
+<variablelist>
+  <varlistentry>
+    <term
+><option
+>ملف</option
+></term>
+  <listitem>
+    <para
+>موقع المشروع المراد فتحه، وينتهي عادةً بـ <literal role="extension"
+>.lml</literal
+>.</para>
+    <para
+>يمكن أيضًا ضغط ملف المشروع، بحيث ينتهي اسم الملف بـ <literal role="extension"
+>.lml.gz</literal
+> أو <literal role="extension"
+>.lml.bz2</literal
+> أو <literal role="extension"
+>.lml.xz</literal
+>.</para>
+  </listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1>
+<title
+>انظر أيضًا</title>
+<simplelist>
+<member
+>وثائق المستخدم الكاملة متوفرة عبر مركز مساعدة كيدي. يمكنك أيضًا إدخال الرابط <ulink url="help:/labplot2"
+>help:/labplot2</ulink
+> (إما بإدخال هذا الرابط في &dolphin;، أو تشغيل <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/labplot2</parameter
+></userinput
+>).</member>
+<member
+>kf5options(7)</member>
+<member
+>qt5options(7)</member>
+<member
+>هناك أيضًا معلومات إضافية متوفرة على <ulink url="https://labplot.kde.org/"
+>https://labplot.kde.org/</ulink
+></member>
+</simplelist>
+</refsect1>
+
+<refsect1 id="authors"
+><title
+>المؤلفون</title>
+<para
+>كُتب معمل الرسم2 بواسطة </para>
+<simplelist>
+    <member
+>Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>
+    <member
+>Alexander Semke &lt;alexander.semke@web.de&gt;,</member>
+    <member
+>فابيان كريستوف-سزابولكس &lt;f-kristof@hotmail.com&gt;</member>
+    <member
+>والعديد من المؤلفين الآخرين.</member>
+</simplelist>
+<para
+>أُعدت صفحة الدليل هذه بواسطة هيلين فولكنر &lt;helen_ml_faulkner@yahoo.co.uk&gt; لنظام دبيان جنو/لينكس (ولكن يمكن استخدامها من قبل الآخرين). </para>
+<para
+>الترخيص: الإصدار العام الثاني من جنو &lt;<ulink url="http://www.gnu.org/licenses/gpl-2.0.html"
+>http://www.gnu.org/licenses/gpl-2.0.html</ulink
+>&gt; </para>
+</refsect1>
+</refentry>
+
