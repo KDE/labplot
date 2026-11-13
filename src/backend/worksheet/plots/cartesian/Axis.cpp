@@ -3150,15 +3150,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 		// scale + offset label
 		if (showScaleOffset && tickLabelPoints.size() > 0) {
-			QString text;
-			const auto numberLocale = QLocale();
-			if (scalingFactor != 1)
-				text += UTF8_QSTRING("×") + numberToString(1. / scalingFactor, numberLocale);
-			if (zeroOffset != 0) {
-				if (zeroOffset < 0)
-					text += QLatin1String("+");
-				text += numberToString(-zeroOffset, numberLocale);
-			}
+			const QString text = scaleOffsetText();
 
 			// used to determinde direction (up/down, left/right)
 			const qreal middleX = plot()->range(Dimension::X, cs->index(Dimension::X)).center();
@@ -3251,6 +3243,23 @@ void AxisPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	setCursor(Qt::ArrowCursor);
 	m_panningStarted = false;
 	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+/*!
+ * returns the text of the label showing the scaling factor and the zero offset
+ * which were applied to the values of the tick labels.
+ */
+QString AxisPrivate::scaleOffsetText() const {
+	QString text;
+	const auto numberLocale = QLocale();
+	if (scalingFactor != 1)
+		text += UTF8_QSTRING("×") + numberToString(1. / scalingFactor, numberLocale, 'g', 6);
+	if (zeroOffset != 0) {
+		if (zeroOffset < 0)
+			text += QLatin1String("+");
+		text += numberToString(-zeroOffset, numberLocale, 'g', 6);
+	}
+	return text;
 }
 
 QString AxisPrivate::createScientificRepresentation(const QString& mantissa, const QString& exponent) {

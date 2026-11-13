@@ -69,6 +69,8 @@ private Q_SLOTS:
 	void autoScaleLog102Vertical();
 
 	void autoDataRangeUpdate();
+
+	void scaleOffsetText();
 };
 
 #endif // AXISTEST_H

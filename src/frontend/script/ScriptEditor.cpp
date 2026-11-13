@@ -9,6 +9,7 @@
 */
 
 #include "ScriptEditor.h"
+#include "FloatingToolBar.h"
 #include "ScriptCompletionModel.h"
 #include "backend/script/Script.h"
 #include <backend/lib/macros.h>
@@ -31,6 +32,14 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	m_kTextEditorView->setContextMenu(m_kTextEditorView->defaultContextMenu(nullptr));
 	ui.editorParent->layout()->addWidget(m_kTextEditorView);
 
+	// KTextEditor::View provides its own save actions (Ctrl+S, Ctrl+Shift+S) which save the
+	// script document to a file and, having a widget-local shortcut context, shadow LabPlot's
+	// project save actions. Remove their shortcuts so the main window handles them.
+	for (const auto* name : {"file_save", "file_save_as", "file_save_as_with_encoding", "file_save_all"}) {
+		if (auto* action = m_kTextEditorView->action(QLatin1String(name)))
+			action->setShortcuts(QList<QKeySequence>());
+	}
+
 	KConfig config;
 	auto group = config.group(QStringLiteral("ScriptEditor"));
 	// we dont manage default editor font or themes ourselves, so no need to check our config
@@ -39,6 +48,7 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 	const bool outputVisible = group.readEntry(QStringLiteral("OutputVisible"), true);
 
 	initActions();
+	initToolBar();
 	setOutputVisible(outputVisible);
 	m_toggleOutputAction->setChecked(outputVisible);
 
@@ -156,6 +166,17 @@ void ScriptEditor::initActions() {
 		}
 	});
 	addAction(m_searchAction);
+}
+
+/*!
+ * toolbar on top of the editor to run the script
+ */
+void ScriptEditor::initToolBar() {
+	// floating on top of the text editor, can be moved horizontally
+	auto* toolBar = new FloatingToolBar(ui.editorParent, QStringLiteral("ToolBarPosition"));
+	toolBar->addAction(m_runScriptAction);
+
+	m_runScriptAction->setEnabled(m_script->isInitialized());
 }
 
 void ScriptEditor::writeOutput(bool isErr, const QString& msg) {

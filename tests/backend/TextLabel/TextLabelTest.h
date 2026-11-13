@@ -22,6 +22,7 @@ private Q_SLOTS:
 	void multiLabelEditColorChange();
 	void multiLabelEditTextChange();
 	void multiLabelEditColorChangeSelection();
+	void multilinePlainText();
 };
 
 #endif

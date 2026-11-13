@@ -40,6 +40,7 @@ public:
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect() override;
 	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
+	QString scaleOffsetText() const;
 
 	bool isDefault{false};
 

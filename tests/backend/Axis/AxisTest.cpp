@@ -2602,4 +2602,44 @@ void AxisTest::autoDataRangeUpdate() {
 	VALUES_EQUAL(yAxis->range().end(), 10.0);
 }
 
+/*!
+ * scaling factors > 1 and fractional zero offsets must be shown correctly
+ * in the scale and offset label and not be truncated to integers (#1159)
+ */
+void AxisTest::scaleOffsetText() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	ws->addChild(p);
+
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	auto* axis = axes.at(1);
+	const auto* d = axis->d_func();
+
+	// no scaling and no offset
+	QCOMPARE(d->scaleOffsetText(), QString());
+
+	axis->setScalingFactor(1e6);
+	QCOMPARE(d->scaleOffsetText(), QStringLiteral("×1e-06"));
+
+	axis->setScalingFactor(0.001);
+	QCOMPARE(d->scaleOffsetText(), QStringLiteral("×1000"));
+
+	axis->setScalingFactor(4.);
+	QCOMPARE(d->scaleOffsetText(), QStringLiteral("×0.25"));
+
+	axis->setScalingFactor(1.);
+	axis->setZeroOffset(-0.5);
+	QCOMPARE(d->scaleOffsetText(), QStringLiteral("+0.5"));
+
+	axis->setScalingFactor(1e6);
+	axis->setZeroOffset(2.5);
+	QCOMPARE(d->scaleOffsetText(), QStringLiteral("×1e-06") + QString::fromUtf8("−") + QStringLiteral("2.5"));
+}
+
 QTEST_MAIN(AxisTest)
