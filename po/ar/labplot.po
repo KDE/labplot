@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-10-31 20:08+0400\n"
+"PO-Revision-Date: 2026-11-12 09:02+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -7661,10 +7661,9 @@ msgid "no script element found"
 msgstr "لا يوجد عنصر سكريبت"
 
 #: src/backend/script/Script.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "failed to initialize the script runtime '%1'"
-msgstr "فشل التّمهيد %1."
+msgstr "تعذر تهيئة وقت تشغيل السكربت '%1'"
 
 #: src/backend/script/Script.cpp:257
 #, kde-format
@@ -7688,15 +7687,14 @@ msgid "A script is already running."
 msgstr "هناك سكريبت قيد التشغيل بالفعل."
 
 #: src/backend/script/Script.cpp:391
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "السمة 'name' مفقودة أو فارغة."
+msgstr "السمة 'runtime' مفقودة أو فارغة"
 
 #: src/backend/script/Script.cpp:396
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "محرك تشغيل السكربت '%1' غير متاح"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
@@ -19012,7 +19010,7 @@ msgstr[5] "مستكشِف المشروع: احذف %1 من الكائنات ال
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "اسحب لنقل شريط الأدوات"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format

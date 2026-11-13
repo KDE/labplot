@@ -1,0 +1,7035 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY latex "L<superscript
+>A</superscript
+>T<subscript
+>E</subscript
+>X">
+  <!ENTITY tex "T<subscript
+>E</subscript
+>X">
+  <!ENTITY LabPlot "<application
+>LabPlot</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Arabic "INCLUDE">
+]>
+
+<book lang="&language;">
+<bookinfo>
+<title
+>دليل معمل الرسم</title>
+
+<authorgroup>
+	<author
+><firstname
+>Stefan</firstname
+> <surname
+>Gerlach</surname
+> <affiliation
+> <address
+><email
+>stefan.gerlach@uni-konstanz.de</email
+></address>
+		</affiliation>
+	</author>
+	<author
+><firstname
+>Alexander</firstname
+> <surname
+>Semke</surname
+> <affiliation
+> <address
+><email
+>Alexander.Semke@web.de</email
+></address>
+		</affiliation>
+	</author>
+	<author
+><firstname
+>Yuri</firstname
+> <surname
+>Chornoivan</surname
+> <affiliation
+> <address
+><email
+>yurchor@ukr.net</email
+></address>
+		</affiliation>
+	</author>
+	<author
+><firstname
+>Garvit</firstname
+> <surname
+>Khatri</surname
+> <affiliation
+> <address
+><email
+>garvitdelhi@gmail.com</email
+></address>
+		</affiliation>
+	</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+
+<copyright>
+  <year
+>2007-2016</year>
+	<holder
+>Stefan Gerlach</holder>
+</copyright>
+<copyright>
+  <year
+>2008-2015</year>
+	<holder
+>Alexander Semke</holder>
+</copyright>
+<copyright>
+  <year
+>2014</year>
+	<holder
+>Yuri Chornoivan</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2016-12-24</date>
+<releaseinfo
+>3.3.1</releaseinfo>
+
+<abstract>
+	<para
+>معمل الرسم هو برنامج لرسم الدوال ثنائية الأبعاد وتحليل البيانات. </para>
+</abstract>
+
+<keywordset>
+	<keyword
+>كيدي</keyword>
+	<keyword
+>معمل الرسم</keyword>
+	<keyword
+>رسم</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>مقدمة</title>
+<para
+>معمل الرسم هو تطبيق كيدي للرسم التفاعلي وتحليل البيانات العلمية. يوفر معمل الرسم طريقة سهلة لإنشاء وإدارة وتحرير الرسوم البيانية. </para>
+
+<para
+>الميزات: <itemizedlist>
+<listitem
+><para
+>إدارة البيانات القائمة على المشروع</para
+></listitem>
+<listitem
+><para
+>مستكشف المشروع لإدارة وتنظيم الكائنات المنشأة في مجلدات ومجلدات فرعية مختلفة</para
+></listitem>
+<listitem
+><para
+>جدول بيانات بوظائف أساسية لإدخال البيانات يدويًا أو لتوليد أعداد عشوائية منتظمة وغير منتظمة</para
+></listitem>
+<listitem
+><para
+>استيراد بيانات ASCII خارجية إلى المشروع لمزيد من التحرير والتصور</para
+></listitem>
+<listitem
+><para
+>تصدير جدول البيانات إلى ملف ASCII</para
+></listitem>
+<listitem
+><para
+>ورقة العمل ككائن رئيس للرسوم البيانية واللصائق وغيرها، تدعم تخطيطات مختلفة ووظائف تكبير</para
+></listitem>
+<listitem
+><para
+>تصدير ورقة العمل إلى صيغ مختلفة (pdf وeps وpng وsvg)</para
+></listitem>
+<listitem
+><para
+>مجموعة كبيرة من إمكانيات التحرير لخصائص ورقة العمل وكائناتها</para
+></listitem>
+<listitem
+><para
+>رسوم بيانية ديكارتية، منشأة إما من مجموعات بيانات مستوردة أو منشأة يدويًا أو عبر معادلة رياضية</para
+></listitem>
+<listitem
+><para
+>يُدعم تعريف الصيغ الرياضية بتمييز الصياغة والإكمال وقائمة الثوابت والدوال الرياضية والفيزيائية المجمعة موضوعيًا</para
+></listitem>
+<listitem
+><para
+>يُدعم فحص البيانات المرسومة بميزات تكبير وتنقل عديدة</para
+></listitem>
+<listitem
+><para
+>عدة وظائف وطرق تحليل لتقليل البيانات والتفاضل والتكامل والاستيفاء والتمهيد والملاءمة (اللاخطية) ومرشح فورييه وتحويل فورييه</para
+></listitem>
+<listitem
+><para
+>ملاءمة خطية ولاخطية للبيانات، عدة نماذج ملاءمة محددة مسبقًا ويمكن توفير نماذج مخصصة بعدد عشوائي من المعاملات</para
+></listitem>
+<listitem
+><para
+>يدعم عدة خلفيات CAS مثل Maxima وPython وKAlgebra وSage</para
+></listitem>
+<listitem
+><para
+>عرض ورقة عمل جميل لتقييم التعابير</para
+></listitem>
+<listitem
+><para
+>بنية سهلة قائمة على الملحقات لإضافة خلفيات مختلفة</para
+></listitem>
+<listitem
+><para
+>حوارات مساعدة قائمة على الملحقات للمهام الشائعة (مثل تكامل دالة أو إدخال مصفوفة)</para
+></listitem>
+<listitem
+><para
+>منتقي بيانات للاستخراج اليدوي أو (شبه-)الآلي للبيانات من الصور المستوردة المحتوية على رسوم بيانية ومنحنيات.</para
+></listitem>
+</itemizedlist>
+</para>
+
+<para
+>يمكن العثور على معمل الرسم على صفحته الرئيسية على kde.org: <ulink url="https://labplot.kde.org/"
+>https://labplot.kde.org/</ulink
+>. </para>
+
+</chapter>
+
+
+<chapter id="using-LabPlot">
+<title
+>استخدام معمل الرسم</title>
+<sect1 id="interface-overview">
+  <title
+>نظرة عامة على الواجهة</title>
+  <para
+>يتبع معمل الرسم فلسفة MDI (واجهة المستندات المتعددة) - توضع جميع كائنات التطبيق المنشأة كنوافذ فرعية في <link linkend="main-area"
+>المنطقة الرئيسة</link
+> من نافذة التطبيق. يعمل <link linkend="project-explorer"
+>مستكشف المشروع</link
+> كأداة لإنشاء وتنظيم تلك الكائنات في بنية شجرية. يُستخدم <link linkend="properties-explorer"
+>مستكشف الخصائص</link
+> لتعديل خصائص الكائن (الكائنات) المحدد حاليًا. يمكن الوصول إلى العديد من الوظائف عبر القائمة الرئيسة وعبر أشرطة أدوات وقوائم سياق خاصة بالكائن. تُعرض معلومات إضافية وإشعارات التطبيق في شريط الحالة. </para>
+
+  <screenshot>
+    <screeninfo
+>نافذة معمل الرسم المبدئية</screeninfo>
+    <mediaobjectco>
+      <imageobjectco>
+	<areaspec units="other" otherunits="imagemap">
+	  <!--these ids are used only internally by DocBook so we keep them short-->
+	  <area id="im-win1a1" linkends="project-explorer" coords="28,69,234,724"/>
+	  <area id="im-win1a2" linkends="worksheet" coords="456,382,804,688"/>
+	  <area id="im-win1a3" linkends="spreadsheet" coords="249,78,553,390"/>
+	  <area id="im-win1a4" linkends="toolbar" coords="1,46,640,68"/>
+	  <area id="im-win1a5" linkends="commands" coords="1,19,432,45"/>
+<!-- 	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777"/> -->
+	  <area id="im-win1a7" linkends="properties-explorer" coords="834,69,1279,724"/>
+	</areaspec>
+	<imageobject>
+	  <imagedata fileref="labplot.png" format="PNG"/>
+	</imageobject>
+      </imageobjectco>
+    </mediaobjectco>
+  </screenshot>
+<!--  <para>
+    The default &LabPlot; window has the <link linkend="project-explorer"
+>Project Explorer</link
+> pane on the left, the <link linkend="properties-explorer"
+>Properties</link
+> pane on the right, <link linkend="spreadsheet"
+>spreadsheet</link
+>/<link linkend="worksheet"
+>worksheet</link
+> area in the center, the <link linkend="toolbar"
+>main toolbar</link
+> on the top and the status bar on the bottom.
+  </para
+>-->
+</sect1>
+
+<sect1 id="project-explorer">
+<title
+>مستكشِف المشروع</title>
+<para
+>مستكشف المشروع هو الجزء الرئيس من معمل الرسم الهادف إلى التعامل مع كائناته. تُنظم الكائنات في بنية شجرية تمثل علاقات الأصل-الفرع بين الكائنات المختلفة. يمكن للمجلدات والمجلدات الفرعية إدخال تجميع إضافي للكائنات المختلفة. </para>
+<para
+>مستكشف المشروع هو نافذة قابلة للإرساء ويمكن وضعها في مكان عشوائي. يمكن للمستخدم تحديد الأعمدة التي يجب عرضها بتحديد/إلغاء تحديد الأعمدة المطلوبة في القائمة السياقية (انقر بزر الفأرة الأيمن على مكان فارغ في عرض الشجرة أو رأسه). علاوة على ذلك، يمكن تقليل قائمة الكائنات المعروضة بتوفير مرشح في حقل النص <guilabel
+>بحث/مرشح</guilabel
+>. </para>
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="project-explorer.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</sect1>
+
+<sect1 id="main-area">
+<title
+>المنطقة الرئيسة</title>
+<para
+>توضع الكائنات المنشأة التي لها عرض (مثل ورقة العمل وجدول البيانات وغيرها) في المنطقة الرئيسة من التطبيق. اعتمادًا على الإعداد الحالي لواجهة المستخدم، توضع النوافذ إما كنوافذ فرعية مستقلة وقابلة للتحريك بحرية (واجهة "عرض النافذة الفرعية") أو كلوائح في عرض مبوب (واجهة "العرض المبوب"). </para>
+<para>
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="sub_window_tabbed_view_interfaces.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+
+<para
+>عند استخدام النوافذ الفرعية، تُعرض فقط جميع نوافذ الكائنات التابعة للمجلد المحدد حاليًا. بدلًا من ذلك، يمكن توسيع رؤية النوافذ لتشمل المجلد المحدد حاليًا ومجلداته الفرعية أو جميع النوافذ في المشروع. يُتحكم في هذا السلوك عبر المعامل "سياسة رؤية النافذة" الذي يمكن الوصول إليه عبر القائمة السياقية لمستكشف المشروع. </para>
+</sect1>
+
+<sect1 id="properties-explorer">
+<title
+>مستكشف الخصائص</title>
+<para
+>يسمح مستكشف الخصائص للمستخدم بتعديل الكائن المحدد حاليًا في مستكشف المشروع. يمكن تحرير مجموعة كبيرة من خصائص الكائن بطريقة قابلة للتراجع/الإعادة. تحرير كائنات متعددة في نفس الوقت ممكن أيضًا. </para>
+<para
+>مستكشف الخصائص هو نافذة قابلة للإرساء ويمكن وضعها في مكان عشوائي. </para>
+</sect1>
+
+<sect1 id="spreadsheet">
+<title
+>جدول بيانات</title>
+<para
+>جدول البيانات هو الجزء الرئيس من معمل الرسم عند العمل مع البيانات ويتكون من أعمدة. العمود هو مجموعة البيانات الأساسية في معمل الرسم المستخدمة للرسم وتحليل البيانات. يُحدد كل عمود من جدول البيانات باسمه ونوعه - رقمي ونص وأسماء أشهر وأسماء أيام وتاريخ ووقت. أيضًا، لكل نوع يمكن تعيين صيغ تمثيل مختلفة مثل الصيغة العشرية أو العلمية للأعمدة الرقمية وغيرها. </para>
+<para
+>يمكنك إخفاء نقاط البيانات المحددة في جدول البيانات (<menuchoice
+><guimenu
+>تحديد</guimenu
+><guimenuitem
+>إخفاء التحديد</guimenuitem
+></menuchoice
+> من قائمة سياق خلية جدول البيانات). البيانات المخفاة لا تُرسم وتُستبعد أيضًا من وظائف تحليل البيانات مثل المطابقة إلخ… بدلًا من ذلك، يمكنك إخفاء أو إسقاط القيم في عمود ( <menuchoice
+><guimenu
+>إخفاء القيم</guimenu
+></menuchoice
+> أو <menuchoice
+><guimenu
+>إسقاط القيم</guimenu
+></menuchoice
+> من قائمة سياق العمود) بتحديد نطاق. عند تحديد القيم المراد إخفاؤها أو إسقاطها، تتوفر عدة عوامل تشغيل ("يساوي"، "أكبر من"، "أصغر من"، إلخ…). يمكن أن تساعد هذه العمليات في إخفاء أو إزالة بعض القيم الشاذة في مجموعة البيانات قبل، مثل، إجراء مطابقة على مجموعة البيانات هذه. </para>
+<para
+>يمكن الوصول إلى أي وظيفة في جدول البيانات عبر قائمة السياق (نقرة بزر الفأرة الأيمن). يمكنك قص ونسخ ولصق بين جداول البيانات، وتوليد وتطبيع وفرز البيانات، وأخيرًا إنشاء رسوم بيانية من بياناتك. </para>
+
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="spreadsheet.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+
+<para
+>يمكن إنتاج بيانات جديدة إما بإدخالها يدويًا في جدول البيانات أو بتوليد البيانات وفقًا لوصفة معينة. يوفر معمل الرسم 5 طرق مختلفة لتوليد البيانات، يمكن الوصول إليها عبر قائمة سياق العمود: <itemizedlist>
+<listitem>
+<para
+>أرقام الصفوف - تُعيّن القيم في العمود وفقًا لرقم صفها، وهذا يوفر طريقة سهلة لإنشاء فهرس بسرعة. </para>
+</listitem>
+
+<listitem>
+<para
+>قيم ثابتة - تُعيّن القيم في العمود إلى قيمة ثابتة يقدمها المستخدم. </para>
+</listitem>
+
+<listitem>
+<para
+>قيم متساوية المسافة (للأعمدة الرقمية فقط) - بالنظر إلى القيمتين الصغرى والعظمى، يمكن توليد القيم متساوية المسافة إما بتثبيت العدد الإجمالي للقيم في ذلك النطاق أو بتثبيت الزيادة (المسافة). <screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="spreadsheet_generate_equidistant_values.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+</listitem>
+
+<listitem>
+<para
+>قيم عشوائية (للأعمدة الرقمية فقط) - تُولّد القيم عشوائيًا وفقًا للتوزيع المحدد. لتوليد أعداد عشوائية موزعة بشكل منتظم، اختر توزيع "مسطح". </para>
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="spreadsheet_generate_random_values.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+<para
+>في أبسط الحالات، يُحسب التوزيع غير المنتظم تحليليًا من التوزيع المنتظم لمولد أعداد عشوائية بتطبيق تحويل مناسب. تُنشأ التوزيعات الأكثر تعقيدًا بطريقة القبول-الرفض، التي تقارن التوزيع المطلوب مع توزيع مشابه ومعروف تحليليًا. </para>
+</listitem>
+
+<listitem>
+<para
+>قيم دالة (للأعمدة الرقمية فقط) - تُولّد القيم وفقًا لدالة رياضية يقدمها المستخدم، ويجب توفير عمود (مجموعة بيانات) يحتوي على وسائط الدالة. من الممكن تعريف دالة متعددة المتغيرات وتوفير مجموعة بيانات (عمود في جدول بيانات) لكل من المتغيرات. يدعم الحوار المقابل إنشاء عدد عشوائي من المتغيرات. <screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="spreadsheet_generate_multivariant_function_values.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+</listitem>
+
+</itemizedlist>
+
+</para>
+
+
+<para
+>يمكن استيراد البيانات الموجودة بالفعل إلى جدول بيانات من ملفات خارجية عبر <link linkend="importdialog"
+>حوار "استيراد بيانات"</link
+>. ستُخزّن البيانات المستوردة في ملف المشروع. لن تتم مزامنة التغييرات على البيانات، التي أُجريت إما في جدول البيانات أو في الملف الخارجي بعد الاستيراد، بعد الآن. </para>
+
+<para
+>يمكن تصدير البيانات في جدول البيانات إلى ملف خارجي (انظر <link linkend="exportdialog"
+>حوار التصدير</link
+>). </para>
+</sect1>
+
+<sect1 id="matrix">
+<title
+>المصفوفة</title>
+<para
+>المصفوفة هي حاوية أخرى للبيانات الشبيهة بالمصفوفة. تُعرض هذه الحاوية كجدول أو، بدلًا من ذلك، كصورة رمادية ثنائية الأبعاد. يمكن اعتبار عناصر هذا الجدول/المصفوفة كقيم Z، Z=Z(X,Y)، مع قيم X و Y كأرقام الصفوف والأعمدة، على التوالي. يتم الانتقال من أرقام الصفوف والأعمدة إلى الإحداثيات المنطقية عبر تعيين صريح يحدده المستخدم لكلا التمثيلين. <screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="matrix.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+
+<para
+>يمكن إدخال بيانات المصفوفة إما يدويًا أو عبر استيراد من ملف خارجي. على غرار توليد البيانات لعمود في جدول بيانات، يمكن ملء المصفوفة بقيم ثابتة أو عبر صيغة أيضًا. لقطة الشاشة أدناه تُظهر عرض الصورة لمصفوفة مع الصيغة التي استُخدمت لتوليد عناصر المصفوفة: <screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="matrix_function_values.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+
+</sect1>
+
+
+<sect1 id="workbook">
+<title
+>كتاب العمل</title>
+<para
+>يساعد المصنف المستخدم على تنظيم وتجميع حاويات البيانات المختلفة (جدول البيانات والمصفوفة) بشكل أفضل. يعمل هذا الكائن كحاوية رئيسة لحاويات متعددة من كائنات جدول البيانات و/أو المصفوفة ويجمعها معًا في عرض بعلامات تبويب متعددة: <screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="workbook.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+<para
+>مع المجلدات، من الممكن بالفعل جلب بعض التنظيم إلى <link linkend="project-explorer"
+>مستكشف المشروع</link
+> وتجميع عدة كائنات ذات صلة معًا (جداول بيانات ببيانات ناشئة من ملفات نصية من أصل مشابه، وقيم حمراء وخضراء وزرقاء لصورة مستوردة إلى ثلاث مصفوفات مختلفة، إلخ…). مع المصنف، لدى المستخدم إمكانية تجميع إضافي آخر. </para>
+
+</sect1>
+
+
+<sect1 id="worksheet">
+<title
+>ورقة العمل</title>
+<para
+>ورقة العمل هي، إلى جانب حاويات البيانات <link linkend="spreadsheet"
+>جدول البيانات</link
+> و<link linkend="matrix"
+>المصفوفة</link
+>، جزء مركزي آخر من التطبيق وتوفر منطقة لعرض وتجميع أنواع مختلفة من كائنات ورقة العمل - الرسوم البيانية، التسميات إلخ… </para>
+<para
+>يمكن أن يكون لأوراق العمل حجم ثابت (حجم يحدده المستخدم أو أحد الأحجام المحددة مسبقًا مثل A4، Letter إلخ…) أو يمكنها ملء المساحة المتاحة بالكامل لنافذة ورقة العمل. يمكن ترتيب رسوم بيانية متعددة على ورقة العمل في تخطيطات عمودية أو أفقية أو شبكية. </para>
+<para
+>يمكن تغيير العديد من خصائص ورقة العمل مثل الحجم ولون الخلفية وإعدادات التخطيط في لوحة "خصائص ورقة العمل". </para>
+
+<para>
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="worksheet.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+
+<para
+>يمكن الوصول إلى إجراءات ورقة العمل المختلفة المتعلقة بإنشاء كائنات جديدة، أو تغيير وضع الفأرة الحالي أو التكبير عبر شريط الأدوات أو القائمة الرئيسة أو قائمة سياق ورقة العمل في <link linkend="project-explorer"
+>مستكشف المشروع</link
+>. </para>
+
+<para
+>يمكن تصدير النتائج المعروضة على ورقة العمل إلى تنسيقات مختلفة عبر <link linkend="exportdialog"
+>حوار التصدير</link
+>. </para>
+</sect1>
+
+<sect1 id="CASworksheet">
+<title
+>ورقة عمل CAS</title>
+<para
+>ورقة عمل CAS هي، إلى جانب <link linkend="worksheet"
+>ورقة العمل</link
+>، الجزء المركزي الثالث من التطبيق وتوفر منطقة لاستخدام تطبيقاتك الرياضية المفضلة من داخل واجهة ورقة عمل أنيقة. </para>
+<para
+>يقدم لك معمل الرسم عدة خيارات للخلفيات التي ترغب في استخدامها معه. يعتمد الاختيار على ما تريد تحقيقه. </para>
+<para>
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="worksheet.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+<para
+>حاليًا، الخلفيات التالية متاحة: <variablelist>
+    <varlistentry>
+      <term
+>ساج:</term>
+      <listitem>
+	<para
+>Sage هو نظام برمجيات رياضيات مفتوح المصدر مجاني مرخص تحت GPL. يجمع قوة العديد من الحزم مفتوحة المصدر الموجودة، ضمن واجهة مشتركة قائمة على Python. انظر <ulink url="http://sagemath.org"
+>http://sagemath.org</ulink
+> لمزيد من المعلومات. </para>
+	</listitem>
+    </varlistentry>
+    <varlistentry>
+      <term
+>ماكسيما:</term>
+      <listitem>
+	<para
+>Maxima هو نظام لمعالجة التعبيرات الرمزية والعددية، بما في ذلك التفاضل والتكامل ومتسلسلات تايلور وتحويلات لابلاس والمعادلات التفاضلية العادية وأنظمة المعادلات الخطية ومتعددات الحدود والمجموعات والقوائم والمتجهات والمصفوفات والموترات. ينتج Maxima نتائج عددية عالية الدقة باستخدام الكسور الدقيقة والأعداد الصحيحة ذات الدقة العشوائية وأرقام الفاصلة العائمة ذات الدقة المتغيرة. يمكن لـ Maxima رسم الدوال والبيانات في بعدين وثلاثة أبعاد. انظر <ulink url="http://maxima.sourceforge.net"
+>http://maxima.sourceforge.net</ulink
+> لمزيد من المعلومات. </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term
+>R:</term>
+      <listitem>
+	<para
+>R هي لغة وبيئة للحوسبة الإحصائية والرسوميات، مشابهة للغة S وبيئتها. توفر مجموعة واسعة من التقنيات الإحصائية (النمذجة الخطية وغير الخطية، والاختبارات الإحصائية الكلاسيكية، وتحليل السلاسل الزمنية، والتصنيف، والتجميع، ...) والرسومية، وهي قابلة للتوسع بشكل كبير. غالبًا ما تكون لغة S هي الوسيلة المفضلة للبحث في المنهجية الإحصائية، وتوفر R طريقًا مفتوح المصدر لذلك. انظر <ulink url="http://www.r-project.org"
+>http://www.r-project.org</ulink
+> لمزيد من المعلومات. </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term
+>&kalgebra;:</term>
+      <listitem>
+	<para
+>&kalgebra; هي آلة حاسبة رسومية قائمة على MathML، تأتي مع مشروع تعليم كيدي. انظر <ulink url="http://edu.kde.org/kalgebra/"
+>http://edu.kde.org/kalgebra/</ulink
+> لمزيد من المعلومات. </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term
+>Qalculate!:</term>
+      <listitem>
+  <para
+>Qalculate! ليس نسخة برمجية عادية لأرخص آلة حاسبة متاحة. يهدف Qalculate! إلى الاستفادة الكاملة من الواجهة الفائقة والقوة والمرونة لأجهزة الحاسوب الحديثة. مركز الاهتمام في Qalculate! هو إدخال التعبير. بدلًا من إدخال كل رقم في تعبير رياضي بشكل منفصل، يمكنك كتابة التعبير بأكمله مباشرة وتعديله لاحقًا. تفسير التعبيرات مرن ومتسامح مع الأخطاء، وإذا أخطأت مع ذلك، سيخبرك Qalculate! بذلك. التعبيرات غير القابلة للحل بالكامل ليست أخطاء. سيبسط Qalculate! قدر الإمكان ويجيب بتعبير. بالإضافة إلى الأرقام وعوامل التشغيل الحسابية، قد يحتوي التعبير على أي مجموعة من المتغيرات والوحدات والدوال. انظر <ulink url="http://qalculate.sourceforge.net/"
+>http://qalculate.sourceforge.net/</ulink
+> لمزيد من المعلومات. </para>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term
+>بيثون2:</term>
+      <listitem>
+  <para
+>بيثون هي لغة برمجة ديناميكية قوية بشكل لافت، تُستخدم في نطاق واسع من مجالات التطبيقات. هناك عدة حزم بيثون للبرمجة العلمية. </para>
+  <para
+>يُوزَّع بايثون تحت رخصة مؤسسة برمجيات بايثون (متوافقة مع GPL). انظر <ulink url="http://www.python.org/"
+>الموقع الرسمي</ulink
+> لمزيد من المعلومات. </para>
+  <note>
+    <para
+>يُضيف هذا الملحق عنصرًا إضافيًا إلى القائمة الرئيسة لـ &cantor;، <guimenu
+>حزمة</guimenu
+>. العنصر الوحيد في هذه القائمة هو <menuchoice
+><guimenu
+>حزمة</guimenu
+><guimenuitem
+>استيراد حزمة</guimenuitem
+></menuchoice
+>. يمكن استخدام هذا العنصر لاستيراد حزم بايثون إلى ورقة العمل. </para>
+  </note>
+  <warning>
+    <para
+>يدعم هذا الملحق بايثون 2 فقط. </para>
+  </warning>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term
+>سايلاب:</term>
+      <listitem>
+  <para
+>Scilab هو برنامج حر، حزمة حسابية رقمية متعددة المنصات ولغة برمجة عالية المستوى موجهة رقميًا. </para>
+  <para
+>يُوزَّع Scilab تحت رخصة CeCILL (متوافقة مع GPL). انظر <ulink url="http://www.scilab.org/"
+>http://www.scilab.org/</ulink
+> لمزيد من المعلومات. </para>
+  <warning>
+    <para
+>تحتاج إلى تثبيت Scilab إصدار 5.5 أو أعلى في نظامك لجعل هذا الملحق قابلًا للاستخدام. </para>
+  </warning>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term
+>أوكتاف:</term>
+      <listitem>
+  <para
+>&GNU; Octave هي لغة عالية المستوى، مخصصة أساسًا للحسابات الرقمية. تُوفِّر واجهة سطر أوامر ملائمة لحل المسائل الخطية وغير الخطية رقميًا، ولإجراء تجارب رقمية أخرى باستخدام لغة متوافقة غالبًا مع <ulink url="http://www.mathworks.com/products/matlab/"
+>MATLAB</ulink
+>. انظر <ulink url="http://www.gnu.org/software/octave/"
+>http://www.gnu.org/software/octave/</ulink
+> لمزيد من المعلومات. </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term
+>لوا:</term>
+      <listitem>
+  <para
+>Lua هي لغة برمجة سريعة وخفيفة، ذات صياغة إجرائية بسيطة. هناك العديد من المكتبات في Lua تستهدف الرياضيات والعلوم. </para>
+  <para
+>انظر <ulink url="http://www.lua.org/"
+>http://www.lua.org/</ulink
+> لمزيد من المعلومات. </para>
+  <para
+>يدعم هذا الملحق <ulink url="http://luajit.org/"
+>luajit 2</ulink
+>. </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+</para>
+</sect1>
+
+
+<sect1 id="file_data_source">
+<title
+>مصدر بيانات ملفي</title>
+<para
+>مصدر البيانات الملفي مشابه جدًا في جوهره لجدول بيانات ببيانات مستوردة من ملف خارجي. الفرق هو أن البيانات المستوردة لا يمكن عرضها وتحريرها في معمل الرسم بعد الاستيراد. قد يكون هذا كافيًا مثلًا إذا أردت فقط رسم البيانات الناتجة عن حساب في برنامج خارجي (ثم تصديرها إلى ملف ASCII لاحقًا). </para>
+<para
+>نظرًا لعدم الحاجة لملء جدول بيانات بالبيانات المستوردة، فإن الاستيراد إلى مصدر بيانات ملفي أسرع من الاستيراد إلى جدول بيانات، وهو ما قد يكون مفيدًا عند التعامل مع ملفات كبيرة. </para>
+<para
+>من الممكن تخزين الرابط إلى الملف الخارجي في ملف المشروع فقط وليس محتواه. في كل مرة يُفتح فيها ملف المشروع في معمل الرسم، يُقرأ المحتوى من الملف الخارجي مرة أخرى. أيضًا، من الممكن جعل معمل الرسم يراقب الملف للتغييرات - يُحدَّث محتوى مصدر البيانات الملفي إذا تغير الملف الخارجي. </para>
+<para>
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="file_data_source.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+<para
+>الخيارات الإضافية التي تُحدد استيراد البيانات مكافئة لتلك المقدمة في <link linkend="importdialog"
+>حوار الاستيراد</link
+>. </para>
+</sect1>
+
+
+<sect1 id="datapicker">
+<title
+>منتقي البيانات</title>
+<para
+>منتقي البيانات هو أداة تسمح لك باستخراج البيانات بسهولة من ملفات الصور. تتكون عملية الاستخراج أساسًا من الخطوات التالية: <itemizedlist>
+<listitem
+><para
+>استورد صورة تحتوي على رسوم بيانية ومنحنيات تريد قراءة نقاط البيانات منها.</para
+></listitem>
+<listitem
+><para
+>اختر نوع الرسم البياني (ديكارتي، قطبي، إلخ).</para
+></listitem>
+<listitem
+><para
+>اختر ثلاث نقاط مرجعية وقدِّم قيمًا لها. بمساعدة هذه النقاط، يُحدد نظام الإحداثيات المنطقي.</para
+></listitem>
+<listitem
+><para
+>أنشئ منحنى منتقي بيانات جديدًا واضبط نوع أشرطة الخطأ.</para
+></listitem>
+<listitem
+><para
+>بدّل إلى وضع الفأرة "تعيين نقاط المنحنى" وابدأ في تحديد نقاط على الصورة المستوردة - تُحدد إحداثيات النقاط المحددة وتُضاف إلى جدول البيانات "البيانات".</para
+></listitem>
+</itemizedlist>
+</para>
+
+<para
+>من الممكن إضافة أكثر من منحنى منتقي بيانات. هذا مفيد في حال احتوت الصورة المستوردة على عدة منحنيات تحتاج إلى رقمنة. منحنى منتقي البيانات المُحدد حاليًا في <link linkend="project-explorer"
+>مستكشف المشروع</link
+> هو "النشط" - النقاط التي يُنقر عليها في صورة منتقي البيانات تُحسب وتُضاف إلى جدول بياناته. <screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="datapicker_active_curve_data_spreadsheet.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+
+<para
+>تُخزَّن القيم المحسوبة في أعمدة مختلفة في جداول بيانات البيانات في منتقي البيانات. تتصرف هذه الأعمدة تمامًا مثل الأعمدة الأخرى في جداول البيانات العادية ويمكن استخدامها مباشرة كأعمدة مصدر للمنحنيات في رسومك البيانية الخاصة. </para>
+
+<para
+>يدعم منتقي البيانات عملية استخراج البيانات بعدة مساعدات. لوضع النقاط بدقة أكبر، تتوفر عدسة تكبير بمستويات تكبير مختلفة. أيضًا، يمكن تحريك آخر نقطة محددة بمساعدة مفاتيح التنقل. علاوة على ذلك، عند قراءة نقاط بيانات ذات أشرطة خطأ، يُنشئ منتقي البيانات تلقائيًا أشرطة تشير إلى نقاط نهاية أشرطة الخطأ. يمكن سحب هذه الأشرطة بالفأرة حتى الوصول إلى الطول المطلوب (المسافة إلى نقطة البيانات). </para>
+
+
+<para
+>إجراء استخراج البيانات من رسم بياني مستورد كما هو موصوف أعلاه قابل للتطبيق عند التعامل مع عدد محدود من النقاط. في حال كانت المنحنيات في الصورة المستوردة معطاة كخطوط صلبة، تسمح أداة منتقي البيانات في معمل الرسم بقراءتها (شبه) تلقائيًا. لهذا، بعد إضافة منحنى منتقي بيانات جديد كما هو موصوف أعلاه، بدّل إلى وضع الفأرة "تحديد مقاطع المنحنى". تُعرَف المنحنيات على الرسم البياني وتُبرز. بالنقر على منحنى مبرز (أو أحد مقاطعه)، تُنشأ نقاط على طول هذا المنحنى. طول المقطع وكثافة النقاط المنشأة (الفصل بين نقطتين) هما معلمتان قابلتان للضبط. في لقطات الشاشة أدناه، بعد التبديل إلى وضع المقطع، بُرزت جميع الخطوط السوداء (باللون الأخضر). في هذه الحالة المحددة، عُرِف المنحنى كمقطع واحد ونقرة فأرة واحدة على هذا المقطع كافية لرقمنة هذا المنحنى ووضع نقاط تلقائيًا على طول المنحنى. <screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="datapicker_segments.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+
+<para
+>في حالات عديدة، الرسم البياني ليس بسيطًا كما سبق (منحنى أسود واحد على خلفية بيضاء) ويحتوي على خطوط شبكية، ومنحنيات كثيرة بألوان وسماكات مختلفة وخلفية غير بيضاء. في مثل هذه الحالة، يفشل الكشف التلقائي (تُبرز كائنات كثيرة جدًا أو لا شيء). لمساعدة منتقي البيانات على تحديد المنحنى (المنحنيات) بشكل صحيح، يجب على المستخدم تحديد النطاقات المسموح بها في فضاءات الألوان HSV (أو HSI). لطرح الخلفية غير البيضاء، من الممكن أيضًا تحديد النطاق للون المقدمة. داخليًا، يُحوَّل كل بكسل من الصورة إلى أبيض وأسود حيث تُضبط فقط النقاط التي تتناسب مع النطاقات المحددة من قبل المستخدم لدرجة اللون، والتشبع، والقيمة، والشدة، والمقدمة إلى الأسود. </para>
+
+<para
+>في لقطات الشاشة أدناه، أُسقطت المنحنيات الزرقاء في الصورة الأصلية عن طريق تقليل النطاقات المسموح بها في فضاء الألوان بشكل مناسب (لاحظ القمة للون الأزرق في الرسم البياني لدرجة اللون). تحتوي الصورة المحولة بالأبيض والأسود فقط على المنحنيات التي يهتم بها المستخدم، وأصبح الآن مهمة سهلة لمنتقي البيانات تحديد المنحنيات ووضع نقاط عليها. <screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="datapicker_original_transformed_segments.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+
+<para
+>على غرار <link linkend="worksheet"
+>ورقة العمل</link
+>، يمكن تصدير المنطقة المرئية حاليًا في منتقي البيانات. تنسيقات الصور المدعومة كما هو موصوف في القسم <link linkend="exportdialog"
+>حوار التصدير</link
+>. </para>
+</sect1>
+
+<sect1 id="importdialog">
+<title
+>حوار الاستيراد</title>
+<para
+>في حوار الاستيراد، يمكنك استيراد البيانات إلى أحد جداول البيانات أو المصفوفات المتاحة في معمل الرسم. تنسيقات البيانات المدعومة هي <itemizedlist
+> <listitem
+><para
+>ASCII</para
+></listitem
+> <listitem
+><para
+>ثنائي</para
+></listitem
+> <listitem
+><para
+>صورة</para
+></listitem
+> <listitem
+><para
+>NetCDF</para
+></listitem
+> <listitem
+><para
+>HDF5</para
+></listitem
+> <listitem
+><para
+>FITS</para
+></listitem
+> </itemizedlist
+> معاينة جميع أنواع الملفات المدعومة متاحة في حوار الاستيراد. لتنسيقات البيانات ذات الهياكل الداخلية المعقدة (مثل NetCDF وHDF5 وFITS)، يُعرض محتوى الملف في عرض شجري يسمح بالتنقل المريح عبر الملف. يُوفَّر أيضًا حوار متعدد الاستخدامات لتحرير الرؤوس (الكلمات المفتاحية) لملف FITS. </para>
+
+<para
+>يمكن استيراد بيانات ASCII والثنائية المضغوطة بـ gzip أو </para>
+
+
+<para
+>يجب تقديم اسم الملف الذي يحتوي على البيانات المراد استيرادها. يفتح الزر <guibutton
+>معلومات الملف</guibutton
+> حوارًا يُعرض فيه بعض المعلومات حول الملف المحدد. يمكن تحديد نوع البيانات - حاليًا، يتم دعم ملفات ASCII فقط التي تحتوي على عدة مجموعات بيانات (متجهات) مخزنة كأعمدة. يحدد المرشح - آلي أو مخصص - كيفية تحليل الملف. عند اختيار المرشح "مخصص"، يمكن تقديم عدة معاملات مثل حرف الفصل &etc; يدويًا في هذه الحالة. </para>
+<para
+>يمكن تخصيص صف البداية والنهاية للقراءة باستخدام لسان <guilabel
+>جزء البيانات المراد قراءته</guilabel
+>. لقراءة جميع البيانات، حدد <userinput
+>-1</userinput
+> كصف أو عمود نهاية. </para>
+<screenshot>
+  <screeninfo
+>استيراد البيانات إلى معمل الرسم</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="import-dialog.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+>استيراد البيانات إلى معمل الرسم</phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+
+</sect1>
+
+
+<sect1 id="exportdialog">
+<title
+>حوار التصدير</title>
+<para
+>يمكن تصدير ورقة عمل إلى عدة تنسيقات رسومية (متجهة ونقطية). يتم التصدير عبر حوار التصدير الذي يمكن الوصول إليه عبر الزر <guibutton
+>تصدير</guibutton
+> في شريط الأدوات الرئيس أو <menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>تصدير</guimenuitem
+></menuchoice
+> في القائمة الرئيسة. </para>
+<para
+>بالإضافة إلى تنسيق الرسوميات، يمكن للمستخدم تحديد أي جزء من ورقة العمل يجب تصديره وما إذا كان يجب تصدير الخلفية أم لا. أيضًا، للرسوميات النقطية يمكن تقديم دقة الصورة. </para>
+<para>
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="export_worksheet_dialog.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+<para
+>يمكن تصدير محتوى جدول بيانات إلى ملف نصي خارجي أو ملف FITS. في حوار التصدير لجداول البيانات، يمكن للمستخدم تحديد حرف فصل قيم الأعمدة المختلفة. اختياريًا، يمكن تصدير رأس الجدول (أسماء الأعمدة في الجدول). </para>
+<para>
+<screenshot
+><mediaobject
+><imageobject>
+      <imagedata fileref="export_spreadsheet_dialog.png" format="PNG"/>
+</imageobject
+></mediaobject
+></screenshot>
+</para>
+</sect1>
+
+</chapter>
+
+<chapter id="commands">
+<title
+>مرجع الأوامر</title>
+
+<sect1 id="file-menu">
+<title
+>قائمة ملف</title>
+
+<para>
+<variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>جديد</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ينشئ ملف مشروع معمل الرسم جديد.</action
+></para>
+<para
+>في ملف المشروع، تُخزن جميع الإعدادات وجميع المخططات بتنسيق ASCII.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>افتح</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يفتح ملف مشروع معمل الرسم.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guisubmenu
+>افتح الأخير</guisubmenu
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يفتح ملف مشروع معمل الرسم حديث.</action
+></para>
+<para
+>هنا تُدرج آخر 10 ملفات مشروع استُخدمت.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+></shortcut
+> <guimenu
+><accel
+>م</accel
+>لف</guimenu
+><guimenuitem
+><accel
+>ح</accel
+>فظ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يحفظ المشروع الحالي.</action
+></para>
+<para
+>إذا لم تحفظ المشروع من قبل، يُحفظ المشروع تحت اسم ملف مشروع مؤقت.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>احفظ باسم</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يحفظ المشروع الحالي باسم مختلف. </action
+></para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>اطبع</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يطبع المخطط النشط.</action
+></para>
+<para
+>هنا يُفتح حوار طباعة حيث يمكنك اختيار الطابعة، أحجام ورق مختلفة، &etc; </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>معاينة الطباعة</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>افتح نافذة معاينة الطباعة.</action
+> يتيح لك معمل الرسم اختيار إعدادات الطباعة باستخدام شريط أدوات هذه النافذة وعرض النتيجة فورًا.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo
+>&Ctrl;<keycap
+>=</keycap
+></keycombo
+></shortcut
+> <guimenu
+>ملف</guimenu
+><guisubmenu
+>جديد</guisubmenu
+><guimenuitem
+>جدول بيانات</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ينشئ جدول بيانات جديد في المجلد الحالي لمشروع معمل الرسم.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo
+>&Alt;<keycap
+>X</keycap
+></keycombo
+></shortcut
+> <guimenu
+>ملف</guimenu
+><guisubmenu
+>جديد</guisubmenu
+><guimenuitem
+>ورقة عمل</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ينشئ ورقة عمل جديدة في المجلد الحالي لمشروع معمل الرسم.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+><guisubmenu
+>جديد</guisubmenu
+><guimenuitem
+>مجلد</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>ينشئ جدول بيانات جديد في المجلد الحالي لمشروع معمل الرسم.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+><guisubmenu
+>جديد</guisubmenu
+><guimenuitem
+>مصدر بيانات ملف</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يفتح نافذة <guilabel
+>استيراد البيانات إلى جدول بيانات/مصفوفة</guilabel
+>.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo
+>&Ctrl;&Shift;<keycap
+>L</keycap
+></keycombo
+></shortcut
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>استيراد</guimenuitem
+> </menuchoice
+></term>
+<listitem>
+<para
+><action
+>استيراد البيانات إلى جدول البيانات النشط</action
+></para>
+<para
+>يمكن استخدام هذا العنصر لاستيراد البيانات إلى معمل الرسم. يُرجى قراءة المزيد في قسم <link linkend="importdialog"
+>حوار الاستيراد</link
+>. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>ملف</guimenu
+> <guimenuitem
+>صدّر </guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يحفظ المخطط النشط كتنسيق خاص.</action
+></para>
+<para
+>المُدعَم حاليًا هو: Encapsulated Postscript (EPS)، Portable Document Format (PDF)، Scalable Vector Graphics (SVG)، و Portable Network Graphics (PNG).</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+><keycombo
+>&Ctrl;<keycap
+>W</keycap
+></keycombo
+></shortcut
+> <guimenu
+>ملف</guimenu
+><guimenuitem
+>أغلق</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يُغلق ملف مشروع معمل الرسم المفتوح حاليًا.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><shortcut
+> <keycombo
+>&Ctrl;<keycap
+>Q</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>ملف</guimenu
+> <guimenuitem
+>أنهِ</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يُنهي معمل الرسم.</action
+></para>
+</listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="edit-menu">
+<title
+>قائمة حرر</title>
+
+<para
+><variablelist>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenu
+>تحرير</guimenu
+><guimenuitem
+>سجل التراجع/الإعادة</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>يفتح نافذة سجل إجراءات معمل الرسم.</action
+> اختر عنصرًا في القائمة للانتقال إلى الخطوة المقابلة. </para
+></listitem>
+</varlistentry>
+
+</variablelist
+></para>
+</sect1>
+
+<sect1 id="worksheet-menu">
+<title
+>قائمة ورقة العمل</title>
+<para
+>تحتوي هذه القائمة على جميع العناصر التي يمكن إيجادها أيضًا في قائمة السياق (الزر الأيمن) لورقة العمل. القائمة متاحة فقط عند تحديد كائن ورقة عمل في لوحة <guilabel
+>مستكشف المشروع</guilabel
+>. </para>
+</sect1>
+
+<sect1 id="spreadsheet-menu">
+<title
+>قائمة جدول البيانات</title>
+<para
+>تحتوي هذه القائمة على جميع العناصر التي يمكن إيجادها أيضًا في قائمة السياق (الزر الأيمن) لجدول البيانات. القائمة متاحة فقط عند تحديد كائن جدول بيانات في لوحة <guilabel
+>مستكشف المشروع</guilabel
+>. </para>
+</sect1>
+
+<sect1 id="CASworksheet-menu">
+<title
+>قائمة ورقة عمل CAS</title>
+<para
+>تحتوي هذه القائمة على جميع العناصر التي يمكن إيجادها أيضًا في قائمة السياق (الزر الأيمن) لورقة عمل CAS. القائمة متاحة فقط عند تحديد كائن ورقة عمل في لوحة <guilabel
+>مستكشف المشروع</guilabel
+>. </para>
+</sect1>
+<sect1 id="datapicker-menu">
+<title
+>قائمة منتقي البيانات</title>
+<para
+>تحتوي هذه القائمة على جميع العناصر التي يمكن إيجادها أيضًا في قائمة السياق (الزر الأيمن) لمنتقي البيانات. القائمة متاحة فقط عند تحديد كائن منتقي بيانات في لوحة <guilabel
+>مستكشف المشروع</guilabel
+>. </para>
+</sect1>
+
+<sect1 id="settings-menu">
+<title
+>قائمة الإعدادات</title>
+
+<para
+>تمنحك هذه القائمة القدرة على تغيير إعدادات المستخدم.</para>
+
+<para
+>بالإضافة إلى مدخلات قائمة الإعدادات الشائعة في كيدي الموضحة في فصل <ulink url="help:/fundamentals/menus.html#menus-settings"
+>قائمة الإعدادات</ulink
+> من أساسيات كيدي، يحتوي معمل الرسم على مدخل القائمة الخاص بالتطبيق هذا: </para>
+
+<variablelist>
+<varlistentry
+><term
+><menuchoice
+><shortcut
+><keycombo
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>إعدادات</guimenu
+> <guimenuitem
+>وضع ملء الشاشة</guimenuitem
+> </menuchoice
+></term>
+<listitem
+><para
+><action
+>أظهر مساحة العمل في وضع ملء الشاشة.</action
+></para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+
+<sect1 id="help-menu">
+<title
+>قائمة مساعدة</title>
+
+<para
+>بالإضافة إلى ذلك، يحتوي معمل الرسم على عناصر قائمة المساعدة الشائعة في كيدي. لمزيد من المعلومات، اقرأ القسم الخاص بـ <ulink url="help:/fundamentals/menus.html#menus-help"
+>قائمة المساعدة</ulink
+> من أساسيات كيدي. </para>
+
+</sect1>
+
+<sect1 id="toolbar">
+<title
+>شريط الأدوات</title>
+
+<para
+>يحتوي شريط الأدوات الرئيس على العناصر الرئيسة التي يمكن إيجادها في القوائم المختلفة. يمكن إيجاد تفاصيل أكثر حول هذا في <ulink url="help:/fundamentals/config.html#toolbars"
+>دليل أساسيات كيدي</ulink
+>.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="plotting">
+<title
+>الرسم البياني</title>
+
+<sect1 id="plots">
+  <title
+>مخططات</title>
+  <para
+>يمكن إنشاء المخططات داخل ورقة عمل عبر "إضافة جديد" في قائمة السياق أو في قائمة التطبيق عبر "ورقة عمل" باختيار "مخطط س ص" ونوع المخطط المطلوب. </para>
+  <para
+>ضمن مخطط س ص هذا، يمكن إضافة منحنى س ص يحتوي على بيانات لعرضها (مرة أخرى عبر قائمة السياق أو قائمة التطبيق). </para>
+  <para
+>يمكن تغيير إعدادات المخطط في عنصر الإرساء المقابل. توجد إعدادات عامة مثل الهندسة ولكن أيضًا نطاق المحورين س و ص (بما في ذلك القياس). يمكن تعيين عنوان المخطط في لسان "العنوان" من عنصر الإرساء. يمكن تغيير أنماط الخلفية والحدود في لسان "منطقة المخطط". </para>
+</sect1>
+  
+<sect1 id="curves">
+  <title
+>المنحنيات</title>
+  <para
+>تحتوي المنحنيات على نقاط بيانات يمكن عرضها في مخطط. توجد ثلاث طرق مختلفة لإنشاء المنحنيات: المنحنى س ص القياسي، ومنحنى س ص من تعبير رياضي، ومنحنى س ص من دالة تحليل بيانات. </para>
+    <para
+>يمكن ملء المنحنى س ص القياسي بقيم من جدول بيانات باختيار بيانات س وبيانات ص كعمود من جدول البيانات في عنصر إرساء المنحنى س ص. طريقة أخرى لملء منحنى هي استخدام تعبير رياضي. هنا يمكن اختيار أي دالة رياضية ونطاق لإنشاء المنحنى. الطريقة الثالثة لإنشاء منحنى هي استخدام دالة تحليل بيانات. يمكن اختيار البيانات ودالة التحليل في عنصر إرساء دالة التحليل. </para>
+  <para
+>لجميع أنواع المنحنيات، يمكن تغيير أنماط الخط والرموز في عنصر الإرساء. كما يمكن تغيير القيم المشروحة وإعدادات أشرطة الخطأ هنا. </para>
+</sect1>
+
+<sect1 id="legends">
+  <title
+>مفسرات</title>
+  <para
+>يمكن إضافة وسيلة إيضاح بسهولة إلى مخطط باستخدام قائمة السياق أو قائمة التطبيق. تحتوي على معلومات حول جميع المنحنيات في المخطط. </para>
+  <para
+>يمكن تغيير إعدادات وسيلة الإيضاح (التنسيق والهندسة) في عنصر إرساء وسيلة الإيضاح. كما يمكن تغيير إعدادات عنوان وسيلة الإيضاح وخلفية وسيلة الإيضاح والتخطيط في اللسان المقابل من عنصر إرساء وسيلة الإيضاح. </para>
+</sect1>
+  
+</chapter>
+
+<chapter id="analysis">
+  <title
+>دوال التحليل</title>
+  <sect1 id="analysis_overview">
+    <title
+>نظرة عامة</title>
+  <para
+>يدعم معمل الرسم مجموعة واسعة من دوال تحليل البيانات: </para>
+      <itemizedlist>
+	<listitem
+><para
+>تقليل البيانات</para
+></listitem>
+	<listitem
+><para
+>تمايز</para
+></listitem>
+	<listitem
+><para
+>التكامل</para
+></listitem>
+	<listitem
+><para
+>الاستيفاء</para
+></listitem>
+	<listitem
+><para
+>التجانس</para
+></listitem>
+	<listitem
+><para
+>ملاءمة المنحنى اللاخطية</para
+></listitem>
+	<listitem
+><para
+>مرشح فورييه</para
+></listitem>
+	<listitem
+><para
+>تحويل فورييه</para
+></listitem>
+      </itemizedlist>
+    <para
+>يمكن تطبيق جميعها على أي بيانات تتكون من عمودي س و ص. يمكن الوصول إلى دوال التحليل باستخدام قائمة التحليل أو قائمة السياق لورقة العمل. يمكن تخصيص المنحنيات المنشأة حديثًا (نمط الخط، نمط الرمز، إلخ…) مثل أي منحنى س ص آخر. </para>
+    </sect1>
+
+  <sect1 id="data_reduction">
+    <title
+>تقليل البيانات</title>
+    <para
+>لتقليل عدد نقاط البيانات دون فقدان ميزات مجموعة البيانات، يمكنك تطبيق إحدى خوارزميات تبسيط الخطوط المتعددة: </para>
+      <itemizedlist>
+	<listitem
+><para
+>دوغلاس-بيكر</para
+></listitem>
+	<listitem
+><para
+>فيزفالينغام-وايت</para
+></listitem>
+	<listitem
+><para
+>ريومان-فيتكام</para
+></listitem>
+	<listitem
+><para
+>تبسيط المسافة العمودية</para
+></listitem>
+	<listitem
+><para
+>تبسيط النقطة ن</para
+></listitem>
+	<listitem
+><para
+>تبسيط المسافة الشعاعية</para
+></listitem>
+	<listitem
+><para
+>الاستيفاء (أقرب جار)</para
+></listitem>
+	<listitem
+><para
+>أوبهايم</para
+></listitem>
+	<listitem
+><para
+>لانغ</para
+></listitem>
+      </itemizedlist>
+    <para
+>يُحسب التسامح المطلوب آليًا من البيانات، ولكن يمكن أيضًا تغييره في عنصر واجهة الإرساء. </para>
+  </sect1>
+
+  <sect1 id="differentiation">
+    <title
+>تمايز</title>
+    <para
+>يمكن إجراء التفاضل العددي للبيانات بتحديد: </para>
+      <itemizedlist>
+	<listitem
+><para
+>رتبة الاشتقاق (من الرتبة الأولى إلى السادسة)</para
+></listitem>
+	<listitem
+><para
+>رتبة الدقة (حتى الرتبة الرابعة، اعتمادًا على رتبة الاشتقاق)</para
+></listitem>
+      </itemizedlist>
+  </sect1>
+  
+  <sect1 id="integration">
+    <title
+>التكامل</title>
+    <para
+>يمكن إجراء التكامل العددي للبيانات بتحديد إحدى الطرق </para>
+      <itemizedlist>
+	<listitem
+><para
+>قاعدة المستطيل (نقطة واحدة)</para
+></listitem>
+	<listitem
+><para
+>قاعدة شبه المنحرف (نقطتان)</para
+></listitem>
+	<listitem
+><para
+>قاعدة سيمبسون-1/3 (3 نقاط)</para
+></listitem>
+	<listitem
+><para
+>قاعدة سيمبسون-3/8 (4 نقاط)</para
+></listitem>
+      </itemizedlist>
+   <para
+>الطريقة المبدئية (شبه المنحرف) يجب أن تكون مناسبة لمعظم الحالات. يُقلل عدد نقاط البيانات الناتجة لكلتا قاعدتي سيمبسون بسبب خصائص هاتين الطريقتين. </para>
+  </sect1
+> 
+
+  <sect1 id="interpolation">
+    <title
+>الاستيفاء</title>
+    <para
+>يمكن إجراء استيفاء البيانات بعدة خوارزميات: </para>
+      <itemizedlist>
+	<listitem
+><para
+>خطّي</para
+></listitem>
+	<listitem
+><para
+>متعدد الحدود (إذا كان عدد نقاط البيانات &lt; 100)</para
+></listitem>
+	<listitem
+><para
+>خط تكعيبي تقريبي</para
+></listitem>
+	<listitem
+><para
+>شريحة تكعيبية (دورية)</para
+></listitem>
+	<listitem
+><para
+>شريحة أكيما</para
+></listitem>
+	<listitem
+><para
+>أكيما-سبلاين (دوري)</para
+></listitem>
+	<listitem
+><para
+>شريحة شتيفن (تتطلب GSL &ge; 2.0)</para
+></listitem>
+	<listitem
+><para
+>cosine</para
+></listitem>
+	<listitem
+><para
+>أسي</para
+></listitem>
+	<listitem
+><para
+>شريحة هيرمايت التكعيبية متعددة القطع (الفروق المحدودة، كاتمول-روم، كاردينال، كوتشانيك-بارتيلز)</para
+></listitem>
+	<listitem
+><para
+>دوال نسبية</para
+></listitem>
+      </itemizedlist>
+    <para
+>تُحسب دالة الاستيفاء بالعدد المعطى ن من نقاط البيانات وتُقيّم على النحو التالي: </para>
+      <itemizedlist>
+	<listitem
+><para
+>الدالة</para
+></listitem>
+	<listitem
+><para
+>مشتقة</para
+></listitem>
+	<listitem
+><para
+>مشتق ثان</para
+></listitem>
+	<listitem
+><para
+>التكامل (بدءًا من الصفر)</para
+></listitem>
+      </itemizedlist>
+  </sect1>
+
+    <sect1 id="smoothing">
+    <title
+>التجانس</title>
+    <para
+>عدد من طرق التنعيم المختلفة مدعومة: </para>
+      <itemizedlist>
+	<listitem
+><para
+>متوسط متحرك (مركزي)</para
+></listitem>
+	<listitem
+><para
+>متوسط متحرك (متأخر)</para
+></listitem>
+	<listitem
+><para
+>مرشح النسبة المئوية</para
+></listitem>
+	<listitem
+><para
+>سافيتزكي-جولاي</para
+></listitem>
+      </itemizedlist>
+    <para
+>تدعم جميع طرق التنعيم عدة أنماط حشو (ثابت، دوري، مرآة، أقرب، إلخ) لبداية ونهاية مجموعة البيانات. تدعم المتوسطات المتحركة عدة دوال وزن (منتظم، مثلثي، ثنائي، قطع مكافئ، ثلاثي تكعيبي، إلخ) يمكن اختيارها لوزن نقاط البيانات المحددة حسب بعدها. </para>
+  </sect1>
+  
+  <sect1 id="fitting">
+    <title
+>توفيق المنحنيات</title>
+    <para
+>يمكن إجراء ملاءمة المنحنيات الخطية وغير الخطية للبيانات بعدة نماذج ملاءمة محددة مسبقًا (على سبيل المثال متعدد الحدود، أسي، غاوسي أو مخصص) لبيانات تتكون من أعمدة س وص مع عمود وزن اختياري. باستخدام نموذج مخصص، يمكن استخدام أي دالة بعدد غير محدود من المعاملات للملاءمة. تُعرض النتائج بما في ذلك الخصائص الإحصائية في نص النتائج. </para>
+    <para
+>يمكن ضبط القيم الابتدائية للمعامل في حوار المعامل. من الممكن أيضًا تثبيت أي معامل وتعيين حدود دنيا وعليا للقيم هنا. كن على علم أن تقليل فضاء المعامل بتثبيت معامل أو تحديد حدود يمكن أن يبطئ التقارب أو يمنع إيجاد نتيجة جيدة. من الجيد دائمًا إزالة أي قيود على المعاملات عند إيجاد قيم ابتدائية جيدة. </para>
+    <para
+>يمكن ضبط الخيارات التالية في حوار الخيارات لتحسين الملاءمة: </para>
+      <itemizedlist>
+	<listitem
+><para
+>أقصى عدد من التكرارات: عدد التكرارات الأقصى</para
+></listitem>
+	<listitem
+><para
+>التسامح: التسامح المطلوب للنتيجة</para
+></listitem>
+	<listitem
+><para
+>النقاط المُقيَّمة: عدد النقاط لتقييم دالة الملاءمة</para
+></listitem>
+	<listitem
+><para
+>قيّم النطاق الكامل: قيّم دالة الملاءمة لكامل نطاق البيانات بدلًا من تقييم نطاق x المُعطى فقط</para
+></listitem>
+	<listitem
+><para
+>استخدم النتائج كقيم بدء جديدة: ستكون النتائج هي قيم بدء الوسائط الجديدة</para
+></listitem>
+	</itemizedlist>
+
+    </sect1>
+  
+  <sect1 id="filter">
+    <title
+>مرشح فورييه</title>
+    <para
+>يمكن استخدام هذه الدالة لتطبيق مرشح فورييه على أي بيانات تتكون من أعمدة x و y. أنواع المرشحات المدعومة هي: </para>
+      <itemizedlist>
+	<listitem
+><para
+>منخفض التردد</para
+></listitem>
+	<listitem
+><para
+>عالي التردد</para
+></listitem>
+	<listitem
+><para
+>تمرير النطاق </para
+></listitem>
+	<listitem
+><para
+>رفض النطاق (حجب النطاق)</para
+></listitem>
+	</itemizedlist>
+    <para
+>حيث يمكن لأي منها أن يتخذ الشكل </para>
+      <itemizedlist>
+	<listitem
+><para
+>مثالي</para
+></listitem>
+	<listitem
+><para
+>بتروورث (الرتبة 1 إلى 10)</para
+></listitem>
+	<listitem
+><para
+>تشيبيشيف النوع I أو II (الرتبة 1 إلى 10)</para
+></listitem>
+	<listitem
+><para
+>لوجاندر الأمثل (الرتبة 1 إلى 10)</para
+></listitem>
+	<listitem
+><para
+>بسل-تومسون (أي رتبة)</para
+></listitem>
+      </itemizedlist>
+    <para
+>يمكن تحديد قيمة/قيم القطع بوحدات التردد (هرتز)، أو الكسر (0.0 إلى 1.0)، أو فهرس نقاط البيانات. </para>
+  </sect1>
+
+  <sect1 id="dft">
+    <title
+>تحويل فورييه</title>
+    <para
+>لتحويل إشارة من المجال الزمني إلى مجال التردد أو للتغيير بين متغيرات مترافقة أخرى مثل الموضع والزخم (فضاء-k)، يمكن تطبيق تحويل فورييه المتقطع. يمكن استخدام الخيارات التالية لتناسب الاحتياجات: </para>
+      <itemizedlist>
+	<listitem
+><para
+>دالة النافذة (ولش، هان، هامينغ، إلخ) لتجنب تأثيرات التسرب</para
+></listitem>
+	<listitem
+><para
+>المخرجات (المقدار، السعة، الطور، ديسيبل، إلخ)</para
+></listitem>
+	<listitem
+><para
+>طيف أحادي أو ثنائي الجانب مع أو بدون إزاحة</para
+></listitem>
+	<listitem
+><para
+>تحجيم محور X إلى التردد أو الفهرس أو الدورة</para
+></listitem>
+      </itemizedlist>
+  </sect1>
+</chapter>
+
+<chapter id="digitization">
+<title
+>تتبع المنحنى</title>
+
+<sect1 id="uploadimage">
+  <title
+>افتح صورة</title>
+  <para
+>يمكن إنشاء منتقي البيانات داخل مشروع عبر <guimenuitem
+>أضف جديدًا</guimenuitem
+> في قائمة السياق للمشروع/المجلد أو في شريط الأدوات الرئيس. بعد ذلك، يمكن إضافة صورة جديدة وتغييرها عبر <guilabel
+>رسم</guilabel
+> في عنصر واجهة الإرساء المقابل. </para>
+  <para
+>بعد تحميل الصورة، يمكن استخدام خيارات تكبير/تصغير مختلفة من قائمة السياق/شريط أدوات منتقي البيانات لتغيير عرض الصورة وارتفاعها. يمكن أيضًا تدوير الصورة بزاوية باستخدام <guilabel
+>تدوير</guilabel
+> في قسم "تحرير" في عنصر واجهة الإرساء. بعد ذلك، على المستخدم <link linkend="axispoint"
+>ضبط نقاط المحور</link
+>. </para>
+</sect1>
+  
+<sect1 id="symbols">
+  <title
+>الرموز</title>
+  <para
+>الرموز هي النقاط التي يمكن رسمها فوق صورة منتقي البيانات. يمكن إنشاء الرموز مباشرة بالنقر بزر الفأرة الأيمن فوق الصورة. الرموز هي أساسًا من نوعين، مع شريط خطأ وبدونه، اعتمادًا على نوع <link linkend="datapickercurve"
+>المنحنى</link
+> الذي تنتمي إليه. </para>
+  <para
+>يمكن أن يكون لكل منحنى في منتقي البيانات نمط رمز خاص به يمكن تغييره في قسم <guilabel
+>الرموز</guilabel
+> في عنصر واجهة الإرساء. يمكن استخدام وضع الفأرة "تحديد وتحريك" لتحديد نقاط/رموز متعددة ويمكن تحريكها باستخدام مفاتيح التنقل. </para>
+</sect1>
+
+<sect1 id="axispoint">
+  <title
+>نقاط المحور</title>
+  <para
+>نقاط المحور هي مجموعة من ثلاث <link linkend="symbols"
+>نقاط</link
+> مرجعية فوق صورة منتقي البيانات. يمكن ضبط هذه النقاط عبر <guimenuitem
+>ضبط نقاط المحور</guimenuitem
+> في قائمة السياق لمنتقي البيانات. بعد تحديد النقاط فوق الصورة، على المستخدم تحديث نوع نظام الإحداثيات الخاص بها عبر <guilabel
+>نوع الرسم</guilabel
+> والمواضع المنطقية عبر <guilabel
+>النقاط المرجعية</guilabel
+> في عنصر واجهة الإرساء. </para>
+</sect1>
+
+<sect1 id="datapickercurve">
+  <title
+>منحنى منتقي البيانات</title>
+  <para
+>يمكن إنشاء منحنى منتقي البيانات داخل منتقي البيانات عبر <guimenuitem
+>منحنى جديد</guimenuitem
+> في قائمة السياق لمنتقي البيانات. يمكن أن يكون للمنحنى أنواع مختلفة من أخطاء X و Y (بدون خطأ، متماثل، غير متماثل). يعتمد هذا على نوع الأخطاء في عنصر واجهة الإرساء لمنتقي البيانات عند نقطة الإنشاء. </para>
+  <para
+>يحتوي كل كائن منحنى على جميع <link linkend="symbols"
+>نقاط</link
+> المنحنى (مخفية) وجدول بيانات يحتوي على المواضع المنطقية لجميع نقاط منحناه، ويوفر خيارات لتحديث جدول البيانات وتبديل رؤية نقاط منحناه باستخدام قائمة السياق. يجب تحديد الوضع <guimenuitem
+>ضبط نقاط المنحنى</guimenuitem
+> في قائمة السياق لمنتقي البيانات لإنشاء نقاط المنحنى. </para>
+  <para
+>يمكن إنشاء منحنيات متعددة لنفس منتقي البيانات. تتوافق نقاط المنحنى المُنشأة دائمًا مع المنحنى النشط لمنتقي البيانات والذي يمكن تغييره عبر خيار <guimenuitem
+>منحنى نشط</guimenuitem
+> في قائمة السياق وعنصر واجهة الإرساء لمنتقي البيانات. يمكن أن يكون لكل منحنى في منتقي البيانات نمط رمز خاص به يمكن تغييره في قسم <guilabel
+>الرموز</guilabel
+> في عنصر واجهة الإرساء. </para>
+</sect1>
+
+<sect1 id="curvesegments">
+  <title
+>اقوس المقاطع</title>
+  <para
+>يمكن إنشاء مقطع منحنى لمنتقي البيانات فوق الصورة بتبديل الوضع إلى <guimenuitem
+>تحديد مقاطع المنحنى</guimenuitem
+> في قائمة السياق لمنتقي البيانات. المقطع هو كائن قابل للتحديد فوق الصورة يمكن تحديده بالنقر بزر الفأرة الأيمن فوقه. </para>
+  <para
+>تُنشأ المقاطع بمعالجة الصورة على أساس نطاق سمات اللون لتتبع المنحنيات آليًا. لتحسين النتائج، يمكن تغيير هذا النطاق وأنواع سمات اللون في قسم "تحرير" في عنصر واجهة الإرساء. يوفر عنصر واجهة الإرساء أيضًا خيارات للتبديل بين الصورة المُعالجة والصورة الأصلية، وضبط الحد الأدنى الممكن لطول المقاطع. </para>
+  <para
+>بمجرد تحديد مقطع، سينشئ نقاط منحنى فوقه بمسافة دنيا محددة بينها. يمكن تغيير المسافة الدنيا المحددة بين النقاط في عنصر واجهة الإرساء لـ datapicker. قد يضطر المستخدم إلى تحديد المقاطع مرة أخرى لملاحظة التغييرات. </para>
+</sect1>
+
+</chapter>
+
+<!-- TODO:
+
+Describe import of ascii-data. Import can be done either by importing the 
+data to an already available spreadsheet or by adding a "File data source". 
+The latter is more useful for bigger data sets where you don't need a view on 
+it. A file data source can be updated on file changes and all the xy-curves 
+consuming the data from this data source will also be updated.
+-->
+
+<chapter id="advanced_topics">
+<title
+>مواضيع متقدمة</title>
+<para
+>هنا ستجد بعض الشروحات للمواضيع المتقدمة. </para>
+
+<sect1 id="topics">
+<title
+>المواضيع</title>
+<sect2 id="errorbar">
+<title
+>أشرطة الخطأ</title>
+<para
+>إذا أردت رسم بيانات بأشرطة خطأ، فما عليك سوى استيراد بياناتك باستخدام <link linkend="importdialog"
+>حوار الاستيراد</link
+> إلى مشروعك. ثم استخدم لسان <guilabel
+>أشرطة الخطأ</guilabel
+> في <link linkend="properties-explorer"
+>خصائص المنحنى</link
+> لاختيار <guilabel
+>نوع الخطأ</guilabel
+>، واختر عمود الخطأ من قائمة <guilabel
+>البيانات، +-</guilabel
+>. يمكن تعريف تنسيق أشرطة الخطأ باستخدام جزء <guilabel
+>التنسيق:</guilabel
+>.</para>
+</sect2>
+
+<sect2 id="texlabel">
+<title
+>وسم تخ</title>
+<para
+>لاستخدام وسم تخ، عليك فقط تفعيل زر التبديل <guiicon
+>تخ</guiicon
+> في لسان <guilabel
+>العنوان</guilabel
+>. بذلك، يُعرض كل نص تدخله في مربع النص بواسطة تخ ويُرسَم وفقًا لذلك. نظرًا لأن هذا التحويل يستغرق بعض الوقت، قد ترى تأخيرًا معينًا عند إعادة رسم المخطط.</para>
+</sect2>
+
+</sect1>
+</chapter>
+
+
+<!-- TODO:
+
+A short tutorial for the basic workflow (create new project, import data, 
+create worksheet, create plots and layout them, add curves, select columns as 
+data sources for the curves, add legends, export everything to pdf) would also help to become familiar with the software more quickly.
+-->
+
+<chapter id="tutorials">
+<title
+>دروس قصيرة</title>
+<sect1 id="sineplot">
+  <title
+>بناء رسم بياني جيبي باستخدام معمل الرسم</title>
+  <para
+>في هذا الفصل ستجد شروحات حول كيفية بناء رسم بياني بسيط لمنحنى في الإحداثيات الديكارتية من معادلة رياضية. </para>
+  <screenshot>
+    <screeninfo
+>نافذة معمل الرسم بعد التشغيل الأول</screeninfo>
+    <mediaobject>
+      <imageobject>
+	<imagedata fileref="tutorial-xy-function1.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+	<phrase
+>نافذة معمل الرسم بعد التشغيل الأول</phrase>
+      </textobject>
+    </mediaobject>
+  </screenshot>
+  <procedure>
+    <step>
+      <para
+>انقر على الزر <guibutton
+>جديد</guibutton
+> أو اضغط <keycombo
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> على لوحة المفاتيح. </para>
+      <screenshot>
+      <screeninfo
+>مشروع معمل الرسم جديد</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function2.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>مشروع معمل الرسم جديد</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على عنصر <guilabel
+>المشروع</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بالزر الأيمن واختر <menuchoice
+><guimenu
+>أضف جديدًا</guimenu
+><guimenuitem
+>ورقة عمل</guimenuitem
+></menuchoice
+> أو اضغط <keycombo
+>&Alt;<keycap
+>X</keycap
+></keycombo
+> على لوحة المفاتيح. </para>
+      <screenshot>
+      <screeninfo
+>إضافة ورقة عمل جديدة في معمل الرسم</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function3.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إضافة ورقة عمل جديدة في معمل الرسم</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على عنصر <guilabel
+>ورقة العمل</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بالزر الأيمن واختر <menuchoice
+><guimenu
+>أضف جديدًا</guimenu
+><guisubmenu
+>رسم xy</guisubmenu
+><guimenuitem
+>محوران، متمركزان</guimenuitem
+></menuchoice
+>. </para>
+      <screenshot>
+      <screeninfo
+>إضافة محاور إلى الرسم البياني</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function4.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إضافة محاور إلى الرسم البياني</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على عنصر <guilabel
+>رسم xy</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بالزر الأيمن واختر <menuchoice
+><guimenu
+>أضف جديدًا</guimenu
+><guimenuitem
+>منحنى xy من معادلة رياضية</guimenuitem
+></menuchoice
+>. </para>
+      <screenshot>
+      <screeninfo
+>إضافة منحنى جديد</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function5.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إضافة منحنى جديد</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>استخدم جزء <guilabel
+>خصائص منحنى معادلة xy</guilabel
+> على اليمين لإدخال <userinput
+>sin(x)</userinput
+> في حقل <guilabel
+>y=f(x)</guilabel
+> (لقائمة الدوال المتاحة، انظر <xref linkend="parser"/>)، و<userinput
+>-6</userinput
+> في حقل <guilabel
+>x، الحد الأدنى</guilabel
+>، و<userinput
+>6</userinput
+> في حقل <guilabel
+>x، الحد الأقصى</guilabel
+>، ثم انقر على الزر <guibutton
+>أعد الحساب</guibutton
+> لرؤية النتيجة. </para>
+      <screenshot>
+      <screeninfo
+>رسم المنحنى المبدئي</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function6.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>رسم المنحنى المبدئي</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      <note>
+	<para
+>يبرز معمل الرسم الصياغة غير المعروفة في حقل <guilabel
+>y=f(x)</guilabel
+>. هذا مفيد للتحكم في صحة الإدخال. </para>
+      </note>
+      <important>
+	<para
+>يمكن العثور على قائمة الدوال المعروفة في <link linkend="parser"
+>القسم المقابل من هذا الدليل</link
+>. </para>
+      </important>
+    </step>
+    <step>
+      <para
+>انتقل إلى لسان <guilabel
+>الخط</guilabel
+> في جزء <guilabel
+>خصائص منحنى معادلة xy</guilabel
+> واختر <guimenuitem
+>شريحة تكعيبية (طبيعية)</guimenuitem
+> من مربع القائمة المنسدلة <guilabel
+>النوع</guilabel
+>. </para>
+      <screenshot>
+      <screeninfo
+>اختيار نوع الخط</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function7.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إضافة نوع الخط</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انتقل إلى لسان <guilabel
+>الرمز</guilabel
+> في جزء <guilabel
+>خصائص منحنى المعادلة-س ص</guilabel
+> واختر <guimenuitem
+>بلا</guimenuitem
+> من القائمة المنسدلة <guilabel
+>النمط</guilabel
+>. </para>
+      <screenshot>
+      <screeninfo
+>إزالة الرموز من المخطط</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function8.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إزالة الرموز من المخطط</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على العنصر <guilabel
+>مخطط-س ص</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بزر الفأرة الأيمن واختر <menuchoice
+><guimenu
+>أضف جديدًا</guimenu
+><guimenuitem
+>وسيلة إيضاح</guimenuitem
+></menuchoice
+>. انتقل إلى لسان <guilabel
+>العنوان</guilabel
+> في جزء <guilabel
+>خصائص وسيلة إيضاح المخطط الديكارتي</guilabel
+> وأدخل <userinput
+>رسم بياني للجيب</userinput
+> في حقل <guilabel
+>النص</guilabel
+>. </para>
+      <screenshot>
+      <screeninfo
+>تغيير عنوان وسيلة الإيضاح</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function9.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>تغيير عنوان وسيلة الإيضاح</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>اختر <menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>تصدير</guimenuitem
+></menuchoice
+> من القائمة الرئيسة. حدد المكان والصيغة لحفظ المخطط. </para>
+      <screenshot>
+      <screeninfo
+>تصدير المخطط</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function10.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>تصدير المخطط</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+  </procedure>
+</sect1>
+
+<sect1 id="spreadsheetplot">
+  <title
+>بناء رسم بياني من بيانات جدول بيانات باستخدام معمل الرسم</title>
+  <para
+>في هذا الفصل ستجد شروحات حول كيفية بناء رسم بياني بسيط من بيانات جدول بيانات. </para>
+  <screenshot>
+    <screeninfo
+>نافذة معمل الرسم بعد التشغيل الأول</screeninfo>
+    <mediaobject>
+      <imageobject>
+	<imagedata fileref="tutorial-xy-function1.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+	<phrase
+>نافذة معمل الرسم بعد التشغيل الأول</phrase>
+      </textobject>
+    </mediaobject>
+  </screenshot>
+  <procedure>
+    <step>
+      <para
+>انقر على الزر <guibutton
+>جديد</guibutton
+> أو اضغط <keycombo
+>&Ctrl;<keycap
+>N</keycap
+></keycombo
+> على لوحة المفاتيح. </para>
+      <screenshot>
+      <screeninfo
+>مشروع معمل الرسم جديد</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function2.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>مشروع معمل الرسم جديد</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على العنصر <guilabel
+>المشروع</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بزر الفأرة الأيمن واختر <menuchoice
+><guimenu
+>أضف جديدًا</guimenu
+><guimenuitem
+>جدول بيانات</guimenuitem
+></menuchoice
+> أو اضغط <keycombo
+>&Ctrl;<keycap
+>=</keycap
+></keycombo
+> على لوحة المفاتيح. </para>
+      <screenshot>
+      <screeninfo
+>إضافة جدول بيانات معمل الرسم جديد</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet1.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إضافة جدول بيانات معمل الرسم جديد</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على رأس العمود الأول من جدول البيانات بزر الفأرة الأيسر ثم انقر على أي من خلاياه بزر الفأرة الأيمن واختر <menuchoice
+><guimenu
+>تحديد</guimenu
+><guisubmenu
+>تعبئة التحديد بـ</guisubmenu
+><guimenuitem
+>أرقام الصفوف</guimenuitem
+></menuchoice
+>. </para>
+      <screenshot>
+      <screeninfo
+>تعبئة العمود الأول من جدول البيانات</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet2.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>تعبئة العمود الأول من جدول البيانات</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      <para
+>اختر <guimenuitem
+>تلقائي (غ)</guimenuitem
+> من مربع القائمة المنسدلة <guilabel
+>الصيغة</guilabel
+> في الإرساء الأيمن <guilabel
+>خصائص العمود</guilabel
+> لتحسين عرض البيانات للعمود الأول. </para>
+    </step>
+    <step>
+      <para
+>انقر على رأس العمود الثاني من جدول البيانات بزر الفأرة الأيمن واختر <menuchoice
+><guimenu
+>توليد بيانات</guimenu
+><guimenuitem
+>قيم عشوائية</guimenuitem
+></menuchoice
+>. </para>
+      <screenshot>
+      <screeninfo
+>تعبئة العمود الثاني من جدول البيانات</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet3.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>تعبئة العمود الثاني من جدول البيانات</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على عنصر <guilabel
+>المشروع</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بالزر الأيمن واختر <menuchoice
+><guimenu
+>أضف جديدًا</guimenu
+><guimenuitem
+>ورقة عمل</guimenuitem
+></menuchoice
+> أو اضغط <keycombo
+>&Alt;<keycap
+>X</keycap
+></keycombo
+> على لوحة المفاتيح. </para>
+      <screenshot>
+      <screeninfo
+>إضافة ورقة عمل جديدة في معمل الرسم</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet4.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إضافة ورقة عمل جديدة في معمل الرسم</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على العنصر <guilabel
+>ورقة العمل</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بزر الفأرة الأيمن واختر <menuchoice
+><guimenu
+>أضف جديدًا</guimenu
+><guisubmenu
+>مخطط-س ص</guisubmenu
+><guimenuitem
+>مخطط صندوقي، أربعة محاور</guimenuitem
+></menuchoice
+>. </para>
+      <screenshot>
+      <screeninfo
+>إضافة محاور إلى الرسم البياني</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet5.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إضافة محاور إلى الرسم البياني</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على العنصر <guilabel
+>مخطط-س ص</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بزر الفأرة الأيمن واختر <menuchoice
+><guimenu
+>أضف جديدًا</guimenu
+><guimenuitem
+>منحنى-س ص</guimenuitem
+></menuchoice
+>. </para>
+      <screenshot>
+      <screeninfo
+>إضافة منحنى جديد</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet6.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>إضافة منحنى جديد</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>استخدم جزء <guilabel
+>خصائص منحنى-س ص</guilabel
+> على اليمين لاختيار <menuchoice
+><guimenu
+>المشروع</guimenu
+><guisubmenu
+>جدول بيانات</guisubmenu
+><guimenuitem
+>1</guimenuitem
+></menuchoice
+> في حقل <guilabel
+>بيانات-س</guilabel
+> (فقط انقر على العنصر واضغط &Enter;). استخدم الإجراء نفسه لاختيار <guimenuitem
+>2</guimenuitem
+> لحقل <guilabel
+>بيانات-ص</guilabel
+>. ستظهر النتائج على ورقة العمل فورًا. </para>
+      <screenshot>
+      <screeninfo
+>المخطط للبيانات غير المرتبة</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet7.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>المخطط للبيانات غير المرتبة</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على العنصر <guilabel
+>جدول البيانات</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> بزر الفأرة الأيسر ثم انقر على رأس العمود الثاني بزر الفأرة الأيمن واختر <menuchoice
+><guimenu
+>ترتيب</guimenu
+><guimenuitem
+>تصاعدي</guimenuitem
+></menuchoice
+>. </para>
+      <screenshot>
+      <screeninfo
+>ترتيب العمود الثاني من جدول البيانات</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet8.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>ترتيب العمود الثاني من جدول البيانات</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para
+>انقر على عنصر <guilabel
+>ورقة العمل</guilabel
+> في لوحة <guilabel
+>مستكشف المشروع</guilabel
+> باستخدام &LMB; لرؤية النتائج. </para>
+      <screenshot>
+      <screeninfo
+>الرسم البياني للبيانات المرتبة</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet9.png" format="PNG"/>
+	</imageobject>
+	<textobject>
+	  <phrase
+>الرسم البياني للبيانات المرتبة</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+  </procedure>
+</sect1>
+</chapter>
+
+<chapter id="examples">
+<title
+>أمثلة</title>
+<sect1 id="example-2d-plotting">
+    <title
+>رسم ثنائي الأبعاد</title>
+    <para
+>تأتي قريبا ... </para>
+    </sect1>
+<sect1 id="example-signal">
+    <title
+>معالجة الإشارة</title>
+     
+    <variablelist>
+    <varlistentry>
+    <term
+>مرشح فورييه</term>
+    <listitem>
+        <para
+>إشارة زمنية تحتوي على شفرة مورس تُحوَّل إلى مجال التردد عبر تحويل فورييه لرؤية المكون الرئيس. بتطبيق مرشح ضيق النطاق، يُستخرج إشارة مورس ويُرى 'SOS' واضح: </para>
+        
+        <screenshot>
+        <mediaobject
+><imageobject
+><imagedata fileref="example-fourier_filter-1024x532.png"/>
+        </imageobject
+></mediaobject
+>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    </variablelist>
+    </sect1>
+<sect1 id="example-computing">
+    <title
+>حوسبة</title>
+     
+    <variablelist>
+    <varlistentry>
+    <term
+>ماكسيما</term>
+    <listitem>
+        <para
+>جلسة ماكسيما تُظهر الديناميكيات الفوضوية لمذبذب دوفينغ. حُلّت المعادلة التفاضلية للمذبذب القسري باستخدام ماكسيما. رُسِمت مسار الحركة، فضاء الطور للمذبذب، وخريطة بوانكاريه المقابلة باستخدام لاببلوت: </para>
+        
+        <screenshot>
+        <mediaobject
+><imageobject
+><imagedata fileref="example-maxima_2-1024x532.png"/>
+        </imageobject
+></mediaobject
+>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    <varlistentry>
+    <term
+>بيثون</term>
+    <listitem>
+        <para
+>جلسة بايثون توضح تأثير نافذة بلاكمان على تحويل فورييه: </para>
+        
+        <screenshot>
+        <mediaobject
+><imageobject
+><imagedata fileref="example-FFT_python-1024x532.png"/>
+        </imageobject
+></mediaobject
+>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    </variablelist>
+    </sect1>
+<sect1 id="example-import-export">
+    <title
+>استيراد / تصدير</title>
+    <para
+>تأتي قريبا ... </para>
+    </sect1>
+<sect1 id="example-tools">
+    <title
+>أدوات</title>
+    <para
+>تأتي قريبا ... </para>
+    </sect1>
+    
+</chapter>
+
+
+<chapter id="parser">
+<title
+>دوال المحلل</title>
+<para
+>يسمح لك محلل معمل الرسم باستخدام الدوال التالية: </para>
+
+<sect1 id="parser-standard">
+<title
+>دوال قياسية</title>
+
+<informaltable pgwide="1"
+><tgroup cols="2">
+
+<thead
+><row
+><entry
+>الدالة</entry
+><entry
+>الوصف</entry
+></row
+></thead>
+
+<tbody>
+
+<row
+><entry
+>cbrt(x)</entry
+><entry
+><action
+>جذر تكعيبي</action
+></entry
+></row>
+<row
+><entry
+>ceil(س)</entry
+><entry
+><action
+>تقريب لأعلى إلى عدد صحيح</action
+></entry
+></row>
+<row
+><entry
+>fabs(x)</entry
+><entry
+><action
+>قيمة مطلقة</action
+></entry
+></row>
+<row
+><entry
+>gamma(x)</entry
+><entry
+><action
+>دالة غاما</action
+></entry
+></row>
+<row
+><entry
+>ldexp(x,y)</entry
+><entry
+><action
+>x * 2<superscript
+>y</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>ln(x)</entry
+><entry
+><action
+>لوغاريتم، أساس e</action
+></entry
+></row>
+<row
+><entry
+>log(x)</entry
+><entry
+><action
+>لوغاريتم، أساس e</action
+></entry
+></row>
+<row
+><entry
+>log1p(x)</entry
+><entry
+><action
+>log(1+x)</action
+></entry
+></row>
+<row
+><entry
+>log10(x)</entry
+><entry
+><action
+>لوغاريتم، أساس 10</action
+></entry
+></row>
+<row
+><entry
+>logb(x)</entry
+><entry
+><action
+>أس مستقل عن الجذر</action
+></entry
+></row>
+<row
+><entry
+>pow(x,n)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>n</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>powint(x,n)</entry
+><entry
+><action
+>دالة القوة الصحيحة x<superscript
+>n</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>pow2(x)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>2</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>pow3(x)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>3</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>pow4(x)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>4</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>pow5(x)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>5</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>pow6(x)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>6</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>pow7(x)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>7</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>pow8(x)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>8</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>pow9(x)</entry
+><entry
+><action
+>دالة القوة x<superscript
+>9</superscript
+></action
+></entry
+></row>
+<row
+><entry
+>rint(x)</entry
+><entry
+><action
+>تقريب إلى أقرب عدد صحيح</action
+></entry
+></row>
+<row
+><entry
+>تقريب(س)</entry
+><entry
+><action
+>تقريب إلى أقرب عدد صحيح</action
+></entry
+></row>
+<row
+><entry
+>sqrt(x)</entry
+><entry
+><action
+>جذر تربيعي</action
+></entry
+></row>
+<row
+><entry
+>tgamma(x)</entry
+><entry
+><action
+>دالة غاما</action
+></entry
+></row>
+<row
+><entry
+>trunc(x)</entry
+><entry
+><action
+>تُرجع أكبر عدد صحيح أصغر من أو يساوي x</action
+></entry
+></row>
+
+</tbody
+></tgroup
+></informaltable>
+</sect1>
+
+<sect1 id="parser-trig">
+<title
+>دوال مثلثية</title>
+
+<informaltable pgwide="1"
+><tgroup cols="2">
+
+<thead
+><row
+><entry
+>الدالة</entry
+><entry
+>الوصف</entry
+></row
+></thead>
+
+<tbody>
+
+    <row
+><entry
+>جيب(س)</entry
+><entry
+><action
+>جيب</action
+></entry
+></row>
+    <row
+><entry
+>cos(x)</entry
+><entry
+><action
+>جيب التمام</action
+></entry
+></row>
+    <row
+><entry
+>tan(x)</entry
+><entry
+><action
+>الظل</action
+></entry
+></row>
+    <row
+><entry
+>asin(x)</entry
+><entry
+><action
+>جيب معكوس</action
+></entry
+></row>
+    <row
+><entry
+>acos(x)</entry
+><entry
+><action
+>جيب التمام معكوس</action
+></entry
+></row>
+    <row
+><entry
+>atan(x)</entry
+><entry
+><action
+>ظل معكوس</action
+></entry
+></row>
+    <row
+><entry
+>atan2(y,x)</entry
+><entry
+><action
+>دالة الظل العكسي لمتغيرين</action
+></entry
+></row>
+    <row
+><entry
+>sinh(x)</entry
+><entry
+><action
+>الجيب الزائد</action
+></entry
+></row>
+    <row
+><entry
+>cosh(x)</entry
+><entry
+><action
+>جيب التمام الزائد</action
+></entry
+></row>
+    <row
+><entry
+>tanh(x)</entry
+><entry
+><action
+>الظل الزائد</action
+></entry
+></row>
+    <row
+><entry
+>asinh(x)</entry
+><entry
+><action
+>الجيب الزائد العكسي</action
+></entry
+></row>
+    <row
+><entry
+>acosh(x)</entry
+><entry
+><action
+>جيب التمام الزائد العكسي</action
+></entry
+></row>
+    <row
+><entry
+>atanh(x)</entry
+><entry
+><action
+>الظل الزائد العكسي</action
+></entry
+></row>
+    <row
+><entry
+>sec(x)</entry
+><entry
+><action
+>قاطع</action
+></entry
+></row>
+    <row
+><entry
+>csc(x)</entry
+><entry
+><action
+>قاطع التمام</action
+></entry
+></row>
+    <row
+><entry
+>cot(x)</entry
+><entry
+><action
+>ظل التمام</action
+></entry
+></row>
+    <row
+><entry
+>asec(x)</entry
+><entry
+><action
+>قاطع معكوس</action
+></entry
+></row>
+    <row
+><entry
+>acsc(x)</entry
+><entry
+><action
+>قاطع التمام معكوس</action
+></entry
+></row>
+    <row
+><entry
+>acot(x)</entry
+><entry
+><action
+>ظل التمام معكوس</action
+></entry
+></row>
+    <row
+><entry
+>sech(x)</entry
+><entry
+><action
+>قاطع زائدي</action
+></entry
+></row>
+    <row
+><entry
+>csch(x)</entry
+><entry
+><action
+>قاطع التمام زائدي</action
+></entry
+></row>
+    <row
+><entry
+>coth(x)</entry
+><entry
+><action
+>ظل تمام الزائد</action
+></entry
+></row>
+    <row
+><entry
+>asech(x)</entry
+><entry
+><action
+>قاطع زائدي معكوس</action
+></entry
+></row>
+    <row
+><entry
+>acsch(x)</entry
+><entry
+><action
+>قاطع التمام زائدي معكوس</action
+></entry
+></row>
+    <row
+><entry
+>acoth(x)</entry
+><entry
+><action
+>ظل التمام زائدي معكوس</action
+></entry
+></row>
+    <row
+><entry
+>sinc(x)</entry
+><entry
+><action
+>Sinc function sin(&pi; x) / (&pi; x)</action
+></entry
+></row>
+    <row
+><entry
+>logsinh(x)</entry
+><entry
+><action
+>log(sinh(x)) for x &gt; 0</action
+></entry
+></row>
+    <row
+><entry
+>logcosh(x)</entry
+><entry
+><action
+>log(cosh(x))</action
+></entry
+></row>
+    <row
+><entry
+>hypot(x,y)</entry
+><entry
+><action
+>دالة الوتر &radic;{x<superscript
+>2</superscript
+> + y<superscript
+>2</superscript
+>}</action
+></entry
+></row>
+    <row
+><entry
+>hypot3(x,y,z)</entry
+><entry
+><action
+>&radic;{x<superscript
+>2</superscript
+> + y<superscript
+>2</superscript
+> + z<superscript
+>2</superscript
+>}</action
+></entry
+></row>
+    <row
+><entry
+>anglesymm(&alpha;)</entry
+><entry
+><action
+>أجبر الزاوية &alpha; على البقاء في النطاق (-&pi;,&pi;]</action
+></entry
+></row>
+    <row
+><entry
+>anglepos(&alpha;)</entry
+><entry
+><action
+>أجبر الزاوية &alpha; على أن تقع في النطاق (0,2&pi;]</action
+></entry
+></row>
+
+</tbody
+></tgroup
+></informaltable>
+</sect1>
+
+
+<sect1 id="parser-gsl">
+<title
+>دوال خاصة</title>
+<para
+>لمزيد من المعلومات حول الدوال، انظر توثيق GSL. </para>
+<informaltable pgwide="1"
+><tgroup cols="2">
+
+<thead
+><row
+><entry
+>الدالة</entry
+><entry
+>الوصف</entry
+></row
+></thead>
+
+<tbody>
+
+<row
+><entry
+>Ai(x)</entry
+><entry
+><action
+>دالة Airy Ai(x)</action
+></entry
+></row>
+<row
+><entry
+>Bi(x)</entry
+><entry
+><action
+>دالة Airy Bi(x)</action
+></entry
+></row>
+<row
+><entry
+>Ais(x)</entry
+><entry
+><action
+>النسخة الموسّعة من دالة Airy S<subscript
+>Ai</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Bis(x)</entry
+><entry
+><action
+>النسخة الموسّعة من دالة Airy S<subscript
+>Bi</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Aid(x)</entry
+><entry
+><action
+>مشتق دالة Airy Ai'(x)</action
+></entry
+></row>
+<row
+><entry
+>Bid(x)</entry
+><entry
+><action
+>مشتق دالة Airy Bi'(x)</action
+></entry
+></row>
+<row
+><entry
+>Aids(x)</entry
+><entry
+><action
+>مشتق دالة Airy الموسّعة S<subscript
+>Ai</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Bids(x)</entry
+><entry
+><action
+>مشتق دالة Airy الموسّعة S<subscript
+>Bi</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Ai0(s)</entry
+><entry
+><action
+>الصفر رقم s لدالة Airy Ai(x)</action
+></entry
+></row>
+<row
+><entry
+>Bi0(s)</entry
+><entry
+><action
+>الصفر رقم s لدالة Airy Bi(x)</action
+></entry
+></row>
+<row
+><entry
+>Aid0(s)</entry
+><entry
+><action
+>الصفر رقم s لمشتق دالة Airy Ai'(x)</action
+></entry
+></row>
+<row
+><entry
+>Bid0(s)</entry
+><entry
+><action
+>الصفر رقم s لمشتق دالة Airy Bi'(x)</action
+></entry
+></row>
+<row
+><entry
+>J0(x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المنتظمة من الرتبة الصفرية، J<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>J1(x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المنتظمة من الرتبة الأولى، J<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Jn(n,x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المنتظمة من الرتبة n، J<subscript
+>n</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Y0(x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية غير المنتظمة من الرتبة الصفرية، Y<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Y1(x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية غير المنتظمة من الرتبة الأولى، Y<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Yn(n,x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية غير المنتظمة من الرتبة n، Y<subscript
+>n</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>I0(x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المعدّلة المنتظمة من الرتبة الصفرية، I<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>I1(x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المعدّلة المنتظمة من الرتبة الأولى، I<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>In(n,x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المعدّلة المنتظمة من الرتبة n، I<subscript
+>n</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>I0s(x)</entry
+><entry
+><action
+>دالة بيسل الأسطوانية المعدلة المنتظمة والمُعدَّلة من الرتبة الصفرية exp(-|x|)I<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>I1s(x)</entry
+><entry
+><action
+>دالة بيسل الأسطوانية المعدلة المنتظمة والمُعدَّلة من الرتبة الأولى exp(-|x|) I<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Ins(n,x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المعدّلة المنتظمة الموسّعة من الرتبة n، exp(-|x|) I<subscript
+>n</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>K0(x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المعدّلة غير المنتظمة من الرتبة الصفرية، K<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>K1(x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المعدّلة غير المنتظمة من الرتبة الأولى، K<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Kn(n,x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المعدّلة غير المنتظمة من الرتبة n، K<subscript
+>n</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>K0s(x)</entry
+><entry
+><action
+>دالة بيسل الأسطوانية المعدلة غير المنتظمة والمُعدَّلة من الرتبة الصفرية exp(x) K<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>K1s(x)</entry
+><entry
+><action
+>دالة بيسل الأسطوانية المعدلة غير المنتظمة والمُعدَّلة من الرتبة الأولى exp(x) K<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Kns(n,x)</entry
+><entry
+><action
+>دالة Bessel الأسطوانية المعدّلة غير المنتظمة الموسّعة من الرتبة n، exp(x) K<subscript
+>n</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>j0(x)</entry
+><entry
+><action
+>دالة Bessel الكروية المنتظمة من الرتبة الصفرية، j<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>j1(x)</entry
+><entry
+><action
+>دالة Bessel الكروية المنتظمة من الرتبة الأولى، j<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>j2(x)</entry
+><entry
+><action
+>دالة بيسل الكروية المنتظمة من الرتبة الثانية، j<subscript
+>2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>jl(l,x)</entry
+><entry
+><action
+>دالة بيسل الكروية المنتظمة من الرتبة l، j<subscript
+>l</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>y0(x)</entry
+><entry
+><action
+>دالة بيسل الكروية غير المنتظمة من الرتبة الصفرية، y<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>y1(x)</entry
+><entry
+><action
+>دالة بيسل الكروية غير المنتظمة من الرتبة الأولى، y<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>y2(x)</entry
+><entry
+><action
+>دالة بيسل الكروية غير المنتظمة من الرتبة الثانية، y<subscript
+>2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>yl(l,x)</entry
+><entry
+><action
+>دالة بيسل الكروية غير المنتظمة من الرتبة l، y<subscript
+>l</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>i0s(x)</entry
+><entry
+><action
+>دالة بيسل الكروية المعدلة المنتظمة والمُعدَّلة من الرتبة الصفرية، exp(-|x|) i<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>i1s(x)</entry
+><entry
+><action
+>دالة بيسل الكروية المعدلة المنتظمة والمُعدَّلة من الرتبة الأولى، exp(-|x|) i<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>i2s(x)</entry
+><entry
+><action
+>دالة بيسل الكروية المعدلة المنتظمة والمُعدَّلة من الرتبة الثانية، exp(-|x|) i<subscript
+>2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>ils(l,x)</entry
+><entry
+><action
+>دالة بيسل الكروية المعدلة المنتظمة المدرجة من الرتبة l، exp(-|x|) i<subscript
+>l</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>k0s(x)</entry
+><entry
+><action
+>دالة بيسل الكروية المعدلة غير المنتظمة والمُعدَّلة من الرتبة الصفرية، exp(x) k<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>k1s(x)</entry
+><entry
+><action
+>دالة بيسل الكروية المعدلة غير المنتظمة والمُعدَّلة من الرتبة الأولى، exp(-|x|) k<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>k2s(x)</entry
+><entry
+><action
+>دالة بيسل الكروية المعدلة غير المنتظمة والمُعدَّلة من الرتبة الثانية، exp(-|x|) k<subscript
+>2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>kls(l,x)</entry
+><entry
+><action
+>دالة بيسل الكروية المعدلة غير المنتظمة المدرجة من الرتبة l، exp(x) k<subscript
+>l</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Jnu(&nu;,x)</entry
+><entry
+><action
+>دالة بيسل الأسطوانية المنتظمة من الرتبة الكسرية &nu;، J<subscript
+>&nu;</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Ynu(&nu;,x)</entry
+><entry
+><action
+>دالة بيسل الأسطوانية غير المنتظمة من الرتبة الكسرية &nu;، Y<subscript
+>&nu;</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Inu(&nu;,x)</entry
+><entry
+><action
+>دالة بيسل المعدلة المنتظمة من الرتبة الكسرية &nu;، I<subscript
+>&nu;</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Inus(&nu;,x)</entry
+><entry
+><action
+>دالة بيسل المعدلة المنتظمة المدرجة من الرتبة الكسرية &nu;، exp(-|x|) I<subscript
+>&nu;</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Knu(&nu;,x)</entry
+><entry
+><action
+>دالة بيسل المعدلة غير المنتظمة من الرتبة الكسرية &nu;، K<subscript
+>&nu;</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>lnKnu(&nu;,x)</entry
+><entry
+><action
+>لوغاريتم دالة بيسل المعدلة غير المنتظمة من الرتبة الكسرية &nu;، ln(K<subscript
+>&nu;</subscript
+>(x))</action
+></entry
+></row>
+<row
+><entry
+>Knus(&nu;,x)</entry
+><entry
+><action
+>دالة بيسل المعدلة غير المنتظمة المدرجة من الرتبة الكسرية &nu;، exp(|x|) K<subscript
+>&nu;</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>J0_0(s)</entry
+><entry
+><action
+>الصفر الموجب رقم s لدالة بيسل J<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>J1_0(s)</entry
+><entry
+><action
+>الصفر الموجب رقم s لدالة بيسل J<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Jnu_0(nu,s)</entry
+><entry
+><action
+>الصفر الموجب رقم s لدالة بيسل J<subscript
+>&nu;</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>clausen(x)</entry
+><entry
+><action
+>تكامل كلاوسن Cl<subscript
+>2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>hydrogenicR_1(Z,R)</entry
+><entry
+><action
+>دالة الموجة الشعاعية للحالة المقيدة الهيدروجينية المعيارية من الرتبة الدنيا R<subscript
+>1</subscript
+> := 2Z &radic;Z exp(-Z r)</action
+></entry
+></row>
+<row
+><entry
+>hydrogenicR(n,l,Z,R)</entry
+><entry
+><action
+>دالة موجة شعاعية نونية لحالة مقيدة هيدروجينية مُعيَّرة</action
+></entry
+></row>
+<row
+><entry
+>dawson(x)</entry
+><entry
+><action
+>تكامل داوسن</action
+></entry
+></row>
+<row
+><entry
+>D1(x)</entry
+><entry
+><action
+>دالة ديباي من الرتبة الأولى D<subscript
+>1</subscript
+>(x) = (1/x) &int;<subscript
+>0</subscript
+><superscript
+>x</superscript
+>(t/(e<superscript
+>t</superscript
+> - 1)) dt</action
+></entry
+></row>
+<row
+><entry
+>D2(x)</entry
+><entry
+><action
+>دالة ديباي من الرتبة الثانية D<subscript
+>2</subscript
+>(x) = (2/x<superscript
+>2</superscript
+>) &int;<subscript
+>0</subscript
+><superscript
+>x</superscript
+> (t<superscript
+>2</superscript
+>/(e<superscript
+>t</superscript
+> - 1)) dt</action
+></entry
+></row>
+<row
+><entry
+>D3(x)</entry
+><entry
+><action
+>دالة ديباي من الرتبة الثالثة D<subscript
+>3</subscript
+>(x) = (3/x<superscript
+>3</superscript
+>) &int;<subscript
+>0</subscript
+><superscript
+>x</superscript
+> (t<superscript
+>3</superscript
+>/(e<superscript
+>t</superscript
+> - 1)) dt</action
+></entry
+></row>
+<row
+><entry
+>D4(x)</entry
+><entry
+><action
+>دالة ديباي من الرتبة الرابعة D<subscript
+>4</subscript
+>(x) = (4/x<superscript
+>4</superscript
+>) &int;<subscript
+>0</subscript
+><superscript
+>x</superscript
+> (t<superscript
+>4</superscript
+>/(e<superscript
+>t</superscript
+> - 1)) dt</action
+></entry
+></row>
+<row
+><entry
+>D5(x)</entry
+><entry
+><action
+>دالة ديباي من الرتبة الخامسة D<subscript
+>5</subscript
+>(x) = (5/x<superscript
+>5</superscript
+>) &int;<subscript
+>0</subscript
+><superscript
+>x</superscript
+> (t<superscript
+>5</superscript
+>/(e<superscript
+>t</superscript
+> - 1)) dt</action
+></entry
+></row>
+<row
+><entry
+>D6(x)</entry
+><entry
+><action
+>دالة ديباي من الرتبة السادسة D<subscript
+>6</subscript
+>(x) = (6/x<superscript
+>6</superscript
+>) &int;<subscript
+>0</subscript
+><superscript
+>x</superscript
+> (t<superscript
+>6</superscript
+>/(e<superscript
+>t</superscript
+> - 1)) dt</action
+></entry
+></row>
+<row
+><entry
+>Li2(x)</entry
+><entry
+><action
+>ثنائي اللوغاريتم</action
+></entry
+></row>
+<row
+><entry
+>Kc(k)</entry
+><entry
+><action
+>التكامل الإهليلجي التام K(k)</action
+></entry
+></row>
+<row
+><entry
+>Ec(k)</entry
+><entry
+><action
+>التكامل الإهليلجي التام E(k)</action
+></entry
+></row>
+<row
+><entry
+>F(phi,k)</entry
+><entry
+><action
+>التكامل الإهليلجي غير التام F(phi,k)</action
+></entry
+></row>
+<row
+><entry
+>E(phi,k)</entry
+><entry
+><action
+>التكامل الناقص البيضوي E(φ,k)</action
+></entry
+></row>
+<row
+><entry
+>P(phi,k,n)</entry
+><entry
+><action
+>التكامل الناقص البيضوي P(φ,k,n)</action
+></entry
+></row>
+<row
+><entry
+>D(phi,k,n)</entry
+><entry
+><action
+>التكامل الناقص البيضوي D(φ,k,n)</action
+></entry
+></row>
+<row
+><entry
+>RC(x,y)</entry
+><entry
+><action
+>التكامل الناقص البيضوي RC(x,y)</action
+></entry
+></row>
+<row
+><entry
+>RD(x,y,z)</entry
+><entry
+><action
+>التكامل الناقص البيضوي RD(x,y,z)</action
+></entry
+></row>
+<row
+><entry
+>RF(x,y,z)</entry
+><entry
+><action
+>التكامل الناقص البيضوي RF(x,y,z)</action
+></entry
+></row>
+<row
+><entry
+>RJ(x,y,z)</entry
+><entry
+><action
+>التكامل الناقص البيضوي RJ(x,y,z,p)</action
+></entry
+></row>
+<row
+><entry
+>erf(x)</entry
+><entry
+><action
+>دالة الخطأ erf(x) = 2/√π ∫₀ˣ exp(-t²) dt</action
+></entry
+></row>
+<row
+><entry
+>erfc(x)</entry
+><entry
+><action
+>دالة الخطأ التكميلية erfc(x) = 1 - erf(x) = 2/√π ∫ₓ^∞ exp(-t²) dt</action
+></entry
+></row>
+<row
+><entry
+>log_erfc(x)</entry
+><entry
+><action
+>لوغاريتم دالة الخطأ التكميلية log(erfc(x))</action
+></entry
+></row>
+<row
+><entry
+>erf_Z(x)</entry
+><entry
+><action
+>دالة الاحتمال الغاوسية Z(x) = (1/(2π)) exp(-x²/2)</action
+></entry
+></row>
+<row
+><entry
+>erf_Q(x)</entry
+><entry
+><action
+>الذيل العلوي لدالة الاحتمال الغاوسية Q(x) = (1/(2π)) ∫ₓ^∞ exp(-t²/2) dt</action
+></entry
+></row>
+<row
+><entry
+>hazard(x)</entry
+><entry
+><action
+>دالة الخطر للتوزيع الطبيعي</action
+></entry
+></row>
+<row
+><entry
+>exp(x)</entry
+><entry
+><action
+>الأسي، الأساس e</action
+></entry
+></row>
+<row
+><entry
+>expm1(x)</entry
+><entry
+><action
+>exp(x)-1</action
+></entry
+></row>
+<row
+><entry
+>exp_mult(x,y)</entry
+><entry
+><action
+>أسّ x واضربه في العامل y لإرجاع الجداء y exp(x)</action
+></entry
+></row>
+<row
+><entry
+>exprel(x)</entry
+><entry
+><action
+>(exp(x)-1)/x باستخدام خوارزمية دقيقة لـ x الصغيرة</action
+></entry
+></row>
+<row
+><entry
+>exprel2(x)</entry
+><entry
+><action
+>2(exp(x)-1-x)/x² باستخدام خوارزمية دقيقة لـ x الصغيرة</action
+></entry
+></row>
+<row
+><entry
+>expreln(n,x)</entry
+><entry
+><action
+>الأسي النسبي من الرتبة n، وهو التعميم n-أولي للدوال `exprel`</action
+></entry
+></row>
+<row
+><entry
+>E1(x)</entry
+><entry
+><action
+>التكامل الأسي E₁(x)، E₁(x) := Re ∫₁^∞ exp(-xt)/t dt</action
+></entry
+></row>
+<row
+><entry
+>E2(x)</entry
+><entry
+><action
+>التكامل الأسي من الرتبة الثانية E₂(x)، E₂(x) := Re ∫₁^∞ exp(-xt)/t² dt</action
+></entry
+></row>
+<row
+><entry
+>En(x)</entry
+><entry
+><action
+>التكامل الأسي E_n(x) من الرتبة n، Eₙ(x) := Re ∫₁^∞ exp(-xt)/tⁿ dt)</action
+></entry
+></row>
+<row
+><entry
+>Ei(x)</entry
+><entry
+><action
+>التكامل الأسي E_i(x)، Ei(x) := PV(∫_{-x}^∞ exp(-t)/t dt)</action
+></entry
+></row>
+<row
+><entry
+>shi(x)</entry
+><entry
+><action
+>Shi(x) = ∫₀ˣ sinh(t)/t dt</action
+></entry
+></row>
+<row
+><entry
+>chi(x)</entry
+><entry
+><action
+>التكامل Chi(x) := Re[ γ_E + log(x) + ∫₀ˣ (cosh[t]-1)/t dt ]</action
+></entry
+></row>
+<row
+><entry
+>Ei3(x)</entry
+><entry
+><action
+>التكامل الأسي Ei₃(x) = ∫₀ˣ exp(-t³) dt لـ x ≥ 0</action
+></entry
+></row>
+<row
+><entry
+>si(x)</entry
+><entry
+><action
+>تكامل الجيب Si(x) = ∫₀ˣ sin(t)/t dt</action
+></entry
+></row>
+<row
+><entry
+>ci(x)</entry
+><entry
+><action
+>تكامل جيب التمام Ci(x) = -∫ₓ^∞ cos(t)/t dt لـ x 
+> 0</action
+></entry
+></row>
+<row
+><entry
+>atanint(x)</entry
+><entry
+><action
+>تكامل قوس الظل AtanInt(x) = ∫₀ˣ arctan(t)/t dt</action
+></entry
+></row>
+<row
+><entry
+>Fm1(x)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الكامل بمؤشر -1، F₋₁(x) = eˣ / (1 + eˣ)</action
+></entry
+></row>
+<row
+><entry
+>F0(x)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الكامل بمؤشر 0، F₀(x) = ln(1 + eˣ)</action
+></entry
+></row>
+<row
+><entry
+>F1(x)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الكامل بمؤشر 1، F<subscript
+>1</subscript
+>(x) = &int;<subscript
+>0</subscript
+><superscript
+>&infin;</superscript
+> (t /(exp(t-x)+1)) dt</action
+></entry
+></row>
+<row
+><entry
+>F2(x)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الكامل بمؤشر 2، F<subscript
+>2</subscript
+>(x) = (1/2) &int;<subscript
+>0</subscript
+><superscript
+>&infin;</superscript
+> (t<superscript
+>2</superscript
+> /(exp(t-x)+1)) dt</action
+></entry
+></row>
+<row
+><entry
+>Fj(j,x)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الكامل بمؤشر j، F<subscript
+>j</subscript
+>(x) = (1/&Gamma;(j+1)) &int;<subscript
+>0</subscript
+><superscript
+>&infin;</superscript
+> (t<superscript
+>j</superscript
+> /(exp(t-x)+1)) dt</action
+></entry
+></row>
+<row
+><entry
+>Fmhalf(x)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الكامل F<subscript
+>-1/2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Fhalf(x)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الكامل F<subscript
+>1/2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>F3half(x)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الكامل F<subscript
+>3/2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Finc0(x,b)</entry
+><entry
+><action
+>تكامل فيرمي-ديراك الناقص بمؤشر صفر، F<subscript
+>0</subscript
+>(x,b) = ln(1 + e<superscript
+>b-x</superscript
+>) - (b-x)</action
+></entry
+></row>
+<row
+><entry
+>lngamma(x)</entry
+><entry
+><action
+>لوغاريتم دالة جاما</action
+></entry
+></row>
+<row
+><entry
+>gammastar(x)</entry
+><entry
+><action
+>دالة غاما المنظمة &Gamma;<superscript
+>*</superscript
+>(x) لـ x &gt; 0</action
+></entry
+></row>
+<row
+><entry
+>gammainv(x)</entry
+><entry
+><action
+>مقلوب دالة غاما، 1/&Gamma;(x) باستخدام طريقة لانكوس الحقيقية.</action
+></entry
+></row>
+<row
+><entry
+>fact(n)</entry
+><entry
+><action
+>عاملي ن!</action
+></entry
+></row>
+<row
+><entry
+>doublefact(n)</entry
+><entry
+><action
+>المضروب المزدوج n!! = n(n-2)(n-4)...</action
+></entry
+></row>
+<row
+><entry
+>lnfact(n)</entry
+><entry
+><action
+>لوغاريتم مضروب n، log(n!)</action
+></entry
+></row>
+<row
+><entry
+>lndoublefact(n)</entry
+><entry
+><action
+>لوغاريتم المضروب المزدوج log(n!!)</action
+></entry
+></row>
+<row
+><entry
+>choose(n,m)</entry
+><entry
+><action
+>العامل التوافيقي `n اختر m' = n!/(m!(n-m)!)</action
+></entry
+></row>
+<row
+><entry
+>lnchoose(n,m)</entry
+><entry
+><action
+>لوغاريتم `n اختر m'</action
+></entry
+></row>
+<row
+><entry
+>taylor(n,x)</entry
+><entry
+><action
+>معامل تايلور x<superscript
+>n</superscript
+> / n! لـ x 
+>= 0، n 
+>= 0</action
+></entry
+></row>
+<row
+><entry
+>poch(a,x)</entry
+><entry
+><action
+>رمز بوخهامر (a)<subscript
+>x</subscript
+> := &Gamma;(a + x)/&Gamma;(x)</action
+></entry
+></row>
+<row
+><entry
+>lnpoch(a,x)</entry
+><entry
+><action
+>لوغاريتم رمز بوخهامر (a)<subscript
+>x</subscript
+> := &Gamma;(a + x)/&Gamma;(x)</action
+></entry
+></row>
+<row
+><entry
+>pochrel(a,x)</entry
+><entry
+><action
+>رمز بوخهامر النسبي ((a,x) - 1)/x حيث (a,x) = (a)<subscript
+>x</subscript
+> := &Gamma;(a + x)/&Gamma;(a)</action
+></entry
+></row>
+<row
+><entry
+>gammainc(a,x)</entry
+><entry
+><action
+>دالة غاما الناقصة &Gamma;(a,x) = &int;<subscript
+>x</subscript
+><superscript
+>&infin;</superscript
+> t<superscript
+>a-1</superscript
+> exp(-t) dt لـ a &gt; 0، x &gt;= 0</action
+></entry
+></row>
+<row
+><entry
+>gammaincQ(a,x)</entry
+><entry
+><action
+>دالة غاما الناقصة المعيارية P(a,x) = 1/&Gamma;(a) &int;<subscript
+>x</subscript
+><superscript
+>&infin;</superscript
+> t<superscript
+>a-1</superscript
+> exp(-t) dt لـ a &gt; 0، x &gt;= 0</action
+></entry
+></row>
+<row
+><entry
+>gammaincP(a,x)</entry
+><entry
+><action
+>دالة غاما الناقصة المعيارية التكميلية P(a,x) = 1/&Gamma;(a) &int;<subscript
+>0</subscript
+><superscript
+>x</superscript
+> t<superscript
+>a-1</superscript
+> exp(-t) dt لـ a &gt; 0، x &gt;= 0</action
+></entry
+></row>
+<row
+><entry
+>beta(a,b)</entry
+><entry
+><action
+>دالة بيتا، B(a,b) = &Gamma;(a) &Gamma;(b)/&Gamma;(a+b) لـ a &gt; 0، b &gt; 0</action
+></entry
+></row>
+<row
+><entry
+>lnbeta(a,b)</entry
+><entry
+><action
+>لوغاريتم دالة بيتا، log(B(a,b)) لـ a &gt; 0، b &gt; 0</action
+></entry
+></row>
+<row
+><entry
+>betainc(a,b,x)</entry
+><entry
+><action
+>دالة بيتا الناقصة المعيارية B_x(a,b)/B(a,b) لـ a &gt; 0، b &gt; 0 </action
+></entry
+></row>
+<row
+><entry
+>C1(&lambda;,x)</entry
+><entry
+><action
+>متعددة حدود غيغنباور C<superscript
+>&lambda;</superscript
+><subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>C2(&lambda;,x)</entry
+><entry
+><action
+>متعددة حدود غيغنباور C<superscript
+>&lambda;</superscript
+><subscript
+>2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>C3(&lambda;,x)</entry
+><entry
+><action
+>متعددة حدود غيغنباور C<superscript
+>&lambda;</superscript
+><subscript
+>3</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Cn(n,&lambda;,x)</entry
+><entry
+><action
+>متعددة حدود غيغنباور C<superscript
+>&lambda;</superscript
+><subscript
+>n</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>hyperg_0F1(c,x)</entry
+><entry
+><action
+>دالة فوق هندسية <subscript
+>0</subscript
+>F<subscript
+>1</subscript
+>(c,x)</action
+></entry
+></row>
+<row
+><entry
+>hyperg_1F1i(m,n,x)</entry
+><entry
+><action
+>دالة فوق هندسية متقاربة <subscript
+>1</subscript
+>F<subscript
+>1</subscript
+>(m,n,x) = M(m,n,x) لمعاملات صحيحة m، n</action
+></entry
+></row>
+<row
+><entry
+>hyperg_1F1(a,b,x)</entry
+><entry
+><action
+>دالة فوقهندسية متقاربة <subscript
+>1</subscript
+>F<subscript
+>1</subscript
+>(a,b,x) = M(a,b,x) لوسائط عامة a,b</action
+></entry
+></row>
+<row
+><entry
+>hyperg_Ui(m,n,x)</entry
+><entry
+><action
+>دالة فوقهندسية متقاربة U(m,n,x) لوسائط صحيحة m,n</action
+></entry
+></row>
+<row
+><entry
+>hyperg_U(a,b,x)</entry
+><entry
+><action
+>دالة فوقهندسية متقاربة U(a,b,x)</action
+></entry
+></row>
+<row
+><entry
+>hyperg_2F1(a,b,c,x)</entry
+><entry
+><action
+>دالة فوقهندسية لغاوس <subscript
+>2</subscript
+>F<subscript
+>1</subscript
+>(a,b,c,x)</action
+></entry
+></row>
+<row
+><entry
+>hyperg_2F1c(a<subscript
+>R</subscript
+>,a<subscript
+>I</subscript
+>,c,x)</entry
+><entry
+><action
+>دالة فوقهندسية لغاوس <subscript
+>2</subscript
+>F<subscript
+>1</subscript
+>(a<subscript
+>R</subscript
+> + i a<subscript
+>I</subscript
+>, a<subscript
+>R</subscript
+> - i a<subscript
+>I</subscript
+>, c, x) بوسائط مركبة</action
+></entry
+></row>
+<row
+><entry
+>hyperg_2F1r(a<subscript
+>R</subscript
+>,a<subscript
+>I</subscript
+>,c,x)</entry
+><entry
+><action
+>دالة فوقهندسية لغاوس معاد تسويتها <subscript
+>2</subscript
+>F<subscript
+>1</subscript
+>(a,b,c,x) / &Gamma;(c)</action
+></entry
+></row>
+<row
+><entry
+>hyperg_2F1cr(a<subscript
+>R</subscript
+>,a<subscript
+>I</subscript
+>,c,x)</entry
+><entry
+><action
+>دالة فوقهندسية لغاوس معاد تسويتها <subscript
+>2</subscript
+>F<subscript
+>1</subscript
+>(a<subscript
+>R</subscript
+> + i a<subscript
+>I</subscript
+>, a<subscript
+>R</subscript
+> - i a<subscript
+>I</subscript
+>, c, x) / &Gamma;(c)</action
+></entry
+></row>
+<row
+><entry
+>hyperg_2F0(a,b,x)</entry
+><entry
+><action
+>دالة فوقهندسية <subscript
+>2</subscript
+>F<subscript
+>0</subscript
+>(a,b,x)</action
+></entry
+></row>
+<row
+><entry
+>L1(a,x)</entry
+><entry
+><action
+>كثيرات حدود لاغير المعممة L<superscript
+>a</superscript
+><subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>L2(a,x)</entry
+><entry
+><action
+>كثيرات حدود لاغير المعممة L<superscript
+>a</superscript
+><subscript
+>2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>L3(a,x)</entry
+><entry
+><action
+>كثيرات حدود لاغير المعممة L<superscript
+>a</superscript
+><subscript
+>3</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>W0(x)</entry
+><entry
+><action
+>الفرع الرئيس لدالة لامبرت W، W<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Wm1(x)</entry
+><entry
+><action
+>الفرع الثانوي ذو القيمة الحقيقية لدالة لامبرت W، W<subscript
+>-1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>P1(x)</entry
+><entry
+><action
+>كثيرات حدود ليجاندر P<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>P2(x)</entry
+><entry
+><action
+>كثيرات حدود ليجاندر P<subscript
+>2</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>P3(x)</entry
+><entry
+><action
+>كثيرات حدود ليجاندر P<subscript
+>3</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Pl(l,x)</entry
+><entry
+><action
+>كثيرات حدود ليجاندر P<subscript
+>l</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Q0(x)</entry
+><entry
+><action
+>كثيرات حدود ليجاندر Q<subscript
+>0</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Q1(x)</entry
+><entry
+><action
+>كثيرات حدود ليجاندر Q<subscript
+>1</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Ql(l,x)</entry
+><entry
+><action
+>كثيرات حدود ليجاندر Q<subscript
+>l</subscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Plm(l,m,x)</entry
+><entry
+><action
+>كثيرة حدود ليجاندر المرافقة P<subscript
+>l</subscript
+><superscript
+>m</superscript
+>(x)</action
+></entry
+></row>
+<row
+><entry
+>Pslm(l,m,x)</entry
+><entry
+><action
+>كثيرة حدود ليجاندر المرافقة المعاد تسويتها &radic;{(2l+1)/(4&pi;)} &radic;{(l-m)!/(l+m)!} P<subscript
+>l</subscript
+><superscript
+>m</superscript
+>(x) المناسبة للاستخدام في التوافقيات الكروية</action
+></entry
+></row>
+<row
+><entry
+>Phalf(&lambda;,x)</entry
+><entry
+><action
+>دالة مخروطية كروية غير منتظمة P<superscript
+>1/2</superscript
+><subscript
+>-1/2 + i &lambda;</subscript
+>(x) لـ x &gt; -1</action
+></entry
+></row>
+<row
+><entry
+>Pmhalf(&lambda;,x)</entry
+><entry
+><action
+>دالة مخروطية كروية منتظمة P<superscript
+>-1/2</superscript
+><subscript
+>-1/2 + i &lambda;</subscript
+>(x) لـ x &gt; -1</action
+></entry
+></row>
+<row
+><entry
+>Pc0(&lambda;,x)</entry
+><entry
+><action
+>دالة مخروطية P<superscript
+>0</superscript
+><subscript
+>-1/2 + i &lambda;</subscript
+>(x) لـ x &gt; -1</action
+></entry
+></row>
+<row
+><entry
+>Pc1(&lambda;,x)</entry
+><entry
+><action
+>دالة مخروطية P<superscript
+>1</superscript
+><subscript
+>-1/2 + i &lambda;</subscript
+>(x) لـ x &gt; -1</action
+></entry
+></row>
+<row
+><entry
+>Psr(l,&lambda;,x)</entry
+><entry
+><action
+>دالة مخروطية كروية منتظمة P<superscript
+>-1/2-l</superscript
+><subscript
+>-1/2 + i &lambda;</subscript
+>(x) لـ x &gt; -1، l &gt;= -1</action
+></entry
+></row>
+<row
+><entry
+>Pcr(l,&lambda;,x)</entry
+><entry
+><action
+>دالة مخروطية أسطوانية منتظمة P<superscript
+>-m</superscript
+><subscript
+>-1/2 + i &lambda;</subscript
+>(x) لـ x &gt; -1، m &gt;= -1</action
+></entry
+></row>
+<row
+><entry
+>H3d0(&lambda;,&eta;)</entry
+><entry
+><action
+>الدالة الذاتية الشعاعية الصفرية للابلاسي في الفضاء الزائدي ثلاثي الأبعاد، L<superscript
+>H3d</superscript
+><subscript
+>0</subscript
+>(&lambda;,,&eta;) := sin(&lambda; &eta;)/(&lambda; sinh(&eta;)) لـ &eta; &gt;= 0</action
+></entry
+></row>
+<row
+><entry
+>H3d1(&lambda;,&eta;)</entry
+><entry
+><action
+>الدالة الذاتية الشعاعية الصفرية للابلاسي في الفضاء الزائدي ثلاثي الأبعاد، L<superscript
+>H3d</superscript
+><subscript
+>1</subscript
+>(&lambda;,&eta;) := 1/&radic;{&lambda;<superscript
+>2</superscript
+> + 1} sin(&lambda; &eta;)/(&lambda; sinh(&eta;)) (coth(&eta;) - &lambda; cot(&lambda; &eta;)) لـ &eta; &gt;= 0</action
+></entry
+></row>
+<row
+><entry
+>H3d(l,&lambda;,&eta;)</entry
+><entry
+><action
+>دالة لابلاس الذاتية الشعاعية من الرتبة l على الفضاء الزائدي ثلاثي الأبعاد eta ≥ 0, l ≥ 0</action
+></entry
+></row>
+<row
+><entry
+>logabs(x)</entry
+><entry
+><action
+>لوغاريتم مقدار X، log(|x|)</action
+></entry
+></row>
+<row
+><entry
+>logp(x)</entry
+><entry
+><action
+>log(1 + x) من أجل x 
+> -1 باستخدام خوارزمية دقيقة للقيم الصغيرة لـ x</action
+></entry
+></row>
+<row
+><entry
+>logm(x)</entry
+><entry
+><action
+>log(1 + x) - x من أجل x 
+> -1 باستخدام خوارزمية دقيقة للقيم الصغيرة لـ x</action
+></entry
+></row>
+<row
+><entry
+>psiint(n)</entry
+><entry
+><action
+>دالة دايغاما ψ(n) للعدد الصحيح الموجب n</action
+></entry
+></row>
+<row
+><entry
+>psi(x)</entry
+><entry
+><action
+>دالة دايغاما ψ(x) للقيمة العامة x</action
+></entry
+></row>
+<row
+><entry
+>psi1piy(y)</entry
+><entry
+><action
+>الجزء الحقيقي من دالة دايغاما على الخط 1+iy، Re[ψ(1 + i y)]</action
+></entry
+></row>
+<row
+><entry
+>psi1int(n)</entry
+><entry
+><action
+>دالة ترايغاما ψ'(n) للعدد الصحيح الموجب n</action
+></entry
+></row>
+<row
+><entry
+>psi1(n)</entry
+><entry
+><action
+>دالة ترايغاما ψ'(x) للقيمة العامة x</action
+></entry
+></row>
+<row
+><entry
+>psin(m,x)</entry
+><entry
+><action
+>دالة بوليغاما ψ<superscript
+>(m)</superscript
+>(x) من أجل m ≥ 0, x 
+> 0</action
+></entry
+></row>
+<row
+><entry
+>synchrotron1(x)</entry
+><entry
+><action
+>دالة السنكروترون الأولى x ∫<subscript
+>x</subscript
+><superscript
+>∞</superscript
+> K<subscript
+>5/3</subscript
+>(t) dt من أجل x ≥ 0</action
+></entry
+></row>
+<row
+><entry
+>synchrotron2(x)</entry
+><entry
+><action
+>دالة السنكروترون الثانية x K<subscript
+>2/3</subscript
+>(x) من أجل x ≥ 0</action
+></entry
+></row>
+<row
+><entry
+>J2(x)</entry
+><entry
+><action
+>دالة النقل J(2,x)</action
+></entry
+></row>
+<row
+><entry
+>J3(x)</entry
+><entry
+><action
+>دالة النقل J(3,x)</action
+></entry
+></row>
+<row
+><entry
+>J4(x)</entry
+><entry
+><action
+>دالة النقل J(4,x)</action
+></entry
+></row>
+<row
+><entry
+>J5(x)</entry
+><entry
+><action
+>دالة النقل J(5,x)</action
+></entry
+></row>
+<row
+><entry
+>zetaint(n)</entry
+><entry
+><action
+>دالة زيتا لريمان ζ(n) للعدد الصحيح n</action
+></entry
+></row>
+<row
+><entry
+>zeta(s)</entry
+><entry
+><action
+>دالة زيتا لريمان ζ(s) للقيمة الاعتبارية s</action
+></entry
+></row>
+<row
+><entry
+>zetam1int(n)</entry
+><entry
+><action
+>دالة ζ لريمان ناقص 1 للعدد الصحيح n</action
+></entry
+></row>
+<row
+><entry
+>zetam1(s)</entry
+><entry
+><action
+>دالة ζ لريمان ناقص 1</action
+></entry
+></row>
+<row
+><entry
+>zetaintm1(s)</entry
+><entry
+><action
+>دالة ζ لريمان للعدد الصحيح n ناقص 1</action
+></entry
+></row>
+<row
+><entry
+>hzeta(s,q)</entry
+><entry
+><action
+>دالة زيتا لهورويتز ζ(s,q) من أجل s 
+> 1, q 
+> 0</action
+></entry
+></row>
+<row
+><entry
+>etaint(n)</entry
+><entry
+><action
+>دالة إيتا η(n) للعدد الصحيح n</action
+></entry
+></row>
+<row
+><entry
+>eta(s)</entry
+><entry
+><action
+>دالة إيتا η(s) للقيمة الاعتبارية s</action
+></entry
+></row>
+</tbody>
+</tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="parser-ran-gsl">
+<title
+>توزيعات الأعداد العشوائية</title>
+<para
+>لمزيد من المعلومات حول الدوال، انظر توثيق GSL. </para>
+<informaltable pgwide="1"
+><tgroup cols="2">
+
+<thead
+><row
+><entry
+>الدالة</entry
+><entry
+>الوصف</entry
+></row
+></thead>
+
+<tbody>
+
+<row
+><entry
+>gaussian(x,&sigma;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع غاوسي بانحراف معياري σ</action
+></entry
+></row>
+<row
+><entry
+>ugaussian(x)</entry
+><entry
+><action
+>توزيع غاوسي الوحدوي. وهي مكافئة للدوال أعلاه بانحراف معياري σ = 1</action
+></entry
+></row>
+<row
+><entry
+>gaussianP(x,&sigma;)</entry
+><entry
+><action
+>دوال التوزيع التراكمي P(x) للتوزيع الغاوسي بانحراف معياري σ</action
+></entry
+></row>
+<row
+><entry
+>gaussianQ(x,&sigma;)</entry
+><entry
+><action
+>دوال التوزيع التراكمي Q(x) للتوزيع الغاوسي بانحراف معياري σ</action
+></entry
+></row>
+<row
+><entry
+>gaussianPinv(P,&sigma;)</entry
+><entry
+><action
+>دوال التوزيع التراكمي المعكوسة P(x) للتوزيع الغاوسي بانحراف معياري σ</action
+></entry
+></row>
+<row
+><entry
+>gaussianQinv(Q,&sigma;)</entry
+><entry
+><action
+>دوال التوزيع التراكمي العكسي Q(x) للتوزيع الغاوسي بانحراف معياري &sigma;</action
+></entry
+></row>
+<row
+><entry
+>ugaussianP(x)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) للتوزيع الغاوسي الوحدوي</action
+></entry
+></row>
+<row
+><entry
+>ugaussianQ(x)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) للتوزيع الغاوسي الوحدوي</action
+></entry
+></row>
+<row
+><entry
+>ugaussianPinv(P)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) للتوزيع الغاوسي الوحدوي</action
+></entry
+></row>
+<row
+><entry
+>ugaussianQinv(Q)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) للتوزيع الغاوسي الوحدوي</action
+></entry
+></row>
+<row
+><entry
+>gaussiantail(x,a,&sigma;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع ذيل غاوسي بانحراف معياري &sigma; وحد أدنى a</action
+></entry
+></row>
+<row
+><entry
+>ugaussiantail(x,a)</entry
+><entry
+><action
+>ذيل توزيع غاوسي وحدوي. وهي مكافئة للدوال أعلاه بانحراف معياري &sigma; = 1</action
+></entry
+></row>
+<row
+><entry
+>gaussianbi(x,y,&sigma;<subscript
+>x</subscript
+>,&sigma;<subscript
+>y</subscript
+>,&rho;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x,y) لتوزيع غاوسي ثنائي المتغير بانحرافين معياريين &sigma;<subscript
+>x</subscript
+>, &sigma;<subscript
+>y</subscript
+> ومعامل ارتباط &rho;</action
+></entry
+></row>
+<row
+><entry
+>exponential(x,&mu;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع أسي بمتوسط &mu;</action
+></entry
+></row>
+<row
+><entry
+>exponentialP(x,&mu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع أسي بمتوسط &mu;</action
+></entry
+></row>
+<row
+><entry
+>exponentialQ(x,&mu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع أسي بمتوسط &mu;</action
+></entry
+></row>
+<row
+><entry
+>exponentialPinv(P,&mu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع أسي بمتوسط &mu;</action
+></entry
+></row>
+<row
+><entry
+>exponentialQinv(Q,&mu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع أسي بمتوسط &mu;</action
+></entry
+></row>
+<row
+><entry
+>laplace(x,a)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع لابلاس بعرض a</action
+></entry
+></row>
+<row
+><entry
+>laplaceP(x,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع لابلاس بعرض a</action
+></entry
+></row>
+<row
+><entry
+>laplaceQ(x,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع لابلاس بعرض a</action
+></entry
+></row>
+<row
+><entry
+>laplacePinv(P,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع لابلاس بعرض a</action
+></entry
+></row>
+<row
+><entry
+>laplaceQinv(Q,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع لابلاس بعرض a</action
+></entry
+></row>
+<row
+><entry
+>exppow(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع قوة أسي بمعامل مقياس a وأس b</action
+></entry
+></row>
+<row
+><entry
+>exppowP(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية التراكمية P(x) لتوزيع قوة أسي بمعامل مقياس a وأس b</action
+></entry
+></row>
+<row
+><entry
+>exppowQ(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية التراكمية Q(x) لتوزيع قوة أسي بمعامل مقياس a وأس b</action
+></entry
+></row>
+<row
+><entry
+>cauchy(x,a)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع كوشي (لورنتز) بمعامل مقياس a</action
+></entry
+></row>
+<row
+><entry
+>cauchyP(x,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع كوشي بمعامل مقياس a</action
+></entry
+></row>
+<row
+><entry
+>cauchyQ(x,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع كوشي بمعامل مقياس a</action
+></entry
+></row>
+<row
+><entry
+>cauchyPinv(P,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع كوشي بمعامل مقياس a</action
+></entry
+></row>
+<row
+><entry
+>cauchyQinv(Q,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع كوشي بمعامل مقياس a</action
+></entry
+></row>
+<row
+><entry
+>rayleigh(x,&sigma;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع رايلي بمعامل مقياس &sigma;</action
+></entry
+></row>
+<row
+><entry
+>rayleighP(x,&sigma;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع رايلي بمعامل مقياس &sigma;</action
+></entry
+></row>
+<row
+><entry
+>rayleighQ(x,&sigma;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع رايلي بمعامل مقياس &sigma;</action
+></entry
+></row>
+<row
+><entry
+>rayleighPinv(P,&sigma;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع رايلي بمعامل مقياس &sigma;</action
+></entry
+></row>
+<row
+><entry
+>rayleighQinv(Q,&sigma;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع رايلي بمعامل قياس &sigma;</action
+></entry
+></row>
+<row
+><entry
+>rayleigh_tail(x,a,&sigma;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع ذيل رايلي بمعامل قياس &sigma; وحد أدنى a</action
+></entry
+></row>
+<row
+><entry
+>landau(x)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع لانداو</action
+></entry
+></row>
+<row
+><entry
+>gammapdf(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع غاما بمعاملين a وb</action
+></entry
+></row>
+<row
+><entry
+>gammaP(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع غاما بمعاملين a وb</action
+></entry
+></row>
+<row
+><entry
+>gammaQ(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع غاما بمعاملين a وb</action
+></entry
+></row>
+<row
+><entry
+>gammaPinv(P,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع غاما بمعاملين a وb</action
+></entry
+></row>
+<row
+><entry
+>gammaQinv(Q,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع غاما بمعاملين a وb</action
+></entry
+></row>
+<row
+><entry
+>flat(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع منتظم من a إلى b</action
+></entry
+></row>
+<row
+><entry
+>flatP(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع منتظم من a إلى b</action
+></entry
+></row>
+<row
+><entry
+>flatQ(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع منتظم من a إلى b</action
+></entry
+></row>
+<row
+><entry
+>flatPinv(P,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع منتظم من a إلى b</action
+></entry
+></row>
+<row
+><entry
+>flatQinv(Q,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع منتظم من a إلى b</action
+></entry
+></row>
+<row
+><entry
+>lognormal(x,&zeta;,&sigma;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع لوغاريتمي طبيعي بمعاملين &zeta; و&sigma;</action
+></entry
+></row>
+<row
+><entry
+>lognormalP(x,&zeta;,&sigma;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع لوغاريتمي طبيعي بمعاملين &zeta; و&sigma;</action
+></entry
+></row>
+<row
+><entry
+>lognormalQ(x,&zeta;,&sigma;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع لوغاريتمي طبيعي بمعاملين &zeta; و&sigma;</action
+></entry
+></row>
+<row
+><entry
+>lognormalPinv(P,&zeta;,&sigma;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع لوغاريتمي طبيعي بمعاملين &zeta; و&sigma;</action
+></entry
+></row>
+<row
+><entry
+>lognormalQinv(Q,&zeta;,&sigma;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع لوغاريتمي طبيعي بمعاملين &zeta; و&sigma;</action
+></entry
+></row>
+<row
+><entry
+>chisq(x,&nu;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع &chi;<superscript
+>2</superscript
+> بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>chisqP(x,&nu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع &chi;<superscript
+>2</superscript
+> بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>chisqQ(x,&nu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع &chi;<superscript
+>2</superscript
+> بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>chisqPinv(P,&nu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع &chi;<superscript
+>2</superscript
+> بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>chisqQinv(Q,&nu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع &chi;<superscript
+>2</superscript
+> بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>fdist(x,&nu;<subscript
+>1</subscript
+>,&nu;<subscript
+>2</subscript
+>)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع F بدرجات حرية &nu;<subscript
+>1</subscript
+> و&nu;<subscript
+>2</subscript
+></action
+></entry
+></row>
+<row
+><entry
+>fdistP(x,&nu;<subscript
+>1</subscript
+>,&nu;<subscript
+>2</subscript
+>)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع F بدرجات حرية &nu;<subscript
+>1</subscript
+> و&nu;<subscript
+>2</subscript
+></action
+></entry
+></row>
+<row
+><entry
+>fdistQ(x,&nu;<subscript
+>1</subscript
+>,&nu;<subscript
+>2</subscript
+>)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع F بدرجات حرية &nu;<subscript
+>1</subscript
+> و&nu;<subscript
+>2</subscript
+></action
+></entry
+></row>
+<row
+><entry
+>fdistPinv(P,&nu;<subscript
+>1</subscript
+>,&nu;<subscript
+>2</subscript
+>)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع F بدرجات حرية &nu;<subscript
+>1</subscript
+> و&nu;<subscript
+>2</subscript
+></action
+></entry
+></row>
+<row
+><entry
+>fdistQinv(Q,&nu;<subscript
+>1</subscript
+>,&nu;<subscript
+>2</subscript
+>)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع F بدرجات حرية &nu;<subscript
+>1</subscript
+> و&nu;<subscript
+>2</subscript
+></action
+></entry
+></row>
+<row
+><entry
+>tdist(x,&nu;)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع t بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>tdistP(x,&nu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع t بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>tdistQ(x,&nu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع t بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>tdistPinv(P,&nu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية P(x) لتوزيع t بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>tdistQinv(Q,&nu;)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية Q(x) لتوزيع t بدرجات حرية &nu;</action
+></entry
+></row>
+<row
+><entry
+>betapdf(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع بيتا بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>betaP(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع بيتا بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>betaQ(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع بيتا بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>betaPinv(P,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية P(x) لتوزيع بيتا بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>betaQinv(Q,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية Q(x) لتوزيع بيتا بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>logistic(x,a)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع لوجستي بمعلمة مقياس a</action
+></entry
+></row>
+<row
+><entry
+>logisticP(x,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع لوجستي بمعلمة مقياس a</action
+></entry
+></row>
+<row
+><entry
+>logisticQ(x,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع لوجستي بمعلمة مقياس a</action
+></entry
+></row>
+<row
+><entry
+>logisticPinv(P,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية P(x) لتوزيع لوجستي بمعلمة مقياس a</action
+></entry
+></row>
+<row
+><entry
+>logisticQinv(Q,a)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية Q(x) لتوزيع لوجستي بمعلمة مقياس a</action
+></entry
+></row>
+<row
+><entry
+>pareto(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع باريتو بأس a ومقياس b</action
+></entry
+></row>
+<row
+><entry
+>paretoP(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع باريتو بأس a ومقياس b</action
+></entry
+></row>
+<row
+><entry
+>paretoQ(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع باريتو بأس a ومقياس b</action
+></entry
+></row>
+<row
+><entry
+>paretoPinv(P,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية P(x) لتوزيع باريتو بأس a ومقياس b</action
+></entry
+></row>
+<row
+><entry
+>paretoQinv(Q,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية Q(x) لتوزيع باريتو بأس a ومقياس b</action
+></entry
+></row>
+<row
+><entry
+>weibull(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع ويبل بمقياس a وأس b</action
+></entry
+></row>
+<row
+><entry
+>weibullP(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع ويبل بمقياس a وأس b</action
+></entry
+></row>
+<row
+><entry
+>weibullQ(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع ويبل بمقياس a وأس b</action
+></entry
+></row>
+<row
+><entry
+>weibullPinv(P,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية P(x) لتوزيع ويبل بمقياس a وأس b</action
+></entry
+></row>
+<row
+><entry
+>weibullQinv(Q,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية Q(x) لتوزيع ويبل بمقياس a وأس b</action
+></entry
+></row>
+<row
+><entry
+>gumbel1(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) لتوزيع غامبل من النوع 1 بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>gumbel1P(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع غامبل من النوع 1 بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>gumbel1Q(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع غامبل من النوع 1 بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>gumbel1Pinv(P,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية P(x) لتوزيع غامبل من النوع 1 بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>gumbel1Qinv(Q,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسية Q(x) لتوزيع غامبل من النوع 1 بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>gumbel2(x,a,b)</entry
+><entry
+><action
+>الكثافة الاحتمالية p(x) عند X لتوزيع غامبل من النوع 2 بمعلمتين A و B</action
+></entry
+></row>
+<row
+><entry
+>gumbel2P(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(x) لتوزيع غامبل من النوع 2 بمعلمتين a و b</action
+></entry
+></row>
+<row
+><entry
+>gumbel2Q(x,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(x) لتوزيع غامبل من النوع 2 بوسيطين a وb</action
+></entry
+></row>
+<row
+><entry
+>gumbel2Pinv(P,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي P(x) لتوزيع غامبل من النوع 2 بوسيطين a وb</action
+></entry
+></row>
+<row
+><entry
+>gumbel2Qinv(Q,a,b)</entry
+><entry
+><action
+>دالة التوزيع التراكمي العكسي Q(x) لتوزيع غامبل من النوع 2 بوسيطين a وb</action
+></entry
+></row>
+<row
+><entry
+>poisson(k,&mu;)</entry
+><entry
+><action
+>احتمال p(k) للحصول على k من توزيع بواسون بمتوسط &mu;</action
+></entry
+></row>
+<row
+><entry
+>poissonP(k,&mu;)</entry
+><entry
+><action
+>دوال التوزيع التراكمي P(k) لتوزيع بواسون بمتوسط &mu;</action
+></entry
+></row>
+<row
+><entry
+>poissonQ(k,&mu;)</entry
+><entry
+><action
+>دوال التوزيع التراكمي Q(k) لتوزيع بواسون بمتوسط &mu;</action
+></entry
+></row>
+<row
+><entry
+>bernoulli(k,p)</entry
+><entry
+><action
+>احتمال p(k) للحصول على k من توزيع برنولي بوسيط احتمال p</action
+></entry
+></row>
+<row
+><entry
+>binomial(k,p,n)</entry
+><entry
+><action
+>احتمال p(k) للحصول على p من توزيع ذي حدين بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>binomialP(k,p,n)</entry
+><entry
+><action
+>دوال التوزيع التراكمي P(k) لتوزيع ذي حدين بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>binomialQ(k,p,n)</entry
+><entry
+><action
+>دوال التوزيع التراكمي Q(k) لتوزيع ذي حدين بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>nbinomial(k,p,n)</entry
+><entry
+><action
+>احتمال p(k) للحصول على k من توزيع ذي حدين سالب بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>nbinomialP(k,p,n)</entry
+><entry
+><action
+>دوال التوزيع التراكمي P(k) لتوزيع ذي حدين سالب بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>nbinomialQ(k,p,n)</entry
+><entry
+><action
+>دوال التوزيع التراكمي Q(k) لتوزيع ذي حدين سالب بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>pascal(k,p,n)</entry
+><entry
+><action
+>احتمال p(k) للحصول على k من توزيع باسكال بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>pascalP(k,p,n)</entry
+><entry
+><action
+>دوال التوزيع التراكمي P(k) لتوزيع باسكال بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>pascalQ(k,p,n)</entry
+><entry
+><action
+>دوال التوزيع التراكمي Q(k) لتوزيع باسكال بوسيطين p وn</action
+></entry
+></row>
+<row
+><entry
+>geometric(k,p)</entry
+><entry
+><action
+>احتمال p(k) للحصول على k من توزيع هندسي بوسيط احتمال p</action
+></entry
+></row>
+<row
+><entry
+>geometricP(k,p)</entry
+><entry
+><action
+>دوال التوزيع التراكمي P(k) لتوزيع هندسي بوسيط p</action
+></entry
+></row>
+<row
+><entry
+>geometricQ(k,p)</entry
+><entry
+><action
+>دوال التوزيع التراكمي Q(k) لتوزيع هندسي بوسيط p</action
+></entry
+></row>
+<row
+><entry
+>hypergeometric(k,n<subscript
+>1</subscript
+>,n<subscript
+>2</subscript
+>,t)</entry
+><entry
+><action
+>احتمال p(k) للحصول على k من توزيع فوق هندسي بوسائط n<subscript
+>1</subscript
+> وn<subscript
+>2</subscript
+> وt</action
+></entry
+></row>
+<row
+><entry
+>hypergeometricP(k,n<subscript
+>1</subscript
+>,n<subscript
+>2</subscript
+>,t)</entry
+><entry
+><action
+>دالة التوزيع التراكمي P(k) لتوزيع فوق هندسي بوسائط n<subscript
+>1</subscript
+> وn<subscript
+>2</subscript
+> وt</action
+></entry
+></row>
+<row
+><entry
+>hypergeometricQ(k,n<subscript
+>1</subscript
+>,n<subscript
+>2</subscript
+>,t)</entry
+><entry
+><action
+>دالة التوزيع التراكمي Q(k) لتوزيع فوق هندسي بوسائط n<subscript
+>1</subscript
+> وn<subscript
+>2</subscript
+> وt</action
+></entry
+></row>
+<row
+><entry
+>logarithmic(k,p)</entry
+><entry
+><action
+>احتمال p(k) للحصول على K من توزيع لوغاريتمي بوسيط احتمال p</action
+></entry
+></row>
+</tbody>
+</tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="parser-const">
+<title
+>ثوابت</title>
+
+<informaltable pgwide="1"
+><tgroup cols="2">
+
+<thead
+><row
+><entry
+>ثابت</entry
+><entry
+>الوصف</entry
+></row
+></thead>
+
+<tbody>
+
+<row
+><entry
+>e</entry
+><entry
+><action
+>أساس اللوغاريتمات الطبيعية</action
+></entry
+></row>
+<row
+><entry
+>pi</entry
+><entry
+><action
+>&pi;</action
+></entry
+></row>
+
+</tbody
+></tgroup
+></informaltable>
+</sect1>
+
+<sect1 id="parser-const-gsl">
+<title
+>ثوابت GSL</title>
+<para
+>لمزيد من المعلومات حول هذه الثوابت، انظر توثيق GSL. </para>
+<informaltable pgwide="1"
+><tgroup cols="2">
+
+<thead
+><row
+><entry
+>ثابت</entry
+><entry
+>الوصف</entry
+></row
+></thead>
+
+<tbody>
+
+<row
+><entry
+>c</entry
+><entry
+><action
+>سرعة الضوء في الفراغ</action
+></entry
+></row>
+<row
+><entry
+>mu0</entry
+><entry
+><action
+>نفاذية الفراغ</action
+></entry
+></row>
+<row
+><entry
+>e0</entry
+><entry
+><action
+>سماحية الفراغ</action
+></entry
+></row>
+<row
+><entry
+>h</entry
+><entry
+><action
+>ثابت بلانك h</action
+></entry
+></row>
+<row
+><entry
+>hbar</entry
+><entry
+><action
+>ثابت بلانك المخفّض &planck;</action
+></entry
+></row>
+<row
+><entry
+>na</entry
+><entry
+><action
+>عدد أفوكادرو</action
+></entry
+></row>
+<row
+><entry
+>f</entry
+><entry
+><action
+>الشحنة المولية لـ 1 فاراداي</action
+></entry
+></row>
+<row
+><entry
+>k</entry
+><entry
+><action
+>ثابت بولتزمان</action
+></entry
+></row>
+<row
+><entry
+>r0</entry
+><entry
+><action
+>ثابت الغاز المولي</action
+></entry
+></row>
+<row
+><entry
+>v0</entry
+><entry
+><action
+>الحجم الغازي المعياري</action
+></entry
+></row>
+<row
+><entry
+>سيجما</entry
+><entry
+><action
+>ثابت ستيفان-بولتزمان</action
+></entry
+></row>
+<row
+><entry
+>غاوس</entry
+><entry
+><action
+>المجال المغناطيسي لـ 1 غاوس</action
+></entry
+></row>
+<row
+><entry
+>au</entry
+><entry
+><action
+>طول 1 وحدة فلكية (متوسط مسافة الأرض-الشمس)</action
+></entry
+></row>
+<row
+><entry
+>G</entry
+><entry
+><action
+>ثابت الجاذبية</action
+></entry
+></row>
+<row
+><entry
+>ly</entry
+><entry
+><action
+>مسافة 1 سنة ضوئية</action
+></entry
+></row>
+<row
+><entry
+>pc</entry
+><entry
+><action
+>مسافة 1 فرسخ فلكي</action
+></entry
+></row>
+<row
+><entry
+>gg</entry
+><entry
+><action
+>تسارع الجاذبية المعياري على الأرض</action
+></entry
+></row>
+<row
+><entry
+>ms</entry
+><entry
+><action
+>كتلة الشمس</action
+></entry
+></row>
+<row
+><entry
+>ee</entry
+><entry
+><action
+>شحنة الإلكترون</action
+></entry
+></row>
+<row
+><entry
+>eV</entry
+><entry
+><action
+>طاقة 1 إلكترون فولت</action
+></entry
+></row>
+<row
+><entry
+>amu</entry
+><entry
+><action
+>الكتلة الذرية الموحّدة</action
+></entry
+></row>
+<row
+><entry
+>me</entry
+><entry
+><action
+>كتلة الإلكترون</action
+></entry
+></row>
+<row
+><entry
+>mmu</entry
+><entry
+><action
+>كتلة الميون</action
+></entry
+></row>
+<row
+><entry
+>mp</entry
+><entry
+><action
+>كتلة البروتون</action
+></entry
+></row>
+<row
+><entry
+>mn</entry
+><entry
+><action
+>كتلة النيوترون</action
+></entry
+></row>
+<row
+><entry
+>ألفا</entry
+><entry
+><action
+>ثابت البنية الدقيقة الكهرومغناطيسية</action
+></entry
+></row>
+<row
+><entry
+>ry</entry
+><entry
+><action
+>ثابت ريدبرغ</action
+></entry
+></row>
+<row
+><entry
+>a0</entry
+><entry
+><action
+>نصف قطر بور</action
+></entry
+></row>
+<row
+><entry
+>a</entry
+><entry
+><action
+>طول 1 أنغستروم</action
+></entry
+></row>
+<row
+><entry
+>حظيرة</entry
+><entry
+><action
+>مساحة 1 بارن</action
+></entry
+></row>
+<row
+><entry
+>muB</entry
+><entry
+><action
+>مغناطيس بور</action
+></entry
+></row>
+<row
+><entry
+>mun</entry
+><entry
+><action
+>المغناطيس النووي</action
+></entry
+></row>
+<row
+><entry
+>mue</entry
+><entry
+><action
+>العزم المغناطيسي للإلكترون</action
+></entry
+></row>
+<row
+><entry
+>mup</entry
+><entry
+><action
+>العزم المغناطيسي للبروتون</action
+></entry
+></row>
+<row
+><entry
+>sigmaT</entry
+><entry
+><action
+>المقطع العرضي لتومسون للإلكترون</action
+></entry
+></row>
+<row
+><entry
+>pD</entry
+><entry
+><action
+>الديباي</action
+></entry
+></row>
+<row
+><entry
+>min</entry
+><entry
+><action
+>عدد الثواني في دقيقة واحدة</action
+></entry
+></row>
+<row
+><entry
+>h</entry
+><entry
+><action
+>عدد الثواني في ساعة واحدة</action
+></entry
+></row>
+<row
+><entry
+>d</entry
+><entry
+><action
+>عدد الثواني في يوم واحد</action
+></entry
+></row>
+<row
+><entry
+>أسبوع</entry
+><entry
+><action
+>عدد الثواني في أسبوع واحد</action
+></entry
+></row>
+<row
+><entry
+>بوصة</entry
+><entry
+><action
+>طول البوصة الواحدة</action
+></entry
+></row>
+<row
+><entry
+>قدم</entry
+><entry
+><action
+>طول القدم الواحدة</action
+></entry
+></row>
+<row
+><entry
+>ياردة</entry
+><entry
+><action
+>طول الياردة الواحدة</action
+></entry
+></row>
+<row
+><entry
+>ميل</entry
+><entry
+><action
+>طول الميل الواحد (1/1000 من البوصة)</action
+></entry
+></row>
+<row
+><entry
+>v_km_per_h</entry
+><entry
+><action
+>سرعة كيلومتر واحد في الساعة</action
+></entry
+></row>
+<row
+><entry
+>v_mile_per_h</entry
+><entry
+><action
+>سرعة ميل واحد في الساعة</action
+></entry
+></row>
+<row
+><entry
+>nmile</entry
+><entry
+><action
+>طول الميل البحري الواحد</action
+></entry
+></row>
+<row
+><entry
+>قامة</entry
+><entry
+><action
+>طول القامة الواحدة</action
+></entry
+></row>
+<row
+><entry
+>عقدة</entry
+><entry
+><action
+>سرعة العقدة الواحدة</action
+></entry
+></row>
+<row
+><entry
+>نقطة</entry
+><entry
+><action
+>طول النقطة الطباعية الواحدة (1/72 بوصة)</action
+></entry
+></row>
+<row
+><entry
+>texpt</entry
+><entry
+><action
+>طول نقطة تخ الواحدة (1/72.27 بوصة)</action
+></entry
+></row>
+<row
+><entry
+>micron</entry
+><entry
+><action
+>طول الميكرومتر الواحد</action
+></entry
+></row>
+<row
+><entry
+>هكتار</entry
+><entry
+><action
+>مساحة الهكتار الواحد</action
+></entry
+></row>
+<row
+><entry
+>فدّان</entry
+><entry
+><action
+>مساحة الفدان الواحد</action
+></entry
+></row>
+<row
+><entry
+>لتر</entry
+><entry
+><action
+>حجم اللتر الواحد</action
+></entry
+></row>
+<row
+><entry
+>us_gallon</entry
+><entry
+><action
+>حجم الغالون الأمريكي الواحد</action
+></entry
+></row>
+<row
+><entry
+>can_gallon</entry
+><entry
+><action
+>حجم الغالون الكندي الواحد</action
+></entry
+></row>
+<row
+><entry
+>uk_gallon</entry
+><entry
+><action
+>حجم الغالون البريطاني الواحد</action
+></entry
+></row>
+<row
+><entry
+>كوارت</entry
+><entry
+><action
+>حجم الكوارت الواحد</action
+></entry
+></row>
+<row
+><entry
+>نصف لتر</entry
+><entry
+><action
+>حجم الباينت الواحد</action
+></entry
+></row>
+<row
+><entry
+>رطل</entry
+><entry
+><action
+>كتلة الرطل الواحد</action
+></entry
+></row>
+<row
+><entry
+>أوقية</entry
+><entry
+><action
+>كتلة 1 أونصة</action
+></entry
+></row>
+<row
+><entry
+>طنّ</entry
+><entry
+><action
+>كتلة 1 طن</action
+></entry
+></row>
+<row
+><entry
+>mton</entry
+><entry
+><action
+>كتلة 1 طن متري (1000 كجم)</action
+></entry
+></row>
+<row
+><entry
+>uk_ton</entry
+><entry
+><action
+>كتلة 1 طن بريطاني</action
+></entry
+></row>
+<row
+><entry
+>troy_ounce</entry
+><entry
+><action
+>كتلة 1 أونصة تروي</action
+></entry
+></row>
+<row
+><entry
+>قيراط</entry
+><entry
+><action
+>كتلة 1 قيراط</action
+></entry
+></row>
+<row
+><entry
+>gram_force</entry
+><entry
+><action
+>قوة 1 غرام-ثقل</action
+></entry
+></row>
+<row
+><entry
+>pound_force</entry
+><entry
+><action
+>قوة 1 رطل-ثقل</action
+></entry
+></row>
+<row
+><entry
+>kilepound_force</entry
+><entry
+><action
+>قوة 1 كيلورطل-ثقل</action
+></entry
+></row>
+<row
+><entry
+>باوندال</entry
+><entry
+><action
+>قوة 1 باوندال</action
+></entry
+></row>
+<row
+><entry
+>كال</entry
+><entry
+><action
+>طاقة 1 سعرة حرارية</action
+></entry
+></row>
+<row
+><entry
+>btu</entry
+><entry
+><action
+>طاقة 1 وحدة حرارية بريطانية</action
+></entry
+></row>
+<row
+><entry
+>حرارية او ثيرم</entry
+><entry
+><action
+>طاقة 1 ثيرم</action
+></entry
+></row>
+<row
+><entry
+>hp</entry
+><entry
+><action
+>قدرة 1 حصان</action
+></entry
+></row>
+<row
+><entry
+>بار</entry
+><entry
+><action
+>ضغط 1 بار</action
+></entry
+></row>
+<row
+><entry
+>atm</entry
+><entry
+><action
+>ضغط 1 جو معياري</action
+></entry
+></row>
+<row
+><entry
+>تور</entry
+><entry
+><action
+>ضغط 1 تور</action
+></entry
+></row>
+<row
+><entry
+>متر زئبقي</entry
+><entry
+><action
+>ضغط 1 متر من الزئبق</action
+></entry
+></row>
+<row
+><entry
+>بوصة زئبق</entry
+><entry
+><action
+>ضغط 1 بوصة من الزئبق</action
+></entry
+></row>
+<row
+><entry
+>inh2o</entry
+><entry
+><action
+>ضغط 1 بوصة من الماء</action
+></entry
+></row>
+<row
+><entry
+>رط/ب بوصة²</entry
+><entry
+><action
+>ضغط 1 رطل لكل بوصة مربعة</action
+></entry
+></row>
+<row
+><entry
+>بواز</entry
+><entry
+><action
+>اللزوجة الديناميكية لـ 1 بواز</action
+></entry
+></row>
+<row
+><entry
+>ستوكس</entry
+><entry
+><action
+>اللزوجة الحركية لـ 1 ستوكس</action
+></entry
+></row>
+<row
+><entry
+>stilb</entry
+><entry
+><action
+>الاستضاءة لـ 1 ستيلب</action
+></entry
+></row>
+<row
+><entry
+>لومن</entry
+><entry
+><action
+>الفيض الضوئي لـ 1 لومن</action
+></entry
+></row>
+<row
+><entry
+>لكس</entry
+><entry
+><action
+>الاستنارة لـ 1 لكس</action
+></entry
+></row>
+<row
+><entry
+>فوت</entry
+><entry
+><action
+>الاستنارة لـ 1 فوت</action
+></entry
+></row>
+<row
+><entry
+>ftcandle</entry
+><entry
+><action
+>الاستنارة لـ 1 شمعة-قدم</action
+></entry
+></row>
+<row
+><entry
+>لامبرت</entry
+><entry
+><action
+>الاستضاءة لـ 1 لامبرت</action
+></entry
+></row>
+<row
+><entry
+>ftlambert</entry
+><entry
+><action
+>لمعان 1 قدم-لامبرت</action
+></entry
+></row>
+<row
+><entry
+>كوري</entry
+><entry
+><action
+>نشاط 1 كوري</action
+></entry
+></row>
+<row
+><entry
+>رونتغن</entry
+><entry
+><action
+>التعرض لـ 1 رونتجن</action
+></entry
+></row>
+<row
+><entry
+>راديان</entry
+><entry
+><action
+>الجرعة الممتصة لـ 1 راد</action
+></entry
+></row>
+<row
+><entry
+>ن</entry
+><entry
+><action
+>قوة 1 نيوتن</action
+></entry
+></row>
+<row
+><entry
+>داين</entry
+><entry
+><action
+>قوة 1 داين</action
+></entry
+></row>
+<row
+><entry
+>J</entry
+><entry
+><action
+>طاقة 1 جول</action
+></entry
+></row>
+<row
+><entry
+>erg</entry
+><entry
+><action
+>طاقة 1 إرج</action
+></entry
+></row>
+
+</tbody
+></tgroup
+></informaltable>
+
+</sect1>
+
+</chapter>
+
+<chapter id="faq">
+<title
+>أسئلة وأجوبة</title>
+
+<qandaset id="faqlist">
+
+<qandaentry>
+<question>
+<para
+>على أي المنصات يتوفر معمل الرسم؟</para>
+</question>
+<answer>
+<para
+>طُوّر معمل الرسم لمنصات يونكس ويستخدم مجموعة أدوات &Qt; و &kde-frameworks;. عادةً يمكنك توقع بناء وتشغيل معمل الرسم على كل منصة تدعمها &kde-frameworks;. يمكن العثور على قائمة حديثة للمنصات المدعومة ونصائح لبناء وتشغيل معمل الرسم على <ulink url="http://labplot.wiki.sourceforge.net/Download"
+> http://labplot.wiki.sourceforge.net/Download</ulink
+>. </para>
+</answer>
+</qandaentry>
+
+<qandaentry
+><question>
+<para
+>كيف أصدر ورقة العمل النشطة كصورة؟</para>
+</question>
+<answer
+><para
+>الطريقة القياسية هي استخدام <menuchoice
+><guimenu
+>ملف</guimenu
+><guimenuitem
+>تصدير</guimenuitem
+></menuchoice
+>. جميع صيغ الصور المدعومة من &Qt; مسموح بها. فقط اختر الصيغة المطلوبة وسيُصدر ورقة العمل النشطة. </para
+></answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>كيف أستخدم الحروف اليونانية للعنوان، تسميات المحاور، إلخ؟</para>
+</question>
+<answer>
+<para
+>استخدم زر <guiicon
+>&pi;</guiicon
+> لفتح نافذة منتقي المحارف أو <guiicon
+>&tex;</guiicon
+> لتوليد الحروف اليونانية والرموز الأخرى باستخدام &latex;. </para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>أفتقد ميزة مهمة. ماذا يمكنني أن أفعل؟</para>
+</question>
+<answer>
+<para
+>يرجى إلقاء نظرة على ملف TODO في توثيق معمل الرسم. هنا، جميع الميزات المخطط لها مدرجة بترتيب أكثر أو أقل فرزًا والتي سأطبقها في الإصدارات المستقبلية من معمل الرسم. إذا كنت ترغب في ميزات إضافية أو ترغب في رؤية ميزة مدرجة قريبًا، أرسل لي رغباتك عبر البريد، وإذا أمكن، أرسل لي بيانات مثال أو وصفًا قصيرًا لما ترغب في فعله. ليس من المستبعد أن تظهر ميزتك في الإصدار المستقر التالي من معمل الرسم :-) </para>
+</answer>
+</qandaentry>
+
+<qandaentry
+><question>
+<para
+>العديد من وظائف التحليل معطلة. ماذا يمكنني أن أفعل؟</para>
+</question>
+<answer
+><para
+>يبدو أن حزمة معمل الرسم الخاصة بك جُمّعت دون دعم GSL (مكتبة &GNU; العلمية). صُمم معمل الرسم ليعمل حتى على الأنظمة التي تفتقر إلى معظم المكتبات القياسية. العديد من التوزيعات تشحن حزم معمل الرسم دون هذه الوظائف الإضافية. في هذه الحالة، بعض الوظائف غير متاحة. لحسن الحظ، يمكن إضافة بعض البرامج (مثل <application
+>pstoedit</application
+> أو <application
+>texvc</application
+>) دون إعادة ترجمة معمل الرسم. يمكنك دائمًا التحقق من بيئة نظامك في قائمة المساعدة في معمل الرسم. </para>
+<para
+>الحزم المقدمة على صفحة التحميل الرسمية تُبنى دائمًا مع المكتبات القياسية (GSL، إلخ). يجب عليك استخدامها للحصول على جميع الميزات. </para>
+</answer>
+</qandaentry>
+
+<qandaentry
+><question>
+<para
+>أريد المساعدة. كيف يمكنني المساهمة في معمل الرسم؟</para>
+</question>
+<answer
+><para
+>نعم، بالطبع. هناك الكثير من الأشياء للقيام بها. حتى لو كنت لا تعرف شيئًا عن البرمجة، نحتاج دائمًا إلى أشخاص للعثور على الأخطاء، اختبار الأشياء، وتقديم الاقتراحات. أيضًا الترجمة والتوثيق يحتاجان دائمًا إلى الكثير من العمل. </para
+></answer>
+</qandaentry>
+
+
+</qandaset>
+</chapter>
+
+<chapter id="license">
+
+<title
+>الرخصة</title>
+
+<para
+>معمل الرسم</para>
+<para
+>حقوق نشر البرنامج &copy; 2007-2016 Stefan Gerlach <email
+>stefan.gerlach@uni-konstanz.de</email
+> حقوق نشر البرنامج &copy; 2008-2016 Alexander Semke <email
+>Alexander.Semke@web.de</email
+> </para>
+
+<important>
+<para
+>معمل الرسم لا يزال قيد التطوير. هناك قائمة طويلة من الميزات المفقودة التي ستنفذ في الإصدارات اللاحقة من معمل الرسم. </para>
+</important>
+
+<para
+>لأن هناك الكثير من الأشياء للقيام بها، يحتاج المطورون إلى كل مساعدة يمكنك تقديمها. أي مساهمة مثل الرغبات، التصحيحات، التصحيحات البرمجية، تقارير الأخطاء، أو لقطات الشاشة مرحب بها. </para>
+
+<para
+>حقوق نشر التوثيق &copy; 2007-2016 Stefan Gerlach <email
+>stefan.gerlach@uni-konstanz.de</email
+> حقوق نشر التوثيق &copy; 2008-2015 Alexander Semke <email
+>Alexander.Semke@web.de</email
+> حقوق نشر التوثيق &copy; 2014 Yuri Chornoivan <email
+>yurchor@ukr.net</email
+> </para>
+
+<para
+>الترجمة: زايد السعيدي <email
+>zayed.alsaidi@gmail.com</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+
+
+
+&documentation.index;
+</book>
