@@ -49,6 +49,7 @@ private:
 
 	// singleton methods (called once for all PythonScripts)
 	static bool initPython();
+	static QString validateInterpreter(const QString&);
 
 	// utilities
 	static PyObject* getModuleDict(const QString&);
@@ -61,6 +62,7 @@ private:
 	static PyObject* sysStdOut;
 	static PyObject* sysStdErr;
 	static bool needsRestart;
+	static QString s_initializationError;
 };
 
 #endif

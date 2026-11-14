@@ -89,6 +89,12 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
 		}
 	});
 	m_kTextEditorView->addAction(m_codeCompletionAction);
+
+	if (!m_script->initializationError().isEmpty()) {
+		writeOutput(true, m_script->initializationError());
+		setOutputVisible(true);
+		m_toggleOutputAction->setChecked(true);
+	}
 }
 
 ScriptEditor::~ScriptEditor() {

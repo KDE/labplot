@@ -37,12 +37,17 @@ public:
 
 	virtual bool init() = 0;
 
+	QString initializationError() const {
+		return m_initializationError;
+	}
+
 	virtual bool cancel() = 0;
 
 	virtual bool exec(const QString& code) = 0;
 
 protected:
 	const QString m_name;
+	QString m_initializationError;
 	int m_errorLine{-1};
 	bool m_isCancellable{false};
 	VariablesInfoModel* m_variableModel{nullptr};

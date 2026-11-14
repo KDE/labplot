@@ -46,6 +46,9 @@ public:
 	bool setRuntime(const QString&);
 
 	bool isInitialized();
+	QString initializationError() const {
+		return m_initializationError;
+	}
 
 	QAbstractItemModel* variableModel();
 
@@ -54,6 +57,7 @@ private:
 	ScriptRuntime* m_scriptRuntime{nullptr};
 	KTextEditor::Document* m_kTextEditorDocument{nullptr};
 	bool m_initialized{false};
+	QString m_initializationError;
 	QString m_outputHtml;
 
 	void prepareDocument() const;

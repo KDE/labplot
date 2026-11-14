@@ -75,8 +75,10 @@ bool Script::setRuntime(const QString& runtime) {
 	m_scriptRuntime = nullptr;
 	m_language.clear();
 	m_initialized = false;
+	m_initializationError.clear();
 
 	if (!Script::languages.contains(runtime, Qt::CaseInsensitive)) {
+		m_initializationError = i18n("Unsupported scripting language: %1", runtime);
 		WARN("Unsupported scripting language: " << STDSTRING(runtime))
 		return false;
 	}
@@ -190,7 +192,7 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	if (!setRuntime(runtime)) {
-		reader->raiseError(i18n("failed to initialize the script runtime '%1'", runtime));
+		reader->raiseError(i18n("Failed to initialize the script runtime '%1': %2", runtime, m_initializationError));
 		return false;
 	}
 
@@ -348,6 +350,9 @@ ScriptRuntime* Script::newScriptRuntime(const QString& language, Script* script)
 	if (scriptRuntime->init()) {
 		return scriptRuntime;
 	} else {
+		script->m_initializationError = scriptRuntime->initializationError();
+		if (script->m_initializationError.isEmpty())
+			script->m_initializationError = i18n("Failed to initialize the %1 script runtime.", language);
 		delete scriptRuntime;
 		return nullptr;
 	}

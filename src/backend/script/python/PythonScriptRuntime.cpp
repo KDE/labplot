@@ -37,8 +37,11 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QFileInfo>
+#include <QProcess>
 
 #include <KConfigGroup>
+#include <KLocalizedString>
 
 // PyObject* handling:
 // PySys_GetObject(), PyImport_AddModule() return a borrowed reference so we create own reference with Py_INCREF() and Py_DECREF(o) when done
@@ -62,6 +65,7 @@ extern PyTypeObject** SbkpylabplotTypes;
 bool PythonScriptRuntime::ready{false};
 
 bool PythonScriptRuntime::needsRestart{false};
+QString PythonScriptRuntime::s_initializationError;
 
 // To redirect python stdout and stderr to our output in the ScriptEditor, we temporarily replace the
 // sys.stdout and sys.stderr objects in python with instances of our PythonLogger class. These variables
@@ -112,12 +116,17 @@ bool PythonScriptRuntime::init() {
 	// initialize python interpreter and pylabplot module
 	bool init = PythonScriptRuntime::initPython();
 	if (!init) {
+		m_initializationError = s_initializationError;
+		if (m_initializationError.isEmpty())
+			m_initializationError = i18n("Failed to initialize Python. Check the Python interpreter in the scripting settings.");
 		WARN("Failed to initialize python interpreter and pylabplot module")
 		// if (Py_IsInitialized()) {
 		// 	PyGILState_STATE gil = PyGILState_Ensure();
 		// 	Py_Finalize();
 		// }
-		needsRestart = true;
+		needsRestart = Py_IsInitialized();
+		if (needsRestart)
+			m_initializationError += i18n("\n\nRestart LabPlot after correcting the Python configuration.");
 		return false;
 	}
 
@@ -170,6 +179,43 @@ bool PythonScriptRuntime::init() {
 	return true;
 }
 
+QString PythonScriptRuntime::validateInterpreter(const QString& executable) {
+	const QFileInfo interpreter(executable);
+	const QString requiredVersion = QStringLiteral("%1.%2").arg(PY_MAJOR_VERSION).arg(PY_MINOR_VERSION);
+	if (interpreter.isSymbolicLink() && !interpreter.exists())
+		return i18n(
+			"The configured Python interpreter '%1' links to '%2', which no longer exists. "
+			"Recreate the virtual environment using Python %3, or select a valid Python %3 interpreter in the scripting settings.",
+			executable,
+			interpreter.symLinkTarget(),
+			requiredVersion);
+	if (!interpreter.isFile() || !interpreter.isExecutable())
+		return i18n("The configured Python interpreter '%1' does not exist or is not executable. Select a valid interpreter in the scripting settings.",
+					executable);
+
+	QProcess process;
+	process.start(
+		executable,
+		{QStringLiteral("-E"), QStringLiteral("-S"), QStringLiteral("-c"), QStringLiteral("import sys; print('{}.{}'.format(*sys.version_info[:2]))")});
+	if (!process.waitForFinished(5000)) {
+		const QString error = process.errorString();
+		process.kill();
+		process.waitForFinished();
+		return i18n("Could not determine the Python version of '%1': %2", executable, error);
+	}
+	if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0)
+		return i18n("Could not determine the Python version of '%1': %2", executable, QString::fromUtf8(process.readAllStandardError()));
+
+	const QString version = QString::fromUtf8(process.readAllStandardOutput()).trimmed();
+	if (version != requiredVersion)
+		return i18n(
+			"The configured interpreter '%1' uses Python %2, but LabPlot requires Python %3. Select a compatible interpreter in the scripting settings.",
+			executable,
+			version,
+			requiredVersion);
+	return {};
+}
+
 // if this fails, set a variable to disable python until app restart
 // need to have a global minimum supported python version because of pyside and shiboken
 // possibly run in isolated mode
@@ -183,7 +229,17 @@ bool PythonScriptRuntime::initPython() {
 	if (Py_IsInitialized() && ready)
 		return true;
 
+	s_initializationError.clear();
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
+	const QString pythonExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
+	if (!pythonExecutable.isEmpty()) {
+		s_initializationError = validateInterpreter(pythonExecutable);
+		if (!s_initializationError.isEmpty())
+			return false;
+	}
+
 	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1) {
+		s_initializationError = i18n("Failed to register the pylabplot module.");
 		WARN("Failed to add the pylabplot module to the table of built-in modules")
 		return false;
 	}
@@ -192,10 +248,8 @@ bool PythonScriptRuntime::initPython() {
 	qputenv("PYTHON_COLORS", "0");
 	qputenv("NO_COLOR", "1");
 
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
 	// for a change in this config to take effect the application may need to restart, though can reinitialize python without needing restart
 	// (finalize then initialize)
-	const QString pythonExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
 	if (!pythonExecutable.isEmpty()) {
 		// need to validate that the provided python executable exists and matches with the python shared library currently linked to
 		static wchar_t interpreterPath[PATH_MAX];
@@ -221,18 +275,23 @@ bool PythonScriptRuntime::initPython() {
 		static wchar_t sysExecutable[PATH_MAX];
 		PyObject* sysExecutableObj = PySys_GetObject("executable");
 		if (!sysExecutableObj) {
+			s_initializationError = i18n("Failed to read the embedded Python interpreter path.");
 			WARN("Failed to to load sys.executable")
 			return false;
 		}
 		Py_INCREF(sysExecutableObj); // own it
 
-		if (PyUnicode_AsWideChar(sysExecutableObj, sysExecutable, sizeof(sysExecutable)) == -1) {
+		const Py_ssize_t executableLength = PyUnicode_AsWideChar(sysExecutableObj, sysExecutable, PATH_MAX - 1);
+		if (executableLength == -1) {
+			s_initializationError = i18n("Failed to read the embedded Python interpreter path.");
 			WARN("Failed to convert sys.executable to wide string")
 			Py_DECREF(sysExecutableObj);
 			return false;
 		}
+		sysExecutable[executableLength] = L'\0';
 
 		if (wcscmp(interpreterPath, sysExecutable) != 0) {
+			s_initializationError = i18n("The embedded Python interpreter does not match the configured interpreter '%1'.", pythonExecutable);
 			WARN("Unexpected sys.executable value")
 			Py_DECREF(sysExecutableObj);
 			return false;
@@ -287,12 +346,33 @@ bool PythonScriptRuntime::initPython() {
 	}
 #endif
 
-	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
+	PyObject* qtCore = PyImport_ImportModule("PySide6.QtCore");
+	const bool pythonInitialized = qtCore && PyInit_pylabplot() != nullptr;
+	Py_XDECREF(qtCore);
 	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
 	if (!pythonInitialized || pyErrorOccurred) {
+		s_initializationError =
+			i18n("Failed to initialize the pylabplot module. Check the Python interpreter and PySide6 installation in the scripting settings.");
 		WARN("Failed to initialize the pylabplot module")
-		if (pyErrorOccurred)
-			PyErr_Print();
+		if (pyErrorOccurred) {
+			PyObject *errorType = nullptr, *errorValue = nullptr, *errorTraceback = nullptr;
+			PyErr_Fetch(&errorType, &errorValue, &errorTraceback);
+			PyErr_NormalizeException(&errorType, &errorValue, &errorTraceback);
+			PyObject* errorName = errorType ? PyObject_GetAttrString(errorType, "__name__") : nullptr;
+			PyObject* description = errorValue ? PyObject_Str(errorValue) : nullptr;
+			if (description) {
+				s_initializationError += QStringLiteral("\n\n");
+				if (errorName)
+					s_initializationError += pyUnicodeToQString(errorName) + QStringLiteral(": ");
+				s_initializationError += pyUnicodeToQString(description);
+			}
+			Py_XDECREF(errorName);
+			Py_XDECREF(description);
+			Py_XDECREF(errorType);
+			Py_XDECREF(errorValue);
+			Py_XDECREF(errorTraceback);
+			PyErr_Clear();
+		}
 		return false;
 	}
 
