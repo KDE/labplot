@@ -156,6 +156,10 @@ function(generate_python_bindings)
 	--typesystem-paths=${PySide6_TYPESYSTEMS}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})
 
+    if(APPLE)
+        list(APPEND shiboken_options "--compiler-path=${CMAKE_CXX_COMPILER}")
+    endif()
+
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})
 
     # Add custom target to run shiboken to generate the binding cpp files.
