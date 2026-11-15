@@ -91,6 +91,7 @@ function(generate_python_bindings)
     # Get the relevant include dirs, to pass them on to shiboken.
     set(INCLUDES "")
     set(FORCE_PROCESS_INCLUDE_DIRS "")
+    set(FRAMEWORK_INCLUDE_DIRS "")
 
     if(WIN32)
         # a literal ';' gets split again by CMake list expansion, the genex survives until the command is generated
@@ -127,7 +128,17 @@ function(generate_python_bindings)
     endmacro()
 
     macro(append_shiboken_include_options include_dirs)
-        make_path(_include_paths ${${include_dirs}})
+        set(_regular_include_dirs "")
+        foreach(_include_dir ${${include_dirs}})
+            if(_include_dir MATCHES "\\.framework$")
+                get_filename_component(_framework_include_dir "${_include_dir}" DIRECTORY)
+                list(APPEND FRAMEWORK_INCLUDE_DIRS "${_framework_include_dir}")
+            else()
+                list(APPEND _regular_include_dirs "${_include_dir}")
+            endif()
+        endforeach()
+
+        make_path(_include_paths ${_regular_include_dirs})
         if(_include_paths)
             list(APPEND INCLUDES "--include-paths=${_include_paths}")
         endif()
@@ -147,6 +158,11 @@ function(generate_python_bindings)
     append_shiboken_include_options(PB_EXISTING_INCLUDES)
 
     make_path(FORCE_PROCESS_INCLUDE_PATHS ${FORCE_PROCESS_INCLUDE_DIRS})
+    list(REMOVE_DUPLICATES FRAMEWORK_INCLUDE_DIRS)
+    make_path(FRAMEWORK_INCLUDE_PATHS ${FRAMEWORK_INCLUDE_DIRS})
+    if(FRAMEWORK_INCLUDE_PATHS)
+        list(APPEND INCLUDES "--framework-include-paths=${FRAMEWORK_INCLUDE_PATHS}")
+    endif()
 
     # Set up the options to pass to shiboken.
     set(shiboken_options --enable-pyside-extensions
