@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-06 06:41+0100\n"
+"PO-Revision-Date: 2026-11-13 02:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -19097,7 +19097,7 @@ msgstr[1] "პროექტების დათვალიერება: 
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "ხელსაწყოთა პანელის გადასატანად, გადაათრიეთ"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format

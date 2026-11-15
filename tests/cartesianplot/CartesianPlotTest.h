@@ -74,5 +74,13 @@ private Q_SLOTS:
 
 	// legend
 	void legendSingleInstance();
+
+	// PlotDataDialog with error columns
+	void testPlotDataWithErrorColumns();
+	void testPlotDataWithAsymmetricErrors();
+	void testPlotDataWithMinusOnlyError();
+	void testPlotDataWithPrecedingMinusPlusErrors();
+	void testPlotDataWithMultipleYErrors();
+	void testPlotDataErrorColumnsExcluded();
 };
 #endif

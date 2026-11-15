@@ -223,6 +223,8 @@ void PlotDataDialog::setFitDistribution(nsl_sf_stats_distribution distribution) 
 }
 
 void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
+	m_selectedColumns = selectedColumns;
+
 	// for bar plots and lollipop plots, extract the first text column to use as tick labels on the x-axis
 	if (m_plotType == Plot::PlotType::BarPlot || m_plotType == Plot::PlotType::LollipopPlot) {
 		for (auto* col : selectedColumns) {
@@ -340,7 +342,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		ui->cbXColumn->setCurrentIndex(xColumnIndex);
 
 		// for the remaining columns, show them in the comboboxes for the Y-data
-		// TODO: handle columns with error-designations
+		// Note: columns with error designations are automatically bound to curves in addCurve()
 		int yColumnIndex = 1; // the index of the first Y-data comboBox in m_columnComboBoxes
 		for (int i = 0; i < columnNames.size(); ++i) {
 			if (i != xColumnIndex) {
@@ -798,12 +800,54 @@ void PlotDataDialog::addCurvesToWorksheets(AbstractAspect* parent) {
  * helper function that does the actual creation of the curve and adding it as child to the \c plot.
  */
 void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) {
+	const auto xErrors = findErrorColumns(xColumn,
+										  AbstractColumn::PlotDesignation::XError,
+										  AbstractColumn::PlotDesignation::XErrorPlus,
+										  AbstractColumn::PlotDesignation::XErrorMinus);
+
+	const auto yErrors = findErrorColumns(yColumn,
+										  AbstractColumn::PlotDesignation::YError,
+										  AbstractColumn::PlotDesignation::YErrorPlus,
+										  AbstractColumn::PlotDesignation::YErrorMinus);
+
 	if (!m_analysisMode) {
 		auto* curve = new XYCurve(name);
 		curve->setSuppressRetransform(true);
 		curve->setXColumn(xColumn);
 		curve->setYColumn(yColumn);
 		curve->setPlotType(m_plotType);
+
+		auto* errorBar = curve->errorBar();
+		if (yErrors.plus && yErrors.minus) {
+			errorBar->setYErrorType(ErrorBar::ErrorType::Asymmetric);
+			errorBar->setYPlusColumn(yErrors.plus);
+			errorBar->setYMinusColumn(yErrors.minus);
+		} else if (yErrors.plus) {
+			errorBar->setYErrorType(ErrorBar::ErrorType::Asymmetric);
+			errorBar->setYPlusColumn(yErrors.plus);
+		} else if (yErrors.minus) {
+			errorBar->setYErrorType(ErrorBar::ErrorType::Asymmetric);
+			errorBar->setYMinusColumn(yErrors.minus);
+		} else if (yErrors.symmetric) {
+			errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
+			errorBar->setYPlusColumn(yErrors.symmetric);
+		}
+
+		if (xErrors.plus && xErrors.minus) {
+			errorBar->setXErrorType(ErrorBar::ErrorType::Asymmetric);
+			errorBar->setXPlusColumn(xErrors.plus);
+			errorBar->setXMinusColumn(xErrors.minus);
+		} else if (xErrors.plus) {
+			errorBar->setXErrorType(ErrorBar::ErrorType::Asymmetric);
+			errorBar->setXPlusColumn(xErrors.plus);
+		} else if (xErrors.minus) {
+			errorBar->setXErrorType(ErrorBar::ErrorType::Asymmetric);
+			errorBar->setXMinusColumn(xErrors.minus);
+		} else if (xErrors.symmetric) {
+			errorBar->setXErrorType(ErrorBar::ErrorType::Symmetric);
+			errorBar->setXPlusColumn(xErrors.symmetric);
+		}
+
 		curve->setSuppressRetransform(false);
 		plot->addChild(curve);
 		m_lastAddedCurve = curve;
@@ -816,6 +860,38 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			curve->setXColumn(xColumn);
 			curve->setYColumn(yColumn);
 			curve->setPlotType(Plot::PlotType::Line);
+
+			auto* errorBar = curve->errorBar();
+			if (yErrors.plus && yErrors.minus) {
+				errorBar->setYErrorType(ErrorBar::ErrorType::Asymmetric);
+				errorBar->setYPlusColumn(yErrors.plus);
+				errorBar->setYMinusColumn(yErrors.minus);
+			} else if (yErrors.plus) {
+				errorBar->setYErrorType(ErrorBar::ErrorType::Asymmetric);
+				errorBar->setYPlusColumn(yErrors.plus);
+			} else if (yErrors.minus) {
+				errorBar->setYErrorType(ErrorBar::ErrorType::Asymmetric);
+				errorBar->setYMinusColumn(yErrors.minus);
+			} else if (yErrors.symmetric) {
+				errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
+				errorBar->setYPlusColumn(yErrors.symmetric);
+			}
+
+			if (xErrors.plus && xErrors.minus) {
+				errorBar->setXErrorType(ErrorBar::ErrorType::Asymmetric);
+				errorBar->setXPlusColumn(xErrors.plus);
+				errorBar->setXMinusColumn(xErrors.minus);
+			} else if (xErrors.plus) {
+				errorBar->setXErrorType(ErrorBar::ErrorType::Asymmetric);
+				errorBar->setXPlusColumn(xErrors.plus);
+			} else if (xErrors.minus) {
+				errorBar->setXErrorType(ErrorBar::ErrorType::Asymmetric);
+				errorBar->setXMinusColumn(xErrors.minus);
+			} else if (xErrors.symmetric) {
+				errorBar->setXErrorType(ErrorBar::ErrorType::Symmetric);
+				errorBar->setXPlusColumn(xErrors.symmetric);
+			}
+
 			curve->setSuppressRetransform(false);
 			plot->addChild(curve);
 			m_lastAddedCurve = curve;
@@ -836,6 +912,10 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		case XYAnalysisCurve::AnalysisAction::FitCustom:
 			analysisCurve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", name));
 			static_cast<XYFitCurve*>(analysisCurve)->initFitData(m_analysisAction);
+			if (xErrors.symmetric)
+				static_cast<XYFitCurve*>(analysisCurve)->setXErrorColumn(xErrors.symmetric);
+			if (yErrors.symmetric)
+				static_cast<XYFitCurve*>(analysisCurve)->setYErrorColumn(yErrors.symmetric);
 			break;
 		case XYAnalysisCurve::AnalysisAction::FitPiecewiseLinear:
 			analysisCurve = new XYPiecewiseLinearFitCurve(i18nc("Curve fitting", "Piecewise Linear Fit to '%1'", name));
@@ -1310,4 +1390,85 @@ void PlotDataDialog::checkOkButton() {
 		m_okButton->setToolTip(i18n("Close the dialog and plot the data."));
 	else
 		m_okButton->setToolTip(msg);
+}
+
+PlotDataDialog::ErrorColumns PlotDataDialog::findErrorColumns(const Column* dataColumn,
+															  AbstractColumn::PlotDesignation symmetricDesignation,
+															  AbstractColumn::PlotDesignation plusDesignation,
+															  AbstractColumn::PlotDesignation minusDesignation) const {
+	ErrorColumns errCols;
+	if (!dataColumn)
+		return errCols;
+
+	const auto* parent = dataColumn->parentAspect();
+	const auto& siblingCols = parent ? parent->children<Column>() : m_selectedColumns;
+	int idx = siblingCols.indexOf(const_cast<Column*>(dataColumn));
+	if (idx == -1)
+		return errCols;
+
+	// 1. Scan forward from the data column up to the next data column
+	for (int i = idx + 1; i < siblingCols.size(); ++i) {
+		auto* sibling = siblingCols.at(i);
+		if (!m_selectedColumns.isEmpty() && !m_selectedColumns.contains(sibling))
+			break;
+
+		auto pd = sibling->plotDesignation();
+		if (pd == AbstractColumn::PlotDesignation::X || pd == AbstractColumn::PlotDesignation::Y || pd == AbstractColumn::PlotDesignation::Z
+			|| pd == AbstractColumn::PlotDesignation::NoDesignation)
+			break;
+
+		if (pd == symmetricDesignation && !errCols.symmetric)
+			errCols.symmetric = sibling;
+		else if (pd == plusDesignation && !errCols.plus)
+			errCols.plus = sibling;
+		else if (pd == minusDesignation && !errCols.minus)
+			errCols.minus = sibling;
+	}
+
+	// 2. If nothing found forward, check immediately to the left
+	if (!errCols.symmetric && !errCols.plus && !errCols.minus && idx > 0) {
+		auto* sibling = siblingCols.at(idx - 1);
+		if (m_selectedColumns.isEmpty() || m_selectedColumns.contains(sibling)) {
+			auto pd = sibling->plotDesignation();
+			if (pd == symmetricDesignation)
+				errCols.symmetric = sibling;
+			else if (pd == plusDesignation) {
+				errCols.plus = sibling;
+				if (idx > 1) {
+					auto* sibling2 = siblingCols.at(idx - 2);
+					if ((m_selectedColumns.isEmpty() || m_selectedColumns.contains(sibling2)) && sibling2->plotDesignation() == minusDesignation)
+						errCols.minus = sibling2;
+				}
+			} else if (pd == minusDesignation) {
+				errCols.minus = sibling;
+				if (idx > 1) {
+					auto* sibling2 = siblingCols.at(idx - 2);
+					if ((m_selectedColumns.isEmpty() || m_selectedColumns.contains(sibling2)) && sibling2->plotDesignation() == plusDesignation)
+						errCols.plus = sibling2;
+				}
+			}
+		}
+	}
+
+	// 3. If still nothing found, check if there is an unambiguous single error column of matching type in the selection
+	if (!errCols.symmetric && !errCols.plus && !errCols.minus) {
+		int countData = 0;
+		for (auto* col : m_selectedColumns) {
+			if (col->plotDesignation() == dataColumn->plotDesignation())
+				countData++;
+		}
+		if (countData == 1) {
+			for (auto* col : m_selectedColumns) {
+				if (col->plotDesignation() == symmetricDesignation) {
+					errCols.symmetric = col;
+					break;
+				} else if (col->plotDesignation() == plusDesignation && !errCols.plus)
+					errCols.plus = col;
+				else if (col->plotDesignation() == minusDesignation && !errCols.minus)
+					errCols.minus = col;
+			}
+		}
+	}
+
+	return errCols;
 }

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-07 01:38+0100\n"
+"PO-Revision-Date: 2026-11-11 11:44+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -19175,7 +19175,7 @@ msgstr[1] "Explorador de proyectos: borrar %1 objetos seleccionados"
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Arrastrar para mover la barra de herramientas"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format
@@ -28475,6 +28475,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Script Toolbar"
-#~ msgstr "Barra de herramientas de guiones"
