@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:56+0000\n"
-"PO-Revision-Date: 2026-11-11 20:36+0300\n"
+"POT-Creation-Date: 2026-11-16 01:00+0000\n"
+"PO-Revision-Date: 2026-11-15 20:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -860,10 +860,10 @@ msgstr "geçersiz veri seçici ögesi “%1”"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/DatapickerCurve.cpp:175
 #: src/frontend/matrix/MatrixView.cpp:130
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:378
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:395
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:409
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:418
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:380
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:397
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:411
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:420
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:213
 #: src/frontend/ui/dockwidgets/columndock.ui:84
 #: src/frontend/ui/dockwidgets/livedatadock.ui:419
@@ -1311,7 +1311,7 @@ msgstr "Aygıt/dosya açılamadı veya boş"
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:342
-#: src/backend/datasources/filters/XLSXFilter.cpp:514
+#: src/backend/datasources/filters/XLSXFilter.cpp:529
 #, kde-format
 msgid "Not enough memory."
 msgstr "Yetersiz bellek."
@@ -2188,13 +2188,13 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "%2 türü için %1 boyutsal veri henüz desteklenmiyor"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:63
-#: src/backend/datasources/filters/XLSXFilter.cpp:46
+#: src/backend/datasources/filters/XLSXFilter.cpp:48
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Sayfa sayısı: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:227
-#: src/backend/datasources/filters/XLSXFilter.cpp:631
+#: src/backend/datasources/filters/XLSXFilter.cpp:656
 #, kde-format
 msgid "No sheet selected."
 msgstr "Seçili sayfa yok."
@@ -2575,12 +2575,12 @@ msgstr "Zaman_ns"
 msgid "Time_10µs"
 msgstr "Zaman_10µs"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:48
+#: src/backend/datasources/filters/XLSXFilter.cpp:50
 #, kde-format
 msgid "Sheets: "
 msgstr "Sayfalar: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:635
+#: src/backend/datasources/filters/XLSXFilter.cpp:660
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Geçersiz bölge belirtildi."
@@ -6635,7 +6635,7 @@ msgstr "Notu Yazdır"
 msgid "Text file (*.txt)"
 msgstr "Metin dosyası (*.txt)"
 
-#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:123
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:125
 #: src/backend/statistics/HypothesisTest.cpp:190
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6644,12 +6644,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Dosyaya Dışa Aktar"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:137
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:139
 #, kde-format
 msgid "Export failed"
 msgstr "Dışa aktarma başarısız"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:137
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:139
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "“%1” dosyası yazmak için açılamadı."
@@ -6673,7 +6673,7 @@ msgstr "%1: Metin rengini ayarla"
 #: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "%1: set text font"
-msgstr "%1: Metin yazıtipini ayarla"
+msgstr "%1: Metin yazı tipini ayarla"
 
 #: src/backend/note/Note.cpp:168
 #, kde-format
@@ -6952,7 +6952,7 @@ msgstr "Ham"
 
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2844
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1117
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1197
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:235
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:334
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:493
@@ -7634,48 +7634,130 @@ msgstr "Üçlü Ağırlık"
 msgid "Tricube"
 msgstr "Üçlü Küp"
 
-#: src/backend/script/Script.cpp:121
+#: src/backend/script/python/PythonScriptRuntime.cpp:121
+#, kde-format
+msgid ""
+"Failed to initialize Python. Check the Python interpreter in the scripting "
+"settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:129
+#, kde-format
+msgid ""
+"\n"
+"\n"
+"Restart LabPlot after correcting the Python configuration."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:187
+#, kde-format
+msgid ""
+"The configured Python interpreter '%1' links to '%2', which no longer "
+"exists. Recreate the virtual environment using Python %3, or select a valid "
+"Python %3 interpreter in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:193
+#, kde-format
+msgid ""
+"The configured Python interpreter '%1' does not exist or is not executable. "
+"Select a valid interpreter in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:204
+#: src/backend/script/python/PythonScriptRuntime.cpp:207
+#, kde-format
+msgid "Could not determine the Python version of '%1': %2"
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:212
+#, kde-format
+msgid ""
+"The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
+"%3. Select a compatible interpreter in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:242
+#, fuzzy, kde-format
+#| msgid "Failed to parse the file."
+msgid "Failed to register the pylabplot module."
+msgstr "Dosya ayrıştırılamadı."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:278
+#: src/backend/script/python/PythonScriptRuntime.cpp:286
+#, kde-format
+msgid "Failed to read the embedded Python interpreter path."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:294
+#, kde-format
+msgid ""
+"The embedded Python interpreter does not match the configured interpreter "
+"'%1'."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:355
+#, kde-format
+msgid ""
+"Failed to initialize the pylabplot module. Check the Python interpreter and "
+"PySide6 installation in the scripting settings."
+msgstr ""
+
+#: src/backend/script/Script.cpp:81
+#, fuzzy, kde-format
+#| msgid "unsupported script runtime '%1'"
+msgid "Unsupported scripting language: %1"
+msgstr "Desteklenmeyen betik çalışma zamanı “%1”"
+
+#: src/backend/script/Script.cpp:123
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Python dosyası (*.py)"
 
-#: src/backend/script/Script.cpp:185 src/backend/script/Script.cpp:383
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
 #, kde-format
 msgid "no script element found"
 msgstr "Bulunan betik ögesi yok"
 
-#: src/backend/script/Script.cpp:193
-#, kde-format
-msgid "failed to initialize the script runtime '%1'"
+#: src/backend/script/Script.cpp:195
+#, fuzzy, kde-format
+#| msgid "failed to initialize the script runtime '%1'"
+msgid "Failed to initialize the script runtime '%1': %2"
 msgstr "Betik çalışma zamanı “%1” ilklendirilemedi."
 
-#: src/backend/script/Script.cpp:257
+#: src/backend/script/Script.cpp:259
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: %2 betiğini çalıştır"
 
-#: src/backend/script/Script.cpp:363 src/backend/script/Script.cpp:368
+#: src/backend/script/Script.cpp:355
+#, fuzzy, kde-format
+#| msgid "failed to initialize the script runtime '%1'"
+msgid "Failed to initialize the %1 script runtime."
+msgstr "Betik çalışma zamanı “%1” ilklendirilemedi."
+
+#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Betik"
 
-#: src/backend/script/Script.cpp:363
+#: src/backend/script/Script.cpp:368
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Betik çalıştırılamadı."
 
-#: src/backend/script/Script.cpp:368
+#: src/backend/script/Script.cpp:373
 #, kde-format
 msgid "A script is already running."
 msgstr "Bir betik hâlihazırda çalışıyor."
 
-#: src/backend/script/Script.cpp:391
+#: src/backend/script/Script.cpp:396
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "“runtime” özniteliği eksik veya boş"
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:401
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "Desteklenmeyen betik çalışma zamanı “%1”"
@@ -9484,7 +9566,7 @@ msgstr "%1: Etiket rengini ayarla"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
 #, kde-format
 msgid "%1: set label font"
-msgstr "%1: Etiket yazıtipini ayarla"
+msgstr "%1: Etiket yazı tipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
 #, kde-format
@@ -9883,8 +9965,8 @@ msgstr "Çubuk Çizimler"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:644
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2029
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:959
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:961
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1039
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1041
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:156
 #, kde-format
 msgid "Bar Plot"
@@ -9911,7 +9993,7 @@ msgstr "Histogram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:662
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:957
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1037
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:153
 #, kde-format
 msgid "Box Plot"
@@ -10198,13 +10280,13 @@ msgid "Distribution Fit to '%1'"
 msgstr "“%1” Ögesine Dağılımı Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2237
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:871
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:951
 #, kde-format
 msgid "Simplification of '%1'"
 msgstr "“%1” Basitleştirmesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2250
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:844
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:924
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "“%1” türevi"
@@ -10218,7 +10300,7 @@ msgid "Differentiation"
 msgstr "Türev Alma"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2263
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:847
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:927
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "“%1” ögesinin integrali"
@@ -10232,13 +10314,13 @@ msgid "Integration"
 msgstr "Tümleştirme"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2276
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:850
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:930
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "“%1” ögesinin aradeğerlendirilmesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2289
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:853
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:933
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "“%1” ögesinin yumuşatılması"
@@ -10255,7 +10337,7 @@ msgstr "Taban Çizgisi Düzeltmesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2323
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2338
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:837
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:913
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
@@ -10366,7 +10448,7 @@ msgstr "%1: Tekerlekle yakınlaştır"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format
 msgid "%1: set font"
-msgstr "%1: Yazıtipini ayarla"
+msgstr "%1: Yazı tipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:207
 #, kde-format
@@ -10377,7 +10459,7 @@ msgstr "%1: Çizimin rengini kullan"
 #: src/backend/worksheet/TextLabel.cpp:408
 #, kde-format
 msgid "%1: set font color"
-msgstr "%1: Yazıtipi rengini ayarla"
+msgstr "%1: Yazı tipi rengini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:221
 #, kde-format
@@ -10660,7 +10742,7 @@ msgstr "%1: Etiket kenarlığı şeklini ayarla"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:666
 #, kde-format
 msgid "%1: set labels font"
-msgstr "%1: Etiket yazıtipini ayarla"
+msgstr "%1: Etiket yazı tipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:701
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:733
@@ -11127,7 +11209,7 @@ msgstr "%1: Değerlerin sonekini ayarla"
 #: src/backend/worksheet/plots/cartesian/Value.cpp:198
 #, kde-format
 msgid "%1: set values font"
-msgstr "%1: Değerlerin yazıtipini ayarla"
+msgstr "%1: Değerlerin yazı tipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:205
 #, kde-format
@@ -11679,7 +11761,7 @@ msgstr "%1: Etiket yer tutucu metnini ayarla"
 #: src/backend/worksheet/TextLabel.cpp:401
 #, kde-format
 msgid "%1: set TeX main font"
-msgstr "%1: TeX ana yazıtipini ayarla"
+msgstr "%1: TeX ana yazı tipini ayarla"
 
 #: src/backend/worksheet/TextLabel.cpp:416
 #, kde-format
@@ -20026,7 +20108,7 @@ msgstr "Arka plan"
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:58
 #, kde-format
 msgid "Font Color"
-msgstr "Yazıtipi rengi"
+msgstr "Yazı tipi rengi"
 
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:59
 #, kde-format
@@ -20060,20 +20142,20 @@ msgstr "Seçili veriyi çiz"
 msgid "&Plot"
 msgstr "&Çiz"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:317
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:319
 #, kde-format
 msgid "Y-data"
 msgstr "Y verisi"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:327
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:391
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:401
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:329
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:393
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:403
 #, kde-format
 msgid "Add Plot to"
 msgstr "Şuraya Çizim Ekle"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:371
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:373
 #: src/frontend/ui/dockwidgets/axisdock.ui:1163
 #: src/frontend/ui/dockwidgets/columndock.ui:446
 #, kde-format
@@ -20081,154 +20163,154 @@ msgid "Labels"
 msgstr "Etiketler"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:405
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:407
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:180
 #, kde-format
 msgid "Add Plots to"
 msgstr "Şuraya Çizimler Ekle"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:437
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:447
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:469
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:439
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:449
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:471
 #, kde-format
 msgid "Plot Area - %1"
 msgstr "Çizim Alanı — %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:443
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:464
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:737
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:761
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:781
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:445
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:466
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:739
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:763
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:783
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "Çalışma Sayfası — %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:463
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:495
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:465
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:497
 #, kde-format
 msgid "Plot data from %1"
 msgstr "%1 konumundan veri çiz"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:646
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:671
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:692
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:740
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:764
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:784
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:648
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:673
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:694
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:742
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:766
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:786
 #, kde-format
 msgid "Plot Area %1"
 msgstr "Çizim Alanı %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:841
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:921
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
 msgstr "“%1” Ögesine Parçalı Doğrusal Uyum"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:856
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:936
 #, kde-format
 msgid "Fourier Filter of '%1'"
 msgstr "“%1” Ögesinin Fourier Süzgeci"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:859
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:939
 #, kde-format
 msgid "Fourier Transform of '%1'"
 msgstr "“%1” Fourier Dönüşümü"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:862
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:942
 #, kde-format
 msgid "Hilbert Transform of '%1'"
 msgstr "“%1” Hilbert Dönüşümü"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:865
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:945
 #, kde-format
 msgid "Convolution of '%1'"
 msgstr "“%1” Evrişimi"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:868
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:948
 #, kde-format
 msgid "Correlation of '%1'"
 msgstr "“%1” Korelasyonu"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:874
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:954
 #, kde-format
 msgid "Baseline Correction of '%1'"
 msgstr "“%1” Taban Çizgisi Düzeltmesi"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:905
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:985
 #, kde-format
 msgid "Probability Density of '%1'"
 msgstr "“%1” Olasılık Yoğunluğu"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:911
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:991
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
 msgstr "“%1” Ögesine Dağılımı Uydur"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1119
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1199
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:357
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Yoğunluk"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1125
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1205
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:387
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Kuramsal Dağılım Dilimleri"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1128
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1208
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:389
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Örnek Dağılım Dilimleri"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1217
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1297
 #, kde-format
 msgid "Sample"
 msgstr "Örneklem"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1260
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1340
 #, kde-format
 msgid "New Plot Area in an Existing Worksheet"
 msgstr "Var Olan Çalışma Sayfasında Yeni Çizim Alanı"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1261
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1341
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
 #, kde-format
 msgid "New Plot Area in a New Worksheet"
 msgstr "Yeni Çalışma Sayfasında Yeni Çizim Alanı"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1268
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1348
 #, kde-format
 msgid "New Plot Areas in an Existing Worksheet"
 msgstr "Var Olan Çalışma Sayfasında Yeni Çizim Alanları"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1269
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1349
 #, kde-format
 msgid "New Plot Areas in a New Worksheet"
 msgstr "Yeni Çalışma Sayfasında Yeni Çizim Alanları"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1296
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1376
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Çizilecek veri seçilmedi."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1300
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1380
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Hâlihazırda var olan bir çizim alanının seçilmesi gereklidir."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1304
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1384
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Hâlihazırda var olan bir çalışma sayfası seçilmeli."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1310
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1390
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "İletişim penceresini kapat ve veriyi çiz."
@@ -23419,7 +23501,7 @@ msgstr "Konum"
 #: src/frontend/ui/labelwidget.ui:629
 #, kde-format
 msgid "Font:"
-msgstr "Yazıtipi:"
+msgstr "Yazı tipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lSuffix)
@@ -23502,7 +23584,7 @@ msgstr "Önek:"
 #: src/frontend/ui/labelwidget.ui:68
 #, kde-format
 msgid "Font Color:"
-msgstr "Yazıtipi rengi:"
+msgstr "Yazı tipi rengi:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
@@ -26156,7 +26238,7 @@ msgstr ""
 #: src/frontend/ui/labelwidget.ui:368
 #, kde-format
 msgid "Main font:"
-msgstr "Ana yazıtipi:"
+msgstr "Ana yazı tipi:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
 #: src/frontend/ui/labelwidget.ui:411

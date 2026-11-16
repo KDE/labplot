@@ -4,7 +4,7 @@
 #
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2014, 2015, 2016.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2015, 2017, 2019, 2020, 2021, 2022.
-# SPDX-FileCopyrightText: 2025-2026 Marcus Gama <marcus.gama@gmail.com>
+# SPDX-FileCopyrightText: 2025-2026 Marcus Gama <marcus.gama@kde.org>
 # SPDX-FileCopyrightText: 2025, 2026 Guilherme Marçal Silva <guimarcalsilva@gmail.com>
 # SPDX-FileCopyrightText: 2026 Geraldo Simiao <geraldosimiao@fedoraproject.org>
 # SPDX-FileCopyrightText: 2026 Elton Carvalho <elton.carvalho@ufrn.br>
@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-11 00:56+0000\n"
+"POT-Creation-Date: 2026-11-16 01:00+0000\n"
 "PO-Revision-Date: 2026-11-11 09:39-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"Last-Translator: Marcus Gama <marcus.gama@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -865,10 +865,10 @@ msgstr "elemento do seletor de dados desconhecido '%1'"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/DatapickerCurve.cpp:175
 #: src/frontend/matrix/MatrixView.cpp:130
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:378
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:395
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:409
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:418
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:380
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:397
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:411
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:420
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:213
 #: src/frontend/ui/dockwidgets/columndock.ui:84
 #: src/frontend/ui/dockwidgets/livedatadock.ui:419
@@ -1315,7 +1315,7 @@ msgstr "Falha ao abrir o dispositivo/arquivo ou ele está vazio."
 #: src/backend/datasources/filters/ROOTFilter.cpp:307
 #: src/backend/datasources/filters/SpiceFilter.cpp:208
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:342
-#: src/backend/datasources/filters/XLSXFilter.cpp:514
+#: src/backend/datasources/filters/XLSXFilter.cpp:529
 #, kde-format
 msgid "Not enough memory."
 msgstr "Sem memória suficiente."
@@ -2193,13 +2193,13 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "Dados dimensionais %1 do tipo %2 ainda não suportados"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:63
-#: src/backend/datasources/filters/XLSXFilter.cpp:46
+#: src/backend/datasources/filters/XLSXFilter.cpp:48
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Contagem de planilhas: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:227
-#: src/backend/datasources/filters/XLSXFilter.cpp:631
+#: src/backend/datasources/filters/XLSXFilter.cpp:656
 #, kde-format
 msgid "No sheet selected."
 msgstr "Nenhuma planilha selecionada."
@@ -2581,12 +2581,12 @@ msgstr "Tempo_ns"
 msgid "Time_10µs"
 msgstr "Tempo_10µs"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:48
+#: src/backend/datasources/filters/XLSXFilter.cpp:50
 #, kde-format
 msgid "Sheets: "
 msgstr "Planilhas: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:635
+#: src/backend/datasources/filters/XLSXFilter.cpp:660
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Região inválida especificada."
@@ -6657,7 +6657,7 @@ msgstr "Imprimir anotação"
 msgid "Text file (*.txt)"
 msgstr "Arquivo texto (*.txt)"
 
-#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:123
+#: src/backend/note/Note.cpp:102 src/backend/script/Script.cpp:125
 #: src/backend/statistics/HypothesisTest.cpp:190
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:305
@@ -6666,12 +6666,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exportar para arquivo"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:137
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:139
 #, kde-format
 msgid "Export failed"
 msgstr "Falha na exportação"
 
-#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:137
+#: src/backend/note/Note.cpp:116 src/backend/script/Script.cpp:139
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Falha ao abrir '%1 para escrita."
@@ -6974,7 +6974,7 @@ msgstr "Bruto"
 
 #: src/backend/nsl/nsl_dft.c:30 src/backend/nsl/nsl_filter.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2844
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1117
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1197
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:235
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:334
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:493
@@ -7656,48 +7656,130 @@ msgstr "Tri-ponderada"
 msgid "Tricube"
 msgstr "Tri-cúbica"
 
-#: src/backend/script/Script.cpp:121
+#: src/backend/script/python/PythonScriptRuntime.cpp:121
+#, kde-format
+msgid ""
+"Failed to initialize Python. Check the Python interpreter in the scripting "
+"settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:129
+#, kde-format
+msgid ""
+"\n"
+"\n"
+"Restart LabPlot after correcting the Python configuration."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:187
+#, kde-format
+msgid ""
+"The configured Python interpreter '%1' links to '%2', which no longer "
+"exists. Recreate the virtual environment using Python %3, or select a valid "
+"Python %3 interpreter in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:193
+#, kde-format
+msgid ""
+"The configured Python interpreter '%1' does not exist or is not executable. "
+"Select a valid interpreter in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:204
+#: src/backend/script/python/PythonScriptRuntime.cpp:207
+#, kde-format
+msgid "Could not determine the Python version of '%1': %2"
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:212
+#, kde-format
+msgid ""
+"The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
+"%3. Select a compatible interpreter in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:242
+#, fuzzy, kde-format
+#| msgid "Failed to parse the file."
+msgid "Failed to register the pylabplot module."
+msgstr "Falha ao analisar o arquivo."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:278
+#: src/backend/script/python/PythonScriptRuntime.cpp:286
+#, kde-format
+msgid "Failed to read the embedded Python interpreter path."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:294
+#, kde-format
+msgid ""
+"The embedded Python interpreter does not match the configured interpreter "
+"'%1'."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:355
+#, kde-format
+msgid ""
+"Failed to initialize the pylabplot module. Check the Python interpreter and "
+"PySide6 installation in the scripting settings."
+msgstr ""
+
+#: src/backend/script/Script.cpp:81
+#, fuzzy, kde-format
+#| msgid "unsupported script runtime '%1'"
+msgid "Unsupported scripting language: %1"
+msgstr "ambiente de execução de script '%1' não suportado"
+
+#: src/backend/script/Script.cpp:123
 #, kde-format
 msgid "Python file (*.py)"
 msgstr "Arquivo python (*.py)"
 
-#: src/backend/script/Script.cpp:185 src/backend/script/Script.cpp:383
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
 #, kde-format
 msgid "no script element found"
 msgstr "nenhum elemento de script encontrado"
 
-#: src/backend/script/Script.cpp:193
-#, kde-format
-msgid "failed to initialize the script runtime '%1'"
+#: src/backend/script/Script.cpp:195
+#, fuzzy, kde-format
+#| msgid "failed to initialize the script runtime '%1'"
+msgid "Failed to initialize the script runtime '%1': %2"
 msgstr "falha ao inicializar o ambiente de execução de script '%1'"
 
-#: src/backend/script/Script.cpp:257
+#: src/backend/script/Script.cpp:259
 #, kde-format
 msgid "%1: run %2 script"
 msgstr "%1: executar script %2"
 
-#: src/backend/script/Script.cpp:363 src/backend/script/Script.cpp:368
+#: src/backend/script/Script.cpp:355
+#, fuzzy, kde-format
+#| msgid "failed to initialize the script runtime '%1'"
+msgid "Failed to initialize the %1 script runtime."
+msgstr "falha ao inicializar o ambiente de execução de script '%1'"
+
+#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:363
+#: src/backend/script/Script.cpp:368
 #, kde-format
 msgid "Failed to run the script."
 msgstr "Falha ao executar o script."
 
-#: src/backend/script/Script.cpp:368
+#: src/backend/script/Script.cpp:373
 #, kde-format
 msgid "A script is already running."
 msgstr "Um script já está em execução."
 
-#: src/backend/script/Script.cpp:391
+#: src/backend/script/Script.cpp:396
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "Falta o atributo 'runtime' ou está em branco"
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:401
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "ambiente de execução de script '%1' não suportado"
@@ -9947,8 +10029,8 @@ msgstr "Gráficos de barra"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:644
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2029
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:959
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:961
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1039
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1041
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:156
 #, kde-format
 msgid "Bar Plot"
@@ -9975,7 +10057,7 @@ msgstr "Histograma"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:662
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:957
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1037
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:153
 #, kde-format
 msgid "Box Plot"
@@ -10262,13 +10344,13 @@ msgid "Distribution Fit to '%1'"
 msgstr "Distribuição ajustada a '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2237
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:871
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:951
 #, kde-format
 msgid "Simplification of '%1'"
 msgstr "Simplificação de '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2250
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:844
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:924
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Derivada de '%1'"
@@ -10282,7 +10364,7 @@ msgid "Differentiation"
 msgstr "Diferenciação"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2263
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:847
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:927
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Integral de '%1'"
@@ -10296,13 +10378,13 @@ msgid "Integration"
 msgstr "Integração"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2276
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:850
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:930
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolação de '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2289
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:853
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:933
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Suavização de '%1'"
@@ -10319,7 +10401,7 @@ msgstr "Correção de linha base"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2323
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2338
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:837
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:913
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
@@ -20193,20 +20275,20 @@ msgstr "Plotar os dados selecionados"
 msgid "&Plot"
 msgstr "&Plotar"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:317
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:319
 #, kde-format
 msgid "Y-data"
 msgstr "Dados-Y"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:327
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:391
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:401
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:329
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:393
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:403
 #, kde-format
 msgid "Add Plot to"
 msgstr "Adicionar gráfico para"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:371
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:373
 #: src/frontend/ui/dockwidgets/axisdock.ui:1163
 #: src/frontend/ui/dockwidgets/columndock.ui:446
 #, kde-format
@@ -20214,154 +20296,154 @@ msgid "Labels"
 msgstr "Legendas"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:405
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:407
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:180
 #, kde-format
 msgid "Add Plots to"
 msgstr "Adicionar gráficos para"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:437
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:447
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:469
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:439
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:449
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:471
 #, kde-format
 msgid "Plot Area - %1"
 msgstr "Área do gráfico - %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:443
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:464
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:737
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:761
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:781
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:445
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:466
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:739
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:763
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:783
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "Folha de trabalho - %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:463
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:495
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:465
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:497
 #, kde-format
 msgid "Plot data from %1"
 msgstr "Área do gráfico de %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:646
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:671
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:692
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:740
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:764
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:784
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:648
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:673
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:694
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:742
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:766
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:786
 #, kde-format
 msgid "Plot Area %1"
 msgstr "Área do gráfico %1"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:841
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:921
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Piecewise Linear Fit to '%1'"
 msgstr "Ajuste linear por partes para '%1'"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:856
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:936
 #, kde-format
 msgid "Fourier Filter of '%1'"
 msgstr "Filtro de Fourier de '%1'"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:859
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:939
 #, kde-format
 msgid "Fourier Transform of '%1'"
 msgstr "Transformação de Fourier de '%1'"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:862
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:942
 #, kde-format
 msgid "Hilbert Transform of '%1'"
 msgstr "Transformação de Hilbert de '%1'"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:865
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:945
 #, kde-format
 msgid "Convolution of '%1'"
 msgstr "Convolução de '%1'"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:868
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:948
 #, kde-format
 msgid "Correlation of '%1'"
 msgstr "Correlação de '%1'"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:874
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:954
 #, kde-format
 msgid "Baseline Correction of '%1'"
 msgstr "Correção de linha base de '%1'"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:905
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:985
 #, kde-format
 msgid "Probability Density of '%1'"
 msgstr "Densidade da probabilidade de '%1'"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:911
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:991
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
 msgstr "Ajuste de distribuição para '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1119
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1199
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:357
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Densidade"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1125
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1205
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:387
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Quantis teóricos"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1128
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1208
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:389
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Quantis de amostra"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1217
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1297
 #, kde-format
 msgid "Sample"
 msgstr "Amostra"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1260
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1340
 #, kde-format
 msgid "New Plot Area in an Existing Worksheet"
 msgstr "Nova área de plotagem em uma folha de trabalho existente"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1261
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1341
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:202
 #, kde-format
 msgid "New Plot Area in a New Worksheet"
 msgstr "Nova área de plotagem em uma nova folha de trabalho"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1268
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1348
 #, kde-format
 msgid "New Plot Areas in an Existing Worksheet"
 msgstr "Novas áreas de plotagem em uma folha de trabalho existente"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1269
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1349
 #, kde-format
 msgid "New Plot Areas in a New Worksheet"
 msgstr "Novas áreas de plotagem em uma nova folha de trabalho"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1296
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1376
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Nenhum dado selecionado para plotagem."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1300
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1380
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Uma área de gráfico já existente deve ser selecionada."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1304
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1384
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "É preciso selecionar uma folha de trabalho já existente."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1310
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1390
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Feche a caixa de diálogo e plote os dados."
@@ -28859,7 +28941,7 @@ msgstr "Não foi possível abrir o arquivo:"
 
 #~ msgctxt "EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
-#~ msgstr "alvarenga@kde.org, marcus.gama@gmail.com"
+#~ msgstr "alvarenga@kde.org, marcus.gama@kde.org"
 
 #~ msgid "Device at end"
 #~ msgstr "Dispositivo chegou ao fim"
