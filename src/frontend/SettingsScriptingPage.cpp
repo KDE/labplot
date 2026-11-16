@@ -50,8 +50,8 @@ SettingsScriptingPage::SettingsScriptingPage(QWidget* parent)
 	}
 
 	// populate available Python environments
-	const QString defaultPythonPrefix = QStringLiteral(LABPLOT_DEFAULT_PYTHON_PREFIX);
-	const QString defaultPythonExecutable = QStringLiteral(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
+	const QString defaultPythonPrefix = QLatin1String(LABPLOT_DEFAULT_PYTHON_PREFIX);
+	const QString defaultPythonExecutable = QLatin1String(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
 	const QString defaultPythonRelativeExecutable = QDir(defaultPythonPrefix).relativeFilePath(defaultPythonExecutable);
 	ui.cbPythonEnvironment->addItem(
 		i18n("%1 (Python: %2) -  Default", QDir::toNativeSeparators(defaultPythonPrefix), QDir::toNativeSeparators(defaultPythonRelativeExecutable)),
@@ -172,11 +172,11 @@ void SettingsScriptingPage::updateRestartMessage() {
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
 	QString savedExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
 	if (savedExecutable.isEmpty())
-		savedExecutable = QStringLiteral(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
+		savedExecutable = QLatin1String(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
 
 	QString selectedExecutable = ui.cbPythonEnvironment->currentData().toString();
 	if (selectedExecutable.isEmpty())
-		selectedExecutable = QStringLiteral(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
+		selectedExecutable = QLatin1String(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
 
 	if (QDir::cleanPath(selectedExecutable) == QDir::cleanPath(savedExecutable)) {
 		if (m_restartMessageWidget)
