@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:10+0000\n"
-"PO-Revision-Date: 2026-11-07 19:20+0300\n"
+"PO-Revision-Date: 2026-11-15 20:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8847,7 +8847,7 @@ msgstr "x=%1"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:200
 #, kde-format
 msgid "%1: set font"
-msgstr "%1: Yazıtipini ayarla"
+msgstr "%1: Yazı tipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:207
 #, kde-format
