@@ -32,10 +32,12 @@ private:
 	void scanForCondaEnvs(const QString& dir);
 	void addEnvironment(const QString& envPath, bool selectAfterAdd = false, bool blockSignalsDuringSelect = false, bool isUserSelected = false);
 	void changed();
+	void updateRestartMessage();
 	void showErrorMessage(const QString&);
 	bool m_changed{false};
 	QString m_pythonMinorVersion; // e.g. "3.11"
 	KMessageWidget* m_messageWidget{nullptr};
+	KMessageWidget* m_restartMessageWidget{nullptr};
 
 Q_SIGNALS:
 	void settingsChanged();
