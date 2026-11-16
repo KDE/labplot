@@ -4,14 +4,14 @@
 #
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2014, 2015, 2016.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2015, 2017, 2019, 2020, 2021, 2022.
-# SPDX-FileCopyrightText: 2025 Marcus Gama <marcus.gama@gmail.com>
+# SPDX-FileCopyrightText: 2025 Marcus Gama <marcus.gama@kde.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 06:30+0000\n"
 "PO-Revision-Date: 2025-08-11 14:33-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
+"Last-Translator: Marcus Gama <marcus.gama@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr "André Marcelo Alvarenga, Marcus Gama"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "alvarenga@kde.org, marcus.gama@gmail.com"
+msgstr "alvarenga@kde.org, marcus.gama@kde.org"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:74
 #, kde-format
