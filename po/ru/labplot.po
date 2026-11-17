@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-16 01:00+0000\n"
-"PO-Revision-Date: 2026-11-11 23:00+0200\n"
+"POT-Creation-Date: 2026-11-17 01:01+0000\n"
+"PO-Revision-Date: 2026-11-16 07:31+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
@@ -7765,6 +7765,8 @@ msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
 msgstr ""
+"Не удалось инициализировать Python. Проверьте интерпретатор Python в "
+"параметрах сценариев."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7773,6 +7775,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"Перезапустите LabPlot после исправления конфигурации Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7781,6 +7786,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"Ссылка выбранного интерпретатора Python «%1» ведёт на несуществующий файл "
+"«%2». Пересоздайте виртуальную среду с Python %3 или выберите корректный "
+"интерпретатор Python %3 в параметрах сценариев."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7788,12 +7796,14 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"Выбранный интерпретатор Python «%1» не существует или не является "
+"исполняемым файлом. Выберите корректный интерпретатор в параметрах сценариев."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "Не удалось определить версию Python для «%1»: %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7801,18 +7811,19 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"В выбранном интерпретаторе «%1» используется Python %2, но LabPlot требуется "
+"Python %3. Выберите совместимый интерпретатор в параметрах сценариев."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "Не удалось разобрать файл."
+msgstr "Не удалось зарегистрировать модуль pylabplot."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:278
 #: src/backend/script/python/PythonScriptRuntime.cpp:286
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "Не удалось прочитать путь к встроенному интерпретатору Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:294
 #, kde-format
@@ -7820,6 +7831,8 @@ msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
+"Встроенный интерпретатор Python не совпадает с выбранным интерпретатором "
+"«%1»."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:355
 #, kde-format
@@ -7827,12 +7840,13 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"Не удалось инициализировать модуль pylabplot. Проверьте интерпретатор Python "
+"и установку PySide6 в параметрах сценариев."
 
 #: src/backend/script/Script.cpp:81
-#, fuzzy, kde-format
-#| msgid "unsupported script runtime '%1'"
+#, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr "неподдерживаемая среда выполнения сценариев «%1»"
+msgstr "Неподдерживаемый язык сценариев: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7845,10 +7859,9 @@ msgid "no script element found"
 msgstr "Не найден элемент сценария."
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "не удалось инициализировать среду выполнения сценариев «%1»"
+msgstr "Не удалось инициализировать среду выполнения сценариев «%1»: %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7856,10 +7869,9 @@ msgid "%1: run %2 script"
 msgstr "%1: выполнение сценария «%2»"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "не удалось инициализировать среду выполнения сценариев «%1»"
+msgstr "Не удалось инициализировать среду выполнения сценариев «%1»."
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -12236,7 +12248,7 @@ msgstr "Частично финансируется:"
 
 # BUGME: please add @title:window --aspotashev
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
 #, kde-format
 msgid "missing"
 msgstr "отсутствуют"
@@ -19856,35 +19868,57 @@ msgstr ""
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Запрашивать подтверждение при перезапуске базовой системы."
 
-# BUGME: please add semantic ctxt --aspotashev
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a Python virtual environment."
-msgstr "Выберите путь к виртуальной среде Python."
+#, fuzzy, kde-format
+#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgid "Select a virtual environment folder containing pyvenv.cfg."
+msgstr "Выбранная виртуальная среда не содержит файл pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:52
+#: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
-msgid "System Default"
-msgstr "Системное значение по умолчанию"
+msgid ""
+"Installation path of the Python interpreter currently running. Virtual "
+"environments using the same Python installation share this path."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:60
+#: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
+msgid "%1 (Python: %2) -  Default"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the Virtual Environment"
 msgctxt "@title:window"
-msgid "Select the Virtual Environment"
+msgid "Select the Virtual Environment Folder"
 msgstr "Выбор виртуальной среды"
 
-#: src/frontend/SettingsScriptingPage.cpp:230
+#: src/frontend/SettingsScriptingPage.cpp:192
+#, kde-format
+msgid ""
+"The selected environment differs from the saved one. Save and restart "
+"LabPlot for the change to take effect."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:268
+#, fuzzy, kde-format
+#| msgid "%1 (System, %2)"
+msgid "%1 (Python: %2)"
+msgstr "%1 (системный, %2)"
+
+#: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "В выбранной виртуальной среде отсутствует исполняемый файл Python."
 
-#: src/frontend/SettingsScriptingPage.cpp:236
+#: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr "Выбранная виртуальная среда не содержит файл pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:264
-#: src/frontend/SettingsScriptingPage.cpp:295
+#: src/frontend/SettingsScriptingPage.cpp:307
+#: src/frontend/SettingsScriptingPage.cpp:338
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
@@ -28958,6 +28992,13 @@ msgstr "сбой процесса convert, код выхода ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не удалось открыть файл:"
+
+# BUGME: please add semantic ctxt --aspotashev
+#~ msgid "Select the path to a Python virtual environment."
+#~ msgstr "Выберите путь к виртуальной среде Python."
+
+#~ msgid "System Default"
+#~ msgstr "Системное значение по умолчанию"
 
 #~ msgid "Script Toolbar"
 #~ msgstr "Панель инструментов сценариев"

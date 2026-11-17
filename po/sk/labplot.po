@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-16 01:00+0000\n"
+"POT-Creation-Date: 2026-11-17 01:01+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -12011,7 +12011,7 @@ msgid "Partly funded by:"
 msgstr "Čiastočne financované:"
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
 #, kde-format
 msgid "missing"
 msgstr "Hodnoty"
@@ -19447,33 +19447,56 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Žiadať potvrdenie pri reštartovaní backendového systému."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a Python virtual environment."
-msgstr "Vyberte cestu k virtuálnemu prostrediu Pythonu."
+#, fuzzy, kde-format
+#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgid "Select a virtual environment folder containing pyvenv.cfg."
+msgstr "Vybrané virtuálne prostredie neobsahuje súbor pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:52
+#: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
-msgid "System Default"
-msgstr "Predvolené v systéme"
+msgid ""
+"Installation path of the Python interpreter currently running. Virtual "
+"environments using the same Python installation share this path."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:60
+#: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
+msgid "%1 (Python: %2) -  Default"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the Virtual Environment"
 msgctxt "@title:window"
-msgid "Select the Virtual Environment"
+msgid "Select the Virtual Environment Folder"
 msgstr "Vybrať virtuálne prostredie"
 
-#: src/frontend/SettingsScriptingPage.cpp:230
+#: src/frontend/SettingsScriptingPage.cpp:192
+#, kde-format
+msgid ""
+"The selected environment differs from the saved one. Save and restart "
+"LabPlot for the change to take effect."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:268
+#, fuzzy, kde-format
+#| msgid "%1 (System, %2)"
+msgid "%1 (Python: %2)"
+msgstr "%1 (Systém, %2)"
+
+#: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "Vybrané virtuálne prostredie neobsahuje spustiteľný súbor Pythonu."
 
-#: src/frontend/SettingsScriptingPage.cpp:236
+#: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr "Vybrané virtuálne prostredie neobsahuje súbor pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:264
-#: src/frontend/SettingsScriptingPage.cpp:295
+#: src/frontend/SettingsScriptingPage.cpp:307
+#: src/frontend/SettingsScriptingPage.cpp:338
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
@@ -28354,6 +28377,12 @@ msgstr "proces convert zlyhal, návratový kód ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Unable to open file:"
+
+#~ msgid "Select the path to a Python virtual environment."
+#~ msgstr "Vyberte cestu k virtuálnemu prostrediu Pythonu."
+
+#~ msgid "System Default"
+#~ msgstr "Predvolené v systéme"
 
 #~ msgid "Script Toolbar"
 #~ msgstr "Panel nástrojov skriptu"

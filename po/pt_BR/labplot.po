@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-16 01:00+0000\n"
-"PO-Revision-Date: 2026-11-11 09:39-0300\n"
+"POT-Creation-Date: 2026-11-17 01:01+0000\n"
+"PO-Revision-Date: 2026-11-16 07:51-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.3\n"
+"X-Generator: Lokalize 26.08.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -7662,6 +7662,8 @@ msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
 msgstr ""
+"Falha ao inicializar o Python. Verifique o interpretador Python nas "
+"configurações de script."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7670,6 +7672,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"Reinicie o LabPlot após corrigir a configuração do Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7678,6 +7683,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"O interpretador Python configurado '%1' aponta para '%2', que não existe "
+"mais. Recrie o ambiente virtual usando o Python %3 ou selecione um "
+"interpretador Python %3 válido nas configurações de script."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7685,12 +7693,14 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"O interpretador Python '%1' configurado não existe ou não é executável. "
+"Selecione um interpretador válido nas configurações de script."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "Não foi possível determinar a versão do Python de '%1': %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7698,18 +7708,19 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"O interpretador configurado '%1' utiliza o Python %2, mas o LabPlot requer o "
+"Python %3. Selecione um interpretador compatível nas configurações de script."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "Falha ao analisar o arquivo."
+msgstr "Falha ao registrar o módulo pylabplot."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:278
 #: src/backend/script/python/PythonScriptRuntime.cpp:286
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "Falha ao ler o caminho do interpretador Python incorporado."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:294
 #, kde-format
@@ -7717,6 +7728,8 @@ msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
+"O interpretador Python incorporado não corresponde ao interpretador "
+"configurado '%1'."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:355
 #, kde-format
@@ -7724,12 +7737,13 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"Falha ao inicializar o módulo pylabplot. Verifique o interpretador Python e "
+"a instalação do PySide6 nas configurações de script."
 
 #: src/backend/script/Script.cpp:81
-#, fuzzy, kde-format
-#| msgid "unsupported script runtime '%1'"
+#, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr "ambiente de execução de script '%1' não suportado"
+msgstr "Linguagem de script não suportada: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7742,10 +7756,9 @@ msgid "no script element found"
 msgstr "nenhum elemento de script encontrado"
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "falha ao inicializar o ambiente de execução de script '%1'"
+msgstr "Falha ao inicializar o ambiente de execução de script '%1': %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7753,10 +7766,9 @@ msgid "%1: run %2 script"
 msgstr "%1: executar script %2"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "falha ao inicializar o ambiente de execução de script '%1'"
+msgstr "Falha ao inicializar o ambiente de execução de script %1."
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -12083,7 +12095,7 @@ msgid "Partly funded by:"
 msgstr "Parcialmente fundado por:"
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
 #, kde-format
 msgid "missing"
 msgstr "faltando"
@@ -19606,33 +19618,56 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Pede confirmação ao reiniciar o sistema de infraestrutura."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a Python virtual environment."
-msgstr "Selecione o caminho para um ambiente virtual Python."
+#, fuzzy, kde-format
+#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgid "Select a virtual environment folder containing pyvenv.cfg."
+msgstr "O ambiente virtual selecionado não contém um arquivo pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:52
+#: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
-msgid "System Default"
-msgstr "Padrão do sistema"
+msgid ""
+"Installation path of the Python interpreter currently running. Virtual "
+"environments using the same Python installation share this path."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:60
+#: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
+msgid "%1 (Python: %2) -  Default"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the Virtual Environment"
 msgctxt "@title:window"
-msgid "Select the Virtual Environment"
+msgid "Select the Virtual Environment Folder"
 msgstr "Selecionar o ambiente virtual"
 
-#: src/frontend/SettingsScriptingPage.cpp:230
+#: src/frontend/SettingsScriptingPage.cpp:192
+#, kde-format
+msgid ""
+"The selected environment differs from the saved one. Save and restart "
+"LabPlot for the change to take effect."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:268
+#, fuzzy, kde-format
+#| msgid "%1 (System, %2)"
+msgid "%1 (Python: %2)"
+msgstr "%1 (Sistema, %2)"
+
+#: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "O ambiente virtual selecionado não contém um executável do Python."
 
-#: src/frontend/SettingsScriptingPage.cpp:236
+#: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr "O ambiente virtual selecionado não contém um arquivo pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:264
-#: src/frontend/SettingsScriptingPage.cpp:295
+#: src/frontend/SettingsScriptingPage.cpp:307
+#: src/frontend/SettingsScriptingPage.cpp:338
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
@@ -28522,6 +28557,12 @@ msgstr "processo do convert falhou, código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível abrir o arquivo:"
+
+#~ msgid "Select the path to a Python virtual environment."
+#~ msgstr "Selecione o caminho para um ambiente virtual Python."
+
+#~ msgid "System Default"
+#~ msgstr "Padrão do sistema"
 
 #~ msgid "Script Toolbar"
 #~ msgstr "Barra de ferramentas de script"

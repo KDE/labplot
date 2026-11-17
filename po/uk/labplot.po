@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-16 01:00+0000\n"
-"PO-Revision-Date: 2026-11-11 17:09+0200\n"
+"POT-Creation-Date: 2026-11-17 01:01+0000\n"
+"PO-Revision-Date: 2026-11-16 12:57+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7698,6 +7698,8 @@ msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
 msgstr ""
+"Не вдалося ініціалізувати Python. Перевірте працездатність інтерпретатора "
+"Python у налаштуваннях скриптів."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7706,6 +7708,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"Перезапустіть LabPlot після виправлення налаштувань Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7714,6 +7719,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"Налаштований інтерпретатор Python «%1» посилається на «%2», якого більше не "
+"існує. Створіть віртуальне середовище заново, використовуючи Python %3, або "
+"виберіть коректний інтерпретатор Python %3 у параметрах скриптів."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7721,12 +7729,14 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"Налаштований інтерпретатор Python «%1» не існує або не є виконуваним. "
+"Виберіть коректний інтерпретатор у параметрах скриптів."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "Не вдалося визначити версію Python «%1»: %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7734,18 +7744,19 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"Налаштований інтерпретатор «%1» використовує Python %2, але LabPlot потребує "
+"Python %3. Виберіть сумісний інтерпретатор у параметрах скриптів."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "Не вдалося обробити файл."
+msgstr "Не вдалося зареєструвати модуль pylabplot."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:278
 #: src/backend/script/python/PythonScriptRuntime.cpp:286
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "Не вдалося прочитати шлях до вбудованого інтерпретатора Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:294
 #, kde-format
@@ -7753,6 +7764,8 @@ msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
+"Вбудований інтерпретатор Python не збігається з налаштованим інтерпретатором "
+"«%1»."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:355
 #, kde-format
@@ -7760,12 +7773,13 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"Не вдалося ініціалізувати модуль pylabplot. Перевірте інтерпретатор Python і "
+"встановлення PySide6 у параметрах скриптів."
 
 #: src/backend/script/Script.cpp:81
-#, fuzzy, kde-format
-#| msgid "unsupported script runtime '%1'"
+#, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr "непідтримуване середовище виконання скрипту «%1»"
+msgstr "Непідтримувана скриптова мова: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7778,10 +7792,9 @@ msgid "no script element found"
 msgstr "не знайдено елемента скрипту"
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "не вдалося ініціалізувати середовище виконання скрипту «%1»"
+msgstr "не вдалося ініціалізувати середовище виконання скрипту «%1»: %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7789,10 +7802,9 @@ msgid "%1: run %2 script"
 msgstr "%1: запустити скрипт %2"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "не вдалося ініціалізувати середовище виконання скрипту «%1»"
+msgstr "Не вдалося ініціалізувати середовище виконання скрипту «%1»"
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -12110,7 +12122,7 @@ msgid "Partly funded by:"
 msgstr "Часткове фінансування:"
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
 #, kde-format
 msgid "missing"
 msgstr "немає"
@@ -19633,34 +19645,57 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Питати підтвердження при перезапуску системи модулів обробки."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a Python virtual environment."
-msgstr "Виберіть шлях до віртуального середовища Python."
+#, fuzzy, kde-format
+#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgid "Select a virtual environment folder containing pyvenv.cfg."
+msgstr "У вибраному віртуальному середовищі не міститься файла pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:52
+#: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
-msgid "System Default"
-msgstr "Типове для системи"
+msgid ""
+"Installation path of the Python interpreter currently running. Virtual "
+"environments using the same Python installation share this path."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:60
+#: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
+msgid "%1 (Python: %2) -  Default"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the Virtual Environment"
 msgctxt "@title:window"
-msgid "Select the Virtual Environment"
+msgid "Select the Virtual Environment Folder"
 msgstr "Виберіть віртуальне середовище"
 
-#: src/frontend/SettingsScriptingPage.cpp:230
+#: src/frontend/SettingsScriptingPage.cpp:192
+#, kde-format
+msgid ""
+"The selected environment differs from the saved one. Save and restart "
+"LabPlot for the change to take effect."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:268
+#, fuzzy, kde-format
+#| msgid "%1 (System, %2)"
+msgid "%1 (Python: %2)"
+msgstr "%1 (система, %2)"
+
+#: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 "У вибраному віртуальному середовищі не міститься виконуваного файла Python."
 
-#: src/frontend/SettingsScriptingPage.cpp:236
+#: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr "У вибраному віртуальному середовищі не міститься файла pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:264
-#: src/frontend/SettingsScriptingPage.cpp:295
+#: src/frontend/SettingsScriptingPage.cpp:307
+#: src/frontend/SettingsScriptingPage.cpp:338
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
@@ -28576,6 +28611,12 @@ msgstr "Не вдалося обробити convert, код виходу ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
+
+#~ msgid "Select the path to a Python virtual environment."
+#~ msgstr "Виберіть шлях до віртуального середовища Python."
+
+#~ msgid "System Default"
+#~ msgstr "Типове для системи"
 
 #~ msgid "Script Toolbar"
 #~ msgstr "Панель інструментів скриптів"

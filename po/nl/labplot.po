@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-16 01:00+0000\n"
-"PO-Revision-Date: 2026-11-12 18:24+0100\n"
+"POT-Creation-Date: 2026-11-17 01:01+0000\n"
+"PO-Revision-Date: 2026-11-16 15:14+0100\n"
 "Last-Translator: freek <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7644,6 +7644,8 @@ msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
 msgstr ""
+"Initialisatie van Python mislukt. Controleer de Python-interpreter in de "
+"scriptinstellingen."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7652,6 +7654,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"Start LabPlot opnieuw nadat u de Python-configuratie hebt gecorrigeerd."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7660,6 +7665,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"De geconfigureerde Python-interpreter '%1' verwijst naar '%2', wat niet "
+"langer bestaat. Maak de virtuele omgeving opnieuw aan met Python %3, of "
+"selecteer een geldige Python %3-interpreter in de scriptinstellingen."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7667,12 +7675,15 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"De geconfigureerde Python-interpreter '%1' bestaat niet of is niet "
+"uitvoerbaar. Selecteer een geldige interpreter in de instellingen voor "
+"scripting."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "Kon de Python-versie van '%1' niet bepalen: %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7680,18 +7691,20 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"De geconfigureerde interpreter '%1' gebruikt Python %2, maar LabPlot vereist "
+"Python %3. Selecteer een compatibele interpreter in de instellingen voor "
+"scripting."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "Het bestand ontleden is mislukt."
+msgstr "Het registreren van de pylabplot-module is mislukt."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:278
 #: src/backend/script/python/PythonScriptRuntime.cpp:286
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "Het pad naar de ingebedde Python-interpreter kon niet worden gelezen."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:294
 #, kde-format
@@ -7699,6 +7712,8 @@ msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
+"De ingebouwde Python-interpreter komt niet overeen met de geconfigureerde "
+"interpreter '%1'."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:355
 #, kde-format
@@ -7706,12 +7721,13 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"Het initialiseren van de module pylabplot is mislukt. Controleer de Python-"
+"interpreter en de installatie van PySide6 in de scriptinstellingen."
 
 #: src/backend/script/Script.cpp:81
-#, fuzzy, kde-format
-#| msgid "unsupported script runtime '%1'"
+#, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr "niet ondersteunde script-runtime '%1'"
+msgstr "Niet ondersteunde scripttaal: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7724,10 +7740,9 @@ msgid "no script element found"
 msgstr "geen scriptelement gevonden"
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "initialisatie van de script-runtime '%1' is mislukt"
+msgstr "Initialisatie van de script-runtime '%1' is mislukt: %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7735,10 +7750,9 @@ msgid "%1: run %2 script"
 msgstr "%1: script %2 uitvoeren"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "initialisatie van de script-runtime '%1' is mislukt"
+msgstr "Initialisatie van de script-runtime %1 is mislukt"
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -12068,7 +12082,7 @@ msgid "Partly funded by:"
 msgstr "Gedeeltelijk gefinancierd door:"
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
 #, kde-format
 msgid "missing"
 msgstr "ontbrekend"
@@ -19600,34 +19614,57 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Bevestiging vragen bij herstarten van de backend."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a Python virtual environment."
-msgstr "Selecteer het pad naar de Python virtuele omgeving."
+#, fuzzy, kde-format
+#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgid "Select a virtual environment folder containing pyvenv.cfg."
+msgstr "De geselecteerde virtuele omgeving bevat geen pyvenv.cfg bestand."
 
-#: src/frontend/SettingsScriptingPage.cpp:52
+#: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
-msgid "System Default"
-msgstr "Systeemstandaard"
+msgid ""
+"Installation path of the Python interpreter currently running. Virtual "
+"environments using the same Python installation share this path."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:60
+#: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
+msgid "%1 (Python: %2) -  Default"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the Virtual Environment"
 msgctxt "@title:window"
-msgid "Select the Virtual Environment"
+msgid "Select the Virtual Environment Folder"
 msgstr "Selecteer de virtuele omgeving"
 
-#: src/frontend/SettingsScriptingPage.cpp:230
+#: src/frontend/SettingsScriptingPage.cpp:192
+#, kde-format
+msgid ""
+"The selected environment differs from the saved one. Save and restart "
+"LabPlot for the change to take effect."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:268
+#, fuzzy, kde-format
+#| msgid "%1 (System, %2)"
+msgid "%1 (Python: %2)"
+msgstr "%1 (Systeem, %2)"
+
+#: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 "De geselecteerde virtuele omgeving bevat geen Python uitvoerbaar bestand."
 
-#: src/frontend/SettingsScriptingPage.cpp:236
+#: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr "De geselecteerde virtuele omgeving bevat geen pyvenv.cfg bestand."
 
-#: src/frontend/SettingsScriptingPage.cpp:264
-#: src/frontend/SettingsScriptingPage.cpp:295
+#: src/frontend/SettingsScriptingPage.cpp:307
+#: src/frontend/SettingsScriptingPage.cpp:338
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
@@ -28518,6 +28555,12 @@ msgstr "conversie is mislukt, exitcode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
+
+#~ msgid "Select the path to a Python virtual environment."
+#~ msgstr "Selecteer het pad naar de Python virtuele omgeving."
+
+#~ msgid "System Default"
+#~ msgstr "Systeemstandaard"
 
 #~ msgid "Script Toolbar"
 #~ msgstr "Scriptwerkbalk"

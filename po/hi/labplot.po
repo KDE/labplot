@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-16 01:00+0000\n"
+"POT-Creation-Date: 2026-11-17 01:01+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -12146,7 +12146,7 @@ msgid "Partly funded by:"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
 #, kde-format
 msgid "missing"
 msgstr "गुम"
@@ -19517,36 +19517,53 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "बैकएंड सिस्टम को पुनः आरंभ करते समय पुष्टि हेतु पूछें।"
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid " Select the image file"
-msgid "Select the path to a Python virtual environment."
-msgstr "छवि फ़ाइल का चयन करें"
+#, kde-format
+msgid "Select a virtual environment folder containing pyvenv.cfg."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:52
-#, fuzzy, kde-format
-#| msgid "Save Default"
-msgid "System Default"
-msgstr "डिफ़ॉल्ट सहेजें"
+#: src/frontend/SettingsScriptingPage.cpp:45
+#, kde-format
+msgid ""
+"Installation path of the Python interpreter currently running. Virtual "
+"environments using the same Python installation share this path."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:60
+#: src/frontend/SettingsScriptingPage.cpp:57
+#, kde-format
+msgid "%1 (Python: %2) -  Default"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:66
 #, fuzzy, kde-format
 #| msgid " Select the image file"
 msgctxt "@title:window"
-msgid "Select the Virtual Environment"
+msgid "Select the Virtual Environment Folder"
 msgstr "छवि फ़ाइल का चयन करें"
 
-#: src/frontend/SettingsScriptingPage.cpp:230
+#: src/frontend/SettingsScriptingPage.cpp:192
+#, kde-format
+msgid ""
+"The selected environment differs from the saved one. Save and restart "
+"LabPlot for the change to take effect."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:268
+#, kde-format
+msgid "%1 (Python: %2)"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:236
+#: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:264
-#: src/frontend/SettingsScriptingPage.cpp:295
+#: src/frontend/SettingsScriptingPage.cpp:307
+#: src/frontend/SettingsScriptingPage.cpp:338
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
@@ -28497,6 +28514,16 @@ msgstr "रूपांतरण प्रक्रिया विफल, न�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "फाइल खोलने में असमर्थ:"
+
+#, fuzzy
+#~| msgid " Select the image file"
+#~ msgid "Select the path to a Python virtual environment."
+#~ msgstr "छवि फ़ाइल का चयन करें"
+
+#, fuzzy
+#~| msgid "Save Default"
+#~ msgid "System Default"
+#~ msgstr "डिफ़ॉल्ट सहेजें"
 
 #, fuzzy
 #~| msgid "Project Toolbar"

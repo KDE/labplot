@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-16 01:00+0000\n"
-"PO-Revision-Date: 2026-11-15 20:16+0300\n"
+"POT-Creation-Date: 2026-11-17 01:01+0000\n"
+"PO-Revision-Date: 2026-11-16 19:34+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -389,7 +389,7 @@ msgstr "Yazdır"
 #: src/backend/core/AbstractPart.cpp:159
 #, kde-format
 msgid "Print Preview"
-msgstr "Yazdırma Önizlemesi"
+msgstr "Yazdırma Ön İzlemesi"
 
 #: src/backend/core/AbstractPart.cpp:167 src/frontend/ActionsManager.cpp:412
 #, kde-format
@@ -7640,6 +7640,7 @@ msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
 msgstr ""
+"Python ilklendirilemedi. Betik yazımı ayarlarından Python yorumcusuna bakın."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7648,6 +7649,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"Python yapılandırmasını düzelttikten sonra LabPlot’u yeniden başlatın."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7656,6 +7660,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"Yapılandırılmış Python yorumlayıcısı “%1”, artık var olmayan “%2” konumuna "
+"bağlantı veriyor. Python %3 kullanarak sanal ortamı yeniden oluşturun veya "
+"betik yazımı ayarlarından geçerli bir Python %3 yorumlayıcısı seçin."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7663,12 +7670,14 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"Yapılandırılmış Python yorumlayıcısı “%1” yok veya yürütülebilir değil. "
+"Betik yazımı ayarlarından geçerli bir yorumcu seçin."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "“%1” Python sürümü algılanamadı: %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7676,18 +7685,19 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"Yapılandırılmış “%1” yorumlayıcısı Python %2 kullanıyor; ancak LabPlot "
+"Python %3 gerektiriyor. Betik yazımı ayarlarından uyumlu bir yorumcu seçin."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "Dosya ayrıştırılamadı."
+msgstr "pylabplot modülü kaydı yapılamadı."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:278
 #: src/backend/script/python/PythonScriptRuntime.cpp:286
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "Gömülü Python yorumcusu yolu okunamadı."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:294
 #, kde-format
@@ -7695,6 +7705,8 @@ msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
+"Gömülü Python yorumlayıcısı, yapılandırılmış “%1” yorumlayıcısıyla "
+"eşleşmiyor."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:355
 #, kde-format
@@ -7702,12 +7714,13 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"pylabplot modülü ilklendirilemedi. Betik yazımı ayarlarından Python "
+"yorumlayıcısını ve PySide6 kurulumunu denetleyin."
 
 #: src/backend/script/Script.cpp:81
-#, fuzzy, kde-format
-#| msgid "unsupported script runtime '%1'"
+#, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr "Desteklenmeyen betik çalışma zamanı “%1”"
+msgstr "Desteklenmeyen betik yazımı dili: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7720,10 +7733,9 @@ msgid "no script element found"
 msgstr "Bulunan betik ögesi yok"
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "Betik çalışma zamanı “%1” ilklendirilemedi."
+msgstr "Betik çalışma zamanı “%1” ilklendirilemedi: %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7731,10 +7743,9 @@ msgid "%1: run %2 script"
 msgstr "%1: %2 betiğini çalıştır"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "Betik çalışma zamanı “%1” ilklendirilemedi."
+msgstr "%1 betiği çalışma zamanı ilklendirilemedi."
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -12013,7 +12024,7 @@ msgid "Partly funded by:"
 msgstr "Kısmen fonlayanlar:"
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
 #, kde-format
 msgid "missing"
 msgstr "eksik"
@@ -12455,7 +12466,7 @@ msgstr "Özellikler Tarayıcısı"
 #: src/frontend/ActionsManager.cpp:484
 #, kde-format
 msgid "Worksheet Preview"
-msgstr "Çalışma Sayfası Önizlemesi"
+msgstr "Çalışma Sayfası Ön İzlemesi"
 
 #: src/frontend/ActionsManager.cpp:507
 #, kde-format
@@ -14057,7 +14068,7 @@ msgstr "Veri Biçimi"
 #: src/frontend/ui/settingsworksheetpage.ui:134
 #, kde-format
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön izleme"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
 #: src/frontend/datasources/ImportFileWidget.cpp:1353
@@ -14070,7 +14081,7 @@ msgstr "Okunacak Veri Porsiyonu"
 #: src/frontend/datasources/ImportFileWidget.cpp:1399
 #, kde-format
 msgid "Data format && preview"
-msgstr "Veri biçimi ve önizleme"
+msgstr "Veri biçimi ve ön izleme"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1446
 #, kde-format
@@ -14362,7 +14373,7 @@ msgstr "Sonraki veri kümelerini göster"
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr "Önizleme için geçerli veri kümesini indir ve içe aktar"
+msgstr "Ön izleme için geçerli veri kümesini indir ve içe aktar"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:131
@@ -14590,17 +14601,17 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:267
 #, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr "Önizleme için sorgu yürütülemedi"
+msgstr "Ön izleme için sorgu yürütülemedi"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:340
 #, kde-format
 msgid "Refresh the data preview of the selected table"
-msgstr "Seçili dosyanın veri önizlemesini yenile"
+msgstr "Seçili dosyanın veri ön izlemesini yenile"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:346
 #, kde-format
 msgid "Execute the query and preview its result"
-msgstr "Sorguyu yürüt ve sonucunu önizle"
+msgstr "Sorguyu yürüt ve sonucunu ön izle"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:465
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:467
@@ -18360,7 +18371,7 @@ msgstr "Proje Tarayıcısı"
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Çalışma Sayfası Önizlemesi"
+msgstr "Çalışma Sayfası Ön İzlemesi"
 
 #: src/frontend/MainWin.cpp:653
 #, kde-format
@@ -18813,7 +18824,7 @@ msgstr "Markdown kaynağı düzenle"
 #: src/frontend/note/NoteView.cpp:106
 #, kde-format
 msgid "Preview rendered output"
-msgstr "Sunulan çıktıyı önizle"
+msgstr "Sunulan çıktıyı ön izle"
 
 #: src/frontend/notebook/NotebookView.cpp:48
 #, kde-format
@@ -19476,33 +19487,56 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Arka uç sistemini yeniden başlatırken onay isteyin."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, kde-format
-msgid "Select the path to a Python virtual environment."
-msgstr "Bir Python sanal ortamına olan yolu seçin."
+#, fuzzy, kde-format
+#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgid "Select a virtual environment folder containing pyvenv.cfg."
+msgstr "Seçili sanal ortam, bir pyvenv.cfg dosyası içermiyor."
 
-#: src/frontend/SettingsScriptingPage.cpp:52
+#: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
-msgid "System Default"
-msgstr "Sistem Öntanımlısı"
+msgid ""
+"Installation path of the Python interpreter currently running. Virtual "
+"environments using the same Python installation share this path."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:60
+#: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
+msgid "%1 (Python: %2) -  Default"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the Virtual Environment"
 msgctxt "@title:window"
-msgid "Select the Virtual Environment"
+msgid "Select the Virtual Environment Folder"
 msgstr "Sanal Ortam Seç"
 
-#: src/frontend/SettingsScriptingPage.cpp:230
+#: src/frontend/SettingsScriptingPage.cpp:192
+#, kde-format
+msgid ""
+"The selected environment differs from the saved one. Save and restart "
+"LabPlot for the change to take effect."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:268
+#, fuzzy, kde-format
+#| msgid "%1 (System, %2)"
+msgid "%1 (Python: %2)"
+msgstr "%1 (Sistem, %2)"
+
+#: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "Seçili sanal ortam, bir Python yürütülebiliri içermiyor."
 
-#: src/frontend/SettingsScriptingPage.cpp:236
+#: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr "Seçili sanal ortam, bir pyvenv.cfg dosyası içermiyor."
 
-#: src/frontend/SettingsScriptingPage.cpp:264
-#: src/frontend/SettingsScriptingPage.cpp:295
+#: src/frontend/SettingsScriptingPage.cpp:307
+#: src/frontend/SettingsScriptingPage.cpp:338
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
@@ -22619,7 +22653,7 @@ msgstr "Koleksiyon"
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:40
 #, kde-format
 msgid "Number of rows to preview:"
-msgstr "Önizlenecek satırların sayısı:"
+msgstr "Ön izlenecek satırların sayısı:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRefreshPreview)
 #: src/frontend/ui/datasources/fitsoptionswidget.ui:49
@@ -26071,7 +26105,7 @@ msgstr "verilen başlangıç parametreleriyle uyum işlevini göster"
 #: src/frontend/ui/fitoptionswidget.ui:106
 #, kde-format
 msgid "Preview fit function"
-msgstr "Uyum işlevini önizle"
+msgstr "Uyum işlevini ön izle"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMaxIterations)
 #: src/frontend/ui/fitoptionswidget.ui:163
@@ -26492,7 +26526,7 @@ msgstr "Kurulu şablonlar:"
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
 #, kde-format
 msgid "Preview:"
-msgstr "Önizleme:"
+msgstr "Ön izleme:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLocation)
 #: src/frontend/ui/PlotTemplateDialog.ui:102
@@ -28384,6 +28418,12 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Select the path to a Python virtual environment."
+#~ msgstr "Bir Python sanal ortamına olan yolu seçin."
+
+#~ msgid "System Default"
+#~ msgstr "Sistem Öntanımlısı"
 
 #~ msgid "Script Toolbar"
 #~ msgstr "Betik Araç Çubuğu"

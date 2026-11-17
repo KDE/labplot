@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-16 01:00+0000\n"
+"POT-Creation-Date: 2026-11-17 01:01+0000\n"
 "PO-Revision-Date: 2026-10-03 14:11+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -12041,7 +12041,7 @@ msgid "Partly funded by:"
 msgstr "Delvis finansierad av:"
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
 #, kde-format
 msgid "missing"
 msgstr "saknas"
@@ -19506,35 +19506,57 @@ msgstr "Fråga efter bekräftelse vid omstart av bakgrundssystemet."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
 #, fuzzy, kde-format
-#| msgid "Select the path to a python virtual environment."
-msgid "Select the path to a Python virtual environment."
-msgstr "Välj sökvägen till en Python virtuell miljö."
+#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+msgid "Select a virtual environment folder containing pyvenv.cfg."
+msgstr "Den valda virtuella miljön innehåller inte filen pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:52
+#: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
-msgid "System Default"
-msgstr "Systemstandard"
+msgid ""
+"Installation path of the Python interpreter currently running. Virtual "
+"environments using the same Python installation share this path."
+msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:60
+#: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
+msgid "%1 (Python: %2) -  Default"
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Select the Virtual Environment"
 msgctxt "@title:window"
-msgid "Select the Virtual Environment"
+msgid "Select the Virtual Environment Folder"
 msgstr "Välj den virtuella miljön"
 
-#: src/frontend/SettingsScriptingPage.cpp:230
+#: src/frontend/SettingsScriptingPage.cpp:192
+#, kde-format
+msgid ""
+"The selected environment differs from the saved one. Save and restart "
+"LabPlot for the change to take effect."
+msgstr ""
+
+#: src/frontend/SettingsScriptingPage.cpp:268
+#, fuzzy, kde-format
+#| msgid "%1 (System, %2)"
+msgid "%1 (Python: %2)"
+msgstr "%1 (system, %2)"
+
+#: src/frontend/SettingsScriptingPage.cpp:273
 #, fuzzy, kde-format
 #| msgid ""
 #| "The selected virtual environment does not contain a python executable."
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr "Den valda virtuella miljön innehåller ingen körbar Python-fil."
 
-#: src/frontend/SettingsScriptingPage.cpp:236
+#: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr "Den valda virtuella miljön innehåller inte filen pyvenv.cfg."
 
-#: src/frontend/SettingsScriptingPage.cpp:264
-#: src/frontend/SettingsScriptingPage.cpp:295
+#: src/frontend/SettingsScriptingPage.cpp:307
+#: src/frontend/SettingsScriptingPage.cpp:338
 #, fuzzy, kde-format
 #| msgid ""
 #| "The selected virtual environment python version does not match the "
@@ -28418,6 +28440,14 @@ msgstr "convert-processen misslyckades, slutkod ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kan inte öppna fil:"
+
+#, fuzzy
+#~| msgid "Select the path to a python virtual environment."
+#~ msgid "Select the path to a Python virtual environment."
+#~ msgstr "Välj sökvägen till en Python virtuell miljö."
+
+#~ msgid "System Default"
+#~ msgstr "Systemstandard"
 
 #~ msgid "Script Toolbar"
 #~ msgstr "Verktygsrad för skript"
