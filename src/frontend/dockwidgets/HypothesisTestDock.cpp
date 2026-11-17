@@ -11,12 +11,10 @@
 */
 
 #include "HypothesisTestDock.h"
-#include "backend/core/AbstractAspect.h"
 #include "backend/core/column/Column.h"
 #include "backend/statistics/HypothesisTest.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
-#include <QCheckBox>
 #include <KMessageWidget>
 
 /*!
@@ -39,16 +37,13 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	m_buttonNew = new QPushButton();
 	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
-	m_cbAutoRecalculate = new QCheckBox(this);
-	ui.horizontalLayout_2->insertWidget(0, m_cbAutoRecalculate);
-
 	retranslateUi();
 
 	//**********************************  Slots **********************************************
 	connect(ui.cbTest, &QComboBox::currentIndexChanged, this, &HypothesisTestDock::testChanged);
 	connect(ui.pbRecalculate, &QPushButton::clicked, this, &HypothesisTestDock::recalculate);
 	connect(m_buttonNew, &QPushButton::clicked, this, &HypothesisTestDock::addVariable);
-	connect(m_cbAutoRecalculate, &QCheckBox::toggled, this, &HypothesisTestDock::autoRecalculateChanged);
+	connect(ui.cbAutoRecalculate, &QCheckBox::toggled, this, &HypothesisTestDock::autoRecalculateChanged);
 }
 
 void HypothesisTestDock::setTest(HypothesisTest* test) {
@@ -106,8 +101,6 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 void HypothesisTestDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 	ui.retranslateUi(this);
-
-	m_cbAutoRecalculate->setText(i18n("Auto Recalculate"));
 
 	ui.cbTest->clear();
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::t_test_one_sample), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
@@ -190,7 +183,7 @@ void HypothesisTestDock::autoRecalculateChanged(bool checked) {
 
 void HypothesisTestDock::testAutoRecalculateChanged(bool value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_cbAutoRecalculate->setChecked(value);
+	ui.cbAutoRecalculate->setChecked(value);
 }
 
 /*! 
@@ -341,7 +334,7 @@ void HypothesisTestDock::manageRecalculate() {
 
 	ui.pbRecalculate->setToolTip(QString());
 
-	if (m_cbAutoRecalculate->isChecked())
+	if (ui.cbAutoRecalculate->isChecked())
 		m_test->recalculate();
 	else
 		ui.pbRecalculate->setEnabled(true);
@@ -489,7 +482,7 @@ void HypothesisTestDock::load() {
 		testChanged(); // manually trigger testChanged()
 
 	// restore auto recalculate
-	m_cbAutoRecalculate->setChecked(m_test->autoRecalculate());
+	ui.cbAutoRecalculate->setChecked(m_test->autoRecalculate());
 	ui.pbRecalculate->setEnabled(!m_test->autoRecalculate());
 
 	manageRecalculate(); // check if all input parameters are valid after the load to enable the recalculate

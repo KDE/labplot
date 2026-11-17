@@ -37,7 +37,6 @@ private:
 	QVector<TreeViewComboBox*> m_dataComboBoxes;
 	QVector<QPushButton*> m_removeButtons;
 	QPushButton* m_buttonNew{nullptr};
-	QCheckBox* m_cbAutoRecalculate{nullptr};
 	KMessageWidget* m_messageWidget{nullptr};
 
 	void load();

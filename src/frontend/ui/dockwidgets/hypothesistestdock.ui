@@ -96,6 +96,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QCheckBox" name="cbAutoRecalculate">
+       <property name="text">
+        <string>Auto</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="9" column="0">
