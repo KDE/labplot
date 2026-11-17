@@ -61,9 +61,7 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	if (m_dataComboBoxes.isEmpty())
 		addVariable(); // create the first variable which is never deleted
 
-	auto* firstTreeViewCb = static_cast<TreeViewComboBox*>(m_dataComboBoxes.at(0)); // treeviewcombobox for the first variable
-	firstTreeViewCb->setModel(aspectModel());
-	firstTreeViewCb->setAspect(nullptr); // clear the current aspect
+	static_cast<TreeViewComboBox*>(m_dataComboBoxes.at(0))->setAspect(nullptr); // clear the current aspect
 
 	load(); // load the remaining properties
 	showStatusError(QString()); // remove the message from the previous test, if available
@@ -408,6 +406,12 @@ void HypothesisTestDock::load() {
 	for (int i = 0, count = m_removeButtons.size(); i < count; i++)
 		removeVariable();
 
+	// set the model on the first combobox (the only one that survives the removal above)
+	auto* model = aspectModel();
+	model->enableNonEmptyNumericColumnsOnly(true);
+	model->setSelectableAspects({AspectType::Column});
+	m_dataComboBoxes.at(0)->setModel(model);
+
 	// restore variables from aspect columns
 	for (int i = 0; i < m_test->dataColumns().size(); i++) {
 		auto* col = m_test->dataColumns().at(i);
@@ -415,8 +419,7 @@ void HypothesisTestDock::load() {
 		if (i != 0) // no need to add for the first since it was never deleted
 			addVariable();
 
-		auto* treeViewCb = static_cast<TreeViewComboBox*>(m_dataComboBoxes.at(i)); // treeviewcombobox for the just added variable above
-		treeViewCb->setModel(aspectModel());
+		auto* treeViewCb = static_cast<TreeViewComboBox*>(m_dataComboBoxes.at(i));
 		treeViewCb->setAspect(col, col->path()); // set the aspect for the treeviewcombobox to the column
 	}
 
