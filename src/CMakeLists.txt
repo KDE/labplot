@@ -651,6 +651,11 @@ set_target_properties(labplotbackendlib PROPERTIES POSITION_INDEPENDENT_CODE ON)
 add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${FRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
 set_target_properties(labplotlib PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
+# Pass HAVE_SCRIPTING to moc so #ifdef guards work in Q_OBJECT classes
+if(ENABLE_SCRIPTING)
+    set_target_properties(labplotlib PROPERTIES AUTOMOC_MOC_OPTIONS "-DHAVE_SCRIPTING")
+endif()
+
 # Propagate include path to all OBJECT libs so AUTOMOC and compilation find NumberSpinBox.h, etc.
 foreach(_labplot_obj labplot_core_obj labplot_data_obj labplot_worksheet_obj labplot_datasources_obj)
     target_include_directories(${_labplot_obj} PRIVATE ${FRONTEND_DIR}/widgets)
@@ -781,8 +786,28 @@ target_link_libraries(labplot_core_obj PRIVATE ${python_scripting_link_libraries
 target_include_directories(labplot_core_obj PRIVATE ${python_scripting_includes})
 target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
 # SettingsScriptingPage.cpp uses Python C-API directly (Py_IsInitialized, etc.)
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} -c "import sys; print(sys.prefix)"
+    OUTPUT_VARIABLE LABPLOT_DEFAULT_PYTHON_PREFIX
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    RESULT_VARIABLE LABPLOT_PYTHON_PREFIX_RESULT)
+if(NOT LABPLOT_PYTHON_PREFIX_RESULT EQUAL 0 OR NOT LABPLOT_DEFAULT_PYTHON_PREFIX)
+    message(FATAL_ERROR "Failed to determine the default Python prefix from ${Python3_EXECUTABLE}")
+endif()
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} -c "import sys; print(sys.executable)"
+    OUTPUT_VARIABLE LABPLOT_DEFAULT_PYTHON_EXECUTABLE
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    RESULT_VARIABLE LABPLOT_PYTHON_EXECUTABLE_RESULT)
+if(NOT LABPLOT_PYTHON_EXECUTABLE_RESULT EQUAL 0 OR NOT LABPLOT_DEFAULT_PYTHON_EXECUTABLE)
+    message(FATAL_ERROR "Failed to determine the default Python executable from ${Python3_EXECUTABLE}")
+endif()
 set_property(SOURCE ${FRONTEND_DIR}/SettingsScriptingPage.cpp APPEND PROPERTY
     INCLUDE_DIRECTORIES $<TARGET_PROPERTY:Python3::Python,INTERFACE_INCLUDE_DIRECTORIES>)
+set_property(SOURCE ${FRONTEND_DIR}/SettingsScriptingPage.cpp APPEND PROPERTY
+    COMPILE_DEFINITIONS
+        "LABPLOT_DEFAULT_PYTHON_PREFIX=\"${LABPLOT_DEFAULT_PYTHON_PREFIX}\""
+        "LABPLOT_DEFAULT_PYTHON_EXECUTABLE=\"${LABPLOT_DEFAULT_PYTHON_EXECUTABLE}\"")
 endif()
 
 target_link_libraries(labplotlib
