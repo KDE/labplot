@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:10+0000\n"
-"PO-Revision-Date: 2026-11-15 20:16+0300\n"
+"PO-Revision-Date: 2026-11-16 19:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11643,7 +11643,7 @@ msgstr "Veri Biçimi"
 #: src/frontend/ui/settingsworksheetpage.ui:134
 #, kde-format
 msgid "Preview"
-msgstr "Önizleme"
+msgstr "Ön izleme"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
 #: src/frontend/datasources/ImportFileWidget.cpp:1282
@@ -11916,7 +11916,7 @@ msgstr "Sonraki veri kümelerini göster"
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr "Önizleme için geçerli veri kümesini indir ve içe aktar"
+msgstr "Ön izleme için geçerli veri kümesini indir ve içe aktar"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:131
@@ -12161,7 +12161,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:332
 #, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr "Önizleme için sorgu yürütülemedi"
+msgstr "Ön izleme için sorgu yürütülemedi"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
@@ -19660,7 +19660,7 @@ msgstr "Koleksiyon"
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:40
 #, kde-format
 msgid "Number of rows to preview:"
-msgstr "Önizlenecek satırların sayısı:"
+msgstr "Ön izlenecek satırların sayısı:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRefreshPreview)
 #: src/frontend/ui/datasources/fitsoptionswidget.ui:49
