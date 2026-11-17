@@ -167,32 +167,36 @@ else()
   add_definitions(-DVECTOR_BLF_DISABLED)
 endif()
 
-if(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
-    FetchContent_Declare(
-        qt_advanced_dock
-        GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
-        GIT_TAG a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
-        EXCLUDE_FROM_ALL
-        OVERRIDE_FIND_PACKAGE
-    )
-    set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
-    FetchContent_MakeAvailable(qt_advanced_dock)
-    set_target_properties(qtadvanceddocking-qt${QT_VERSION_MAJOR} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-    target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"git\")
-elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
-    # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
-    # src/3rdparty/cmake/QtADS_config.cmake
-    set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
-    set(ADS_VERSION ${labplot_VERSION})
-    add_subdirectory(Qt-Advanced-Docking-System EXCLUDE_FROM_ALL)
-    set_target_properties(qtadvanceddocking-qt${QT_VERSION_MAJOR} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-    target_include_directories(labplotlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
-    target_include_directories(labplot_core_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
-    target_include_directories(labplot_data_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
+if(ENABLE_LOCAL_QADS)
+    if(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
+        FetchContent_Declare(
+            qt_advanced_dock
+            GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
+            GIT_TAG a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
+            EXCLUDE_FROM_ALL
+            OVERRIDE_FIND_PACKAGE
+        )
+        set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
+        FetchContent_MakeAvailable(qt_advanced_dock)
+        set_target_properties(qtadvanceddocking-qt${QT_VERSION_MAJOR} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+        target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"git\")
+    elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
+        # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
+        # src/3rdparty/cmake/QtADS_config.cmake
+        set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
+        set(ADS_VERSION ${labplot_VERSION})
+        add_subdirectory(Qt-Advanced-Docking-System EXCLUDE_FROM_ALL)
+        set_target_properties(qtadvanceddocking-qt${QT_VERSION_MAJOR} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+        target_include_directories(labplotlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
+        target_include_directories(labplot_core_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
+        target_include_directories(labplot_data_obj PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Qt-Advanced-Docking-System/src)
 
-    get_target_property(QADS_VERSION "qtadvanceddocking-qt${QT_VERSION_MAJOR}" VERSION)
-    message(STATUS "QADS VERSION ${QADS_VERSION}")
-    target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"${QADS_VERSION}\")
+        get_target_property(QADS_VERSION "qtadvanceddocking-qt${QT_VERSION_MAJOR}" VERSION)
+        message(STATUS "QADS VERSION ${QADS_VERSION}")
+        target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"${QADS_VERSION}\")
+    else()
+        message(FATAL_ERROR "ENABLE_LOCAL_QADS is ON, but neither local QADS source option is enabled.")
+    endif()
 else()
     target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"system\")
 endif()
