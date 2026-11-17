@@ -85,6 +85,9 @@ public:
 	void setTest(Test);
 	Test test() const;
 
+	void setAutoRecalculate(bool);
+	bool autoRecalculate() const;
+
 	void recalculate();
 
 	static QPair<int, int> variableCount(Test);
@@ -97,6 +100,7 @@ public:
 
 Q_SIGNALS:
 	void changed();
+	void autoRecalculateChanged(bool);
 	void requestProjectContextMenu(QMenu*);
 
 private:

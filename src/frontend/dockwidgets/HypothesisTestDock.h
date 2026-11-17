@@ -20,6 +20,7 @@
 class TreeViewComboBox;
 class KMessageWidget;
 class QPushButton;
+class QCheckBox;
 
 class HypothesisTestDock : public BaseDock {
 	Q_OBJECT
@@ -36,6 +37,7 @@ private:
 	QVector<TreeViewComboBox*> m_dataComboBoxes;
 	QVector<QPushButton*> m_removeButtons;
 	QPushButton* m_buttonNew{nullptr};
+	QCheckBox* m_cbAutoRecalculate{nullptr};
 	KMessageWidget* m_messageWidget{nullptr};
 
 	void load();
@@ -53,9 +55,10 @@ private Q_SLOTS:
 	// General-Tab
 	void testChanged();
 	void recalculate();
+	void autoRecalculateChanged(bool);
 
 	// SLOTs for changes triggered in HypothesisTest
-	// TODO
+	void testAutoRecalculateChanged(bool);
 
 	void showStatusError(const QString&);
 };

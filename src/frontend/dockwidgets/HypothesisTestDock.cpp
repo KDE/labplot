@@ -16,6 +16,7 @@
 #include "backend/statistics/HypothesisTest.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <QCheckBox>
 #include <KMessageWidget>
 
 /*!
@@ -38,12 +39,16 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	m_buttonNew = new QPushButton();
 	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
+	m_cbAutoRecalculate = new QCheckBox(this);
+	ui.horizontalLayout_2->insertWidget(0, m_cbAutoRecalculate);
+
 	retranslateUi();
 
 	//**********************************  Slots **********************************************
 	connect(ui.cbTest, &QComboBox::currentIndexChanged, this, &HypothesisTestDock::testChanged);
 	connect(ui.pbRecalculate, &QPushButton::clicked, this, &HypothesisTestDock::recalculate);
 	connect(m_buttonNew, &QPushButton::clicked, this, &HypothesisTestDock::addVariable);
+	connect(m_cbAutoRecalculate, &QCheckBox::toggled, this, &HypothesisTestDock::autoRecalculateChanged);
 }
 
 void HypothesisTestDock::setTest(HypothesisTest* test) {
@@ -67,27 +72,42 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	showStatusError(QString()); // remove the message from the previous test, if available
 
 	// update the aspect properties when the ui properties change
-	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
-	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
-	m_aspectConnections << connect(ui.rbAlternateTwoTailed, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
+	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), this, [this](double value) {
+		m_test->setSignificanceLevel(value);
+		manageRecalculate();
+	});
+	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), this, [this](double value) {
+		m_test->setTestMean(value);
+		manageRecalculate();
+	});
+	m_aspectConnections << connect(ui.rbAlternateTwoTailed, &QRadioButton::toggled, this, [this](bool checked) {
+		if (checked) {
 			m_test->setTail(nsl_stats_tail_type_two);
+			manageRecalculate();
+		}
 	});
-	m_aspectConnections << connect(ui.rbAlternateOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
+	m_aspectConnections << connect(ui.rbAlternateOneTailedLeft, &QRadioButton::toggled, this, [this](bool checked) {
+		if (checked) {
 			m_test->setTail(nsl_stats_tail_type_negative);
+			manageRecalculate();
+		}
 	});
-	m_aspectConnections << connect(ui.rbAlternateOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
+	m_aspectConnections << connect(ui.rbAlternateOneTailedRight, &QRadioButton::toggled, this, [this](bool checked) {
+		if (checked) {
 			m_test->setTail(nsl_stats_tail_type_positive);
+			manageRecalculate();
+		}
 	});
 
+	m_aspectConnections << connect(m_test, &HypothesisTest::autoRecalculateChanged, this, &HypothesisTestDock::testAutoRecalculateChanged);
 	connect(m_test, &HypothesisTest::statusError, this, &HypothesisTestDock::showStatusError);
 }
 
 void HypothesisTestDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 	ui.retranslateUi(this);
+
+	m_cbAutoRecalculate->setText(i18n("Auto Recalculate"));
 
 	ui.cbTest->clear();
 	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::t_test_one_sample), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
@@ -159,6 +179,18 @@ void HypothesisTestDock::retranslateUi() {
 */
 void HypothesisTestDock::recalculate() {
 	m_test->recalculate();
+}
+
+void HypothesisTestDock::autoRecalculateChanged(bool checked) {
+	m_test->setAutoRecalculate(checked);
+	ui.pbRecalculate->setEnabled(!checked);
+	if (checked)
+		m_test->recalculate();
+}
+
+void HypothesisTestDock::testAutoRecalculateChanged(bool value) {
+	CONDITIONAL_LOCK_RETURN;
+	m_cbAutoRecalculate->setChecked(value);
 }
 
 /*! 
@@ -308,7 +340,11 @@ void HypothesisTestDock::manageRecalculate() {
 	}
 
 	ui.pbRecalculate->setToolTip(QString());
-	ui.pbRecalculate->setEnabled(true);
+
+	if (m_cbAutoRecalculate->isChecked())
+		m_test->recalculate();
+	else
+		ui.pbRecalculate->setEnabled(true);
 }
 
 void HypothesisTestDock::addVariable() {
@@ -320,7 +356,7 @@ void HypothesisTestDock::addVariable() {
 	cbColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbColumn->setModel(model);
 	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::updateColumns); // update columns in aspect whenever treeviewcombobox changes
-	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::manageRecalculate, Qt::SingleShotConnection); // only checked once after updating columns since treeviewcombobox doesn't allow unselecting items
+	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::manageRecalculate); // trigger recalculate if auto-recalculate is enabled
 
 	const int index = m_dataComboBoxes.size();
 	if (index == 0) {
@@ -451,6 +487,10 @@ void HypothesisTestDock::load() {
 	int newIndex = ui.cbTest->currentIndex();
 	if (oldIndex == newIndex)
 		testChanged(); // manually trigger testChanged()
+
+	// restore auto recalculate
+	m_cbAutoRecalculate->setChecked(m_test->autoRecalculate());
+	ui.pbRecalculate->setEnabled(!m_test->autoRecalculate());
 
 	manageRecalculate(); // check if all input parameters are valid after the load to enable the recalculate
 }

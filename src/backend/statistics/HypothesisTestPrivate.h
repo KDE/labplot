@@ -50,6 +50,7 @@ public:
 	double testMean{0.0};
 	double significanceLevel{0.05};
 	nsl_stats_tail_type tail{nsl_stats_tail_type_two};
+	bool autoRecalculate{true};
 
 private:
 	static QString addResultTitle(const QString&);

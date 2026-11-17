@@ -173,6 +173,19 @@ HypothesisTest::Test HypothesisTest::test() const {
 	return d->test;
 }
 
+void HypothesisTest::setAutoRecalculate(bool value) {
+	Q_D(HypothesisTest);
+	if (value != d->autoRecalculate) {
+		d->autoRecalculate = value;
+		Q_EMIT autoRecalculateChanged(value);
+	}
+}
+
+bool HypothesisTest::autoRecalculate() const {
+	Q_D(const HypothesisTest);
+	return d->autoRecalculate;
+}
+
 void HypothesisTest::recalculate() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	Q_D(HypothesisTest);
@@ -1926,6 +1939,7 @@ void HypothesisTest::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("testMean"), QString::number(d->testMean));
 	writer->writeAttribute(QLatin1String("significanceLevel"), QString::number(d->significanceLevel));
 	writer->writeAttribute(QLatin1String("tail"), QString::number(static_cast<int>(d->tail)));
+	writer->writeAttribute(QLatin1String("autoRecalculate"), QString::number(d->autoRecalculate));
 	writer->writeAttribute(QLatin1String("result"), d->resultText);
 	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement(); // general
@@ -1961,6 +1975,7 @@ bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("testMean", testMean);
 			READ_DOUBLE_VALUE("significanceLevel", significanceLevel);
 			READ_INT_VALUE("tail", tail, nsl_stats_tail_type);
+			READ_INT_VALUE("autoRecalculate", autoRecalculate, bool);
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 
