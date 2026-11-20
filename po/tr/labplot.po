@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:10+0000\n"
-"PO-Revision-Date: 2026-11-16 19:27+0300\n"
+"PO-Revision-Date: 2026-11-19 19:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1487,7 +1487,7 @@ msgstr "Yığının boyutu: %1 bayt"
 #: src/backend/datasources/filters/HDF5Filter.cpp:265
 #, kde-format
 msgid "Cache config version: %1"
-msgstr "Önbellek yapılandırması sürümü: %1"
+msgstr "Ön bellek yapılandırması sürümü: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:267
 #: src/backend/datasources/filters/HDF5Filter.cpp:307
@@ -1516,7 +1516,7 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:269
 #, kde-format
 msgid "Cache initial maximum size: %1 bytes"
-msgstr "İlk en büyük boyutu önbellekle: %1 bayt"
+msgstr "En büyük başlangıç ön belleği boyutu: %1 bayt"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:271
 #, kde-format
@@ -1551,12 +1551,12 @@ msgstr "Geçerli önbellek boyutu: %1 bayt"
 #: src/backend/datasources/filters/HDF5Filter.cpp:292
 #, kde-format
 msgid "Current number of entries in the cache: %1"
-msgstr "Önbellekteki girdi sayısı: %1"
+msgstr "Ön bellekteki girdi sayısı: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:307
 #, kde-format
 msgid "Logging enabled: %1"
-msgstr "Günlükleme etkinleştirildi: %1"
+msgstr "Günlükleme etkin: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
@@ -3288,7 +3288,7 @@ msgstr "İstenilen özellik (henüz) gerçeklenmedi"
 #: src/backend/gsl/errors.h:72
 #, kde-format
 msgid "Cache limit exceeded"
-msgstr "Önbellek sınırı aşıldı"
+msgstr "Ön bellek sınırı aşıldı"
 
 #: src/backend/gsl/errors.h:74
 #, kde-format
@@ -23178,7 +23178,7 @@ msgstr "Konum:"
 #: src/frontend/ui/settingsdatasetspage.ui:26
 #, kde-format
 msgid "Cache:"
-msgstr "Önbellek:"
+msgstr "Ön bellek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lKaggle)
 #: src/frontend/ui/settingsdatasetspage.ui:39
