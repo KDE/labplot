@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:05+0000\n"
-"PO-Revision-Date: 2026-10-27 15:41+0100\n"
+"PO-Revision-Date: 2026-11-18 10:39+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -7671,6 +7671,8 @@ msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
 msgstr ""
+"Impossibile inizializzare Python. Verifica l'interprete Python nelle "
+"impostazioni di scripting."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7679,6 +7681,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"Riavvia LabPlot dopo aver corretto la configurazione di Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7687,6 +7692,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"L'interprete Python configurato «%1» fa riferimento a «%2» che non esiste "
+"più. Ricrea l'ambiente virtuale utilizzando Python %3, oppure seleziona un "
+"interprete Python %3 valido nelle impostazioni di scripting."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7694,12 +7702,14 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"L'interprete Python configurato «%1» non esiste, o non è eseguibile. "
+"Seleziona un interprete valido nelle impostazioni di scripting."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "Impossibile determinare la versione di Python di «%1»: %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7707,18 +7717,19 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"L'interprete configurato «%1» utilizza Python %2, ma LabPlot richiede Python "
+"%3. Seleziona un interprete compatibile nelle impostazioni di scripting."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "Impossibile analizzare il file."
+msgstr "Impossibile registrare il modulo pylabplot."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:278
 #: src/backend/script/python/PythonScriptRuntime.cpp:286
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "Impossibile leggere il percorso dell'interprete Python incorporato."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:294
 #, kde-format
@@ -7726,6 +7737,7 @@ msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
+"L'interprete Python incorporato non corrisponde a quello configurato, «%1»."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:355
 #, kde-format
@@ -7733,11 +7745,13 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"Impossibile inizializzare il modulo pylabplot. Verifica l'interprete Python "
+"e l'installazione di PySide6 nelle impostazioni di scripting."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr ""
+msgstr "Linguaggio di scripting non supportato: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7750,10 +7764,9 @@ msgid "no script element found"
 msgstr "Nessun elemento di script trovato"
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "Impossibile inizializzare %1."
+msgstr "Impossibile inizializzare il runtime dello script «%1»: %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7761,10 +7774,9 @@ msgid "%1: run %2 script"
 msgstr "%1: esegui script %2"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "Impossibile inizializzare %1."
+msgstr "Impossibile inizializzare il runtime dello script «%1»."
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -7783,15 +7795,14 @@ msgid "A script is already running."
 msgstr "Uno script è già in esecuzione."
 
 #: src/backend/script/Script.cpp:396
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "L'attributo «name» è mancante o vuoto."
+msgstr "l'attributo «runtime» è mancante o vuoto"
 
 #: src/backend/script/Script.cpp:401
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "runtime dello script «%1» non supportato"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
@@ -19265,7 +19276,7 @@ msgstr[1] "Esploratore di progetti: elimina %1 oggetti selezionati"
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Trascina per spostare la barra degli strumenti"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format
@@ -19631,10 +19642,10 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Chiedi conferma prima di riavviare il motore di sistema."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+#, kde-format
 msgid "Select a virtual environment folder containing pyvenv.cfg."
-msgstr "L'ambiente virtuale selezionato non contiene un file pyvenv.cfg."
+msgstr ""
+"Seleziona una cartella dell'ambiente virtuale contenente il file pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
@@ -19642,19 +19653,20 @@ msgid ""
 "Installation path of the Python interpreter currently running. Virtual "
 "environments using the same Python installation share this path."
 msgstr ""
+"Percorso di installazione dell'interprete Python attualmente in esecuzione. "
+"Gli ambienti virtuali che utilizzano la stessa installazione di Python "
+"condividono questo percorso."
 
 #: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
 msgid "%1 (Python: %2) -  Default"
-msgstr ""
+msgstr "%1 (Python: %2) -  predefinito"
 
 #: src/frontend/SettingsScriptingPage.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the Virtual Environment"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment Folder"
-msgstr "Seleziona l'ambiente virtuale"
+msgstr "Seleziona la cartella dell'ambiente virtuale"
 
 #: src/frontend/SettingsScriptingPage.cpp:192
 #, kde-format
@@ -19662,12 +19674,13 @@ msgid ""
 "The selected environment differs from the saved one. Save and restart "
 "LabPlot for the change to take effect."
 msgstr ""
+"L'ambiente selezionato è diverso da quello salvato. Salva e riavvia LabPlot "
+"affinché la modifica abbia effetto."
 
 #: src/frontend/SettingsScriptingPage.cpp:268
-#, fuzzy, kde-format
-#| msgid "%1 (System, %2)"
+#, kde-format
 msgid "%1 (Python: %2)"
-msgstr "%1 (Sistema, %2)"
+msgstr "%1 (Python: %2)"
 
 #: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format

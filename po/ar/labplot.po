@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:05+0000\n"
-"PO-Revision-Date: 2026-11-12 09:02+0400\n"
+"PO-Revision-Date: 2026-11-19 17:29+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -7656,7 +7656,7 @@ msgstr "مكعب ثلاثي"
 msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
-msgstr ""
+msgstr "تعذّر تهيئة بايثون. تحقق من مفسّر بايثون في إعدادات النصوص البرمجية."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7665,6 +7665,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"أعد تشغيل معمل الرسم بعد تصحيح إعدادات بايثون."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7673,6 +7676,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"مفسّر بايثون المضبوط '%1' يرتبط بـ'%2'، الذي لم يعد موجودًا. أعد إنشاء البيئة "
+"الافتراضية باستخدام بايثون %3، أو اختر مفسّر بايثون %3 صالحًا في إعدادات "
+"النصوص البرمجية."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7680,12 +7686,14 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"مفسّر بايثون المضبوط '%1' غير موجود أو غير قابل للتنفيذ. اختر مفسّرًا صالحًا في "
+"إعدادات النصوص البرمجية."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "تعذّر تحديد إصدار بايثون الخاص بـ'%1': %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7693,25 +7701,26 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"المفسّر المضبوط '%1' يستخدم بايثون %2، لكن LabPlot يتطلب بايثون %3. اختر "
+"مفسّرًا متوافقًا في إعدادات النصوص البرمجية."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "فشل تحليل الملف."
+msgstr "تعذّر تسجيل وحدة pylabplot."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:278
 #: src/backend/script/python/PythonScriptRuntime.cpp:286
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "تعذّرت قراءة مسار مفسّر بايثون المضمّن."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:294
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
-msgstr ""
+msgstr "مفسّر بايثون المضمّن لا يطابق المفسّر المضبوط '%1'."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:355
 #, kde-format
@@ -7719,12 +7728,13 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"تعذّرت تهيئة وحدة pylabplot. تحقق من مفسّر بايثون وتثبيت PySide6 في إعدادات "
+"النصوص البرمجية."
 
 #: src/backend/script/Script.cpp:81
-#, fuzzy, kde-format
-#| msgid "unsupported script runtime '%1'"
+#, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr "محرك تشغيل السكربت '%1' غير متاح"
+msgstr "لغة نصوص برمجية غير مدعومة: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7737,10 +7747,9 @@ msgid "no script element found"
 msgstr "لا يوجد عنصر سكريبت"
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "تعذر تهيئة وقت تشغيل السكربت '%1'"
+msgstr "تعذّرت تهيئة بيئة تشغيل النصوص البرمجية '%1': %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7748,10 +7757,9 @@ msgid "%1: run %2 script"
 msgstr "%1: نفذ سكريبت %2"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "تعذر تهيئة وقت تشغيل السكربت '%1'"
+msgstr "تعذّرت تهيئة بيئة تشغيل النصوص البرمجية %1."
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -19440,10 +19448,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "اِطلب تأكيدًا عند إعادة تشغيل نظام الخلفيّة."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+#, kde-format
 msgid "Select a virtual environment folder containing pyvenv.cfg."
-msgstr "البيئة الافتراضية المحددة لا تحتوي على ملف pyvenv.cfg."
+msgstr "اختر مجلد بيئة افتراضية يحتوي على pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
@@ -19451,19 +19458,19 @@ msgid ""
 "Installation path of the Python interpreter currently running. Virtual "
 "environments using the same Python installation share this path."
 msgstr ""
+"مسار تثبيت مفسّر بايثون قيد التشغيل حاليًا. تتشارك البيئات الافتراضية التي "
+"تستخدم تثبيت بايثون نفسه هذا المسار."
 
 #: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
 msgid "%1 (Python: %2) -  Default"
-msgstr ""
+msgstr "%1 (بايثون: %2) - مبدئي"
 
 #: src/frontend/SettingsScriptingPage.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the Virtual Environment"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment Folder"
-msgstr "حدد بيئة افتراضية"
+msgstr "اختر مجلد البيئة الافتراضية"
 
 #: src/frontend/SettingsScriptingPage.cpp:192
 #, kde-format
@@ -19471,17 +19478,18 @@ msgid ""
 "The selected environment differs from the saved one. Save and restart "
 "LabPlot for the change to take effect."
 msgstr ""
+"البيئة المختارة تختلف عن المحفوظة. احفظ وأعد تشغيل LabPlot ليصبح التغيير "
+"ساريًا."
 
 #: src/frontend/SettingsScriptingPage.cpp:268
-#, fuzzy, kde-format
-#| msgid "%1 (System, %2)"
+#, kde-format
 msgid "%1 (Python: %2)"
-msgstr "%1 (نظام، %2)"
+msgstr "%1 (بايثون: %2)"
 
 #: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
-msgstr "البيئة الافتراضية المحددة لا تحتوي على ملف تنفيذي لـ Python."
+msgstr "البيئة الافتراضية المحددة لا تحتوي على ملف تنفيذي لـ بايثون."
 
 #: src/frontend/SettingsScriptingPage.cpp:279
 #, kde-format
@@ -19495,7 +19503,7 @@ msgid ""
 "The selected virtual environment Python version does not match the "
 "application Python version."
 msgstr ""
-"إصدار Python في البيئة الافتراضية المحددة لا يطابق إصدار Python في التطبيق."
+"إصدار بايثون في البيئة الافتراضية المحددة لا يطابق إصدار بايثون في التطبيق."
 
 #: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format

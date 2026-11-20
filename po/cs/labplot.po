@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:05+0000\n"
-"PO-Revision-Date: 2026-11-16 12:30+0100\n"
+"PO-Revision-Date: 2026-11-19 03:38+0100\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 26.08.3\n"
+"X-Generator: Poedit 3.10\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -19537,10 +19537,10 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Při restartování podpůrné vrstvy požádat o potvrzení."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+#, kde-format
 msgid "Select a virtual environment folder containing pyvenv.cfg."
-msgstr "Vybrané virtuální prostředí neobsahuje soubor pyvenv.cfg."
+msgstr ""
+"Vyberte složku virtuálního prostředí, která obsahuje soubor pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
@@ -19548,19 +19548,20 @@ msgid ""
 "Installation path of the Python interpreter currently running. Virtual "
 "environments using the same Python installation share this path."
 msgstr ""
+"Cesta k instalaci interpretu jazyka Python, který je právě spuštěn. "
+"Virtuální prostředí využívající stejnou instalaci jazyka Python sdílejí tuto "
+"cestu."
 
 #: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
 msgid "%1 (Python: %2) -  Default"
-msgstr ""
+msgstr "%1 (Python: %2) -  výchozí"
 
 #: src/frontend/SettingsScriptingPage.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the Virtual Environment"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment Folder"
-msgstr "Vybrat virtuální prostředí"
+msgstr "Vybrat složku virtuálního prostředí"
 
 #: src/frontend/SettingsScriptingPage.cpp:192
 #, kde-format
@@ -19568,12 +19569,13 @@ msgid ""
 "The selected environment differs from the saved one. Save and restart "
 "LabPlot for the change to take effect."
 msgstr ""
+"Vybrané prostředí se liší od uloženého. Aby se změna projevila, uložte "
+"nastavení a restartujte program LabPlot."
 
 #: src/frontend/SettingsScriptingPage.cpp:268
-#, fuzzy, kde-format
-#| msgid "%1 (System, %2)"
+#, kde-format
 msgid "%1 (Python: %2)"
-msgstr "%1 (Systém, %2)"
+msgstr "%1 (Python: %2)"
 
 #: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
@@ -25504,7 +25506,7 @@ msgstr "Vynechat řádky"
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:132
 #, kde-format
 msgid "Interm. points:"
-msgstr "Mezileh. body"
+msgstr "Mezileh. body:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSkipGaps)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:139

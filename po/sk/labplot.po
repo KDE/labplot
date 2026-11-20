@@ -7621,6 +7621,8 @@ msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
 msgstr ""
+"Inicializácia Pythonu zlyhala. Skontrolujte interpret Pythonu v nastaveniach "
+"skriptovania."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7629,6 +7631,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"Po oprave konfigurácie Pythonu reštartujte LabPlot."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7637,6 +7642,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"Nastavený interpret Pythonu '%1' odkazuje na '%2', ktorý už neexistuje. "
+"Znova vytvorte virtuálne prostredie pomocou Pythonu %3 alebo v nastaveniach "
+"skriptovania vyberte platný interpret Pythonu %3."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7644,12 +7652,14 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"Nastavený interpret Pythonu '%1' neexistuje alebo nie je spustiteľný. V "
+"nastaveniach skriptovania vyberte platný interpret."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "Nepodarilo sa zistiť verziu Pythonu '%1': %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7657,25 +7667,26 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"Nastavený interpret '%1' používa Python %2, ale LabPlot vyžaduje Python %3. "
+"V nastaveniach skriptovania vyberte kompatibilný interpret."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "Failed to parse the file."
+msgstr "Nepodarilo sa zaregistrovať modul pylabplot."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:278
 #: src/backend/script/python/PythonScriptRuntime.cpp:286
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "Nepodarilo sa načítať cestu vloženého interpretu Pythonu."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:294
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
-msgstr ""
+msgstr "Vložený interpret Pythonu sa nezhoduje s nastaveným interpretom '%1'."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:355
 #, kde-format
@@ -7683,11 +7694,13 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"Inicializácia modulu pylabplot zlyhala. V nastaveniach skriptovania "
+"skontrolujte interpret Pythonu a inštaláciu PySide6."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr ""
+msgstr "Nepodporovaný skriptovací jazyk: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7700,10 +7713,9 @@ msgid "no script element found"
 msgstr "nenašiel sa žiaden prvok skriptu"
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "Failed to initialize %1."
+msgstr "Nepodarilo sa inicializovať skriptovacie prostredie '%1': %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7711,10 +7723,9 @@ msgid "%1: run %2 script"
 msgstr "%1: spustiť skript %2"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "Failed to initialize %1."
+msgstr "Nepodarilo sa inicializovať skriptovacie prostredie %1."
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -7733,15 +7744,14 @@ msgid "A script is already running."
 msgstr "Skript už beží."
 
 #: src/backend/script/Script.cpp:396
-#, fuzzy, kde-format
-#| msgid "Attribute 'name' is missing or empty."
+#, kde-format
 msgid "attribute 'runtime' is missing or empty"
-msgstr "Atribút 'name' chýba alebo je prázdny."
+msgstr "atribút 'runtime' chýba alebo je prázdny"
 
 #: src/backend/script/Script.cpp:401
 #, kde-format
 msgid "unsupported script runtime '%1'"
-msgstr ""
+msgstr "nepodporované skriptovacie prostredie '%1'"
 
 #: src/backend/script/ScriptRuntime.cpp:99
 #, kde-format
@@ -19094,7 +19104,7 @@ msgstr[2] "Prieskumník projektu: vymazať %1 vybraných objektov"
 #: src/frontend/script/FloatingToolBar.cpp:31
 #, kde-format
 msgid "Drag to move the toolbar"
-msgstr ""
+msgstr "Ťahaním presuniete panel nástrojov"
 
 #: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format
@@ -19448,10 +19458,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "Žiadať potvrdenie pri reštartovaní backendového systému."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+#, kde-format
 msgid "Select a virtual environment folder containing pyvenv.cfg."
-msgstr "Vybrané virtuálne prostredie neobsahuje súbor pyvenv.cfg."
+msgstr "Vyberte priečinok virtuálneho prostredia so súborom pyvenv.cfg."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
@@ -19459,19 +19468,19 @@ msgid ""
 "Installation path of the Python interpreter currently running. Virtual "
 "environments using the same Python installation share this path."
 msgstr ""
+"Inštalačná cesta práve bežiaceho interpretu Pythonu. Virtuálne prostredia s "
+"rovnakou inštaláciou Pythonu zdieľajú túto cestu."
 
 #: src/frontend/SettingsScriptingPage.cpp:57
 #, kde-format
 msgid "%1 (Python: %2) -  Default"
-msgstr ""
+msgstr "%1 (Python: %2) -  Predvolené"
 
 #: src/frontend/SettingsScriptingPage.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the Virtual Environment"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment Folder"
-msgstr "Vybrať virtuálne prostredie"
+msgstr "Vybrať priečinok virtuálneho prostredia"
 
 #: src/frontend/SettingsScriptingPage.cpp:192
 #, kde-format
@@ -19479,12 +19488,13 @@ msgid ""
 "The selected environment differs from the saved one. Save and restart "
 "LabPlot for the change to take effect."
 msgstr ""
+"Vybrané prostredie sa líši od uloženého. Aby sa zmena prejavila, uložte a "
+"reštartujte LabPlot."
 
 #: src/frontend/SettingsScriptingPage.cpp:268
-#, fuzzy, kde-format
-#| msgid "%1 (System, %2)"
+#, kde-format
 msgid "%1 (Python: %2)"
-msgstr "%1 (Systém, %2)"
+msgstr "%1 (Python: %2)"
 
 #: src/frontend/SettingsScriptingPage.cpp:273
 #, kde-format
