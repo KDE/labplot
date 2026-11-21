@@ -829,13 +829,13 @@ typename tree<T, tree_node_allocator>::fixed_depth_iterator tree<T, tree_node_al
 				// try to walk up and then right again
 				do {
 					if(tmp==ret.top_node)
-					   throw std::range_error("tree: begin_fixed out of range");
+						throw std::range_error("tree: begin_fixed out of range");
 					tmp=tmp->parent;
-               if(tmp==nullptr) 
-					   throw std::range_error("tree: begin_fixed out of range");
-               --curdepth;
-				   } while(tmp->next_sibling==nullptr);
-				}
+					if(tmp==nullptr)
+						throw std::range_error("tree: begin_fixed out of range");
+					--curdepth;
+				} while(tmp->next_sibling==nullptr);
+			}
 			tmp=tmp->next_sibling;
 			}
 		tmp=tmp->first_child;
@@ -3338,15 +3338,15 @@ typename tree<T, tree_node_allocator>::leaf_iterator& tree<T, tree_node_allocato
 			  this->node=this->node->first_child;
 		 }
 	else {
-		 while(this->node->next_sibling==nullptr) { 
-			  if (this->node->parent==nullptr) return *this;
-			  this->node=this->node->parent;
-			  if (top_node != nullptr && this->node==top_node) return *this;
-			  }
-		 this->node=this->node->next_sibling;
-		 while(this->node->first_child)
-			  this->node=this->node->first_child;
-		 }
+		while(this->node->next_sibling==nullptr) {
+			if (this->node->parent==nullptr) return *this;
+			this->node=this->node->parent;
+			if (top_node != nullptr && this->node==top_node) return *this;
+		}
+		this->node=this->node->next_sibling;
+		while(this->node->first_child)
+			this->node=this->node->first_child;
+	}
 	return *this;
    }
 
@@ -3357,13 +3357,13 @@ typename tree<T, tree_node_allocator>::leaf_iterator& tree<T, tree_node_allocato
 	while (this->node->prev_sibling==nullptr) {
 		if (this->node->parent==nullptr) return *this;
 		this->node=this->node->parent;
-		if (top_node !=nullptr && this->node==top_node) return *this; 
-		}
+		if (top_node !=nullptr && this->node==top_node) return *this;
+	}
 	this->node=this->node->prev_sibling;
 	while(this->node->last_child)
 		this->node=this->node->last_child;
 	return *this;
-	}
+   }
 
 template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::leaf_iterator tree<T, tree_node_allocator>::leaf_iterator::operator++(int)
