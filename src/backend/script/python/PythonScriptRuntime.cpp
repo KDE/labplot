@@ -310,6 +310,37 @@ bool PythonScriptRuntime::initPython() {
 	// same qt6 linked by labplot. then distribute our compiled pyside python library
 	// and add it to sys.path
 
+#ifdef Q_OS_WIN
+	// On Windows, when launched from desktop shortcut (not from command prompt),
+	// Python doesn't inherit PATH and needs explicit sys.path setup to find the bundled
+	// stdlib (bin/Lib/) and site-packages (bin/Lib/site-packages/).
+	{
+		const QString appDir = QCoreApplication::applicationDirPath(); // .../bin
+		const QString pythonLibPath = QDir(appDir + QStringLiteral("/Lib")).canonicalPath();
+		const QString sitePkgsPath = QDir(appDir + QStringLiteral("/Lib/site-packages")).canonicalPath();
+
+		PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
+		if (sysPath && PyList_Check(sysPath)) {
+			auto prependPath = [sysPath](const QString& path) {
+				if (path.isEmpty())
+					return;
+				PyObject* entry = PyUnicode_FromString(path.toUtf8().constData());
+				if (!entry)
+					return;
+				const int contains = PySequence_Contains(sysPath, entry);
+				if (contains < 0)
+					PyErr_Clear();
+				if (contains != 1)
+					PyList_Insert(sysPath, 0, entry);
+				Py_DECREF(entry);
+			};
+
+			prependPath(sitePkgsPath);
+			prependPath(pythonLibPath);
+		}
+	}
+#endif
+
 #ifdef Q_OS_MACOS
 	// When running from the macOS app bundle with a user-selected virtual environment,
 	// force bundled stdlib/lib-dynload/site-packages ahead of venv paths.
