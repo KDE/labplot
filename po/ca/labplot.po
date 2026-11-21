@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-18 01:05+0000\n"
-"PO-Revision-Date: 2026-11-17 08:55+0100\n"
+"PO-Revision-Date: 2026-11-20 21:05+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2616,7 +2616,7 @@ msgstr "El dispositiu no existeix."
 #: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr "L'usuari no té suficient permís per a obrir el dispositiu."
+msgstr "L'usuari no té prou permís per a obrir el dispositiu."
 
 #: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
@@ -8720,7 +8720,7 @@ msgid ""
 "%2"
 msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
-"les mitjanes del grups. %2"
+"les mitjanes dels grups. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1357
 #: src/backend/statistics/HypothesisTest.cpp:1415
@@ -8971,8 +8971,8 @@ msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr ""
-"Al nivell de significació %1, el procés sembla que que sigui estable "
-"(homogeni). %2"
+"Al nivell de significació %1, el procés sembla que sigui estable (homogeni). "
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1996
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:153
@@ -17361,7 +17361,7 @@ msgstr ""
 "com la tolerància angular per a simplificar les línies. Reté punts només si "
 "cauen fora d'una distància especificada i un llindar angular des del punt "
 "retingut anterior.</li><li>Lang - reté els punts que són almenys una "
-"distància especificada apart i assegura que cap punt es desvia més d'una "
+"distància especificada a part i assegura que cap punt es desvia més d'una "
 "tolerància especificada des de la línia simplificada.</li></ul>"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:214
@@ -19167,7 +19167,7 @@ msgstr "Dibuixa el diagrama de les dades"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:632
 #, kde-format
 msgid "Statistical Analysis"
-msgstr "Anàlisi estadístic"
+msgstr "Anàlisi estadística"
 
 #: src/frontend/notebook/NotebookView.cpp:335
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:633
@@ -19276,7 +19276,7 @@ msgstr "No s'ha pogut llegir el fitxer"
 #: src/frontend/PlotTemplateDialog.cpp:215
 #, kde-format
 msgid "Failed to load the plot template"
-msgstr "Ha fallat en carregar la plantilla de diagrama"
+msgstr "Ha fallat en carregar la plantilla de diagrames"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
