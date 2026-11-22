@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-18 01:05+0000\n"
+"POT-Creation-Date: 2026-11-22 00:59+0000\n"
 "PO-Revision-Date: 2026-11-19 00:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -7724,7 +7724,7 @@ msgstr ""
 "El intérprete de Python integrado no coincide con el intérprete configurado "
 "«%1»."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:355
+#: src/backend/script/python/PythonScriptRuntime.cpp:386
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
