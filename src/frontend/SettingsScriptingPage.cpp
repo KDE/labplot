@@ -50,8 +50,27 @@ SettingsScriptingPage::SettingsScriptingPage(QWidget* parent)
 	}
 
 	// populate available Python environments
-	const QString defaultPythonPrefix = QLatin1String(LABPLOT_DEFAULT_PYTHON_PREFIX);
-	const QString defaultPythonExecutable = QLatin1String(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
+	// Compute default paths at runtime - build-time paths point to the CI build machine
+	const QString appDir = QCoreApplication::applicationDirPath();
+	QString defaultPythonPrefix;
+	QString defaultPythonExecutable;
+#ifdef Q_OS_WIN
+	defaultPythonPrefix = appDir; // .../bin
+	defaultPythonExecutable = defaultPythonPrefix + QStringLiteral("/python3.exe");
+#elif defined(Q_OS_MACOS)
+	// macOS app bundle: .../Contents/MacOS -> .../Contents/Frameworks/Python.framework/...
+	defaultPythonPrefix = QDir(appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current")).canonicalPath();
+	defaultPythonExecutable = defaultPythonPrefix + QStringLiteral("/bin/python3");
+#else
+	// Linux AppImage/Flatpak: Python bundled at bin/python3 relative to app directory
+	defaultPythonPrefix = QDir(appDir + QStringLiteral("/..")).canonicalPath(); // go up from bin/ to app root
+	defaultPythonExecutable = appDir + QStringLiteral("/python3");
+	// Fall back to querying Python at runtime if bundled Python doesn't exist (distro packages using system Python)
+	if (!QFile::exists(defaultPythonExecutable)) {
+		defaultPythonPrefix = QString::fromWCharArray(Py_GetPrefix());
+		defaultPythonExecutable = QString::fromWCharArray(Py_GetProgramFullPath());
+	}
+#endif
 	const QString defaultPythonRelativeExecutable = QDir(defaultPythonPrefix).relativeFilePath(defaultPythonExecutable);
 	ui.cbPythonEnvironment->addItem(
 		i18n("%1 (Python: %2) -  Default", QDir::toNativeSeparators(defaultPythonPrefix), QDir::toNativeSeparators(defaultPythonRelativeExecutable)),
@@ -168,15 +187,31 @@ void SettingsScriptingPage::updateRestartMessage() {
 		return;
 	}
 
+	// Helper to get the default Python executable path at runtime
+	auto getDefaultPythonExecutable = []() -> QString {
+		const QString appDir = QCoreApplication::applicationDirPath();
+#ifdef Q_OS_WIN
+		return appDir + QStringLiteral("/python3.exe");
+#elif defined(Q_OS_MACOS)
+		return QDir(appDir + QStringLiteral("/../Frameworks/Python.framework/Versions/Current")).canonicalPath() + QStringLiteral("/bin/python3");
+#else
+		// Linux: check for bundled Python first, fall back to querying Python at runtime
+		const QString bundled = appDir + QStringLiteral("/python3");
+		if (QFile::exists(bundled))
+			return bundled;
+		return QString::fromWCharArray(Py_GetProgramFullPath());
+#endif
+	};
+
 	// Compare selected environment with the saved one (what will be used after restart)
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Scripting"));
 	QString savedExecutable = group.readEntry(QLatin1String("PythonExecutable"), QString());
 	if (savedExecutable.isEmpty())
-		savedExecutable = QLatin1String(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
+		savedExecutable = getDefaultPythonExecutable();
 
 	QString selectedExecutable = ui.cbPythonEnvironment->currentData().toString();
 	if (selectedExecutable.isEmpty())
-		selectedExecutable = QLatin1String(LABPLOT_DEFAULT_PYTHON_EXECUTABLE);
+		selectedExecutable = getDefaultPythonExecutable();
 
 	if (QDir::cleanPath(selectedExecutable) == QDir::cleanPath(savedExecutable)) {
 		if (m_restartMessageWidget)

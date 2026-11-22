@@ -785,29 +785,9 @@ if(ENABLE_PYTHON_SCRIPTING)
 target_link_libraries(labplot_core_obj PRIVATE ${python_scripting_link_libraries})
 target_include_directories(labplot_core_obj PRIVATE ${python_scripting_includes})
 target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
-# SettingsScriptingPage.cpp uses Python C-API directly (Py_IsInitialized, etc.)
-execute_process(
-    COMMAND ${Python3_EXECUTABLE} -c "import sys; print(sys.prefix)"
-    OUTPUT_VARIABLE LABPLOT_DEFAULT_PYTHON_PREFIX
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    RESULT_VARIABLE LABPLOT_PYTHON_PREFIX_RESULT)
-if(NOT LABPLOT_PYTHON_PREFIX_RESULT EQUAL 0 OR NOT LABPLOT_DEFAULT_PYTHON_PREFIX)
-    message(FATAL_ERROR "Failed to determine the default Python prefix from ${Python3_EXECUTABLE}")
-endif()
-execute_process(
-    COMMAND ${Python3_EXECUTABLE} -c "import sys; print(sys.executable)"
-    OUTPUT_VARIABLE LABPLOT_DEFAULT_PYTHON_EXECUTABLE
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    RESULT_VARIABLE LABPLOT_PYTHON_EXECUTABLE_RESULT)
-if(NOT LABPLOT_PYTHON_EXECUTABLE_RESULT EQUAL 0 OR NOT LABPLOT_DEFAULT_PYTHON_EXECUTABLE)
-    message(FATAL_ERROR "Failed to determine the default Python executable from ${Python3_EXECUTABLE}")
-endif()
+# SettingsScriptingPage.cpp uses Python C-API directly (Py_IsInitialized, Py_GetPrefix, etc.)
 set_property(SOURCE ${FRONTEND_DIR}/SettingsScriptingPage.cpp APPEND PROPERTY
     INCLUDE_DIRECTORIES $<TARGET_PROPERTY:Python3::Python,INTERFACE_INCLUDE_DIRECTORIES>)
-set_property(SOURCE ${FRONTEND_DIR}/SettingsScriptingPage.cpp APPEND PROPERTY
-    COMPILE_DEFINITIONS
-        "LABPLOT_DEFAULT_PYTHON_PREFIX=\"${LABPLOT_DEFAULT_PYTHON_PREFIX}\""
-        "LABPLOT_DEFAULT_PYTHON_EXECUTABLE=\"${LABPLOT_DEFAULT_PYTHON_EXECUTABLE}\"")
 endif()
 
 target_link_libraries(labplotlib
