@@ -248,6 +248,17 @@ bool PythonScriptRuntime::initPython() {
 	qputenv("PYTHON_COLORS", "0");
 	qputenv("NO_COLOR", "1");
 
+#ifdef Q_OS_WIN
+	// On Windows, when launched from desktop shortcut, Python can't auto-detect its home directory.
+	// Set PYTHONHOME to the application directory (bin/) which contains Lib/ and DLLs/.
+	// This must be done BEFORE Py_Initialize() or Python fails to find the encodings module.
+	if (pythonExecutable.isEmpty() && !qEnvironmentVariableIsSet("PYTHONHOME")) {
+		const QString appDir = QCoreApplication::applicationDirPath();
+		qDebug() << "PythonScriptRuntime: setting PYTHONHOME to" << appDir;
+		qputenv("PYTHONHOME", appDir.toLocal8Bit());
+	}
+#endif
+
 	// for a change in this config to take effect the application may need to restart, though can reinitialize python without needing restart
 	// (finalize then initialize)
 	if (!pythonExecutable.isEmpty()) {
@@ -316,8 +327,13 @@ bool PythonScriptRuntime::initPython() {
 	// stdlib (bin/Lib/) and site-packages (bin/Lib/site-packages/).
 	{
 		const QString appDir = QCoreApplication::applicationDirPath(); // .../bin
-		const QString pythonLibPath = QDir(appDir + QStringLiteral("/Lib")).canonicalPath();
-		const QString sitePkgsPath = QDir(appDir + QStringLiteral("/Lib/site-packages")).canonicalPath();
+		// Use absolutePath() not canonicalPath() - canonicalPath() returns empty if path doesn't exist yet
+		const QString pythonLibPath = QDir(appDir).absoluteFilePath(QStringLiteral("Lib"));
+		const QString sitePkgsPath = QDir(appDir).absoluteFilePath(QStringLiteral("Lib/site-packages"));
+
+		qDebug() << "PythonScriptRuntime: appDir=" << appDir;
+		qDebug() << "PythonScriptRuntime: pythonLibPath=" << pythonLibPath;
+		qDebug() << "PythonScriptRuntime: sitePkgsPath=" << sitePkgsPath;
 
 		PyObject* sysPath = PySys_GetObject("path"); // borrowed reference
 		if (sysPath && PyList_Check(sysPath)) {
