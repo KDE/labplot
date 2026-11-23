@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-22 00:59+0000\n"
+"POT-Creation-Date: 2026-11-23 00:57+0000\n"
 "PO-Revision-Date: 2026-11-18 13:29+0100\n"
 "Last-Translator: freek <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -7701,13 +7701,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "Het registreren van de pylabplot-module is mislukt."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:278
-#: src/backend/script/python/PythonScriptRuntime.cpp:286
+#: src/backend/script/python/PythonScriptRuntime.cpp:289
+#: src/backend/script/python/PythonScriptRuntime.cpp:297
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "Het pad naar de ingebedde Python-interpreter kon niet worden gelezen."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
+#: src/backend/script/python/PythonScriptRuntime.cpp:305
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7716,7 +7716,7 @@ msgstr ""
 "De ingebouwde Python-interpreter komt niet overeen met de geconfigureerde "
 "interpreter '%1'."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:386
+#: src/backend/script/python/PythonScriptRuntime.cpp:402
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -12083,7 +12083,7 @@ msgid "Partly funded by:"
 msgstr "Gedeeltelijk gefinancierd door:"
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:94
 #, kde-format
 msgid "missing"
 msgstr "ontbrekend"
@@ -19629,18 +19629,18 @@ msgstr ""
 "Virtuele omgevingen die gebruikmaken van dezelfde Python-installatie, delen "
 "dit pad."
 
-#: src/frontend/SettingsScriptingPage.cpp:57
+#: src/frontend/SettingsScriptingPage.cpp:76
 #, kde-format
 msgid "%1 (Python: %2) -  Default"
 msgstr "%1 (Python: %2) -  standaard"
 
-#: src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/SettingsScriptingPage.cpp:85
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment Folder"
 msgstr "Selecteer de virtuele omgevingsmap"
 
-#: src/frontend/SettingsScriptingPage.cpp:192
+#: src/frontend/SettingsScriptingPage.cpp:227
 #, kde-format
 msgid ""
 "The selected environment differs from the saved one. Save and restart "
@@ -19649,24 +19649,24 @@ msgstr ""
 "De geselecteerde omgeving verschilt van de opgeslagen omgeving. Sla de "
 "wijzigingen op en start LabPlot opnieuw om de wijziging door te voeren."
 
-#: src/frontend/SettingsScriptingPage.cpp:268
+#: src/frontend/SettingsScriptingPage.cpp:303
 #, kde-format
 msgid "%1 (Python: %2)"
 msgstr "%1 (Python: %2)"
 
-#: src/frontend/SettingsScriptingPage.cpp:273
+#: src/frontend/SettingsScriptingPage.cpp:308
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 "De geselecteerde virtuele omgeving bevat geen Python uitvoerbaar bestand."
 
-#: src/frontend/SettingsScriptingPage.cpp:279
+#: src/frontend/SettingsScriptingPage.cpp:314
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr "De geselecteerde virtuele omgeving bevat geen pyvenv.cfg bestand."
 
-#: src/frontend/SettingsScriptingPage.cpp:307
-#: src/frontend/SettingsScriptingPage.cpp:338
+#: src/frontend/SettingsScriptingPage.cpp:342
+#: src/frontend/SettingsScriptingPage.cpp:373
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "

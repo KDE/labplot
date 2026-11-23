@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-22 00:59+0000\n"
+"POT-Creation-Date: 2026-11-23 00:57+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -545,10 +545,9 @@ msgid "%1: set random values"
 msgstr ""
 
 #: src/backend/core/column/Column.cpp:1108
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgid "Path: %1"
-msgstr "状态: %1"
+msgstr ""
 
 #: src/backend/core/column/Column.cpp:1109
 #: src/frontend/datasources/ImportFileWidget.cpp:1741
@@ -4186,10 +4185,9 @@ msgid "equal"
 msgstr "是否等于"
 
 #: src/backend/gsl/functions.cpp:351
-#, fuzzy, kde-format
-#| msgid "Not a number"
+#, kde-format
 msgid "Not a Number"
-msgstr "NaN"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
@@ -5542,10 +5540,9 @@ msgid "IEEE remainder of x/y"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:696
-#, fuzzy, kde-format
-#| msgid "square x"
+#, kde-format
 msgid "Square (x^2)"
-msgstr "方块 X"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:697
 #, kde-format
@@ -5553,10 +5550,9 @@ msgid "Reciprocal (1/x)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:698
-#, fuzzy, kde-format
-#| msgid "Heavyside theta function"
+#, kde-format
 msgid "Heaviside step function"
-msgstr "单位阶跃函数"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:699
 #, kde-format
@@ -7608,20 +7604,20 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:278
-#: src/backend/script/python/PythonScriptRuntime.cpp:286
+#: src/backend/script/python/PythonScriptRuntime.cpp:289
+#: src/backend/script/python/PythonScriptRuntime.cpp:297
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
+#: src/backend/script/python/PythonScriptRuntime.cpp:305
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:386
+#: src/backend/script/python/PythonScriptRuntime.cpp:402
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -7644,10 +7640,9 @@ msgid "no script element found"
 msgstr ""
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "初始化 %1 失败。"
+msgstr ""
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7655,10 +7650,9 @@ msgid "%1: run %2 script"
 msgstr ""
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "初始化 %1 失败。"
+msgstr ""
 
 #: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
@@ -11899,7 +11893,7 @@ msgid "Partly funded by:"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:221 src/frontend/AboutDialog.cpp:393
-#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:75
+#: src/frontend/AboutDialog.cpp:394 src/frontend/SettingsScriptingPage.cpp:94
 #, kde-format
 msgid "missing"
 msgstr ""
@@ -17334,10 +17328,9 @@ msgid "Dash-dot-dot Line"
 msgstr "双点虚相间线"
 
 #: src/frontend/GuiTools.cpp:132 src/frontend/GuiTools.cpp:161
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Round Dot Line"
-msgstr "点线"
+msgstr ""
 
 #: src/frontend/GuiTools.cpp:272
 #, kde-format
@@ -19022,41 +19015,41 @@ msgid ""
 "environments using the same Python installation share this path."
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:57
+#: src/frontend/SettingsScriptingPage.cpp:76
 #, kde-format
 msgid "%1 (Python: %2) -  Default"
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:66
+#: src/frontend/SettingsScriptingPage.cpp:85
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment Folder"
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:192
+#: src/frontend/SettingsScriptingPage.cpp:227
 #, kde-format
 msgid ""
 "The selected environment differs from the saved one. Save and restart "
 "LabPlot for the change to take effect."
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:268
+#: src/frontend/SettingsScriptingPage.cpp:303
 #, kde-format
 msgid "%1 (Python: %2)"
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:273
+#: src/frontend/SettingsScriptingPage.cpp:308
 #, kde-format
 msgid "The selected virtual environment does not contain a Python executable."
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:279
+#: src/frontend/SettingsScriptingPage.cpp:314
 #, kde-format
 msgid "The selected virtual environment does not contain a pyvenv.cfg file."
 msgstr ""
 
-#: src/frontend/SettingsScriptingPage.cpp:307
-#: src/frontend/SettingsScriptingPage.cpp:338
+#: src/frontend/SettingsScriptingPage.cpp:342
+#: src/frontend/SettingsScriptingPage.cpp:373
 #, kde-format
 msgid ""
 "The selected virtual environment Python version does not match the "
@@ -25450,10 +25443,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFitRange)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:248
-#, fuzzy, kde-format
-#| msgid "Plot Range:"
+#, kde-format
 msgid "Fit Range:"
-msgstr "绘图范围："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChangepointLines)
 #: src/frontend/ui/dockwidgets/xypiecewiselinearfitcurvedockgeneraltab.ui:367
@@ -27460,10 +27452,9 @@ msgid "Search/Filter text"
 msgstr "搜索/过滤文本"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:62
-#, fuzzy, kde-format
-#| msgid "Clea&r Selection"
+#, kde-format
 msgid "Clear selection"
-msgstr "清除内容(&R)"
+msgstr ""
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:421
 #, kde-format
