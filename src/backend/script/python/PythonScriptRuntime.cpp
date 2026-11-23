@@ -252,10 +252,15 @@ bool PythonScriptRuntime::initPython() {
 	// On Windows, when launched from desktop shortcut, Python can't auto-detect its home directory.
 	// Set PYTHONHOME to the application directory (bin/) which contains Lib/ and DLLs/.
 	// This must be done BEFORE Py_Initialize() or Python fails to find the encodings module.
+	// Use Py_SetPythonHome() with wide strings to handle paths with spaces/Unicode correctly.
 	if (pythonExecutable.isEmpty() && !qEnvironmentVariableIsSet("PYTHONHOME")) {
 		const QString appDir = QCoreApplication::applicationDirPath();
 		qDebug() << "PythonScriptRuntime: setting PYTHONHOME to" << appDir;
-		qputenv("PYTHONHOME", appDir.toLocal8Bit());
+		static wchar_t pythonHome[PATH_MAX];
+		const std::wstring wideHome = appDir.toStdWString();
+		wcsncpy(pythonHome, wideHome.c_str(), PATH_MAX - 1);
+		pythonHome[PATH_MAX - 1] = L'\0';
+		Py_SetPythonHome(pythonHome);
 	}
 #endif
 
