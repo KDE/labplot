@@ -365,7 +365,10 @@ void Script::runScript(Script* script, const QString& code) {
 
 		if (!script->scriptRuntime()->exec(code)) {
 			m_isRunning = false;
-			QMessageBox::critical(script->view(), i18n("Script"), i18n("Failed to run the script."));
+			QString errorMsg = script->scriptRuntime()->initializationError();
+			if (errorMsg.isEmpty())
+				errorMsg = i18n("Failed to run the script.");
+			QMessageBox::critical(script->view(), i18n("Script"), errorMsg);
 		}
 
 		m_isRunning = false;
