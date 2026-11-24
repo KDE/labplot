@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-23 00:57+0000\n"
-"PO-Revision-Date: 2026-11-19 19:39+0300\n"
+"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"PO-Revision-Date: 2026-11-23 18:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2433,7 +2433,7 @@ msgstr "Dosya ayrıştırılamadı."
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:498
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
-msgstr "“%1” özniteliği eksik veya boş, öntanımlı değer kullanılacak"
+msgstr "“%1” özniteliği eksik veya boş, varsayılan değer kullanılacak"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:151
 #, kde-format
@@ -3779,7 +3779,7 @@ msgstr "Hücre (indis; değişken)"
 #: src/backend/gsl/functions.cpp:256
 #, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Hücre (indis; öntanımlı_değer; değişken)"
+msgstr "Hücre (indis; varsayılan_değer; değişken)"
 
 #: src/backend/gsl/functions.cpp:257
 #, kde-format
@@ -3864,7 +3864,7 @@ msgstr "Geçerli sütun hücresi (indis)"
 #: src/backend/gsl/functions.cpp:274
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr "Geçerli sütun hücresi (indis; öntanımlı değer)"
+msgstr "Geçerli sütun hücresi (indis; varsayılan değer)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:278
@@ -7694,13 +7694,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "pylabplot modülü kaydı yapılamadı."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:289
-#: src/backend/script/python/PythonScriptRuntime.cpp:297
+#: src/backend/script/python/PythonScriptRuntime.cpp:294
+#: src/backend/script/python/PythonScriptRuntime.cpp:302
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "Gömülü Python yorumcusu yolu okunamadı."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:305
+#: src/backend/script/python/PythonScriptRuntime.cpp:310
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7709,7 +7709,7 @@ msgstr ""
 "Gömülü Python yorumlayıcısı, yapılandırılmış “%1” yorumlayıcısıyla "
 "eşleşmiyor."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:402
+#: src/backend/script/python/PythonScriptRuntime.cpp:407
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -10195,7 +10195,7 @@ msgstr "%1: X aralığı %2 ölçeği değiştir"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
 #, kde-format
 msgid "%1: set default plot range"
-msgstr "%1: Öntanımlı çizim erimi ayarla"
+msgstr "%1: Varsayılan çizim erimi ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1818
 #, kde-format
@@ -10243,7 +10243,7 @@ msgstr "%1: %2 temasını yükle"
 #: src/backend/worksheet/Worksheet.cpp:894
 #, kde-format
 msgid "%1: load default theme"
-msgstr "%1: Öntanımlı temayı yükle"
+msgstr "%1: Varsayılan temayı yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:6026
@@ -12937,7 +12937,7 @@ msgstr "tür"
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
 msgid "Output resolution in DPI for raster formats (default: 300)."
-msgstr "Raster biçimler için DPI türünde çıktı biçimi (öntanımlı: 300)."
+msgstr "Raster biçimler için DPI türünde çıktı biçimi (varsayılan: 300)."
 
 #: src/frontend/CLIProcessor.cpp:269
 #, kde-format
@@ -15252,7 +15252,7 @@ msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
-"Çubuğun genişliğini öntanımlı değerine göre denetlemek için çarpanı yüzde "
+"Çubuğun genişliğini varsayılan değerine göre denetlemek için çarpanı yüzde "
 "türünden belirt, tüm çubuklara uygula"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:408
@@ -15328,7 +15328,7 @@ msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr ""
-"Kutunun genişliğini öntanımlı değerine göre denetlemek için çarpanı yüzde "
+"Kutunun genişliğini varsayılan değerine göre denetlemek için çarpanı yüzde "
 "türünden belirtin."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:249
@@ -16387,7 +16387,7 @@ msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
-"İşaretlenmişse öntanımlı uygulama rıhtımının durumu proje dosyasına "
+"İşaretlenmişse varsayılan uygulama rıhtımının durumu proje dosyasına "
 "kaydedilir ve proje yüklendiğinde yeniden açılır."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:79
@@ -18971,7 +18971,7 @@ msgstr "Çizim Alanı Şablonları"
 #: src/frontend/widgets/ThemesWidget.cpp:71
 #, kde-format
 msgid "Default"
-msgstr "Öntanımlı"
+msgstr "Varsayılan"
 
 #: src/frontend/PlotTemplateDialog.cpp:46
 #, kde-format
@@ -19238,7 +19238,7 @@ msgstr "Düzenleyici"
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
-"Tüm ayarlar öntanımlı değerlere sıfırlanacak. Sürdürmek istiyor musunuz?"
+"Tüm ayarlar varsayılan değerlere sıfırlanacak. Sürdürmek istiyor musunuz?"
 
 #: src/frontend/SettingsDialog.cpp:181
 #, kde-format
@@ -19388,7 +19388,7 @@ msgid ""
 "properties."
 msgstr ""
 "Rıhtımların durumunu (konumu ve geometrisi) proje dosyasına kaydedin.\n"
-"Yeni projeler için öntanımlı davranışı belirler.\n"
+"Yeni projeler için varsayılan davranışı belirler.\n"
 "Bu ayar, her bir proje için proje ayarlarında ayrı ayrı değiştirilebilir."
 
 #: src/frontend/SettingsGeneralPage.cpp:280
@@ -19406,7 +19406,7 @@ msgstr ""
 "kaydedin.\n"
 "Daha uzun proje yükleme süreleri pahasına proje dosyasının boyutunu azaltmak "
 "için bu seçeneğin işaretini kaldırın.\n"
-"Yeni projeler için öntanımlı davranışı belirler.\n"
+"Yeni projeler için varsayılan davranışı belirler.\n"
 "Bu ayar, her bir proje için proje ayarlarında ayrı ayrı değiştirilebilir."
 
 #: src/frontend/SettingsGeneralPage.cpp:287
@@ -19504,7 +19504,7 @@ msgstr ""
 #: src/frontend/SettingsScriptingPage.cpp:76
 #, kde-format
 msgid "%1 (Python: %2) -  Default"
-msgstr "%1 (Python: %2) — Öntanımlı"
+msgstr "%1 (Python: %2) — Varsayılan"
 
 #: src/frontend/SettingsScriptingPage.cpp:85
 #, kde-format
@@ -19550,7 +19550,7 @@ msgstr ""
 msgid "Default theme for newly created worksheets and worksheet objects"
 msgstr ""
 "Yeni oluşturulan çalışma sayfaları ve çalışma sayfası nesneleri için "
-"öntanımlı tema."
+"varsayılan tema."
 
 #: src/frontend/SettingsWorksheetPage.cpp:30
 #, kde-format
@@ -20511,7 +20511,7 @@ msgstr "Satırın sonu"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1542
 #, kde-format
 msgid "Match any character excluding new line (by default)"
-msgstr "Yeni satır dışında herhangi bir karakteri eşleştir (öntanımlı)"
+msgstr "Yeni satır dışında herhangi bir karakteri eşleştir (varsayılan)"
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1543
 #, kde-format
@@ -21460,12 +21460,12 @@ msgstr "Geçerli özellikleri bir şablon olarak kaydet"
 #: src/frontend/TemplateHandler.cpp:185
 #, kde-format
 msgid "Save Default"
-msgstr "Öntanımlı Kaydet"
+msgstr "Varsayılan Kaydet"
 
 #: src/frontend/TemplateHandler.cpp:186
 #, kde-format
 msgid "Save current properties as default"
-msgstr "Geçerli özellikleri öntanımlı olarak kaydet"
+msgstr "Geçerli özellikleri varsayılan olarak kaydet"
 
 #: src/frontend/TemplateHandler.cpp:199
 #, kde-format
@@ -21530,7 +21530,7 @@ msgstr "“%1” şablonu kaydedildi."
 #: src/frontend/TemplateHandler.cpp:362
 #, kde-format
 msgid "New default template was saved."
-msgstr "Yeni öntanımlı şablon kaydedildi."
+msgstr "Yeni varsayılan şablon kaydedildi."
 
 #: src/frontend/ThemeHandler.cpp:141
 #, kde-format

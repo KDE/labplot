@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-23 00:57+0000\n"
+"POT-Creation-Date: 2026-11-24 00:59+0000\n"
 "PO-Revision-Date: 2026-11-19 00:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -7709,13 +7709,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "No se ha podido registrar el módulo pylabplot."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:289
-#: src/backend/script/python/PythonScriptRuntime.cpp:297
+#: src/backend/script/python/PythonScriptRuntime.cpp:294
+#: src/backend/script/python/PythonScriptRuntime.cpp:302
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "Ha fallado la lectura de la ruta del intérprete de Python integrado."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:305
+#: src/backend/script/python/PythonScriptRuntime.cpp:310
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7724,7 +7724,7 @@ msgstr ""
 "El intérprete de Python integrado no coincide con el intérprete configurado "
 "«%1»."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:402
+#: src/backend/script/python/PythonScriptRuntime.cpp:407
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
