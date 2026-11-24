@@ -616,9 +616,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 		if (!Py_IsInitialized())
 			m_initializationError = i18n("Python interpreter is not initialized.");
 		else if (!ready)
-			m_initializationError = s_initializationError.isEmpty()
-				? i18n("Python scripting module (pylabplot) failed to initialize.")
-				: s_initializationError;
+			m_initializationError = s_initializationError.isEmpty() ? i18n("Python scripting module (pylabplot) failed to initialize.") : s_initializationError;
 		return false;
 	}
 
