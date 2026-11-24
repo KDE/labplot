@@ -261,6 +261,11 @@ bool PythonScriptRuntime::initPython() {
 		wcsncpy(pythonHome, wideHome.c_str(), PATH_MAX - 1);
 		pythonHome[PATH_MAX - 1] = L'\0';
 		Py_SetPythonHome(pythonHome);
+
+		// Add application directory to DLL search path for PySide6/shiboken6 DLL loading.
+		// When launched from desktop shortcut, the default DLL search path may not include
+		// the application directory where Qt and Python DLLs reside.
+		SetDllDirectoryW(wideHome.c_str());
 	}
 #endif
 
@@ -318,6 +323,12 @@ bool PythonScriptRuntime::initPython() {
 		// Python auto-detects its prefix. Users can override via the standard
 		// PYTHONHOME environment variable if needed.
 		Py_Initialize();
+	}
+
+	if (!Py_IsInitialized()) {
+		s_initializationError = i18n("Failed to initialize the Python interpreter.");
+		WARN("Py_Initialize() failed")
+		return false;
 	}
 
 	PySys_SetArgvEx(1, argv, 0); // this will be removed in removed in python 3.15 but there are alternatives
@@ -601,8 +612,15 @@ bool PythonScriptRuntime::unRedirectOutput() {
 bool PythonScriptRuntime::exec(const QString& code) {
 	INFO(Q_FUNC_INFO)
 	// Python interpreter or pylabplot module is not initialized
-	if (!Py_IsInitialized() || !ready)
+	if (!Py_IsInitialized() || !ready) {
+		if (!Py_IsInitialized())
+			m_initializationError = i18n("Python interpreter is not initialized.");
+		else if (!ready)
+			m_initializationError = s_initializationError.isEmpty()
+				? i18n("Python scripting module (pylabplot) failed to initialize.")
+				: s_initializationError;
 		return false;
+	}
 
 	PyGILState_STATE gil = PyGILState_Ensure();
 
