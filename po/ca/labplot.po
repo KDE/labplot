@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2026-11-20 21:05+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -7787,13 +7787,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "Ha fallat en registrar el mòdul «pylabplot»."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "No s'ha pogut llegir el camí de l'intèrpret de Python incrustat."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7801,7 +7801,13 @@ msgid ""
 msgstr ""
 "L'intèrpret Python incrustat no coincideix amb l'intèrpret configurat «%1»."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to initialize the Python interpreter."
+msgstr "Ha fallat en inicialitzar l'entorn d'execució de l'script %1."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -7809,6 +7815,16 @@ msgid ""
 msgstr ""
 "No s'ha pogut inicialitzar el mòdul «pylabplot». Comproveu l'intèrpret del "
 "Python i la instal·lació del PySide6 a la configuració de creació de scripts."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, kde-format
+msgid "Python interpreter is not initialized."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
+msgstr ""
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
@@ -7820,7 +7836,7 @@ msgstr "Llenguatge de creació de scripts no admès: %1"
 msgid "Python file (*.py)"
 msgstr "Fitxer Python (*.py)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, kde-format
 msgid "no script element found"
 msgstr "no s'ha trobat cap element de script"
@@ -7840,28 +7856,28 @@ msgstr "%1: executa l'script %2"
 msgid "Failed to initialize the %1 script runtime."
 msgstr "Ha fallat en inicialitzar l'entorn d'execució de l'script %1."
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, kde-format
+msgid "Failed to run the script."
+msgstr "Ha fallat en executar l'script."
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:368
-#, kde-format
-msgid "Failed to run the script."
-msgstr "Ha fallat en executar l'script."
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr "Ja s'està executant un script."
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "Manca l'atribut «runtime» o està buit"
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "entorn d'execució de l'script «%1» no admès"

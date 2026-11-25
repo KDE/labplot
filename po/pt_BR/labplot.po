@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2026-11-17 05:49-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@kde.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -7717,13 +7717,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "Falha ao registrar o módulo pylabplot."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "Falha ao ler o caminho do interpretador Python incorporado."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7732,7 +7732,13 @@ msgstr ""
 "O interpretador Python incorporado não corresponde ao interpretador "
 "configurado '%1'."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to initialize the Python interpreter."
+msgstr "Falha ao inicializar o ambiente de execução de script %1."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -7740,6 +7746,17 @@ msgid ""
 msgstr ""
 "Falha ao inicializar o módulo pylabplot. Verifique o interpretador Python e "
 "a instalação do PySide6 nas configurações de script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Python interpreter is not initialized."
+msgstr "Falha ao abrir"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
+msgstr ""
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
@@ -7751,7 +7768,7 @@ msgstr "Linguagem de script não suportada: %1"
 msgid "Python file (*.py)"
 msgstr "Arquivo python (*.py)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, kde-format
 msgid "no script element found"
 msgstr "nenhum elemento de script encontrado"
@@ -7771,28 +7788,28 @@ msgstr "%1: executar script %2"
 msgid "Failed to initialize the %1 script runtime."
 msgstr "Falha ao inicializar o ambiente de execução de script %1."
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, kde-format
+msgid "Failed to run the script."
+msgstr "Falha ao executar o script."
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Script"
 
-#: src/backend/script/Script.cpp:368
-#, kde-format
-msgid "Failed to run the script."
-msgstr "Falha ao executar o script."
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr "Um script já está em execução."
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "Falta o atributo 'runtime' ou está em branco"
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "ambiente de execução de script '%1' não suportado"
@@ -29195,11 +29212,6 @@ msgstr "Não foi possível abrir o arquivo:"
 #~| msgid "Custom grid"
 #~ msgid "Custom Names:"
 #~ msgstr "Grade personalizada"
-
-#, fuzzy
-#~| msgid "Failed to open"
-#~ msgid "Filter not initialized"
-#~ msgstr "Falha ao abrir"
 
 #, fuzzy
 #~| msgid "Data Type"

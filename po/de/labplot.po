@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2026-10-15 23:35+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -7690,24 +7690,41 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "Fehler beim Parsen der Datei."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Failed to initialize the Python interpreter."
+msgstr "Initialisierung von %1 fehlgeschlagen."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, fuzzy, kde-format
+#| msgid "Filter not initialized"
+msgid "Python interpreter is not initialized."
+msgstr "Filter nicht initialisiert"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
 
 #: src/backend/script/Script.cpp:81
@@ -7720,7 +7737,7 @@ msgstr ""
 msgid "Python file (*.py)"
 msgstr "Pythondatei (*.py)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, kde-format
 msgid "no script element found"
 msgstr "Kein Skriptelement gefunden"
@@ -7742,29 +7759,29 @@ msgstr "%1: starte %2 Skript"
 msgid "Failed to initialize the %1 script runtime."
 msgstr "Initialisierung von %1 fehlgeschlagen."
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, kde-format
+msgid "Failed to run the script."
+msgstr "Laufzeitfehler des Skriptes."
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Skript"
 
-#: src/backend/script/Script.cpp:368
-#, kde-format
-msgid "Failed to run the script."
-msgstr "Laufzeitfehler des Skriptes."
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr "Ein Skript läuft bereits."
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, fuzzy, kde-format
 #| msgid "Attribute 'name' is missing or empty."
 msgid "attribute 'runtime' is missing or empty"
 msgstr "Das Attribut „name“ fehlt oder hat keinen Wert."
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr ""
@@ -29037,9 +29054,6 @@ msgstr "Fehler beim Öffnen der Datei:"
 
 #~ msgid "Custom Names:"
 #~ msgstr "Eigene Namen:"
-
-#~ msgid "Filter not initialized"
-#~ msgstr "Filter nicht initialisiert"
 
 #~ msgid "Data Type:"
 #~ msgstr "Datentyp:"

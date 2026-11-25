@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -7681,24 +7681,41 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "सञ्चिकायाः विश्लेषणं कर्तुं असफलम् ।"
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Failed to initialize the Python interpreter."
+msgstr "%1 आरम्भं कर्तुं असफलम् ।"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, fuzzy, kde-format
+#| msgid "Filter not initialized"
+msgid "Python interpreter is not initialized."
+msgstr "फ़िल्टर आरम्भः न कृतः"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
 
 #: src/backend/script/Script.cpp:81
@@ -7712,7 +7729,7 @@ msgstr ""
 msgid "Python file (*.py)"
 msgstr "पाठसञ्चिका (*.txt)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, fuzzy, kde-format
 #| msgid "no note element found"
 msgid "no script element found"
@@ -7735,31 +7752,31 @@ msgstr ""
 msgid "Failed to initialize the %1 script runtime."
 msgstr "%1 आरम्भं कर्तुं असफलम् ।"
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to run the script."
+msgstr "सञ्चिकां उद्घाटयितुं असफलम्।"
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Script"
 msgstr "&प्रलेखन"
 
-#: src/backend/script/Script.cpp:368
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
-msgid "Failed to run the script."
-msgstr "सञ्चिकां उद्घाटयितुं असफलम्।"
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr ""
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, fuzzy, kde-format
 #| msgid "Attribute 'name' is missing or empty."
 msgid "attribute 'runtime' is missing or empty"
 msgstr "'नाम' इति विशेषणं लुप्तं वा रिक्तं वा अस्ति ।"
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr ""
@@ -28984,9 +29001,6 @@ msgstr "सञ्चिकां उद्घाटयितुं असमर�
 
 #~ msgid "Custom Names:"
 #~ msgstr "कस्टम् नाम :"
-
-#~ msgid "Filter not initialized"
-#~ msgstr "फ़िल्टर आरम्भः न कृतः"
 
 #~ msgid "Data Type:"
 #~ msgstr "दत्तांशप्रकारः :"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2026-11-13 02:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -7694,24 +7694,40 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "ფაილის დამუშავება ჩავარდა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "failed to initialize the script runtime '%1'"
+msgid "Failed to initialize the Python interpreter."
+msgstr "ინიციალიზაციის შეცდომა სკრიპტის გაშვების გარემოსთვის '%1'"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, kde-format
+msgid "Python interpreter is not initialized."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
 
 #: src/backend/script/Script.cpp:81
@@ -7725,7 +7741,7 @@ msgstr "მხარდაუჭერელი სკრიპტის გა�
 msgid "Python file (*.py)"
 msgstr "Python-ის ფაილი (*.py)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, kde-format
 msgid "no script element found"
 msgstr "სკრიპტის ელემენტი აღმოჩენილი არაა"
@@ -7747,28 +7763,28 @@ msgstr "%1: %2 სკრიპტის გაშვება"
 msgid "Failed to initialize the %1 script runtime."
 msgstr "ინიციალიზაციის შეცდომა სკრიპტის გაშვების გარემოსთვის '%1'"
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, kde-format
+msgid "Failed to run the script."
+msgstr "სკრიპტის გაშვება ჩავარდა."
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "სკრიპტი"
 
-#: src/backend/script/Script.cpp:368
-#, kde-format
-msgid "Failed to run the script."
-msgstr "სკრიპტის გაშვება ჩავარდა."
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr "სკრიპტი უკვე გაშვებულია."
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "ატრიბუტი \"runtime\" აკლია ან ცარიელია"
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "მხარდაუჭერელი სკრიპტის გაშვების გარემო '%1'"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2026-11-19 00:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -7709,13 +7709,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "No se ha podido registrar el módulo pylabplot."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "Ha fallado la lectura de la ruta del intérprete de Python integrado."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7724,7 +7724,13 @@ msgstr ""
 "El intérprete de Python integrado no coincide con el intérprete configurado "
 "«%1»."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to initialize the Python interpreter."
+msgstr "No se ha podido inicializar el entorno de ejecución de guiones «%1»."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -7732,6 +7738,16 @@ msgid ""
 msgstr ""
 "No se ha podido inicializar el módulo pylabplot. Compruebe la instalación "
 "del intérprete de Python y de PySide6 en las preferencias de guiones."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, kde-format
+msgid "Python interpreter is not initialized."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
+msgstr ""
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
@@ -7743,7 +7759,7 @@ msgstr "Lenguaje de guiones no compatible: %1"
 msgid "Python file (*.py)"
 msgstr "Archivo de Python (*.py)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, kde-format
 msgid "no script element found"
 msgstr "no se ha encontrado ningún elemento de guion"
@@ -7764,28 +7780,28 @@ msgstr "%1: ejecutar el guion %2"
 msgid "Failed to initialize the %1 script runtime."
 msgstr "No se ha podido inicializar el entorno de ejecución de guiones «%1»."
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, kde-format
+msgid "Failed to run the script."
+msgstr "La ejecución del guion ha fallado."
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Guion"
 
-#: src/backend/script/Script.cpp:368
-#, kde-format
-msgid "Failed to run the script."
-msgstr "La ejecución del guion ha fallado."
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr "Ya se está ejecutando un guion."
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "el atributo «runtime» falta o está vacío."
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "entorno de ejecución de guiones «%1» no compatible."

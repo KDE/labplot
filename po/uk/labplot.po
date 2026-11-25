@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2026-11-17 08:39+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -7753,13 +7753,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "Не вдалося зареєструвати модуль pylabplot."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "Не вдалося прочитати шлях до вбудованого інтерпретатора Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7768,7 +7768,13 @@ msgstr ""
 "Вбудований інтерпретатор Python не збігається з налаштованим інтерпретатором "
 "«%1»."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to initialize the Python interpreter."
+msgstr "Не вдалося ініціалізувати середовище виконання скрипту «%1»"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -7776,6 +7782,17 @@ msgid ""
 msgstr ""
 "Не вдалося ініціалізувати модуль pylabplot. Перевірте інтерпретатор Python і "
 "встановлення PySide6 у параметрах скриптів."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, fuzzy, kde-format
+#| msgid "Filter not initialized"
+msgid "Python interpreter is not initialized."
+msgstr "Фільтр не ініціалізовано"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
+msgstr ""
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
@@ -7787,7 +7804,7 @@ msgstr "Непідтримувана скриптова мова: %1"
 msgid "Python file (*.py)"
 msgstr "файл Python (*.py)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, kde-format
 msgid "no script element found"
 msgstr "не знайдено елемента скрипту"
@@ -7807,28 +7824,28 @@ msgstr "%1: запустити скрипт %2"
 msgid "Failed to initialize the %1 script runtime."
 msgstr "Не вдалося ініціалізувати середовище виконання скрипту «%1»"
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, kde-format
+msgid "Failed to run the script."
+msgstr "Не вдалося запустити скрипт."
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Скрипт"
 
-#: src/backend/script/Script.cpp:368
-#, kde-format
-msgid "Failed to run the script."
-msgstr "Не вдалося запустити скрипт."
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr "Скрипт вже запущено."
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "пропущено атрибут «runtime» або вказано порожнє значення атрибута."
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "непідтримуване середовище виконання скрипту «%1»"
@@ -29244,9 +29261,6 @@ msgstr "Не вдалося відкрити файл:"
 
 #~ msgid "Custom Names:"
 #~ msgstr "Нетипові назви:"
-
-#~ msgid "Filter not initialized"
-#~ msgstr "Фільтр не ініціалізовано"
 
 #~ msgid "Data Type:"
 #~ msgstr "Тип даних:"

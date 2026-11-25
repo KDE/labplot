@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2026-11-23 18:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -7694,13 +7694,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "pylabplot modülü kaydı yapılamadı."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "Gömülü Python yorumcusu yolu okunamadı."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7709,7 +7709,13 @@ msgstr ""
 "Gömülü Python yorumlayıcısı, yapılandırılmış “%1” yorumlayıcısıyla "
 "eşleşmiyor."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to initialize the Python interpreter."
+msgstr "%1 betiği çalışma zamanı ilklendirilemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -7717,6 +7723,16 @@ msgid ""
 msgstr ""
 "pylabplot modülü ilklendirilemedi. Betik yazımı ayarlarından Python "
 "yorumlayıcısını ve PySide6 kurulumunu denetleyin."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, kde-format
+msgid "Python interpreter is not initialized."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
+msgstr ""
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
@@ -7728,7 +7744,7 @@ msgstr "Desteklenmeyen betik yazımı dili: %1"
 msgid "Python file (*.py)"
 msgstr "Python dosyası (*.py)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, kde-format
 msgid "no script element found"
 msgstr "Bulunan betik ögesi yok"
@@ -7748,28 +7764,28 @@ msgstr "%1: %2 betiğini çalıştır"
 msgid "Failed to initialize the %1 script runtime."
 msgstr "%1 betiği çalışma zamanı ilklendirilemedi."
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, kde-format
+msgid "Failed to run the script."
+msgstr "Betik çalıştırılamadı."
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "Betik"
 
-#: src/backend/script/Script.cpp:368
-#, kde-format
-msgid "Failed to run the script."
-msgstr "Betik çalıştırılamadı."
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr "Bir betik hâlihazırda çalışıyor."
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "“runtime” özniteliği eksik veya boş"
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "Desteklenmeyen betik çalışma zamanı “%1”"

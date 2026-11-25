@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-24 00:59+0000\n"
+"POT-Creation-Date: 2026-11-25 01:21+0000\n"
 "PO-Revision-Date: 2026-11-18 07:57+0200\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -7820,13 +7820,13 @@ msgstr ""
 msgid "Failed to register the pylabplot module."
 msgstr "Не удалось зарегистрировать модуль pylabplot."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:294
-#: src/backend/script/python/PythonScriptRuntime.cpp:302
+#: src/backend/script/python/PythonScriptRuntime.cpp:299
+#: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
 msgstr "Не удалось прочитать путь к встроенному интерпретатору Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:310
+#: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
 msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
@@ -7835,7 +7835,13 @@ msgstr ""
 "Встроенный интерпретатор Python не совпадает с выбранным интерпретатором "
 "«%1»."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:407
+#: src/backend/script/python/PythonScriptRuntime.cpp:329
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to initialize the Python interpreter."
+msgstr "Не удалось инициализировать среду выполнения сценариев «%1»."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
 msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
@@ -7843,6 +7849,16 @@ msgid ""
 msgstr ""
 "Не удалось инициализировать модуль pylabplot. Проверьте интерпретатор Python "
 "и установку PySide6 в параметрах сценариев."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#, fuzzy, kde-format
+msgid "Python interpreter is not initialized."
+msgstr "Не удалось инициализировать %1."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#, kde-format
+msgid "Python scripting module (pylabplot) failed to initialize."
+msgstr ""
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
@@ -7854,7 +7870,7 @@ msgstr "Неподдерживаемый язык сценариев: %1"
 msgid "Python file (*.py)"
 msgstr "Файлы Python (*.py)"
 
-#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:388
+#: src/backend/script/Script.cpp:187 src/backend/script/Script.cpp:391
 #, kde-format
 msgid "no script element found"
 msgstr "Не найден элемент сценария."
@@ -7874,28 +7890,28 @@ msgstr "%1: выполнение сценария «%2»"
 msgid "Failed to initialize the %1 script runtime."
 msgstr "Не удалось инициализировать среду выполнения сценариев «%1»."
 
-#: src/backend/script/Script.cpp:368 src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:370
+#, kde-format
+msgid "Failed to run the script."
+msgstr "Не удалось выполнить сценарий."
+
+#: src/backend/script/Script.cpp:371 src/backend/script/Script.cpp:376
 #: src/frontend/MainWin.cpp:583 src/frontend/MainWin.cpp:1256
 #, kde-format
 msgid "Script"
 msgstr "&Сценарий"
 
-#: src/backend/script/Script.cpp:368
-#, kde-format
-msgid "Failed to run the script."
-msgstr "Не удалось выполнить сценарий."
-
-#: src/backend/script/Script.cpp:373
+#: src/backend/script/Script.cpp:376
 #, kde-format
 msgid "A script is already running."
 msgstr "Сценарий уже выполняется."
 
-#: src/backend/script/Script.cpp:396
+#: src/backend/script/Script.cpp:399
 #, kde-format
 msgid "attribute 'runtime' is missing or empty"
 msgstr "атрибут «runtime» отсутствует или пуст"
 
-#: src/backend/script/Script.cpp:401
+#: src/backend/script/Script.cpp:404
 #, kde-format
 msgid "unsupported script runtime '%1'"
 msgstr "неподдерживаемая среда выполнения сценариев «%1»"
@@ -29456,10 +29472,6 @@ msgstr "Не удалось открыть файл:"
 
 #~ msgid "Custom Names:"
 #~ msgstr "Настраиваемые имена:"
-
-#, fuzzy
-#~ msgid "Filter not initialized"
-#~ msgstr "Не удалось инициализировать %1."
 
 #~ msgid "Data Type:"
 #~ msgstr "Тип данных:"
