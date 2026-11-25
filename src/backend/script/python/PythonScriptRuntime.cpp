@@ -624,12 +624,14 @@ bool PythonScriptRuntime::exec(const QString& code) {
 
 	if (!reset()) {
 		WARN(Q_FUNC_INFO << ", Failed to create new local context for script execution")
+		m_initializationError = i18n("Failed to create execution context for Python script.");
 		PyGILState_Release(gil);
 		return false;
 	}
 
 	if (!m_localDict) {
 		WARN(Q_FUNC_INFO << ", Failed to create new local context for script execution")
+		m_initializationError = i18n("Failed to create local dictionary for Python script.");
 		PyGILState_Release(gil);
 		return false;
 	}
@@ -637,6 +639,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	// Redirect python output to output in our ScriptEditor
 	if (!redirectOutput()) {
 		WARN(Q_FUNC_INFO << ", Redirect python output to output in our ScriptEditor")
+		m_initializationError = i18n("Failed to redirect Python output.");
 		PyGILState_Release(gil);
 		return false;
 	}
@@ -653,6 +656,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 			PyGILState_Release(gil);
 			return true; // This is ok
 		}
+		m_initializationError = i18n("Failed to compile Python script.");
 		PyGILState_Release(gil);
 		return false;
 	}
@@ -671,6 +675,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 			PyGILState_Release(gil);
 			return true; // this is ok
 		}
+		m_initializationError = i18n("Failed to execute Python script.");
 		PyGILState_Release(gil);
 		return false;
 	}
@@ -681,6 +686,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	// Unredirect python output to output in our ScriptEditor
 	if (!unRedirectOutput()) {
 		WARN("Unredirect python output failed")
+		m_initializationError = i18n("Failed to restore Python output.");
 		PyGILState_Release(gil);
 		return false;
 	}
@@ -688,6 +694,7 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	// fetch new variables
 	if (!populateVariableInfo()) {
 		WARN("fetch new variables failed")
+		m_initializationError = i18n("Failed to fetch Python variables.");
 		PyGILState_Release(gil);
 		return false;
 	}

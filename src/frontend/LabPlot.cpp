@@ -166,13 +166,14 @@ int main(int argc, char* argv[]) {
 	INFO("Application dir: " << STDSTRING(applicationPath))
 
 #if defined(Q_OS_WIN) ||  defined(Q_OS_MACOS)
-	// append application path to PATH to find Cantor backends
+	// prepend application path to PATH to find Cantor backends and Python/PySide6 DLLs
+	// Must be prepended (not appended) so our bundled DLLs are found before any system-installed ones
 	QString path = qEnvironmentVariable("PATH");
 	INFO("Old PATH = " << STDSTRING(path))
 #if defined(Q_OS_WIN)
-	path.append(QLatin1String(";") + applicationPath);
+	path = applicationPath + QLatin1String(";") + path;
 #else
-	path.append(QLatin1String(":") + applicationPath);
+	path = applicationPath + QLatin1String(":") + path;
 #endif
 	qputenv("PATH", qPrintable(path));
 	INFO("New PATH = " << STDSTRING(qEnvironmentVariable("PATH")))
