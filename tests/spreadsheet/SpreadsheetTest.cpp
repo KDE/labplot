@@ -3717,7 +3717,7 @@ Vector::BLF::CanMessage2* createCANMessage(uint32_t id, uint64_t timestamp, cons
 	auto* canMessage = new Vector::BLF::CanMessage2();
 	canMessage->channel = 1;
 	canMessage->flags = 1; // TX
-	canMessage->dlc = std::min<uint8_t>(data.size(), 8);
+	canMessage->dlc = static_cast<uint8_t>(std::min(data.size(), size_t(8)));
 	canMessage->id = id;
 	canMessage->objectTimeStamp = timestamp;
 	canMessage->objectFlags = Vector::BLF::ObjectHeader::ObjectFlags::TimeOneNans;
