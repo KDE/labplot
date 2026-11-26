@@ -480,6 +480,7 @@ bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* l
 	auto* sysStream = PySys_GetObject(streamName); // borrowed reference
 	if (!sysStream) {
 		WARN("Failed to get" << streamName)
+		m_initializationError = i18n("Failed to get Python %1 stream.", QString::fromLatin1(streamName));
 		return false;
 	}
 	Py_INCREF(sysStream); // own it
@@ -487,6 +488,7 @@ bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* l
 	auto* loggerStream = PythonScriptRuntime::shibokenConvertToPyObject(loggerInstance); // owned reference
 	if (!loggerStream) {
 		WARN("Failed to convert PythonLogger instance to PyObject")
+		m_initializationError = i18n("Failed to create Python logger object for output redirection.");
 		Py_DECREF(sysStream);
 		return false;
 	}
@@ -494,6 +496,7 @@ bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* l
 	auto* loggerStreamWrite = PyObject_GetAttrString(loggerStream, "write"); // new reference
 	if (!loggerStreamWrite) {
 		WARN("Failed to get write from loggerStream")
+		m_initializationError = i18n("Failed to get write method from Python logger.");
 		Py_DECREF(sysStream);
 		Py_DECREF(loggerStream);
 		return false;
@@ -501,6 +504,7 @@ bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* l
 
 	if (PyObject_SetAttrString(sysStream, "write", loggerStreamWrite) < 0) {
 		WARN("Failed to set write from loggerStream in" << streamName)
+		m_initializationError = i18n("Failed to set write method on Python %1.", QString::fromLatin1(streamName));
 		Py_DECREF(sysStream);
 		Py_DECREF(loggerStream);
 		Py_DECREF(loggerStreamWrite);
@@ -712,6 +716,22 @@ PyTypeObject* PythonScriptRuntime::getPythonLoggerType() {
 	auto* module = PyImport_ImportModule("pylabplot");
 	if (!module) {
 		WARN("Importing module pylabplot failed!")
+		if (PyErr_Occurred()) {
+			PyObject *errorType = nullptr, *errorValue = nullptr, *errorTraceback = nullptr;
+			PyErr_Fetch(&errorType, &errorValue, &errorTraceback);
+			PyErr_NormalizeException(&errorType, &errorValue, &errorTraceback);
+			if (errorValue) {
+				PyObject* description = PyObject_Str(errorValue);
+				if (description) {
+					s_initializationError = i18n("Failed to import pylabplot module: %1", pyUnicodeToQString(description));
+					Py_DECREF(description);
+				}
+			}
+			Py_XDECREF(errorType);
+			Py_XDECREF(errorValue);
+			Py_XDECREF(errorTraceback);
+			PyErr_Clear();
+		}
 		return nullptr;
 	}
 
