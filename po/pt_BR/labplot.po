@@ -12,16 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
-"PO-Revision-Date: 2026-11-17 05:49-0300\n"
-"Last-Translator: Marcus Gama <marcus.gama@kde.org>\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
+"PO-Revision-Date: 2026-11-25 04:59-0300\n"
+"Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.08.2\n"
+"X-Generator: Lokalize 26.08.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:240
 #, kde-format
@@ -7733,10 +7733,9 @@ msgstr ""
 "configurado '%1'."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:329
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the %1 script runtime."
+#, kde-format
 msgid "Failed to initialize the Python interpreter."
-msgstr "Falha ao inicializar o ambiente de execução de script %1."
+msgstr "Falha ao inicializar o interpretador Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
@@ -7748,15 +7747,56 @@ msgstr ""
 "a instalação do PySide6 nas configurações de script."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:617
-#, fuzzy, kde-format
-#| msgid "Failed to open"
+#, kde-format
 msgid "Python interpreter is not initialized."
-msgstr "Falha ao abrir"
+msgstr "O interpretador Python não foi inicializado."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:619
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
-msgstr ""
+msgstr "O módulo de script em Python (pylabplot) falhou ao inicializar."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to create execution context for Python script."
+msgstr "Falha ao executar o script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create local dictionary for Python script."
+msgstr "Falha ao criar a pasta %1 para salvar o conjunto de dados."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to redirect Python output."
+msgstr "Falha ao inicializar o interpretador Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to compile Python script."
+msgstr "Falha ao executar o script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to execute Python script."
+msgstr "Falha ao executar o script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to restore Python output."
+msgstr "Falha ao inicializar o interpretador Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to fetch Python variables."
+msgstr "Falha ao abrir o arquivo."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
 "PO-Revision-Date: 2014-02-22 22:22-0800\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -7607,6 +7607,41 @@ msgstr ""
 #: src/backend/script/python/PythonScriptRuntime.cpp:619
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, kde-format
+msgid "Failed to create execution context for Python script."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, kde-format
+msgid "Failed to create local dictionary for Python script."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, kde-format
+msgid "Failed to redirect Python output."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, kde-format
+msgid "Failed to compile Python script."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, kde-format
+msgid "Failed to execute Python script."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, kde-format
+msgid "Failed to restore Python output."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, kde-format
+msgid "Failed to fetch Python variables."
 msgstr ""
 
 #: src/backend/script/Script.cpp:81

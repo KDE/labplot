@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
-"PO-Revision-Date: 2026-11-23 18:16+0300\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
+"PO-Revision-Date: 2026-11-25 17:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7710,10 +7710,9 @@ msgstr ""
 "eşleşmiyor."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:329
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the %1 script runtime."
+#, kde-format
 msgid "Failed to initialize the Python interpreter."
-msgstr "%1 betiği çalışma zamanı ilklendirilemedi."
+msgstr "Python yorumcusu ilklendirilemedi."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
@@ -7727,12 +7726,54 @@ msgstr ""
 #: src/backend/script/python/PythonScriptRuntime.cpp:617
 #, kde-format
 msgid "Python interpreter is not initialized."
-msgstr ""
+msgstr "Python yorumcusu ilklendirilmemiş."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:619
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
-msgstr ""
+msgstr "Python betik yazımı modülü (pylabplot) ilklendirilemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to create execution context for Python script."
+msgstr "Betik çalıştırılamadı."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create local dictionary for Python script."
+msgstr "Veri kümesini kaydetmek üzere %1 dizini oluşturulamadı."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to redirect Python output."
+msgstr "Python yorumcusu ilklendirilemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to compile Python script."
+msgstr "Betik çalıştırılamadı."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to execute Python script."
+msgstr "Betik çalıştırılamadı."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to restore Python output."
+msgstr "Python yorumcusu ilklendirilemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to fetch Python variables."
+msgstr "Dosya açılamadı."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

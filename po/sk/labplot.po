@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
 "PO-Revision-Date: 2026-09-14 20:10+0200\n"
 "Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -7712,6 +7712,48 @@ msgstr "Inicializácia zlyhala"
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to create execution context for Python script."
+msgstr "Nepodarilo sa otvoriť"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create local dictionary for Python script."
+msgstr "Failed to create the directory %1 to save the dataset."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to redirect Python output."
+msgstr "Nepodarilo sa inicializovať skriptovacie prostredie %1."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to compile Python script."
+msgstr "Nepodarilo sa otvoriť"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to execute Python script."
+msgstr "Nepodarilo sa otvoriť"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to restore Python output."
+msgstr "Nepodarilo sa inicializovať skriptovacie prostredie %1."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to fetch Python variables."
+msgstr "Failed to open the file."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

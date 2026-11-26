@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
-"PO-Revision-Date: 2026-11-18 13:29+0100\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
+"PO-Revision-Date: 2026-11-25 13:47+0100\n"
 "Last-Translator: freek <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7717,10 +7717,9 @@ msgstr ""
 "interpreter '%1'."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:329
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the %1 script runtime."
+#, kde-format
 msgid "Failed to initialize the Python interpreter."
-msgstr "Initialisatie van de script-runtime %1 is mislukt"
+msgstr "Initialisatie van de Python-interpretator is mislukt."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
@@ -7732,15 +7731,56 @@ msgstr ""
 "interpreter en de installatie van PySide6 in de scriptinstellingen."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:617
-#, fuzzy, kde-format
-#| msgid "Filter not initialized"
+#, kde-format
 msgid "Python interpreter is not initialized."
-msgstr "Filter niet geïnitialiseerd"
+msgstr "Python-interpretator is nier geïnitialiseerd."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:619
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
-msgstr ""
+msgstr "Python scripting-module (pylabplot) initialiseren is mislukt."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to create execution context for Python script."
+msgstr "Het script uitvoeren is mislukt."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create local dictionary for Python script."
+msgstr "Map %1 aanmaken voor opslaan van de gegevensset is mislukt."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to redirect Python output."
+msgstr "Initialisatie van de Python-interpretator is mislukt."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to compile Python script."
+msgstr "Het script uitvoeren is mislukt."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to execute Python script."
+msgstr "Het script uitvoeren is mislukt."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to restore Python output."
+msgstr "Initialisatie van de Python-interpretator is mislukt."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to fetch Python variables."
+msgstr "Het bestand openen is mislukt."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

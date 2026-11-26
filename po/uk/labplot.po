@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
-"PO-Revision-Date: 2026-11-17 08:39+0200\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
+"PO-Revision-Date: 2026-11-25 14:19+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7769,10 +7769,9 @@ msgstr ""
 "«%1»."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:329
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the %1 script runtime."
+#, kde-format
 msgid "Failed to initialize the Python interpreter."
-msgstr "Не вдалося ініціалізувати середовище виконання скрипту «%1»"
+msgstr "Не вдалося ініціалізувати інтерпретатор Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
@@ -7784,15 +7783,57 @@ msgstr ""
 "встановлення PySide6 у параметрах скриптів."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:617
-#, fuzzy, kde-format
-#| msgid "Filter not initialized"
+#, kde-format
 msgid "Python interpreter is not initialized."
-msgstr "Фільтр не ініціалізовано"
+msgstr "Не ініціалізовано інтерпретатор Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:619
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
+"Не вдалося ініціалізувати модуль виконання скриптів Python (pylabplot)."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to create execution context for Python script."
+msgstr "Не вдалося запустити скрипт."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create local dictionary for Python script."
+msgstr "Не вдалося створити каталог %1 для збереження набору даних."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to redirect Python output."
+msgstr "Не вдалося ініціалізувати інтерпретатор Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to compile Python script."
+msgstr "Не вдалося запустити скрипт."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to execute Python script."
+msgstr "Не вдалося запустити скрипт."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to restore Python output."
+msgstr "Не вдалося ініціалізувати інтерпретатор Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to fetch Python variables."
+msgstr "Не вдалося відкрити файл."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

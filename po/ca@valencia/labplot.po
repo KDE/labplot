@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
-"PO-Revision-Date: 2026-11-17 08:55+0100\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
+"PO-Revision-Date: 2026-11-25 10:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2618,7 +2618,7 @@ msgstr "El dispositiu no existix."
 #: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr "L'usuari no té suficient permís per a obrir el dispositiu."
+msgstr "L'usuari no té prou permís per a obrir el dispositiu."
 
 #: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
@@ -7803,10 +7803,9 @@ msgstr ""
 "L'intèrpret Python incrustat no coincidix amb l'intèrpret configurat «%1»."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:329
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the %1 script runtime."
+#, kde-format
 msgid "Failed to initialize the Python interpreter."
-msgstr "Ha fallat mentre es restablia l'entorn d'execució de l'script %1."
+msgstr "Ha fallat mentre es restablia l'intèrpret de Python."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
@@ -7820,12 +7819,58 @@ msgstr ""
 #: src/backend/script/python/PythonScriptRuntime.cpp:617
 #, kde-format
 msgid "Python interpreter is not initialized."
-msgstr ""
+msgstr "L'intèrpret de Python no està inicialitzat."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:619
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
+"El mòdul de creació de scripts en Python (pylabplot) ha fallat mentre es "
+"restablia."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to create execution context for Python script."
+msgstr "Ha fallat mentre s'executava l'script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create local dictionary for Python script."
+msgstr ""
+"Ha fallat mentre es creava la carpeta %1 per a guardar-hi el conjunt de "
+"dades."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to redirect Python output."
+msgstr "Ha fallat mentre es restablia l'intèrpret de Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to compile Python script."
+msgstr "Ha fallat mentre s'executava l'script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to execute Python script."
+msgstr "Ha fallat mentre s'executava l'script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to restore Python output."
+msgstr "Ha fallat mentre es restablia l'intèrpret de Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to fetch Python variables."
+msgstr "Ha fallat mentre s'obria el fitxer."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
@@ -8737,7 +8782,7 @@ msgid ""
 "%2"
 msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
-"les mitjanes del grups. %2"
+"les mitjanes dels grups. %2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1357
 #: src/backend/statistics/HypothesisTest.cpp:1415
@@ -8988,8 +9033,8 @@ msgid ""
 "At the significance level %1, the process appears to be stable "
 "(homogeneous). %2"
 msgstr ""
-"Al nivell de significació %1, el procés pareix que que siga estable "
-"(homogeni). %2"
+"Al nivell de significació %1, el procés pareix que siga estable (homogeni). "
+"%2"
 
 #: src/backend/statistics/HypothesisTest.cpp:1996
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:153
@@ -10457,7 +10502,7 @@ msgstr "%1: ajust de la distribució a «%2»"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2190
 #, kde-format
 msgid "Distribution Fit to '%1'"
-msgstr "Ajust de la distribució a «%1»"
+msgstr "Ajusteu la distribució a «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2237
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:951
@@ -17372,7 +17417,7 @@ msgstr ""
 "com la tolerància angular per a simplificar les línies. Reté punts només si "
 "cauen fora d'una distància especificada i un llindar angular des del punt "
 "retingut anterior.</li><li>Lang – reté els punts que són almenys una "
-"distància especificada apart i assegura que cap punt es desvia més d'una "
+"distància especificada a part i assegura que cap punt es desvia més d'una "
 "tolerància especificada des de la línia simplificada.</li></ul>"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:214
@@ -19178,7 +19223,7 @@ msgstr "Dibuixa el diagrama de les dades"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:632
 #, kde-format
 msgid "Statistical Analysis"
-msgstr "Anàlisi estadístic"
+msgstr "Anàlisi estadística"
 
 #: src/frontend/notebook/NotebookView.cpp:335
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:633
@@ -19287,7 +19332,7 @@ msgstr "No s'ha pogut llegir el fitxer"
 #: src/frontend/PlotTemplateDialog.cpp:215
 #, kde-format
 msgid "Failed to load the plot template"
-msgstr "Ha fallat mentre es carregava la plantilla de diagrama"
+msgstr "Ha fallat mentre es carregava la plantilla de diagrames"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
@@ -20564,7 +20609,7 @@ msgstr "Densitat de probabilitat de «%1»"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
-msgstr "Ajust de la distribució a «%1»"
+msgstr "Ajusteu la distribució a «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1199
@@ -22798,7 +22843,7 @@ msgstr "Controlador:"
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:66
 #, kde-format
 msgid "Host:"
-msgstr "Amfitrió:"
+msgstr "Màquina:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPort)
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)

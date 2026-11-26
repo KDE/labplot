@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
-"PO-Revision-Date: 2026-11-13 02:49+0100\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
+"PO-Revision-Date: 2026-11-25 14:12+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7651,6 +7651,8 @@ msgid ""
 "Failed to initialize Python. Check the Python interpreter in the scripting "
 "settings."
 msgstr ""
+"Python-ის ინიციალიზაცია ჩავარდა. შეამოწმეთ Python-ის ინტერპრეტატორი "
+"სკრიპტინგის პარამეტრებში."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:129
 #, kde-format
@@ -7659,6 +7661,9 @@ msgid ""
 "\n"
 "Restart LabPlot after correcting the Python configuration."
 msgstr ""
+"\n"
+"\n"
+"გადატვირთეთ LabPlot Python-ის კონფიგურაციის შესწორების შემდეგ."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:187
 #, kde-format
@@ -7667,6 +7672,9 @@ msgid ""
 "exists. Recreate the virtual environment using Python %3, or select a valid "
 "Python %3 interpreter in the scripting settings."
 msgstr ""
+"მორგებული Python-ის ინტერპრეტატორი '%1' უკავშირდება '%2'-ს, რომელიც აღარ "
+"არსებობს. შექმენით ვირტუალური გარემო Python %3-ით, ან აირჩიეთ Python %3-"
+"სწორი ინტერპრეტატორი სკრიპტინგის პარამეტრებში."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:193
 #, kde-format
@@ -7674,12 +7682,14 @@ msgid ""
 "The configured Python interpreter '%1' does not exist or is not executable. "
 "Select a valid interpreter in the scripting settings."
 msgstr ""
+"მორგებული Python-ის ინტერპრეტატორი '%1' არ არსებობს ან გაშვებადი არა. "
+"აირჩიეთ სწორი ინტერპრეტატორი სკრიპტინგის პარამეტრებში."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:204
 #: src/backend/script/python/PythonScriptRuntime.cpp:207
 #, kde-format
 msgid "Could not determine the Python version of '%1': %2"
-msgstr ""
+msgstr "'%1'-ის Python-ის ვერსიის დადგენა შეუძლებელია: %2"
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:212
 #, kde-format
@@ -7687,18 +7697,19 @@ msgid ""
 "The configured interpreter '%1' uses Python %2, but LabPlot requires Python "
 "%3. Select a compatible interpreter in the scripting settings."
 msgstr ""
+"მორგებული ინტერპრეტატორი '%1' იყენებს Python-ს %2, მაგრამ LabPlot-ს სჭირდება "
+"Python %3. აირჩიეთ თავსებადი ინტერპრეტატორი სკრიპტინგის პარამეტრებში."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:242
-#, fuzzy, kde-format
-#| msgid "Failed to parse the file."
+#, kde-format
 msgid "Failed to register the pylabplot module."
-msgstr "ფაილის დამუშავება ჩავარდა."
+msgstr "pylabplot მოდულის რეგისტრაცია ჩავარდა."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:299
 #: src/backend/script/python/PythonScriptRuntime.cpp:307
 #, kde-format
 msgid "Failed to read the embedded Python interpreter path."
-msgstr ""
+msgstr "ჩაშენებული Python-ის ინტერპრეტატორის ბილიკის წაკითხვა ჩავარდა."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:315
 #, kde-format
@@ -7706,12 +7717,12 @@ msgid ""
 "The embedded Python interpreter does not match the configured interpreter "
 "'%1'."
 msgstr ""
+"ჩაშენებული Python-ის ინტერპრეტატორი არ ემთხვევა მორგებულ ინტერპრეტატორს '%1'."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:329
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the Python interpreter."
-msgstr "ინიციალიზაციის შეცდომა სკრიპტის გაშვების გარემოსთვის '%1'"
+msgstr "Python ინტერპრეტატორის ინიციალიზაცია ვერ მოხერხდა."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:418
 #, kde-format
@@ -7719,22 +7730,65 @@ msgid ""
 "Failed to initialize the pylabplot module. Check the Python interpreter and "
 "PySide6 installation in the scripting settings."
 msgstr ""
+"მოდულის 'pylabplot' ინიციალიზაცია ჩავარდა. შეამოწმეთ Python-ის "
+"ინტერპრეტატორი და PySide6-ს ფაილები სკრიპტინგის პარამეტრებში."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:617
 #, kde-format
 msgid "Python interpreter is not initialized."
-msgstr ""
+msgstr "Python-ის ინტერპრეტატორი ინიციალიზებული არაა."
 
 #: src/backend/script/python/PythonScriptRuntime.cpp:619
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
-msgstr ""
+msgstr "Python-ის სკრიპტინგის მოდულის (pylabplot) ინიციალიზაცია ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to create execution context for Python script."
+msgstr "სკრიპტის გაშვება ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create local dictionary for Python script."
+msgstr "ჩავარდა შექმნა საქაღალდისთვის %1 მონაცემების ნაკრების შესანახად."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to redirect Python output."
+msgstr "Python ინტერპრეტატორის ინიციალიზაცია ვერ მოხერხდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to compile Python script."
+msgstr "სკრიპტის გაშვება ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to execute Python script."
+msgstr "სკრიპტის გაშვება ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to restore Python output."
+msgstr "Python ინტერპრეტატორის ინიციალიზაცია ვერ მოხერხდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to fetch Python variables."
+msgstr "ფაილის გახსნის შეცდომა."
 
 #: src/backend/script/Script.cpp:81
-#, fuzzy, kde-format
-#| msgid "unsupported script runtime '%1'"
+#, kde-format
 msgid "Unsupported scripting language: %1"
-msgstr "მხარდაუჭერელი სკრიპტის გაშვების გარემო '%1'"
+msgstr "მხარდაუჭერელი სკრიპტინგის ენა: %1"
 
 #: src/backend/script/Script.cpp:123
 #, kde-format
@@ -7747,10 +7801,9 @@ msgid "no script element found"
 msgstr "სკრიპტის ელემენტი აღმოჩენილი არაა"
 
 #: src/backend/script/Script.cpp:195
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the script runtime '%1': %2"
-msgstr "ინიციალიზაციის შეცდომა სკრიპტის გაშვების გარემოსთვის '%1'"
+msgstr "ინიციალიზაციის შეცდომა სკრიპტის გაშვების გარემოსთვის '%1': %2"
 
 #: src/backend/script/Script.cpp:259
 #, kde-format
@@ -7758,10 +7811,9 @@ msgid "%1: run %2 script"
 msgstr "%1: %2 სკრიპტის გაშვება"
 
 #: src/backend/script/Script.cpp:355
-#, fuzzy, kde-format
-#| msgid "failed to initialize the script runtime '%1'"
+#, kde-format
 msgid "Failed to initialize the %1 script runtime."
-msgstr "ინიციალიზაციის შეცდომა სკრიპტის გაშვების გარემოსთვის '%1'"
+msgstr "ინიციალიზაციის შეცდომა სკრიპტის '%1' გაშვების გარემოსთვის."
 
 #: src/backend/script/Script.cpp:370
 #, kde-format
@@ -19556,10 +19608,9 @@ msgid "Ask for confirmation when restarting the backend system."
 msgstr "დადასტურების თხოვნა უკანაბოლოს სისტემის გადატვირთვისას."
 
 #: src/frontend/SettingsScriptingPage.cpp:39
-#, fuzzy, kde-format
-#| msgid "The selected virtual environment does not contain a pyvenv.cfg file."
+#, kde-format
 msgid "Select a virtual environment folder containing pyvenv.cfg."
-msgstr "არჩეული ვირტუალური გარემო ფაილს pyvenv.cfg არ შეიცავს."
+msgstr "აირჩიეთ pyvenv.cfg-ის შემცველი ვირტუალური გარემოს საქაღალდე."
 
 #: src/frontend/SettingsScriptingPage.cpp:45
 #, kde-format
@@ -19567,19 +19618,19 @@ msgid ""
 "Installation path of the Python interpreter currently running. Virtual "
 "environments using the same Python installation share this path."
 msgstr ""
+"ამჟამად გაშვებული Python-ის ინტერპრეტატორის დაყენების ბილიკი. ვირტუალური "
+"გარემოები, რომლებიც იყენებენ ერთსა და იმავე Python-ის, ამ ბილიკს იყენებენ."
 
 #: src/frontend/SettingsScriptingPage.cpp:76
 #, kde-format
 msgid "%1 (Python: %2) -  Default"
-msgstr ""
+msgstr "%1 (Python: %2) -  ნაგულისხმევი"
 
 #: src/frontend/SettingsScriptingPage.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the Virtual Environment"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Virtual Environment Folder"
-msgstr "აირჩიეთ ვირტუალური გარემო"
+msgstr "ვირტუალური გარემოს საქაღალდის არჩევა"
 
 #: src/frontend/SettingsScriptingPage.cpp:227
 #, kde-format
@@ -19587,12 +19638,13 @@ msgid ""
 "The selected environment differs from the saved one. Save and restart "
 "LabPlot for the change to take effect."
 msgstr ""
+"არჩეული გარემო განსხვავდება შენახულისგან. ცვლილებების ძალაში შესასვლელად "
+"შეინახეთ და გაუშვით LabPlot თავიდან."
 
 #: src/frontend/SettingsScriptingPage.cpp:303
-#, fuzzy, kde-format
-#| msgid "%1 (System, %2)"
+#, kde-format
 msgid "%1 (Python: %2)"
-msgstr "%1 (სისტემა, %2)"
+msgstr "%1 (Python: %2)"
 
 #: src/frontend/SettingsScriptingPage.cpp:308
 #, kde-format

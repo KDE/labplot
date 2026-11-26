@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-25 01:21+0000\n"
+"POT-Creation-Date: 2026-11-26 00:58+0000\n"
 "PO-Revision-Date: 2026-11-18 10:39+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -7764,6 +7764,48 @@ msgstr "Filtro non inizializzato"
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to create execution context for Python script."
+msgstr "Impossibile eseguire lo script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create local dictionary for Python script."
+msgstr "Impossibile creare la cartella %1 per salvare l'insieme di dati."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to redirect Python output."
+msgstr "Impossibile inizializzare il runtime dello script «%1»."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to compile Python script."
+msgstr "Impossibile eseguire lo script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to execute Python script."
+msgstr "Impossibile eseguire lo script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the %1 script runtime."
+msgid "Failed to restore Python output."
+msgstr "Impossibile inizializzare il runtime dello script «%1»."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to fetch Python variables."
+msgstr "Impossibile aprire il file."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
