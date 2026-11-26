@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:10+0000\n"
-"PO-Revision-Date: 2026-11-11 20:29+0100\n"
+"PO-Revision-Date: 2026-11-20 20:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2489,7 +2489,7 @@ msgstr "El dispositiu no existix."
 #: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr "L'usuari no té suficient permís per a obrir el dispositiu."
+msgstr "L'usuari no té prou permís per a obrir el dispositiu."
 
 #: src/backend/datasources/LiveDataSource.cpp:737
 #, kde-format
@@ -8789,7 +8789,7 @@ msgstr "%1: ajust de la distribució a «%2»"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1912
 #, kde-format
 msgid "Distribution Fit to '%1'"
-msgstr "Ajust de la distribució a «%1»"
+msgstr "Ajusteu la distribució a «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
 #, kde-format
@@ -17455,7 +17455,7 @@ msgstr "Densitat de probabilitat de «%1»"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
-msgstr "Ajust de la distribució a «%1»"
+msgstr "Ajusteu la distribució a «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:948
