@@ -524,6 +524,10 @@ bool PythonScriptRuntime::redirectOutput() {
 
 	if (!Py_IsInitialized() || !ready) {
 		WARN(Q_FUNC_INFO << "Python interpreter or pylabplot module is not initialized")
+		if (!Py_IsInitialized())
+			m_initializationError = i18n("Cannot redirect output: Python interpreter is not initialized.");
+		else
+			m_initializationError = i18n("Cannot redirect output: Python scripting module (pylabplot) is not ready.");
 		return false;
 	}
 
@@ -643,7 +647,8 @@ bool PythonScriptRuntime::exec(const QString& code) {
 	// Redirect python output to output in our ScriptEditor
 	if (!redirectOutput()) {
 		WARN(Q_FUNC_INFO << ", Redirect python output to output in our ScriptEditor")
-		m_initializationError = i18n("Failed to redirect Python output.");
+		if (m_initializationError.isEmpty())
+			m_initializationError = i18n("Failed to redirect Python output.");
 		PyGILState_Release(gil);
 		return false;
 	}
@@ -731,6 +736,8 @@ PyTypeObject* PythonScriptRuntime::getPythonLoggerType() {
 			Py_XDECREF(errorValue);
 			Py_XDECREF(errorTraceback);
 			PyErr_Clear();
+		} else {
+			s_initializationError = i18n("Failed to import pylabplot module (no Python error available).");
 		}
 		return nullptr;
 	}
@@ -738,6 +745,10 @@ PyTypeObject* PythonScriptRuntime::getPythonLoggerType() {
 	Py_DECREF(module);
 
 	cachedType = Shiboken::SbkType<::PythonLogger>();
+	if (!cachedType) {
+		s_initializationError = i18n("Failed to get shiboken type for PythonLogger.");
+		WARN("Shiboken::SbkType<PythonLogger>() returned nullptr")
+	}
 
 	return cachedType;
 }
@@ -745,16 +756,43 @@ PyTypeObject* PythonScriptRuntime::getPythonLoggerType() {
 // Converts a C++ object to a PyObject (owned reference)
 PyObject* PythonScriptRuntime::shibokenConvertToPyObject(PythonLogger* object) {
 	INFO(Q_FUNC_INFO)
-	if (!Py_IsInitialized() || !ready)
+	if (!Py_IsInitialized() || !ready) {
+		if (!Py_IsInitialized())
+			s_initializationError = i18n("Cannot convert to Python object: interpreter not initialized.");
+		else
+			s_initializationError = i18n("Cannot convert to Python object: pylabplot module not ready.");
 		return nullptr;
+	}
 
 	auto* loggerObject = getPythonLoggerType();
 	if (!loggerObject) {
 		WARN("Failed to get Python type for PythonLogger")
+		if (s_initializationError.isEmpty())
+			s_initializationError = i18n("Failed to get Python type for logger object.");
 		return nullptr;
 	}
 
 	auto* po = Shiboken::Object::newObject(loggerObject, object);
+	if (!po) {
+		WARN("Shiboken::Object::newObject() returned nullptr")
+		s_initializationError = i18n("Failed to create Python wrapper for logger object.");
+		if (PyErr_Occurred()) {
+			PyObject *errorType = nullptr, *errorValue = nullptr, *errorTraceback = nullptr;
+			PyErr_Fetch(&errorType, &errorValue, &errorTraceback);
+			PyErr_NormalizeException(&errorType, &errorValue, &errorTraceback);
+			if (errorValue) {
+				PyObject* description = PyObject_Str(errorValue);
+				if (description) {
+					s_initializationError += QStringLiteral("\n") + pyUnicodeToQString(description);
+					Py_DECREF(description);
+				}
+			}
+			Py_XDECREF(errorType);
+			Py_XDECREF(errorValue);
+			Py_XDECREF(errorTraceback);
+			PyErr_Clear();
+		}
+	}
 
 	return po;
 }
