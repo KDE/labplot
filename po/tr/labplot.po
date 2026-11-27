@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-26 00:58+0000\n"
-"PO-Revision-Date: 2026-11-25 17:58+0300\n"
+"POT-Creation-Date: 2026-11-27 00:59+0000\n"
+"PO-Revision-Date: 2026-11-26 18:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1172,12 +1172,12 @@ msgid ""
 "Sunday</td></tr></table><br><br>In case the provided expression is empty, "
 "the format will be auto-detected."
 msgstr ""
-"Biçim dizisinin tarih bölümü için kullanılabilen ifadeler: <table><tr><td>d</"
-"td><td>başında sıfır olmadan sayı olarak gün (1’den 31’e).</td></"
-"tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01’den 31’e).</td></"
-"tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. “Pzt”den "
-"“Paz”a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
-"tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. “Pazartesi”den "
+"Biçim dizgesinin tarih bölümü için kullanılabilen ifadeler: "
+"<table><tr><td>d</td><td>başında sıfır olmadan sayı olarak gün (1’den 31’e)."
+"</td></tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01’den 31’e)."
+"</td></tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. "
+"“Pzt”den “Paz”a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</"
+"td></tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. “Pazartesi”den "
 "“Pazar”a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
 "tr><tr><td>M</td><td>başında sıfır olmadan ay (1’den 12’ye).</td></"
 "tr><tr><td>MM</td><td>başına sıfır koyarak ay (01’den 12’ye).</td></"
@@ -1187,9 +1187,9 @@ msgstr ""
 "“Aralık”a). Sistemin yerel ayarını adı yerelleştirmek için kullanır.</td></"
 "tr><tr><td>yy</td><td>iki rakam olarak yıl (00’dan 99’a).</td></"
 "tr><tr><td>yyyy</td><td>4 rakam olarak yıl. Yıl negatif ise önüne eksi "
-"işareti eklenir.</td></tr></table><br><br>Biçim dizisindeki zaman kısmı için "
-"kullanılabilen ifadeler<table><tr><td>h</td><td>başında sıfır olmadan saat "
-"(0’dan 23’e veya 1’den 12’ye ÖÖ/ÖS gösteriliyorsa)</td></tr><tr><td>hh</"
+"işareti eklenir.</td></tr></table><br><br>Biçim dizgesindeki zaman kısmı "
+"için kullanılabilen ifadeler<table><tr><td>h</td><td>başında sıfır olmadan "
+"saat (0’dan 23’e veya 1’den 12’ye ÖÖ/ÖS gösteriliyorsa)</td></tr><tr><td>hh</"
 "td><td>başında sıfır olacak şekilde saat (00’dan 23’e veya 01’den 12’ye ÖÖ/"
 "ÖS gösteriliyorsa)</td></tr><tr><td>H</td><td>başında sıfır olmadan saat "
 "(0’dan 23’e ÖÖ/ÖS gösteriliyor olsa bile)</td></tr><tr><td>HH</"
@@ -7723,57 +7723,80 @@ msgstr ""
 "pylabplot modülü ilklendirilemedi. Betik yazımı ayarlarından Python "
 "yorumlayıcısını ve PySide6 kurulumunu denetleyin."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#: src/backend/script/python/PythonScriptRuntime.cpp:483
+#, fuzzy, kde-format
+#| msgid "Failed to execute Python script."
+msgid "Failed to get Python %1 stream."
+msgstr "Python betiği yürütülemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:491
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to create Python logger object for output redirection."
+msgstr "Python çıktısı geri yüklenemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:499
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to get write method from Python logger."
+msgstr "Python çıktısı geri yüklenemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:507
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to set write method on Python %1."
+msgstr "Python çıktısı geri yüklenemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:621
 #, kde-format
 msgid "Python interpreter is not initialized."
 msgstr "Python yorumcusu ilklendirilmemiş."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#: src/backend/script/python/PythonScriptRuntime.cpp:623
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr "Python betik yazımı modülü (pylabplot) ilklendirilemedi."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:627
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:631
+#, kde-format
 msgid "Failed to create execution context for Python script."
-msgstr "Betik çalıştırılamadı."
+msgstr "Python betiği için yürütme bağlamı oluşturulamadı."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:634
-#, fuzzy, kde-format
-#| msgid "Failed to create the directory %1 to save the dataset."
+#: src/backend/script/python/PythonScriptRuntime.cpp:638
+#, kde-format
 msgid "Failed to create local dictionary for Python script."
-msgstr "Veri kümesini kaydetmek üzere %1 dizini oluşturulamadı."
+msgstr "Python betiği için yerel dizin oluşturulamadı."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:642
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the Python interpreter."
+#: src/backend/script/python/PythonScriptRuntime.cpp:646
+#, kde-format
 msgid "Failed to redirect Python output."
-msgstr "Python yorumcusu ilklendirilemedi."
+msgstr "Python çıktısı yeniden yönlendirilemedi."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:659
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:663
+#, kde-format
 msgid "Failed to compile Python script."
-msgstr "Betik çalıştırılamadı."
+msgstr "Python betiği derlenemedi."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:678
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:682
+#, kde-format
 msgid "Failed to execute Python script."
-msgstr "Betik çalıştırılamadı."
+msgstr "Python betiği yürütülemedi."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:689
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the Python interpreter."
+#: src/backend/script/python/PythonScriptRuntime.cpp:693
+#, kde-format
 msgid "Failed to restore Python output."
-msgstr "Python yorumcusu ilklendirilemedi."
+msgstr "Python çıktısı geri yüklenemedi."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:697
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#: src/backend/script/python/PythonScriptRuntime.cpp:701
+#, kde-format
 msgid "Failed to fetch Python variables."
-msgstr "Dosya açılamadı."
+msgstr "Python değişkenleri getirilemedi."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:726
+#, fuzzy, kde-format
+#| msgid "Failed to register the pylabplot module."
+msgid "Failed to import pylabplot module: %1"
+msgstr "pylabplot modülü kaydı yapılamadı."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

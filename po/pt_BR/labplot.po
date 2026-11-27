@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-26 00:58+0000\n"
-"PO-Revision-Date: 2026-11-25 04:59-0300\n"
+"POT-Creation-Date: 2026-11-27 00:59+0000\n"
+"PO-Revision-Date: 2026-11-26 05:13-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -7746,57 +7746,80 @@ msgstr ""
 "Falha ao inicializar o módulo pylabplot. Verifique o interpretador Python e "
 "a instalação do PySide6 nas configurações de script."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#: src/backend/script/python/PythonScriptRuntime.cpp:483
+#, fuzzy, kde-format
+#| msgid "Failed to execute Python script."
+msgid "Failed to get Python %1 stream."
+msgstr "Falha ao executar o script Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:491
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to create Python logger object for output redirection."
+msgstr "Falha ao restaurar a saída do Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:499
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to get write method from Python logger."
+msgstr "Falha ao restaurar a saída do Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:507
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to set write method on Python %1."
+msgstr "Falha ao restaurar a saída do Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:621
 #, kde-format
 msgid "Python interpreter is not initialized."
 msgstr "O interpretador Python não foi inicializado."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#: src/backend/script/python/PythonScriptRuntime.cpp:623
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr "O módulo de script em Python (pylabplot) falhou ao inicializar."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:627
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:631
+#, kde-format
 msgid "Failed to create execution context for Python script."
-msgstr "Falha ao executar o script."
+msgstr "Falha ao criar contexto de execução para o script Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:634
-#, fuzzy, kde-format
-#| msgid "Failed to create the directory %1 to save the dataset."
+#: src/backend/script/python/PythonScriptRuntime.cpp:638
+#, kde-format
 msgid "Failed to create local dictionary for Python script."
-msgstr "Falha ao criar a pasta %1 para salvar o conjunto de dados."
+msgstr "Falha ao criar dicionário local para o script Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:642
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the Python interpreter."
+#: src/backend/script/python/PythonScriptRuntime.cpp:646
+#, kde-format
 msgid "Failed to redirect Python output."
-msgstr "Falha ao inicializar o interpretador Python."
+msgstr "Falha ao redirecionar a saída do Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:659
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:663
+#, kde-format
 msgid "Failed to compile Python script."
-msgstr "Falha ao executar o script."
+msgstr "Falha ao compilar o script Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:678
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:682
+#, kde-format
 msgid "Failed to execute Python script."
-msgstr "Falha ao executar o script."
+msgstr "Falha ao executar o script Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:689
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the Python interpreter."
+#: src/backend/script/python/PythonScriptRuntime.cpp:693
+#, kde-format
 msgid "Failed to restore Python output."
-msgstr "Falha ao inicializar o interpretador Python."
+msgstr "Falha ao restaurar a saída do Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:697
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#: src/backend/script/python/PythonScriptRuntime.cpp:701
+#, kde-format
 msgid "Failed to fetch Python variables."
-msgstr "Falha ao abrir o arquivo."
+msgstr "Falha ao obter variáveis ​​Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:726
+#, fuzzy, kde-format
+#| msgid "Failed to register the pylabplot module."
+msgid "Failed to import pylabplot module: %1"
+msgstr "Falha ao registrar o módulo pylabplot."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

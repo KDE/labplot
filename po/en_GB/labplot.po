@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-26 00:58+0000\n"
+"POT-Creation-Date: 2026-11-27 00:59+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -7748,58 +7748,88 @@ msgid ""
 "PySide6 installation in the scripting settings."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#: src/backend/script/python/PythonScriptRuntime.cpp:483
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to get Python %1 stream."
+msgstr "Failed to open the file."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:491
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Failed to create Python logger object for output redirection."
+msgstr "Failed to initialise %1."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:499
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Failed to get write method from Python logger."
+msgstr "Failed to initialise %1."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:507
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Failed to set write method on Python %1."
+msgstr "Failed to initialise %1."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:621
 #, fuzzy, kde-format
 #| msgid "Filter not initialized"
 msgid "Python interpreter is not initialized."
 msgstr "Filter not initialised"
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#: src/backend/script/python/PythonScriptRuntime.cpp:623
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:627
+#: src/backend/script/python/PythonScriptRuntime.cpp:631
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to create execution context for Python script."
 msgstr "Failed to open the file."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:634
+#: src/backend/script/python/PythonScriptRuntime.cpp:638
 #, fuzzy, kde-format
 #| msgid "Failed to create the directory %1 to save the dataset."
 msgid "Failed to create local dictionary for Python script."
 msgstr "Failed to create the directory %1 to save the dataset."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:642
+#: src/backend/script/python/PythonScriptRuntime.cpp:646
 #, fuzzy, kde-format
 #| msgid "Failed to initialize %1."
 msgid "Failed to redirect Python output."
 msgstr "Failed to initialise %1."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:659
+#: src/backend/script/python/PythonScriptRuntime.cpp:663
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to compile Python script."
 msgstr "Failed to open the file."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:678
+#: src/backend/script/python/PythonScriptRuntime.cpp:682
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to execute Python script."
 msgstr "Failed to open the file."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:689
+#: src/backend/script/python/PythonScriptRuntime.cpp:693
 #, fuzzy, kde-format
 #| msgid "Failed to initialize %1."
 msgid "Failed to restore Python output."
 msgstr "Failed to initialise %1."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:697
+#: src/backend/script/python/PythonScriptRuntime.cpp:701
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to fetch Python variables."
 msgstr "Failed to open the file."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:726
+#, fuzzy, kde-format
+#| msgid "Failed to parse the file."
+msgid "Failed to import pylabplot module: %1"
+msgstr "Failed to parse the file."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

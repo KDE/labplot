@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-26 00:58+0000\n"
-"PO-Revision-Date: 2026-11-25 14:12+0100\n"
+"POT-Creation-Date: 2026-11-27 00:59+0000\n"
+"PO-Revision-Date: 2026-11-26 06:34+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7733,57 +7733,80 @@ msgstr ""
 "მოდულის 'pylabplot' ინიციალიზაცია ჩავარდა. შეამოწმეთ Python-ის "
 "ინტერპრეტატორი და PySide6-ს ფაილები სკრიპტინგის პარამეტრებში."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:617
+#: src/backend/script/python/PythonScriptRuntime.cpp:483
+#, fuzzy, kde-format
+#| msgid "Failed to execute Python script."
+msgid "Failed to get Python %1 stream."
+msgstr "Python სკრიპტის შესრულება ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:491
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to create Python logger object for output redirection."
+msgstr "Python-ის გამონატანის აღდგენა ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:499
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to get write method from Python logger."
+msgstr "Python-ის გამონატანის აღდგენა ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:507
+#, fuzzy, kde-format
+#| msgid "Failed to restore Python output."
+msgid "Failed to set write method on Python %1."
+msgstr "Python-ის გამონატანის აღდგენა ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:621
 #, kde-format
 msgid "Python interpreter is not initialized."
 msgstr "Python-ის ინტერპრეტატორი ინიციალიზებული არაა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:619
+#: src/backend/script/python/PythonScriptRuntime.cpp:623
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr "Python-ის სკრიპტინგის მოდულის (pylabplot) ინიციალიზაცია ჩავარდა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:627
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:631
+#, kde-format
 msgid "Failed to create execution context for Python script."
-msgstr "სკრიპტის გაშვება ჩავარდა."
+msgstr "Python-ის სკრიპტისთვის შესრულების კონტექსტის შექმნა ჩავარდა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:634
-#, fuzzy, kde-format
-#| msgid "Failed to create the directory %1 to save the dataset."
+#: src/backend/script/python/PythonScriptRuntime.cpp:638
+#, kde-format
 msgid "Failed to create local dictionary for Python script."
-msgstr "ჩავარდა შექმნა საქაღალდისთვის %1 მონაცემების ნაკრების შესანახად."
+msgstr "Python სკრიპტისთვის ადგილობრივი ლექსიკონის შექმნა ჩავარდა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:642
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the Python interpreter."
+#: src/backend/script/python/PythonScriptRuntime.cpp:646
+#, kde-format
 msgid "Failed to redirect Python output."
-msgstr "Python ინტერპრეტატორის ინიციალიზაცია ვერ მოხერხდა."
+msgstr "Python-ის გამონატანის გადამისამართება ჩავარდა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:659
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:663
+#, kde-format
 msgid "Failed to compile Python script."
-msgstr "სკრიპტის გაშვება ჩავარდა."
+msgstr "Python სკრიპტის კომპილაცია ჩავარდა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:678
-#, fuzzy, kde-format
-#| msgid "Failed to run the script."
+#: src/backend/script/python/PythonScriptRuntime.cpp:682
+#, kde-format
 msgid "Failed to execute Python script."
-msgstr "სკრიპტის გაშვება ჩავარდა."
+msgstr "Python სკრიპტის შესრულება ჩავარდა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:689
-#, fuzzy, kde-format
-#| msgid "Failed to initialize the Python interpreter."
+#: src/backend/script/python/PythonScriptRuntime.cpp:693
+#, kde-format
 msgid "Failed to restore Python output."
-msgstr "Python ინტერპრეტატორის ინიციალიზაცია ვერ მოხერხდა."
+msgstr "Python-ის გამონატანის აღდგენა ჩავარდა."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:697
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#: src/backend/script/python/PythonScriptRuntime.cpp:701
+#, kde-format
 msgid "Failed to fetch Python variables."
-msgstr "ფაილის გახსნის შეცდომა."
+msgstr "Python ცვლადების მიღება ჩავარდა."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:726
+#, fuzzy, kde-format
+#| msgid "Failed to register the pylabplot module."
+msgid "Failed to import pylabplot module: %1"
+msgstr "pylabplot მოდულის რეგისტრაცია ჩავარდა."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format
