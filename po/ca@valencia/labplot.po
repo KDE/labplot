@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 00:59+0000\n"
+"POT-Creation-Date: 2026-11-28 01:04+0000\n"
 "PO-Revision-Date: 2026-11-25 10:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -7840,25 +7840,40 @@ msgstr "Ha fallat mentre es restablia l'intèrpret de Python."
 msgid "Failed to set write method on Python %1."
 msgstr "Ha fallat mentre es restablia l'intèrpret de Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:621
+#: src/backend/script/python/PythonScriptRuntime.cpp:528
+#, fuzzy, kde-format
+#| msgid "Python interpreter is not initialized."
+msgid "Cannot redirect output: Python interpreter is not initialized."
+msgstr "L'intèrpret de Python no està inicialitzat."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:530
+#, fuzzy, kde-format
+#| msgid "Python scripting module (pylabplot) failed to initialize."
+msgid ""
+"Cannot redirect output: Python scripting module (pylabplot) is not ready."
+msgstr ""
+"El mòdul de creació de scripts en Python (pylabplot) ha fallat mentre es "
+"restablia."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:625
 #, kde-format
 msgid "Python interpreter is not initialized."
 msgstr "L'intèrpret de Python no està inicialitzat."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:623
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
 "El mòdul de creació de scripts en Python (pylabplot) ha fallat mentre es "
 "restablia."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:631
+#: src/backend/script/python/PythonScriptRuntime.cpp:635
 #, fuzzy, kde-format
 #| msgid "Failed to run the script."
 msgid "Failed to create execution context for Python script."
 msgstr "Ha fallat mentre s'executava l'script."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:638
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
 #, fuzzy, kde-format
 #| msgid "Failed to create the directory %1 to save the dataset."
 msgid "Failed to create local dictionary for Python script."
@@ -7866,41 +7881,78 @@ msgstr ""
 "Ha fallat mentre es creava la carpeta %1 per a guardar-hi el conjunt de "
 "dades."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:646
+#: src/backend/script/python/PythonScriptRuntime.cpp:651
 #, fuzzy, kde-format
 #| msgid "Failed to initialize the Python interpreter."
 msgid "Failed to redirect Python output."
 msgstr "Ha fallat mentre es restablia l'intèrpret de Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:663
+#: src/backend/script/python/PythonScriptRuntime.cpp:668
 #, fuzzy, kde-format
 #| msgid "Failed to run the script."
 msgid "Failed to compile Python script."
 msgstr "Ha fallat mentre s'executava l'script."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:682
+#: src/backend/script/python/PythonScriptRuntime.cpp:687
 #, fuzzy, kde-format
 #| msgid "Failed to run the script."
 msgid "Failed to execute Python script."
 msgstr "Ha fallat mentre s'executava l'script."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:693
+#: src/backend/script/python/PythonScriptRuntime.cpp:698
 #, fuzzy, kde-format
 #| msgid "Failed to initialize the Python interpreter."
 msgid "Failed to restore Python output."
 msgstr "Ha fallat mentre es restablia l'intèrpret de Python."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:701
+#: src/backend/script/python/PythonScriptRuntime.cpp:706
 #, fuzzy, kde-format
 #| msgid "Failed to open the file."
 msgid "Failed to fetch Python variables."
 msgstr "Ha fallat mentre s'obria el fitxer."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:726
+#: src/backend/script/python/PythonScriptRuntime.cpp:731
 #, fuzzy, kde-format
 #| msgid "Failed to register the pylabplot module."
 msgid "Failed to import pylabplot module: %1"
 msgstr "No s'ha pogut registrar el mòdul «pylabplot»."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:740
+#, fuzzy, kde-format
+#| msgid "Failed to insert values into the table."
+msgid "Failed to import pylabplot module (no Python error available)."
+msgstr "Ha fallat mentre s'inserien valors a la taula."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:749
+#, fuzzy, kde-format
+#| msgid "Failed to run the script."
+msgid "Failed to get shiboken type for PythonLogger."
+msgstr "Ha fallat mentre s'executava l'script."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:761
+#, fuzzy, kde-format
+#| msgid "Python interpreter is not initialized."
+msgid "Cannot convert to Python object: interpreter not initialized."
+msgstr "L'intèrpret de Python no està inicialitzat."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:763
+#, kde-format
+msgid "Cannot convert to Python object: pylabplot module not ready."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:771
+#, fuzzy, kde-format
+#| msgid "Failed to initialize the Python interpreter."
+msgid "Failed to get Python type for logger object."
+msgstr "Ha fallat mentre es restablia l'intèrpret de Python."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:778
+#, fuzzy, kde-format
+#| msgid "Failed to create the directory %1 to save the dataset."
+msgid "Failed to create Python wrapper for logger object."
+msgstr ""
+"Ha fallat mentre es creava la carpeta %1 per a guardar-hi el conjunt de "
+"dades."
 
 #: src/backend/script/Script.cpp:81
 #, kde-format

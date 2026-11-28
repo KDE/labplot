@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-27 00:59+0000\n"
+"POT-Creation-Date: 2026-11-28 01:04+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -8193,63 +8193,110 @@ msgstr "%1 – alustaminen epäonnistui."
 msgid "Failed to set write method on Python %1."
 msgstr "%1 – alustaminen epäonnistui."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:621
+#: src/backend/script/python/PythonScriptRuntime.cpp:528
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Cannot redirect output: Python interpreter is not initialized."
+msgstr "%1 – alustaminen epäonnistui."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:530
+#, kde-format
+msgid ""
+"Cannot redirect output: Python scripting module (pylabplot) is not ready."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:625
 #, fuzzy, kde-format
 #| msgid "Failed to initialize %1."
 msgid "Python interpreter is not initialized."
 msgstr "%1 – alustaminen epäonnistui."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:623
+#: src/backend/script/python/PythonScriptRuntime.cpp:627
 #, kde-format
 msgid "Python scripting module (pylabplot) failed to initialize."
 msgstr ""
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:631
+#: src/backend/script/python/PythonScriptRuntime.cpp:635
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create execution context for Python script."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:638
+#: src/backend/script/python/PythonScriptRuntime.cpp:642
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create local dictionary for Python script."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:646
+#: src/backend/script/python/PythonScriptRuntime.cpp:651
 #, fuzzy, kde-format
 #| msgid "Failed to initialize %1."
 msgid "Failed to redirect Python output."
 msgstr "%1 – alustaminen epäonnistui."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:663
+#: src/backend/script/python/PythonScriptRuntime.cpp:668
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to compile Python script."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:682
+#: src/backend/script/python/PythonScriptRuntime.cpp:687
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to execute Python script."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:693
+#: src/backend/script/python/PythonScriptRuntime.cpp:698
 #, fuzzy, kde-format
 #| msgid "Failed to initialize %1."
 msgid "Failed to restore Python output."
 msgstr "%1 – alustaminen epäonnistui."
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:701
+#: src/backend/script/python/PythonScriptRuntime.cpp:706
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to fetch Python variables."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/script/python/PythonScriptRuntime.cpp:726
+#: src/backend/script/python/PythonScriptRuntime.cpp:731
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to import pylabplot module: %1"
+msgstr "Avaaminen epäonnistui"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:740
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to import pylabplot module (no Python error available)."
+msgstr "Avaaminen epäonnistui"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:749
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to get shiboken type for PythonLogger."
+msgstr "Avaaminen epäonnistui"
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:761
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Cannot convert to Python object: interpreter not initialized."
+msgstr "%1 – alustaminen epäonnistui."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:763
+#, kde-format
+msgid "Cannot convert to Python object: pylabplot module not ready."
+msgstr ""
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:771
+#, fuzzy, kde-format
+#| msgid "Failed to initialize %1."
+msgid "Failed to get Python type for logger object."
+msgstr "%1 – alustaminen epäonnistui."
+
+#: src/backend/script/python/PythonScriptRuntime.cpp:778
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to create Python wrapper for logger object."
 msgstr "Avaaminen epäonnistui"
 
 #: src/backend/script/Script.cpp:81
