@@ -300,8 +300,10 @@ void Script::prepareDocument() const {
 	if (!m_kTextEditorDocument->isEmpty())
 		return;
 #ifdef HAVE_PYTHON_SCRIPTING
-	if (m_language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0)
+	if (m_language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0) {
 		m_kTextEditorDocument->setText(QStringLiteral("from pylabplot import *"));
+		m_kTextEditorDocument->setModified(false);
+	}
 #endif
 }
 
