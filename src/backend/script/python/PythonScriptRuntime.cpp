@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -130,42 +131,18 @@ bool PythonScriptRuntime::init() {
 		return false;
 	}
 
-	// Get sys.stdout
+	// Get sys.stdout (may be None on Windows without console)
 	if (!sysStdOut) {
 		sysStdOut = PySys_GetObject("stdout"); // borrowed reference
-		if (!sysStdOut) {
-			WARN("Failed to get sys.stdout")
-			return false;
-		}
-
-		Py_INCREF(sysStdOut); // own it
-		// DEBUG(Q_FUNC_INFO << ", sysStdOut refcnt now = " << Py_REFCNT(sysStdOut));
-
-		// auto* sysStdOutWrite = PyObject_GetAttrString(sysStdOut, "write"); // owned reference
-		/*if (!sysStdOutWrite) {
-			WARN("Failed to get sys.stdout.write")
-			Py_DECREF(sysStdOut);
-			return false;
-		}*/
+		if (sysStdOut)
+			Py_INCREF(sysStdOut); // own it
 	}
 
-	// Get sys.stderr
+	// Get sys.stderr (may be None on Windows without console)
 	if (!sysStdErr) {
 		sysStdErr = PySys_GetObject("stderr"); // borrowed reference
-		if (!sysStdErr) {
-			WARN("Failed to get sys.stderr")
-			return false;
-		}
-
-		Py_INCREF(sysStdErr); // own it
-		// DEBUG(Q_FUNC_INFO << ", sysStdErr refcnt now = " << Py_REFCNT(sysStdErr));
-
-		// auto* sysStdErrWrite = PyObject_GetAttrString(sysStdErr, "write"); // owned reference
-		/*if (!sysStdErrWrite) {
-			WARN("Failed to get sys.stderr.write")
-			Py_DECREF(sysStdErr);
-			return false;
-		}*/
+		if (sysStdErr)
+			Py_INCREF(sysStdErr); // own it
 	}
 
 	// create a fresh local context where we can execute our scripts
@@ -539,8 +516,7 @@ bool PythonScriptRuntime::redirectOutput() {
 	return true;
 }
 
-bool PythonScriptRuntime::restoreStream(PyObject* sysModule, const char* streamName, PyObject* original) {
-	Q_UNUSED(sysModule)
+bool PythonScriptRuntime::restoreStream(const char* streamName, PyObject* original) {
 	PyGILState_STATE gil = PyGILState_Ensure();
 
 	// Restore the original sys.stdout/stderr object
@@ -566,32 +542,12 @@ bool PythonScriptRuntime::unRedirectOutput() {
 		return false;
 	}
 
-	PyGILState_STATE gil = PyGILState_Ensure();
 	bool ok = true;
 
-	auto* sysModule = PyImport_ImportModule("sys"); // new reference
-	if (!sysModule) {
-		WARN(Q_FUNC_INFO << "Failed loading sys module")
-		PyGILState_Release(gil);
-		return false;
-	}
-
-	// INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
-	// INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
-
 	if (sysStdOut)
-		ok &= restoreStream(sysModule, "stdout", sysStdOut);
-	bool stderrEqualStdout = (sysStdOut == sysStdErr);
-	if (stderrEqualStdout)
-		WARN("stderr == stdout!")
-	if (sysStdErr && !stderrEqualStdout)
-		ok &= restoreStream(sysModule, "stderr", sysStdErr);
-
-	// INFO(Q_FUNC_INFO << ", sysStdOut refcnt = " << Py_REFCNT(sysStdOut));
-	// INFO(Q_FUNC_INFO << ", sysStdErr refcnt = " << Py_REFCNT(sysStdErr));
-
-	Py_DECREF(sysModule);
-	PyGILState_Release(gil);
+		ok &= restoreStream("stdout", sysStdOut);
+	if (sysStdErr && sysStdErr != sysStdOut)
+		ok &= restoreStream("stderr", sysStdErr);
 
 	m_outputRedirected = false;
 	return ok;
@@ -752,7 +708,8 @@ PyObject* PythonScriptRuntime::shibokenConvertToPyObject(PythonLogger* object) {
 		return nullptr;
 	}
 
-	auto* po = Shiboken::Object::newObject(loggerObject, object);
+	// hasOwnership=false: C++ side owns the PythonLogger, Python must not delete it
+	auto* po = Shiboken::Object::newObject(loggerObject, object, /*hasOwnership=*/false);
 	if (!po) {
 		WARN("Shiboken::Object::newObject() returned nullptr")
 		s_initializationError = i18n("Failed to create Python wrapper for logger object.");

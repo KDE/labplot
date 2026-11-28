@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-FileCopyrightText: 2026 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2026 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -41,7 +42,7 @@ private:
 	bool reset();
 	bool redirectStream(const char* streamName, PythonLogger* loggerInstance);
 	bool redirectOutput();
-	bool restoreStream(PyObject* sysModule, const char* streamName, PyObject* original);
+	bool restoreStream(const char* streamName, PyObject* original);
 	bool unRedirectOutput();
 	bool populateVariableInfo();
 	PyObject* createLocalDict();
