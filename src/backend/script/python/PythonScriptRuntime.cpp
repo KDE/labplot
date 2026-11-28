@@ -477,43 +477,41 @@ bool PythonScriptRuntime::cancel() {
 
 bool PythonScriptRuntime::redirectStream(const char* streamName, PythonLogger* loggerInstance) {
 	INFO(Q_FUNC_INFO)
-	auto* sysStream = PySys_GetObject(streamName); // borrowed reference
-	if (!sysStream) {
-		WARN("Failed to get" << streamName)
-		m_initializationError = i18n("Failed to get Python %1 stream.", QString::fromLatin1(streamName));
-		return false;
-	}
-	Py_INCREF(sysStream); // own it
 
 	auto* loggerStream = PythonScriptRuntime::shibokenConvertToPyObject(loggerInstance); // owned reference
 	if (!loggerStream) {
 		WARN("Failed to convert PythonLogger instance to PyObject")
 		m_initializationError = i18n("Failed to create Python logger object for output redirection.");
-		Py_DECREF(sysStream);
 		return false;
 	}
 
-	auto* loggerStreamWrite = PyObject_GetAttrString(loggerStream, "write"); // new reference
-	if (!loggerStreamWrite) {
-		WARN("Failed to get write from loggerStream")
-		m_initializationError = i18n("Failed to get write method from Python logger.");
-		Py_DECREF(sysStream);
+	// Replace sys.stdout/stderr entirely with our logger object.
+	// On Windows without a console (e.g., launched from desktop shortcut), sys.stdout
+	// may be None or a restricted object that doesn't allow attribute modification.
+	if (PySys_SetObject(streamName, loggerStream) < 0) {
+		WARN("Failed to set sys." << streamName << " to logger")
+		m_initializationError = i18n("Failed to redirect Python %1.", QString::fromLatin1(streamName));
+		if (PyErr_Occurred()) {
+			PyObject *errorType = nullptr, *errorValue = nullptr, *errorTraceback = nullptr;
+			PyErr_Fetch(&errorType, &errorValue, &errorTraceback);
+			PyErr_NormalizeException(&errorType, &errorValue, &errorTraceback);
+			if (errorValue) {
+				PyObject* description = PyObject_Str(errorValue);
+				if (description) {
+					m_initializationError += QStringLiteral("\n") + pyUnicodeToQString(description);
+					Py_DECREF(description);
+				}
+			}
+			Py_XDECREF(errorType);
+			Py_XDECREF(errorValue);
+			Py_XDECREF(errorTraceback);
+			PyErr_Clear();
+		}
 		Py_DECREF(loggerStream);
 		return false;
 	}
 
-	if (PyObject_SetAttrString(sysStream, "write", loggerStreamWrite) < 0) {
-		WARN("Failed to set write from loggerStream in" << streamName)
-		m_initializationError = i18n("Failed to set write method on Python %1.", QString::fromLatin1(streamName));
-		Py_DECREF(sysStream);
-		Py_DECREF(loggerStream);
-		Py_DECREF(loggerStreamWrite);
-		return false;
-	}
-	Py_DECREF(sysStream);
 	Py_DECREF(loggerStream);
-	Py_DECREF(loggerStreamWrite);
-
 	return true;
 }
 
@@ -542,33 +540,15 @@ bool PythonScriptRuntime::redirectOutput() {
 }
 
 bool PythonScriptRuntime::restoreStream(PyObject* sysModule, const char* streamName, PyObject* original) {
+	Q_UNUSED(sysModule)
 	PyGILState_STATE gil = PyGILState_Ensure();
-	auto* stream = PyObject_GetAttrString(sysModule, streamName); // owned
-	if (!stream) {
-		WARN("Failed to get " << streamName)
+
+	// Restore the original sys.stdout/stderr object
+	if (PySys_SetObject(streamName, original) < 0) {
+		WARN("Failed to restore sys." << streamName)
 		PyGILState_Release(gil);
 		return false;
 	}
-
-	// DEBUG(Q_FUNC_INFO << ", stream refcnt = " << Py_REFCNT(stream));
-	// DEBUG(Q_FUNC_INFO << ", original refcnt = " << Py_REFCNT(original));
-
-	if (stream == original) { // already restored
-		INFO(Q_FUNC_INFO << ", stream already restored")
-		Py_DECREF(stream);
-		return true;
-	}
-
-	if (PyObject_SetAttrString(stream, "write", original) < 0) {
-		WARN(Q_FUNC_INFO << ", Failed to restore " << streamName);
-		Py_DECREF(stream);
-		PyGILState_Release(gil);
-		return false;
-	}
-
-	Py_DECREF(stream);
-	// DEBUG(Q_FUNC_INFO << ", stream refcnt now = " << Py_REFCNT(stream));
-	// DEBUG(Q_FUNC_INFO << ", original now = " << Py_REFCNT(original));
 
 	PyGILState_Release(gil);
 	return true;
