@@ -498,6 +498,11 @@ QString HDF5FilterPrivate::translateHDF5Class(H5T_class_t c) {
 	case H5T_NO_CLASS:
 		dclass = QStringLiteral("NOCLASS");
 		break;
+#if H5_VERSION_GE(1, 14, 0)
+	case H5T_COMPLEX:
+		dclass = QStringLiteral("COMPLEX");
+		break;
+#endif
 	}
 	return dclass;
 }
@@ -1188,6 +1193,11 @@ QStringList HDF5FilterPrivate::readHDF5DataType(hid_t tid) {
 	case H5T_ARRAY:
 		// TODO
 		break;
+#if H5_VERSION_GE(1, 14, 0)
+	case H5T_COMPLEX:
+		// TODO
+		break;
+#endif
 	case H5T_NCLASSES:
 		// TODO
 		break;
@@ -1590,7 +1600,11 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_VLEN:
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
-		case H5T_NCLASSES: {
+		case H5T_NCLASSES:
+#if H5_VERSION_GE(1, 14, 0)
+		case H5T_COMPLEX:
+#endif
+		{
 			ok = false;
 			q->setLastError(i18n("rank 0 not implemented yet for type %1", translateHDF5Class(dclass)));
 		}
@@ -1893,7 +1907,11 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_ENUM:
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
-		case H5T_NCLASSES: {
+		case H5T_NCLASSES:
+#if H5_VERSION_GE(1, 14, 0)
+		case H5T_COMPLEX:
+#endif
+		{
 			ok = false;
 			q->setLastError(i18n("rank 1 not implemented yet for type %1", translateHDF5Class(dclass)));
 		}
@@ -2102,7 +2120,11 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_VLEN:
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
-		case H5T_NCLASSES: {
+		case H5T_NCLASSES:
+#if H5_VERSION_GE(1, 14, 0)
+		case H5T_COMPLEX:
+#endif
+		{
 			ok = false;
 			q->setLastError(i18n("rank 2 not implemented yet for type %1", translateHDF5Class(dclass)));
 		}
