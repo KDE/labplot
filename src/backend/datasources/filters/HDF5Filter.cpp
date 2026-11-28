@@ -498,7 +498,7 @@ QString HDF5FilterPrivate::translateHDF5Class(H5T_class_t c) {
 	case H5T_NO_CLASS:
 		dclass = QStringLiteral("NOCLASS");
 		break;
-#if H5_VERSION_GE(1, 14, 0)
+#if H5_VERSION_GE(2, 0, 0)
 	case H5T_COMPLEX:
 		dclass = QStringLiteral("COMPLEX");
 		break;
@@ -1193,7 +1193,7 @@ QStringList HDF5FilterPrivate::readHDF5DataType(hid_t tid) {
 	case H5T_ARRAY:
 		// TODO
 		break;
-#if H5_VERSION_GE(1, 14, 0)
+#if H5_VERSION_GE(2, 0, 0)
 	case H5T_COMPLEX:
 		// TODO
 		break;
@@ -1601,7 +1601,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES:
-#if H5_VERSION_GE(1, 14, 0)
+#if H5_VERSION_GE(2, 0, 0)
 		case H5T_COMPLEX:
 #endif
 		{
@@ -1908,7 +1908,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES:
-#if H5_VERSION_GE(1, 14, 0)
+#if H5_VERSION_GE(2, 0, 0)
 		case H5T_COMPLEX:
 #endif
 		{
@@ -2121,7 +2121,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES:
-#if H5_VERSION_GE(1, 14, 0)
+#if H5_VERSION_GE(2, 0, 0)
 		case H5T_COMPLEX:
 #endif
 		{
