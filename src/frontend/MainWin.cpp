@@ -202,7 +202,7 @@ void MainWin::initGUI(const QString& fileName) {
 	setupGUI();
 	m_actionsManager->init();
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 #ifdef HAVE_TOUCHBAR
 	// setup touchbar before GUI (otherwise actions in the toolbar are not selectable)
 	m_touchBar = new KDMacTouchBar(this);

@@ -35,7 +35,7 @@
  *
  */
 
-#ifdef Q_OS_MAC // Mac
+#ifdef Q_OS_MACOS
 #define SETTINGS_FORMAT QSettings::IniFormat
 #else
 #define SETTINGS_FORMAT QSettings::NativeFormat

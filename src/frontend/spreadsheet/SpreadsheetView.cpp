@@ -46,7 +46,7 @@
 #include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/StatisticsDialog.h"
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 

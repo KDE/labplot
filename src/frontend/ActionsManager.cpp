@@ -146,7 +146,7 @@ void ActionsManager::init() {
 	// load recently used projects
 	m_recentProjectsAction->loadEntries(Settings::group(QStringLiteral("Recent Files")));
 
-	#ifdef Q_OS_MAC
+	#ifdef Q_OS_MACOS
 	if (auto* windowHandle = m_mainWindow->windowHandle()) {
 		connect(windowHandle, &QWindow::windowStateChanged, this, [this](Qt::WindowState state) {
 			m_fullScreenAction->setChecked(state == Qt::WindowFullScreen);
@@ -198,7 +198,7 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("file_example_open"), openExample);
 	connect(openExample, &QAction::triggered, m_mainWindow, &MainWin::exampleProjectsDialog);
 
-	#ifdef Q_OS_MAC
+	#ifdef Q_OS_MACOS
 	m_fullScreenAction = new QAction(QIcon::fromTheme(QStringLiteral("view-fullscreen")), i18n("&Full Screen Mode"), collection);
 	m_fullScreenAction->setCheckable(true);
 	collection->setDefaultShortcuts(m_fullScreenAction, KStandardShortcut::shortcut(KStandardShortcut::FullScreen));
@@ -395,7 +395,7 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("history"), m_historyAction);
 	connect(m_historyAction, &QAction::triggered, m_mainWindow, &MainWin::historyDialog);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	m_undoIconOnlyAction = new QAction(m_undoAction->icon(), QString());
 	connect(m_undoIconOnlyAction, &QAction::triggered, m_mainWindow, &MainWin::undo);
 

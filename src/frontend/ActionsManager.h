@@ -76,7 +76,7 @@ private:
 	MainWin* m_mainWindow{nullptr};
 	friend class MainWin;
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 #ifdef HAVE_TOUCHBAR
 	KDMacTouchBar* m_touchBar;
 #endif

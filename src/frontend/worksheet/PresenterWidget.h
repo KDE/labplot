@@ -35,7 +35,7 @@ protected:
 	void keyPressEvent(QKeyEvent*) override;
 	bool eventFilter(QObject*, QEvent*) override;
 	void focusOutEvent(QFocusEvent*) override;
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	void closeEvent(QCloseEvent*) override;
 #endif
 };

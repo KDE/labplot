@@ -31,7 +31,7 @@
 #include "frontend/worksheet/PresenterWidget.h"
 #endif
 #include <frontend/GuiTools.h>
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
